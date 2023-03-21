@@ -16,14 +16,20 @@ const extent = {
     north: 45.2135
 };
 
-// camera seetup
+// camera setup
 const placement = {
     coord: new itowns.Coordinates('EPSG:4326', 0.71829, 45.18260),
     range: 3000,
     tilt: 20
 };
 
-let view = new itowns.GlobeView(viewerDiv, placement);
+const view = new itowns.GlobeView(viewerDiv, placement);
+setupLoadingScreen(viewerDiv, view);
+
+// ------------ GUI ------------ //
+const menuGlobe = new GuiTools('menuDiv', view);
+
+
 
 // ------------ Layers ------------ //
 // WMTS Layer
@@ -33,7 +39,7 @@ const wmts_layer = wmtsLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoport
     'PM',
     'image/jpeg');
 
-view.addLayer(wmts_layer);
+view.addLayer(wmts_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 // Elevation Layer
 const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
@@ -42,17 +48,17 @@ const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuq
     'WGS84G',
     'image/x-bil;bits=32');
 
-view.addLayer(elevation_layer);
+view.addLayer(elevation_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 // Geometry Layer
-const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
+const geometry_layer = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
     'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
     'EPSG:4326',
     14,
     extent,
     view);
 
-view.addLayer(geometry_layer);
+view.addLayer(geometry_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 
 // Listen for globe full initialisation event
