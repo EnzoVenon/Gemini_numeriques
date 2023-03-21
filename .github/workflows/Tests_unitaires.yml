@@ -14,8 +14,11 @@ jobs:
         with:
           node-version: 19
       
+      - name: Where am I
+        run: ls
+
       - name: Installer les dépendances (npm)
-        run: cd Gemini_numeriques && npm install
+        run: npm install
 
       - name: Tests unitaires avec couverture
         run: npm test
