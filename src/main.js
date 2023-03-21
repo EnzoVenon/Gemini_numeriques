@@ -51,14 +51,15 @@ const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuq
 view.addLayer(elevation_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 // Geometry Layer
-const geometry_layer = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
-    'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
+const geometry_layer = buildingLayer('https://wxs.ign.fr/topographie/geoportail/wfs?',
+    'BDTOPO_V3:batiment',
     'EPSG:4326',
     14,
     extent,
     view);
 
-view.addLayer(geometry_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+view.addLayer(geometry_layer);
+
 
 
 // Listen for globe full initialisation event

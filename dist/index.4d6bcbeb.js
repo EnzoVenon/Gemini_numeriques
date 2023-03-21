@@ -589,8 +589,8 @@ view.addLayer(wmts_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 const elevation_layer = (0, _elevation.elevationLayer)("http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts", "EPSG:4326", "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES", "WGS84G", "image/x-bil;bits=32");
 view.addLayer(elevation_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 // Geometry Layer
-const geometry_layer = (0, _building.buildingLayer)("http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?", "BDTOPO_BDD_WLD_WGS84G:bati_indifferencie", "EPSG:4326", 14, extent, view);
-view.addLayer(geometry_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+const geometry_layer = (0, _building.buildingLayer)("https://wxs.ign.fr/topographie/geoportail/wfs?", "BDTOPO_V3:batiment", "EPSG:4326", 14, extent, view);
+view.addLayer(geometry_layer);
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
@@ -698,15 +698,28 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "buildingLayer", ()=>buildingLayer);
 function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
+    let meshes = [];
     // Source
     const geometrySource = new itowns.WFSSource({
         url: serverURL,
         typeName: nameType,
         crs: crs,
+        ipr: "IGN",
+        format: "application/json",
         extent: extent
     });
     // Geometry Layer
     const geomLayer = new itowns.FeatureGeometryLayer("Buildings", {
+        batchId: function(property, featureId) {
+            return featureId;
+        },
+        onMeshCreated: function scaleZ(mesh) {
+            mesh.children.forEach((c)=>{
+                c.scale.z = 0.01;
+                meshes.push(c);
+            });
+        },
+        filter: acceptFeature,
         source: geometrySource,
         zoom: {
             min: zoomMinLayer
@@ -723,7 +736,13 @@ function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
 }
 // Coloring the data
 function setColor(properties) {
-    return new itowns.THREE.Color(0xaaaaaa);
+    let color = new itowns.THREE.Color(0xaaaaaa);
+    if (properties.usage_1 === "R\xe9sidentiel") return color.set(0xFDFDFF);
+    else if (properties.usage_1 === "Annexe") return color.set(0xC6C5B9);
+    else if (properties.usage_1 === "Commercial et services") return color.set(0x62929E);
+    else if (properties.usage_1 === "Religieux") return color.set(0x393D3F);
+    else if (properties.usage_1 === "Sportif") return color.set(0x546A7B);
+    return color.set(0x555555);
 }
 // Extruding the data 
 function setExtrusion(properties) {
@@ -731,16 +750,41 @@ function setExtrusion(properties) {
 }
 // Placing the data on the ground
 function setAltitude(properties) {
-    return properties.z_min - properties.hauteur;
+    return properties.altitude_minimale_sol;
+}
+function acceptFeature(properties) {
+    return !!properties.hauteur;
 } /* Properties example:
-            geometry_name: "the_geom"
-            hauteur: 9
-            id: "bati_indifferencie.19138409"
-            origin_bat: "Cadastre"
-            prec_alti: 5
-            prec_plani: 2.5
-            z_max: 83.7
-            z_min: 83.7
+    altitude_maximale_sol: 190.9
+     altitude_maximale_toit: 194
+    altitude_minimale_sol: 190.1
+    altitude_minimale_toit: 193.5
+    appariement_fichiers_fonciers: null
+    bbox: Array(4) [ 0.74671617, 45.1690315, 0.74672584, … ]
+    construction_legere: true
+    date_creation: "2012-02-22T12:29:23.469Z"
+    date_d_apparition: null
+    date_de_confirmation: null
+    date_modification: "2022-05-12T23:19:01.410Z"
+    etat_de_l_objet: "En service"
+    geojson: Object { id: "batiment.BATIMENT0000000296089808", geometry_name: "geometrie" }
+    hauteur: 3.4
+    identifiants_sources: ""
+    materiaux_de_la_toiture: null
+    materiaux_des_murs: null
+    methode_d_acquisition_altimetrique: "Interpolation bâti BDTopo"
+    methode_d_acquisition_planimetrique: "BDParcellaire recalée"
+    nature: "Indifférenciée"
+    nombre_d_etages: null
+    nombre_de_logements: null
+    origine_du_batiment: "Cadastre"
+    precision_altimetrique: 2.5
+    precision_planimetrique: 3
+    sources: null
+    style: Object { isStyle: true, order: 0, parent: {…}, … }
+    usage_1: "Indifférencié"
+    usage_2: null
+    <prototype>: Object { … }
 */ 
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["e11Rl","gLLPy"], "gLLPy", "parcelRequire4520")
