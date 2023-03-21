@@ -3,7 +3,7 @@
 // ------------ Imports ------------ //
 import { wmtsLayer } from "./models/wmts";
 import { elevationLayer } from "./models/elevation";
-import { buildingLayer, addMeshToScene } from "./models/building";
+import { buildingLayer } from "./models/building";
 
 // ------------ View ------------ //
 const viewerDiv = document.getElementById('viewerDiv');
