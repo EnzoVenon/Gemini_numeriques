@@ -2,8 +2,8 @@
   "name": "three_parcel",
   "source": "./src/index.html",
   "staticFiles": {
-    "staticOutPath": "./assets/models",
-    "staticPath": "./assets/models"
+    "staticOutPath": "./data",
+    "staticPath": "./data"
   },
   "scripts": {
     "start": "parcel --open",
