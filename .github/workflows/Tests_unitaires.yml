@@ -1,0 +1,21 @@
+name: Tests_Unitaires
+on:
+  - push
+  - pull_request
+jobs:
+  tests_unitaires:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v3
+  
+      - name: Installer npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      
+      - name: Installer les dépendances (npm)
+        run: cd Gemini_numeriques && npm install
+
+      - name: Tests unitaires avec couverture
+        run: npm test
