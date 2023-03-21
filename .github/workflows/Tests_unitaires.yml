@@ -17,5 +17,5 @@ jobs:
       - name: Installer les dépendances (npm)
         run: npm install
 
-      - name: Tests unitaires avec couverture
+      - name: ESLint et tests unitaires avec couverture
         run: npm test
