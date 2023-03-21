@@ -1,19 +1,21 @@
 
-export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
-    let meshes = [];
+export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, zoomMinLayer, meshes) {
+    // let meshes = [];
+
 
     // Source
     const geometrySource = new itowns.WFSSource({
         url: serverURL,
+        version: version,
         typeName: nameType,
         crs: crs,
-        ipr: 'IGN',
-        format: 'application/json',
+        ipr: ipr,
+        format: format,
         extent: extent
     });
 
     // Geometry Layer
-    const geomLayer = new itowns.FeatureGeometryLayer('Buildings', {
+    const geomLayer = new itowns.FeatureGeometryLayer('WFS Building', {
         batchId: function (property, featureId) { return featureId; },
         onMeshCreated: function scaleZ(mesh) {
             mesh.children.forEach(c => {
@@ -24,23 +26,24 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
         filter: acceptFeature,
         source: geometrySource,
         zoom: { min: zoomMinLayer },
+
         style: new itowns.Style({
             fill: {
-                color: setColor,
-                base_altitude: setAltitude,
-                extrusion_height: setExtrusion,
-            },
-
-        }),
-
+                color: colorBuildings,
+                base_altitude: altitudeBuildings,
+                extrusion_height: extrudeBuildings,
+            }
+        })
     });
 
-    return geomLayer;
+    return { layer: geomLayer, meshList: meshes };
 }
 
+
 // Coloring the data
-function setColor(properties) {
-    let color = new itowns.THREE.Color(0xaaaaaa);
+export function colorBuildings(properties) {
+
+    let color = new itowns.THREE.Color();
     if (properties.usage_1 === 'Résidentiel') {
         return color.set(0xFDFDFF);
     } else if (properties.usage_1 === 'Annexe') {
@@ -56,17 +59,17 @@ function setColor(properties) {
     return color.set(0x555555);
 }
 
-// Extruding the data 
-function setExtrusion(properties) {
-    return properties.hauteur;
-}
-
 // Placing the data on the ground
-function setAltitude(properties) {
+export function altitudeBuildings(properties) {
     return properties.altitude_minimale_sol;
 }
 
-function acceptFeature(properties) {
+// Extruding the data 
+export function extrudeBuildings(properties) {
+    return properties.hauteur;
+}
+
+export function acceptFeature(properties) {
     return !!properties.hauteur;
 }
 
