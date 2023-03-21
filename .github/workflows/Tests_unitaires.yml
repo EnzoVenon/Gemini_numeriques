@@ -13,9 +13,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 19
-      
-      - name: Where am I
-        run: ls
 
       - name: Installer les dépendances (npm)
         run: npm install
