@@ -558,185 +558,104 @@ function hmrAccept(bundle, id) {
 
 },{}],"gLLPy":[function(require,module,exports) {
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
-// ------------ Imports ------------ //
-var _wmts = require("./models/wmts");
-var _elevation = require("./models/elevation");
-var _building = require("./models/building");
-// ------------ View ------------ //
-const viewerDiv = document.getElementById("viewerDiv");
-// Perigueux extent
-const extent = {
-    west: 0.67289,
-    east: 0.74665,
-    south: 45.17272,
-    north: 45.2135
+// Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
+itowns.proj4.defs("EPSG:3946", "+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+// # Simple Globe viewer
+// Define initial camera position
+var positionOnGlobe = {
+    longitude: 4.818,
+    latitude: 45.7354,
+    altitude: 3000
 };
-// camera setup
-const placement = {
-    coord: new itowns.Coordinates("EPSG:4326", 0.71829, 45.18260),
+var placement = {
+    coord: new itowns.Coordinates("EPSG:4326", 4.818, 45.7354),
     range: 3000,
-    tilt: 20
+    tilt: 45
 };
-const view = new itowns.GlobeView(viewerDiv, placement);
+var meshes = [];
+var linesBus = [];
+var scaler;
+// `viewerDiv` will contain iTowns' rendering area (`<canvas>`)
+var viewerDiv = document.getElementById("viewerDiv");
+// Instanciate iTowns GlobeView*
+var view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
-// ------------ GUI ------------ //
-const menuGlobe = new GuiTools("menuDiv", view);
-// ------------ Layers ------------ //
-// WMTS Layer
-const wmts_layer = (0, _wmts.wmtsLayer)("http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts", "EPSG:3857", "ORTHOIMAGERY.ORTHOPHOTOS", "PM", "image/jpeg");
-view.addLayer(wmts_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-// Elevation Layer
-const elevation_layer = (0, _elevation.elevationLayer)("http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts", "EPSG:4326", "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES", "WGS84G", "image/x-bil;bits=32");
-view.addLayer(elevation_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-// Geometry Layer
-const geometry_layer = (0, _building.buildingLayer)("https://wxs.ign.fr/topographie/geoportail/wfs?", "BDTOPO_V3:batiment", "EPSG:4326", 14, extent, view);
-view.addLayer(geometry_layer);
-// Listen for globe full initialisation event
-view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
-    // eslint-disable-next-line no-console
-    console.info("Globe initialized");
+// Add one imagery layer to the scene
+// This layer is defined in a json file but it could be defined as a plain js
+// object. See Layer* for more info.
+itowns.Fetcher.json("./layers/JSONLayers/Ortho.json").then(function _(config) {
+    config.source = new itowns.WMTSSource(config.source);
+    var layer = new itowns.ColorLayer("Ortho", config);
+    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 });
-
-},{"./models/wmts":"c82T1","./models/elevation":"2x72h","./models/building":"8WZDc"}],"c82T1":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "wmtsLayer", ()=>wmtsLayer);
-function wmtsLayer(serverURL, crs, name, tileMatrixSet, format) {
-    // Source
-    const colorSource = new itowns.WMTSSource({
-        url: serverURL,
-        crs: crs,
-        name: name,
-        tileMatrixSet: tileMatrixSet,
-        format: format
-    });
-    // Layer
-    const colorLayer = new itowns.ColorLayer("Ortho", {
-        source: colorSource
-    });
-    return colorLayer;
+// Add two elevation layers.
+// These will deform iTowns globe geometry to represent terrain elevation.
+function addElevationLayerFromConfig(config) {
+    config.source = new itowns.WMTSSource(config.source);
+    var layer = new itowns.ElevationLayer(config.id, config);
+    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 }
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"2x72h":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "elevationLayer", ()=>elevationLayer);
-function elevationLayer(serverURL, crs, name, tileMatrixSet, format) {
-    // Source
-    const elevationSource = new itowns.WMTSSource({
-        url: serverURL,
-        crs: crs,
-        name: name,
-        tileMatrixSet: tileMatrixSet,
-        format: format,
-        tileMatrixSetLimits: {
-            11: {
-                minTileRow: 442,
-                maxTileRow: 1267,
-                minTileCol: 1344,
-                maxTileCol: 2683
-            },
-            12: {
-                minTileRow: 885,
-                maxTileRow: 2343,
-                minTileCol: 3978,
-                maxTileCol: 5126
-            },
-            13: {
-                minTileRow: 1770,
-                maxTileRow: 4687,
-                minTileCol: 7957,
-                maxTileCol: 10253
-            },
-            14: {
-                minTileRow: 3540,
-                maxTileRow: 9375,
-                minTileCol: 15914,
-                maxTileCol: 20507
-            }
+itowns.Fetcher.json("./layers/JSONLayers/WORLD_DTM.json").then(addElevationLayerFromConfig);
+itowns.Fetcher.json("./layers/JSONLayers/IGN_MNT_HIGHRES.json").then(addElevationLayerFromConfig);
+var color = new itowns.THREE.Color();
+var tile;
+function altitudeLine(properties, contour) {
+    var result;
+    var z = 0;
+    if (contour) {
+        result = itowns.DEMUtils.getTerrainObjectAt(view.tileLayer, contour, 0, tile);
+        if (!result) result = itowns.DEMUtils.getTerrainObjectAt(view.tileLayer, contour, 0);
+        tile = [
+            result.tile
+        ];
+        if (result) z = result.coord.z;
+        return z + 5;
+    }
+}
+function colorLine(properties) {
+    return color.set(Math.round(Math.random() * 0xffffff));
+}
+function acceptFeatureBus(properties) {
+    if (properties.sens == "Aller") {
+        var line = properties.ligne;
+        if (linesBus.indexOf(line) === -1) {
+            linesBus.push(line);
+            return true;
         }
-    });
-    // Layer
-    const eleLayer = new itowns.ElevationLayer("MNT_WORLD", {
-        source: elevationSource
-    });
-    return eleLayer;
+    }
+    return false;
 }
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8WZDc":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "buildingLayer", ()=>buildingLayer);
-function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
-    let meshes = [];
-    // Source
-    const geometrySource = new itowns.WFSSource({
-        url: serverURL,
-        typeName: nameType,
-        crs: crs,
-        ipr: "IGN",
-        format: "application/json",
-        extent: extent
-    });
-    // Geometry Layer
-    const geomLayer = new itowns.FeatureGeometryLayer("Buildings", {
-        batchId: function(property, featureId) {
-            return featureId;
-        },
-        onMeshCreated: function scaleZ(mesh) {
-            mesh.children.forEach((c)=>{
-                c.scale.z = 0.01;
-                meshes.push(c);
-            });
-        },
-        filter: acceptFeature,
-        source: geometrySource,
-        zoom: {
-            min: zoomMinLayer
-        },
-        style: new itowns.Style({
-            fill: {
-                color: setColor,
-                base_altitude: setAltitude,
-                extrusion_height: setExtrusion
-            }
-        })
-    });
-    return geomLayer;
-}
-// Coloring the data
-function setColor(properties) {
-    let color = new itowns.THREE.Color(0xaaaaaa);
+var lyonTclBusSource = new itowns.WFSSource({
+    protocol: "wfs",
+    url: "https://download.data.grandlyon.com/wfs/rdata?",
+    version: "2.0.0",
+    typeName: "tcl_sytral.tcllignebus",
+    crs: "EPSG:3946",
+    extent: {
+        west: 1822174.60,
+        east: 1868247.07,
+        south: 5138876.75,
+        north: 5205890.19
+    },
+    format: "geojson"
+});
+var lyonTclBusLayer = new itowns.FeatureGeometryLayer("WFS Bus lines", {
+    name: "lyon_tcl_bus",
+    filter: acceptFeatureBus,
+    source: lyonTclBusSource,
+    zoom: {
+        min: 9
+    },
+    style: new itowns.Style({
+        stroke: {
+            color: colorLine,
+            base_altitude: altitudeLine,
+            width: 5
+        }
+    })
+});
+view.addLayer(lyonTclBusLayer);
+function colorBuildings(properties) {
     if (properties.usage_1 === "R\xe9sidentiel") return color.set(0xFDFDFF);
     else if (properties.usage_1 === "Annexe") return color.set(0xC6C5B9);
     else if (properties.usage_1 === "Commercial et services") return color.set(0x62929E);
@@ -744,49 +663,116 @@ function setColor(properties) {
     else if (properties.usage_1 === "Sportif") return color.set(0x546A7B);
     return color.set(0x555555);
 }
-// Extruding the data 
-function setExtrusion(properties) {
-    return properties.hauteur;
-}
-// Placing the data on the ground
-function setAltitude(properties) {
+function altitudeBuildings(properties) {
     return properties.altitude_minimale_sol;
+}
+function extrudeBuildings(properties) {
+    return properties.hauteur;
 }
 function acceptFeature(properties) {
     return !!properties.hauteur;
-} /* Properties example:
-    altitude_maximale_sol: 190.9
-     altitude_maximale_toit: 194
-    altitude_minimale_sol: 190.1
-    altitude_minimale_toit: 193.5
-    appariement_fichiers_fonciers: null
-    bbox: Array(4) [ 0.74671617, 45.1690315, 0.74672584, … ]
-    construction_legere: true
-    date_creation: "2012-02-22T12:29:23.469Z"
-    date_d_apparition: null
-    date_de_confirmation: null
-    date_modification: "2022-05-12T23:19:01.410Z"
-    etat_de_l_objet: "En service"
-    geojson: Object { id: "batiment.BATIMENT0000000296089808", geometry_name: "geometrie" }
-    hauteur: 3.4
-    identifiants_sources: ""
-    materiaux_de_la_toiture: null
-    materiaux_des_murs: null
-    methode_d_acquisition_altimetrique: "Interpolation bâti BDTopo"
-    methode_d_acquisition_planimetrique: "BDParcellaire recalée"
-    nature: "Indifférenciée"
-    nombre_d_etages: null
-    nombre_de_logements: null
-    origine_du_batiment: "Cadastre"
-    precision_altimetrique: 2.5
-    precision_planimetrique: 3
-    sources: null
-    style: Object { isStyle: true, order: 0, parent: {…}, … }
-    usage_1: "Indifférencié"
-    usage_2: null
-    <prototype>: Object { … }
-*/ 
+}
+scaler = function update() {
+    var i;
+    var mesh;
+    if (meshes.length) view.notifyChange(view.camera.camera3D, true);
+    for(i = 0; i < meshes.length; i++){
+        mesh = meshes[i];
+        if (mesh) {
+            mesh.scale.z = Math.min(1.0, mesh.scale.z + 0.1);
+            mesh.updateMatrixWorld(true);
+        }
+    }
+    meshes = meshes.filter(function filter(m) {
+        return m.scale.z < 1;
+    });
+};
+view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, scaler);
+var wfsBuildingSource = new itowns.WFSSource({
+    url: "https://wxs.ign.fr/topographie/geoportail/wfs?",
+    version: "2.0.0",
+    typeName: "BDTOPO_V3:batiment",
+    crs: "EPSG:4326",
+    ipr: "IGN",
+    format: "application/json",
+    extent: {
+        west: 4.568,
+        east: 5.18,
+        south: 45.437,
+        north: 46.03
+    }
+});
+var wfsBuildingLayer = new itowns.FeatureGeometryLayer("WFS Building", {
+    batchId: function(property, featureId) {
+        return featureId;
+    },
+    onMeshCreated: function scaleZ(mesh) {
+        mesh.children.forEach((c)=>{
+            c.scale.z = 0.01;
+            meshes.push(c);
+        });
+    },
+    filter: acceptFeature,
+    source: wfsBuildingSource,
+    zoom: {
+        min: 14
+    },
+    style: new itowns.Style({
+        fill: {
+            color: colorBuildings,
+            base_altitude: altitudeBuildings,
+            extrusion_height: extrudeBuildings
+        }
+    })
+});
+view.addLayer(wfsBuildingLayer);
+var menuGlobe = new GuiTools("menuDiv", view);
+// Listen for globe full initialisation event
+view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function() {
+    // eslint-disable-next-line no-console
+    console.info("Globe initialized");
+});
+debug.createTileDebugUI(menuGlobe.gui, view);
+function picking(event) {
+    if (view.controls.isPaused) {
+        var htmlInfo = document.getElementById("info");
+        var intersects = view.pickObjectsAt(event, 3, "WFS Building");
+        var properties;
+        var info;
+        var batchId;
+        htmlInfo.innerHTML = " ";
+        if (intersects.length) {
+            batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
+            properties = intersects[0].object.feature.geometries[batchId].properties;
+            Object.keys(properties).map(function(objectKey) {
+                var value = properties[objectKey];
+                if (value) {
+                    var key = objectKey.toString();
+                    if (key[0] !== "_" && key !== "geometry_name") {
+                        info = value.toString();
+                        htmlInfo.innerHTML += "<li><b>" + key + ": </b>" + info + "</li>";
+                    }
+                }
+            });
+        }
+    }
+}
+for (var layer of view.getLayers()){
+    if (layer.id === "WFS Bus lines") layer.whenReady.then(function _(layer) {
+        var gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
+        debug.GeometryDebug.addMaterialLineWidth(gui, view, layer, 1, 10);
+    });
+    if (layer.id === "WFS Building") layer.whenReady.then(function _(layer) {
+        var gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
+        debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
+        window.addEventListener("mousemove", picking, false);
+    });
+    if (layer.id === "WFS Route points") layer.whenReady.then(function _(layer) {
+        var gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
+        debug.GeometryDebug.addMaterialSize(gui, view, layer, 1, 200);
+    });
+}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["e11Rl","gLLPy"], "gLLPy", "parcelRequireecff")
+},{}]},["e11Rl","gLLPy"], "gLLPy", "parcelRequireecff")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
