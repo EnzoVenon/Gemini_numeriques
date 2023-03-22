@@ -1,11 +1,11 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
-import { buildingLayer, colorBuildings, altitudeBuildings, acceptFeature, extrudeBuildings } from "./models/building";
-
+import { update, buildingLayer, colorBuildings, altitudeBuildings, acceptFeature, extrudeBuildings } from "./models/building";
+import { addOrthoLayer } from "./models/ortho";
+import { addElevationLayer } from "./models/elevation";
 // ----------------- Global variables ----------------- //
 
 let meshes = [];
-let linesBus = [];
 let scaler;
 const extent = {
     west: 0.67289,
@@ -28,91 +28,45 @@ const placement = {
 
 const viewerDiv = document.getElementById('viewerDiv');
 
-// Instanciate iTowns GlobeView*
+// Instanciate iTowns GlobeView
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 
+const menuGlobe = new GuiTools('menuDiv', view);
 
 
 // ----------------- Layer Setup ----------------- //
 // Ortho Layer
-itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json').then(function _(config) {
-    config.source = new itowns.WMTSSource(config.source);
-    const layer = new itowns.ColorLayer('Ortho', config);
-    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-});
+itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
+    .then(result => addOrthoLayer(result, view, menuGlobe));
+
 
 // Elevation layers
-// These will deform iTowns globe geometry to represent terrain elevation.
-function addElevationLayerFromConfig(config) {
-    config.source = new itowns.WMTSSource(config.source);
-    const layer = new itowns.ElevationLayer(config.id, config);
-    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-}
-itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json').then(addElevationLayerFromConfig);
-itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json').then(addElevationLayerFromConfig);
+itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
+    .then(result => addElevationLayer(result, view, menuGlobe));
+itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
+    .then(result => addElevationLayer(result, view, menuGlobe));
+
+view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
 
-scaler = function update(/* dt */) {
-    let i;
-    let mesh;
-    // console.log("update")
-    if (meshes.length) {
-        view.notifyChange(view.camera.camera3D, true);
-    }
-    for (i = 0; i < meshes.length; i++) {
-        mesh = meshes[i];
-        if (mesh) {
-            mesh.scale.z = Math.min(
-                1.0, mesh.scale.z + 0.1);
-            mesh.updateMatrixWorld(true);
-        }
-    }
-    meshes = meshes.filter(function filter(m) { return m.scale.z < 1; });
-};
-
-view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, scaler);
-
-// Buildings Layer
-const wfsBuildingSource = new itowns.WFSSource({
-    url: 'https://wxs.ign.fr/topographie/geoportail/wfs?',
-    version: '2.0.0',
-    typeName: 'BDTOPO_V3:batiment',
-    crs: 'EPSG:4326',
-    ipr: 'IGN',
-    format: 'application/json',
-    extent: {
+const wfsBuildingLayer = buildingLayer(
+    'https://wxs.ign.fr/topographie/geoportail/wfs?',
+    '2.0.0',
+    'BDTOPO_V3:batiment',
+    'EPSG:4326',
+    'IGN',
+    'application/json',
+    {
         west: 0.67289,
         east: 0.74665,
         south: 45.17272,
         north: 45.2135,
     },
-});
-
-
-const wfsBuildingLayer = new itowns.FeatureGeometryLayer('WFS Building', {
-    batchId: function (property, featureId) { return featureId; },
-    onMeshCreated: function scaleZ(mesh) {
-        mesh.children.forEach(c => {
-            c.scale.z = 0.01;
-            meshes.push(c);
-        })
-    },
-    filter: acceptFeature,
-    source: wfsBuildingSource,
-    zoom: { min: 14 },
-
-    style: new itowns.Style({
-        fill: {
-            color: colorBuildings,
-            base_altitude: altitudeBuildings,
-            extrusion_height: extrudeBuildings,
-        }
-    })
-});
+    14
+);
 view.addLayer(wfsBuildingLayer);
 
-const menuGlobe = new GuiTools('menuDiv', view);
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function () {
     // eslint-disable-next-line no-console

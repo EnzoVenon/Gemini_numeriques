@@ -1,7 +1,26 @@
 
-export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, zoomMinLayer, meshes) {
-    // let meshes = [];
 
+let meshes = [];
+
+export function update(/* dt */view) {
+    let i;
+    let mesh;
+    // console.log("update")
+    if (meshes.length) {
+        view.notifyChange(view.camera.camera3D, true);
+    }
+    for (i = 0; i < meshes.length; i++) {
+        mesh = meshes[i];
+        if (mesh) {
+            mesh.scale.z = Math.min(
+                1.0, mesh.scale.z + 0.1);
+            mesh.updateMatrixWorld(true);
+        }
+    }
+    meshes = meshes.filter(function filter(m) { return m.scale.z < 1; });
+};
+
+export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, zoomMinLayer) {
 
     // Source
     const geometrySource = new itowns.WFSSource({
@@ -36,8 +55,10 @@ export function buildingLayer(serverURL, version, nameType, crs, ipr, format, ex
         })
     });
 
-    return { layer: geomLayer, meshList: meshes };
+    return geomLayer;
 }
+
+
 
 
 // Coloring the data
