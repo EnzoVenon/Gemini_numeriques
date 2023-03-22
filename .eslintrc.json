@@ -1,0 +1,25 @@
+{
+    "plugins": [
+        "jest"
+    ],
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "jest/globals": true
+    },
+    "extends": "eslint:recommended",
+    "overrides": [],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {},
+    "globals": {
+        "require": "readonly",
+        "module": "readonly",
+        "itowns": "readonly",
+        "dat": "readonly",
+        "setupLoadingScreen": "readonly",
+        "GuiTools": "readonly"
+    }
+}
