@@ -1,18 +1,9 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
-import { update, buildingLayer, colorBuildings, altitudeBuildings, acceptFeature, extrudeBuildings } from "./models/building";
+import { update, buildingLayer, picking } from "./models/building";
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
-// ----------------- Global variables ----------------- //
 
-let meshes = [];
-let scaler;
-const extent = {
-    west: 0.67289,
-    east: 0.74665,
-    south: 45.17272,
-    north: 45.2135,
-};
 
 // ----------------- View Setup ----------------- //
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
@@ -75,41 +66,16 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function () {
 
 debug.createTileDebugUI(menuGlobe.gui, view);
 
-function picking(event) {
-    if (view.controls.isPaused) {
-        const htmlInfo = document.getElementById('info');
-        const intersects = view.pickObjectsAt(event, 3, 'WFS Building');
-        let properties;
-        let info;
-        let batchId;
-
-        htmlInfo.innerHTML = ' ';
-
-        if (intersects.length) {
-            batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
-            properties = intersects[0].object.feature.geometries[batchId].properties;
-
-            Object.keys(properties).map(function (objectKey) {
-                const value = properties[objectKey];
-                if (value) {
-                    const key = objectKey.toString();
-                    if (key[0] !== '_' && key !== 'geometry_name') {
-                        info = value.toString();
-                        htmlInfo.innerHTML += '<li><b>' + key + ': </b>' + info + '</li>';
-                    }
-                }
-            });
-        }
-    }
-}
 
 for (const layer of view.getLayers()) {
-
     if (layer.id === 'WFS Building') {
         layer.whenReady.then(function _(layer) {
             const gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
             debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
-            window.addEventListener('mousemove', picking, false);
+            window.addEventListener(
+                'mousemove',
+                (event) => { picking(event, view) },
+                false);
         });
     }
 

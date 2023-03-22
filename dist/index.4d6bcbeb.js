@@ -561,15 +561,6 @@ function hmrAccept(bundle, id) {
 var _building = require("./models/building");
 var _ortho = require("./models/ortho");
 var _elevation = require("./models/elevation");
-// ----------------- Global variables ----------------- //
-let meshes = [];
-let scaler;
-const extent = {
-    west: 0.67289,
-    east: 0.74665,
-    south: 45.17272,
-    north: 45.2135
-};
 // ----------------- View Setup ----------------- //
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
 itowns.proj4.defs("EPSG:3946", "+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
@@ -611,34 +602,12 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function() {
     console.info("Globe initialized");
 });
 debug.createTileDebugUI(menuGlobe.gui, view);
-function picking(event) {
-    if (view.controls.isPaused) {
-        const htmlInfo = document.getElementById("info");
-        const intersects = view.pickObjectsAt(event, 3, "WFS Building");
-        let properties;
-        let info;
-        let batchId;
-        htmlInfo.innerHTML = " ";
-        if (intersects.length) {
-            batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
-            properties = intersects[0].object.feature.geometries[batchId].properties;
-            Object.keys(properties).map(function(objectKey) {
-                const value = properties[objectKey];
-                if (value) {
-                    const key = objectKey.toString();
-                    if (key[0] !== "_" && key !== "geometry_name") {
-                        info = value.toString();
-                        htmlInfo.innerHTML += "<li><b>" + key + ": </b>" + info + "</li>";
-                    }
-                }
-            });
-        }
-    }
-}
 for (const layer of view.getLayers())if (layer.id === "WFS Building") layer.whenReady.then(function _(layer) {
     const gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
     debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
-    window.addEventListener("mousemove", picking, false);
+    window.addEventListener("mousemove", (event)=>{
+        (0, _building.picking)(event, view);
+    }, false);
 });
 
 },{"./models/building":"8WZDc","./models/ortho":"3i7rY","./models/elevation":"2x72h"}],"8WZDc":[function(require,module,exports) {
@@ -652,7 +621,8 @@ parcelHelpers.export(exports, "colorBuildings", ()=>colorBuildings);
 parcelHelpers.export(exports, "altitudeBuildings", ()=>altitudeBuildings);
 // Extruding the data 
 parcelHelpers.export(exports, "extrudeBuildings", ()=>extrudeBuildings);
-parcelHelpers.export(exports, "acceptFeature", ()=>acceptFeature) /* Properties example:
+parcelHelpers.export(exports, "acceptFeature", ()=>acceptFeature);
+/* Properties example:
     altitude_maximale_sol: 190.9
      altitude_maximale_toit: 194
     altitude_minimale_sol: 190.1
@@ -683,7 +653,7 @@ parcelHelpers.export(exports, "acceptFeature", ()=>acceptFeature) /* Properties 
     usage_1: "Indifférencié"
     usage_2: null
     <prototype>: Object { … }
-*/ ;
+*/ parcelHelpers.export(exports, "picking", ()=>picking);
 let meshes = [];
 function update(/* dt */ view) {
     let i;
@@ -755,6 +725,30 @@ function extrudeBuildings(properties) {
 }
 function acceptFeature(properties) {
     return !!properties.hauteur;
+}
+function picking(event, view) {
+    if (view.controls.isPaused) {
+        const htmlInfo = document.getElementById("info");
+        const intersects = view.pickObjectsAt(event, 3, "WFS Building");
+        let properties;
+        let info;
+        let batchId;
+        htmlInfo.innerHTML = " ";
+        if (intersects.length) {
+            batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
+            properties = intersects[0].object.feature.geometries[batchId].properties;
+            Object.keys(properties).map(function(objectKey) {
+                const value = properties[objectKey];
+                if (value) {
+                    const key = objectKey.toString();
+                    if (key[0] !== "_" && key !== "geometry_name") {
+                        info = value.toString();
+                        htmlInfo.innerHTML += "<li><b>" + key + ": </b>" + info + "</li>";
+                    }
+                }
+            });
+        }
+    }
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
