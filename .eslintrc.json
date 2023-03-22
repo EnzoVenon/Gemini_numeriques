@@ -18,6 +18,7 @@
         "require": "readonly",
         "module": "readonly",
         "itowns": "readonly",
+        "debug": "readonly",
         "dat": "readonly",
         "setupLoadingScreen": "readonly",
         "GuiTools": "readonly"

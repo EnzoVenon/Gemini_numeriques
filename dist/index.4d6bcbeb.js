@@ -565,11 +565,6 @@ var _elevation = require("./models/elevation");
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
 itowns.proj4.defs("EPSG:3946", "+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 // Define initial camera position
-const positionOnGlobe = {
-    longitude: 0.71829,
-    latitude: 45.18260,
-    altitude: 3000
-};
 const placement = {
     coord: new itowns.Coordinates("EPSG:4326", 0.71829, 45.18260),
     range: 3000,
@@ -594,7 +589,7 @@ const wfsBuildingLayer = (0, _building.buildingLayer)("https://wxs.ign.fr/topogr
     east: 0.74665,
     south: 45.17272,
     north: 45.2135
-}, 14);
+});
 view.addLayer(wfsBuildingLayer);
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function() {
@@ -610,7 +605,47 @@ for (const layer of view.getLayers())if (layer.id === "WFS Building") layer.when
     }, false);
 });
 
-},{"./models/building":"8WZDc","./models/ortho":"3i7rY","./models/elevation":"2x72h"}],"8WZDc":[function(require,module,exports) {
+},{"./models/elevation":"2x72h","./models/building":"8WZDc","./models/ortho":"3i7rY"}],"2x72h":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "addElevationLayer", ()=>addElevationLayer);
+function addElevationLayer(configElevation, view, menuGlobe) {
+    configElevation.source = new itowns.WMTSSource(configElevation.source);
+    const layer = new itowns.ElevationLayer(configElevation.id, configElevation);
+    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"8WZDc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "update", ()=>update);
@@ -671,7 +706,7 @@ function update(/* dt */ view) {
         return m.scale.z < 1;
     });
 }
-function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, zoomMinLayer) {
+function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent) {
     // Source
     const geometrySource = new itowns.WFSSource({
         url: serverURL,
@@ -751,53 +786,13 @@ function picking(event, view) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"3i7rY":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3i7rY":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "addOrthoLayer", ()=>addOrthoLayer);
 function addOrthoLayer(configOrtho, view, menuGlobe) {
     configOrtho.source = new itowns.WMTSSource(configOrtho.source);
     const layer = new itowns.ColorLayer("Ortho", configOrtho);
-    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2x72h":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "addElevationLayer", ()=>addElevationLayer);
-function addElevationLayer(configElevation, view, menuGlobe) {
-    configElevation.source = new itowns.WMTSSource(configElevation.source);
-    const layer = new itowns.ElevationLayer(configElevation.id, configElevation);
     view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 }
 
