@@ -44,7 +44,7 @@ export function buildingLayer(serverURL, version, nameType, crs, ipr, format, ex
         },
         filter: acceptFeature,
         source: geometrySource,
-        zoom: { min: zoomMinLayer },
+        zoom: { min: 14 },
 
         style: new itowns.Style({
             fill: {

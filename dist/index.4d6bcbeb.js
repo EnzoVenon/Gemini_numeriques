@@ -696,7 +696,7 @@ function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, z
         filter: acceptFeature,
         source: geometrySource,
         zoom: {
-            min: zoomMinLayer
+            min: 14
         },
         style: new itowns.Style({
             fill: {

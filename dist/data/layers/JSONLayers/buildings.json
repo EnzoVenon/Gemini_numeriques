@@ -1,0 +1,21 @@
+{
+    "id": "WFS Building",
+    "source": {
+        "url": "https://wxs.ign.fr/topographie/geoportail/wfs?",
+        "version": "2.0.0",
+        "typeName": "BDTOPO_V3:batiment",
+        "crs": "EPSG:4326",
+        "ipr": "IGN",
+        "format": "application/json",
+        "attribution": {
+            "name": "IGN",
+            "url": "http://www.ign.fr/"
+        },
+        "extent": {
+            "west": 0.67289,
+            "east": 0.74665,
+            "south": 45.17272,
+            "north": 45.2135
+        }
+    }
+}
