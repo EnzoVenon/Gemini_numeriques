@@ -10,7 +10,6 @@ import { addElevationLayer } from "./models/elevation";
 itowns.proj4.defs('EPSG:3946', '+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs');
 
 // Define initial camera position
-const positionOnGlobe = { longitude: 0.71829, latitude: 45.18260, altitude: 3000 };
 const placement = {
     coord: new itowns.Coordinates('EPSG:4326', 0.71829, 45.18260),
     range: 3000,
@@ -53,8 +52,7 @@ const wfsBuildingLayer = buildingLayer(
         east: 0.74665,
         south: 45.17272,
         north: 45.2135,
-    },
-    14
+    }
 );
 view.addLayer(wfsBuildingLayer);
 
