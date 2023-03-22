@@ -82,19 +82,9 @@ view.addLayer(wfsCartoLayer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 
 // Ortho Layer
-var colorSource = new itowns.WMTSSource({
-    url: 'http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
-    crs: 'EPSG:3857',
-    name: 'ORTHOIMAGERY.ORTHOPHOTOS',
-    tileMatrixSet: 'PM',
-    format: 'image/jpeg'
-});
+itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
+    .then(result => addOrthoLayer(result, view, menuGlobe));
 
-var colorLayer = new itowns.ColorLayer('Ortho', {
-    source: colorSource,
-});
-
-view.addLayer(colorLayer);
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
