@@ -18,9 +18,9 @@ export function update(/* dt */view) {
         }
     }
     meshes = meshes.filter(function filter(m) { return m.scale.z < 1; });
-};
+}
 
-export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent, zoomMinLayer) {
+export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent) {
 
     // Source
     const geometrySource = new itowns.WFSSource({
