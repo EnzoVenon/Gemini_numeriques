@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto'
 
-export function addChart(divId, data, xdata, ydata) {
+export function addChart(divId, data, xdata, ydata, label) {
   return new Chart(
     document.getElementById(divId),
     {
@@ -9,7 +9,7 @@ export function addChart(divId, data, xdata, ydata) {
         labels: data.map(row => row[xdata]),
         datasets: [
           {
-            label: 'population dans iris',
+            label: label,
             data: data.map(row => row[ydata])
           }
         ]
