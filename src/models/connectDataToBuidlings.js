@@ -17,24 +17,43 @@ export async function picking(event, view) {
       // console.log(intersects[0])
       batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
       properties = intersects[0].object.feature.geometries[batchId].properties;
-
+      let iris_code;
       let importantKey = ["usage_1", "usage_2", "hauteur", "nombre_de_logements", "nombre_d_etage"]
-      Object.keys(properties).map(function (objectKey) {
+
+      let keys = Object.keys(properties)
+      // Object.keys(properties).map(async function (objectKey) 
+      for (let i = 0; i < keys.length; i++) {
+        let objectKey = keys[i]
+
         const value = properties[objectKey];
+
         if (value) {
           const key = objectKey.toString();
+          console.log('------------------- Key ---------------')
+          if (key === 'bbox') {
+            lon = (value[0] + value[2]) / 2;
+            lat = (value[1] + value[3]) / 2;
+            const res = await fetch("https://pyris.datajazz.io/api/coords?lat=" + lat + "&lon=" + lon)
+            const json = await res.json();
+
+            console.log('result')
+            iris_code = json.complete_code
+          }
           if (key[0] !== '_' && key !== 'geometry_name' && (importantKey.includes(key))) {
             info = value.toString();
             htmlInfo.innerHTML += '<li><b>' + key + ': </b>' + info + '</li>';
           }
         }
-      });
+      };
       htmlInfo.innerHTML += '<li>' + 'test iris' + '</li>';
 
-      // getPopdata
-      let apiUrl = "https://pyris.datajazz.io/api/insee/population/" + 291230000
+      console.log('iris_code')
+      console.log(iris_code)
 
-      let apiUrl2 = "https://pyris.datajazz.io/api/insee/population/distribution/" + 291230000 + "?by=age"
+      // getPopdata
+      let apiUrl = "https://pyris.datajazz.io/api/insee/population/" + iris_code
+
+      let apiUrl2 = "https://pyris.datajazz.io/api/insee/population/distribution/" + iris_code + "?by=age"
 
 
       let dataPromise = await fetch(apiUrl)
@@ -46,7 +65,9 @@ export async function picking(event, view) {
       console.log(dataJsonAge.data)
       delete dataJsonAge.data.census;
 
-      htmlInfo.innerHTML += '<li><div style="width:100%;"><canvas id="pop"></canvas></div></li>';
+      htmlInfo.innerHTML += '<li>' + 'population par groupe paté de maison' + '</li>';
+      htmlInfo.innerHTML += '<div style="width:100%;"><canvas id="pop"></canvas></div>';
+      htmlInfo.innerHTML += '<li>' + 'population par age par groupe paté de maison' + '</li>';
       htmlInfo.innerHTML += '<div style="width:100%;"><canvas id="pop2"></canvas></div>';
 
 
@@ -63,8 +84,8 @@ export async function picking(event, view) {
 
       })
 
-      addChart('pop', data, "pop", "count")
-      addChart('pop2', dataAge, "age", "count")
+      addChart('pop', data, "pop", "count", 'population')
+      addChart('pop2', dataAge, "age", "count", 'population par age')
 
     }
   }
