@@ -4,6 +4,9 @@ import { update, buildingLayer, picking } from "./models/building";
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
+import { setUpMenu } from "./GUI/BaseMenu";
+
+setUpMenu();
 
 // ----------------- View Setup ----------------- //
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
