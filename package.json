@@ -14,7 +14,8 @@
     "start": "parcel --open",
     "build": "parcel build",
     "clean": "rm -rf dist",
-    "test": "npx eslint src ; jest --coverage"
+    "test": "npx eslint src ; jest --coverage",
+    "jest": "jest --coverage"
   },
   "devDependencies": {
     "buffer": "^5.7.1",

@@ -21,4 +21,4 @@ jobs:
         run: npx eslint src
       
       - name: Tests unitaires avec couverture
-        run: jest --coverage
+        run: npm run jest
