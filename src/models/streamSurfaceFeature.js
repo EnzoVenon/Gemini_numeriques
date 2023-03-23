@@ -77,7 +77,7 @@ export function addStreamSurfaceFeature(url, version, typeName, crs, zoomMin, la
     return { surface_layer: wfsCartoLayer, label_layer: wfsCartoLabelLayer, geom: geomLayer }
 }
 
-function setColor(properties) {
+function setColor() {
     // console.log(properties)
     var num = Math.round(0xffffff * Math.random());
     var r = num >> 16;
@@ -87,7 +87,7 @@ function setColor(properties) {
 }
 
 
-function setColorLabel(properties) {
+function setColorLabel() {
     // console.log(properties)
     var num = Math.round(0xffffff * Math.random());
     var r = num >> 16;

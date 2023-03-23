@@ -132,7 +132,7 @@ export function picking(event, view) {
         const htmlInfo = document.getElementById('info');
         const intersects = view.pickObjectsAt(event, 3, 'WFS Building');
         // const intersects2 = view.pickObjectsAt(event, 10000000, 'iris');
-        console.log(intersects2)
+        //console.log(intersects2)
         let properties;
         let info;
         let batchId;
