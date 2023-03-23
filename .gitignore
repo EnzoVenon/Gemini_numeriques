@@ -106,3 +106,4 @@ typings/
 package-lock.json
 .parcel-cache
 .DS_Store
+dist/
