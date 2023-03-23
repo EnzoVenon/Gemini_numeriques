@@ -62,7 +62,7 @@ export function buildingLayer(serverURL, version, nameType, crs, ipr, format, ex
 
 
 // Coloring the data
-export function colorBuildings(properties) {
+function colorBuildings(properties) {
 
     let color = new itowns.THREE.Color();
     if (properties.usage_1 === 'Résidentiel') {
@@ -81,16 +81,16 @@ export function colorBuildings(properties) {
 }
 
 // Placing the data on the ground
-export function altitudeBuildings(properties) {
+function altitudeBuildings(properties) {
     return properties.altitude_minimale_sol;
 }
 
 // Extruding the data 
-export function extrudeBuildings(properties) {
+function extrudeBuildings(properties) {
     return properties.hauteur;
 }
 
-export function acceptFeature(properties) {
+function acceptFeature(properties) {
     return !!properties.hauteur;
 }
 
