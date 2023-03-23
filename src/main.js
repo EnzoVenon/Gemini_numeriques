@@ -7,13 +7,13 @@ import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 
 // ----------------- View Setup ----------------- //
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
-// itowns.proj4.defs('EPSG:3946', '+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs');
+//  itowns.proj4.defs('EPSG:3946', '+proj=lcc +lat_1=45.25 +lat_2=46.75 +lat_0=46 +lon_0=3 +x_0=1700000 +y_0=5200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs');
 
 // Define initial camera position
 const placement = {
     coord: new itowns.Coordinates('EPSG:4326', 0.71829, 45.18260),
     range: 3000,
-    tilt: 20,
+    tilt: 30,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -52,39 +52,53 @@ const wfsBuildingLayer = buildingLayer(
 );
 view.addLayer(wfsBuildingLayer);
 
-var wfsCartoSource = new itowns.WFSSource({
-    url: 'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
-    version: '2.0.0',
-    typeName: 'BDCARTO_BDD_WLD_WGS84G:departement',
-    crs: 'EPSG:4326',
-    ipr: 'IGN',
-    format: 'application/json',
-});
-
-var wfsCartoStyle = new itowns.Style({
-    zoom: { min: 10, max: 20 },
-    // point: { color: 'white', line: 'green' },
-    fill: {
-        color: setColor
-    },
-    stroke: { color: "red" }
-});
-
-var wfsCartoLayer = new itowns.ColorLayer('testWFSDEP', {
-    source: wfsCartoSource,
-    style: wfsCartoStyle,
-
-    addLabelLayer: true,
-});
-
-
-view.addLayer(wfsCartoLayer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-
-
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view, menuGlobe));
 
+// let departement_layer = addStreamSurfaceFeature(
+//     'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
+//     '2.0.0',
+//     'BDCARTO_BDD_WLD_WGS84G:departement',
+//     'EPSG:4326',
+//     10,
+//     "dep",
+//     {
+//         west: 0.67289,
+//         east: 0.74665,
+//         south: 45.17272,
+//         north: 45.2135,
+//     }
+// )
+
+
+// let surface_layer = departement_layer.surface_layer
+// let label_layer = departement_layer.label_layer
+
+let iris_layer = addStreamSurfaceFeature(
+    'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
+    '2.0.0',
+    'STATISTICALUNITS.IRIS:contours_iris',
+    'EPSG:4326',
+    10,
+    "iris",
+    {
+        west: 0.67289,
+        east: 0.74665,
+        south: 45.17272,
+        north: 45.2135,
+    }
+)
+
+
+let iris_surface_layer = iris_layer.surface_layer
+let iris_geom_layer = iris_layer.geom
+
+
+
+
+
+// console.log(departement_layer)
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -92,6 +106,15 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
 
+    // view.addLayer(surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    // view.addLayer(label_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+
+    view.addLayer(iris_geom_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+
+
+    view.addLayer(iris_surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+
+    console.log(iris_surface_layer)
 
 });
 
@@ -112,12 +135,3 @@ for (const layer of view.getLayers()) {
 
 }
 
-function setColor(properties) {
-    console.log(properties)
-
-    var num = Math.round(0xffffff * Math.random());
-    var r = num >> 16;
-    var g = num >> 8 & 255;
-    var b = num & 255;
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', 0.3)';
-}
