@@ -71,7 +71,7 @@ for (const layer of view.getLayers()) {
             const gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
             debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
             window.addEventListener(
-                'mousemove',
+                'click',
                 (event) => { picking(event, view) },
                 false);
         });
