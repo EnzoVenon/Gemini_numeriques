@@ -1,5 +1,9 @@
 # Jumeaux_num-riques
 
+# bdcarto:
+ - https://geoservices.ign.fr/services-web-experts-cartovecto
+ 
+
 # installation: 
 - git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 - install node (and npm)
