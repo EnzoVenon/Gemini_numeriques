@@ -1,4 +1,4 @@
-import Chart from 'chart.js/auto'
+import { addChart } from "./insee/showChart"
 
 export async function picking(event, view) {
   if (view.controls.isPaused) {
@@ -33,12 +33,21 @@ export async function picking(event, view) {
 
       // getPopdata
       let apiUrl = "https://pyris.datajazz.io/api/insee/population/" + 291230000
+
+      let apiUrl2 = "https://pyris.datajazz.io/api/insee/population/distribution/" + 291230000 + "?by=age"
+
+
       let dataPromise = await fetch(apiUrl)
       let dataJson = await dataPromise.json()
       console.log(dataJson)
-      htmlInfo.innerHTML += '<div style="width:100%;"><canvas id="acquisitions"></canvas></div>';
 
-      console.log(dataJson.population)
+      let dataPromiseAge = await fetch(apiUrl2)
+      let dataJsonAge = await dataPromiseAge.json()
+      console.log(dataJsonAge.data)
+      delete dataJsonAge.data.census;
+
+      htmlInfo.innerHTML += '<li><div style="width:100%;"><canvas id="pop"></canvas></div></li>';
+      htmlInfo.innerHTML += '<div style="width:100%;"><canvas id="pop2"></canvas></div>';
 
 
       const data = [
@@ -47,21 +56,16 @@ export async function picking(event, view) {
         { pop: "femme", count: dataJson.population_female },
       ];
 
-      new Chart(
-        document.getElementById('acquisitions'),
-        {
-          type: 'bar',
-          data: {
-            labels: data.map(row => row.pop),
-            datasets: [
-              {
-                label: 'population dans iris',
-                data: data.map(row => row.count)
-              }
-            ]
-          }
-        }
-      )
+      let dataAge = [];
+      Object.entries(dataJsonAge.data).forEach(([key, val]) => {
+        console.log(val)
+        dataAge.push({ age: key, count: val })
+
+      })
+
+      addChart('pop', data, "pop", "count")
+      addChart('pop2', dataAge, "age", "count")
+
     }
   }
 }
