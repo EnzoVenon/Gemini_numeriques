@@ -21,4 +21,4 @@ jobs:
         run: npx eslint src
       
       - name: Tests unitaires avec couverture
-        run: jest --coverage
+        run: cd Gemini_numeriques && jest --coverage
