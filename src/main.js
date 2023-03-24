@@ -1,12 +1,14 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
-import { update, buildingLayer, picking } from "./models/building";
+import { update, buildingLayer } from "./models/building";
+import { picking } from "./models/connectDataToBuidlings"
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
 
 setUpMenu();
+
 
 // ----------------- View Setup ----------------- //
 // Define crs projection that we will use (taken from https://epsg.io/3946, Proj4js section)
@@ -59,25 +61,6 @@ view.addLayer(wfsBuildingLayer);
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view, menuGlobe));
 
-// let departement_layer = addStreamSurfaceFeature(
-//     'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
-//     '2.0.0',
-//     'BDCARTO_BDD_WLD_WGS84G:departement',
-//     'EPSG:4326',
-//     10,
-//     "dep",
-//     {
-//         west: 0.67289,
-//         east: 0.74665,
-//         south: 45.17272,
-//         north: 45.2135,
-//     }
-// )
-
-
-// let surface_layer = departement_layer.surface_layer
-// let label_layer = departement_layer.label_layer
-
 let iris_layer = addStreamSurfaceFeature(
     'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
     '2.0.0',
@@ -96,10 +79,6 @@ let iris_layer = addStreamSurfaceFeature(
 
 let iris_surface_layer = iris_layer.surface_layer
 let iris_geom_layer = iris_layer.geom
-
-
-
-
 
 // console.log(departement_layer)
 
