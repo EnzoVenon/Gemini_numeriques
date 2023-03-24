@@ -17,5 +17,8 @@ jobs:
       - name: Installer les dépendances (npm)
         run: npm install
 
-      - name: ESLint et tests unitaires avec couverture
-        run: npm test
+      - name: ESLint
+        run: npx eslint src
+      
+      - name: Tests unitaires avec couverture
+        run: npm run jest

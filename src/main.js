@@ -5,6 +5,9 @@ import { picking } from "./models/connectDataToBuidlings"
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
+import { setUpMenu } from "./GUI/BaseMenu";
+
+setUpMenu();
 
 
 // ----------------- View Setup ----------------- //
