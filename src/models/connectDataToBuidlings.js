@@ -31,8 +31,8 @@ export async function picking(event, view) {
           const key = objectKey.toString();
           console.log('------------------- Key ---------------')
           if (key === 'bbox') {
-            lon = (value[0] + value[2]) / 2;
-            lat = (value[1] + value[3]) / 2;
+            const lon = (value[0] + value[2]) / 2;
+            const lat = (value[1] + value[3]) / 2;
             const res = await fetch("https://pyris.datajazz.io/api/coords?lat=" + lat + "&lon=" + lon)
             const json = await res.json();
 
@@ -44,7 +44,7 @@ export async function picking(event, view) {
             htmlInfo.innerHTML += '<li><b>' + key + ': </b>' + info + '</li>';
           }
         }
-      };
+      }
       htmlInfo.innerHTML += '<li>' + 'test iris' + '</li>';
 
       console.log('iris_code')
