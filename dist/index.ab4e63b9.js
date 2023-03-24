@@ -1,4 +1,4 @@
-/* global itowns */ // eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
 function setupLoadingScreen(viewerDiv, view) {
     var loadingScreenContainer;
     if (view.isDebugMode) return;

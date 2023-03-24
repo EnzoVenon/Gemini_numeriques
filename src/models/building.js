@@ -1,19 +1,40 @@
 
-export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
-    let meshes = [];
+
+let meshes = [];
+
+export function update(/* dt */view) {
+    let i;
+    let mesh;
+    // console.log("update")
+    if (meshes.length) {
+        view.notifyChange(view.camera.camera3D, true);
+    }
+    for (i = 0; i < meshes.length; i++) {
+        mesh = meshes[i];
+        if (mesh) {
+            mesh.scale.z = Math.min(
+                1.0, mesh.scale.z + 0.1);
+            mesh.updateMatrixWorld(true);
+        }
+    }
+    meshes = meshes.filter(function filter(m) { return m.scale.z < 1; });
+}
+
+export function buildingLayer(serverURL, version, nameType, crs, ipr, format, extent) {
 
     // Source
     const geometrySource = new itowns.WFSSource({
         url: serverURL,
+        version: version,
         typeName: nameType,
         crs: crs,
-        ipr: 'IGN',
-        format: 'application/json',
+        ipr: ipr,
+        format: format,
         extent: extent
     });
 
     // Geometry Layer
-    const geomLayer = new itowns.FeatureGeometryLayer('Buildings', {
+    const geomLayer = new itowns.FeatureGeometryLayer('WFS Building', {
         batchId: function (property, featureId) { return featureId; },
         onMeshCreated: function scaleZ(mesh) {
             mesh.children.forEach(c => {
@@ -23,24 +44,27 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
         },
         filter: acceptFeature,
         source: geometrySource,
-        zoom: { min: zoomMinLayer },
+        zoom: { min: 14 },
+
         style: new itowns.Style({
             fill: {
-                color: setColor,
-                base_altitude: setAltitude,
-                extrusion_height: setExtrusion,
-            },
-
-        }),
-
+                color: colorBuildings,
+                base_altitude: altitudeBuildings,
+                extrusion_height: extrudeBuildings,
+            }
+        })
     });
 
     return geomLayer;
 }
 
+
+
+
 // Coloring the data
-function setColor(properties) {
-    let color = new itowns.THREE.Color(0xaaaaaa);
+function colorBuildings(properties) {
+
+    let color = new itowns.THREE.Color();
     if (properties.usage_1 === 'Résidentiel') {
         return color.set(0xFDFDFF);
     } else if (properties.usage_1 === 'Annexe') {
@@ -56,14 +80,14 @@ function setColor(properties) {
     return color.set(0x555555);
 }
 
-// Extruding the data 
-function setExtrusion(properties) {
-    return properties.hauteur;
+// Placing the data on the ground
+function altitudeBuildings(properties) {
+    return properties.altitude_minimale_sol;
 }
 
-// Placing the data on the ground
-function setAltitude(properties) {
-    return properties.altitude_minimale_sol;
+// Extruding the data 
+function extrudeBuildings(properties) {
+    return properties.hauteur;
 }
 
 function acceptFeature(properties) {
@@ -102,4 +126,5 @@ function acceptFeature(properties) {
     usage_2: null
     <prototype>: Object { … }
 */
+
 

@@ -2,7 +2,7 @@
  * Generated On: 2015-10-5
  * Class: GuiTools
  * Description: Classe pour créer un menu.
- */ /* global dat, itowns */ dat.GUI.prototype.removeFolder = function removeFolder(name) {
+ */ dat.GUI.prototype.removeFolder = function removeFolder(name) {
     var folder = this.__folders[name];
     if (!folder) return;
     folder.close();
