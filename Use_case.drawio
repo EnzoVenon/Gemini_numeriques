@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-03-27T14:39:03.885Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="OfXfZqtyGIpPUqAlIX0-" version="21.1.1" type="github">
+<mxfile host="app.diagrams.net" modified="2023-03-27T14:40:23.808Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="i3MIOqEh7EMkbblDhMko" version="21.1.1" type="github">
   <diagram name="Page-1" id="HIEHrfZLS2LJmifFWxkU">
     <mxGraphModel dx="988" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -8,7 +8,7 @@
           <mxGeometry x="205" y="170" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-5" value="Sélection d&#39;un objet au clic avec affichage d&#39;informations" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="200" y="490" width="210" height="50" as="geometry" />
+          <mxGeometry x="200" y="520" width="210" height="50" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-6" value="Visualisation 3D du globe" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="200" y="230" width="210" height="50" as="geometry" />
@@ -65,7 +65,7 @@
           <mxGeometry x="195" y="350" width="210" height="50" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-31" value="Sources de données" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="580" y="580" width="170" height="285" as="geometry" />
+          <mxGeometry x="630" y="600" width="170" height="285" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-30" value="BDNB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="0HWwTG7SeUn4EHq8_ZQe-31" vertex="1">
           <mxGeometry x="40" y="207" width="70" height="30" as="geometry" />
@@ -73,7 +73,7 @@
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-50" value="Cadastre" style="rounded=1;whiteSpace=wrap;html=1;" parent="0HWwTG7SeUn4EHq8_ZQe-31" vertex="1">
           <mxGeometry x="40" y="247" width="70" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="cFTcSejxlXXtRCKA9RDN-8" value="&lt;div&gt;FLUX&lt;/div&gt;" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;rotation=-180;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
+        <mxCell id="cFTcSejxlXXtRCKA9RDN-8" value="&lt;div&gt;FLUX&lt;/div&gt;" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;rotation=-180;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
           <mxGeometry x="20" y="30" width="130" height="170" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-27" value="INSEE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="0HWwTG7SeUn4EHq8_ZQe-31" vertex="1">
@@ -149,12 +149,15 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-51" value="Lien entre un objet et différentes sources de données " style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="440" y="490" width="210" height="50" as="geometry" />
+          <mxGeometry x="440" y="520" width="210" height="50" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-55" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.039;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="0HWwTG7SeUn4EHq8_ZQe-51" target="0HWwTG7SeUn4EHq8_ZQe-31" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="540" y="540" as="sourcePoint" />
             <mxPoint x="420" y="500" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="545" y="610" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-56" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=3;entryX=-0.007;entryY=0.081;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="0HWwTG7SeUn4EHq8_ZQe-8" target="0HWwTG7SeUn4EHq8_ZQe-31" edge="1">
