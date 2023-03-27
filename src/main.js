@@ -48,9 +48,9 @@ const wfsBuildingLayer = buildingLayer(
     'IGN',
     'application/json',
     {
-        west: 0.69289,
+        west: 0.67289,
         east: 0.74665,
-        south: 45.19272,
+        south: 45.17272,
         north: 45.2135,
     }
 );
