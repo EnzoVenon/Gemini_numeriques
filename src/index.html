@@ -18,6 +18,7 @@
 <body>
     <div id="viewerDiv"></div>
 
+    <script src="./jsItown/plugins/FeatureToolTip.js"></script>
     <script src="./GUI/GuiTools.js"></script>
     <script src="../node_modules/itowns/dist/itowns.js"></script>
     <script src="../node_modules/itowns/dist/debug.js"></script>
@@ -31,8 +32,20 @@
     <div id="menu">
         <h2>Menu</h2>
         <p>test</p>
-        <input type="checkbox" name="bouton_afficher_menu" id="bouton_afficher_menu" checked>
+        <input type="checkbox" name="affiche" id="bouton_afficher_menu">
         <label for="bouton_afficher_menu">Afficher le menu</label>
+
+        <input type="checkbox" name="affiche" id="affiche_bd_topo" checked>
+        <label for="affiche_bd_topo">Affiche bd_topo</label>
+
+        <input type="checkbox" name="affiche" id="affiche_bd_nb" checked>
+        <label for="affiche_bd_nb">Affiche bd_nb</label>
+
+
+        <input type="checkbox" name="affiche" id="affiche_bd_cadastre" checked>
+        <label for="affiche_bd_cadastre">Affiche bd_cadastre</label>
+
+
     </div>
 
     <script type="module" src="./main.js"></script>
