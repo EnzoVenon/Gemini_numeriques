@@ -1,5 +1,5 @@
 
-export async function addShp(filePath, view) {
+export async function addShp(filePath, layerName, oulineColor, fillColor, view) {
     let layer = await itowns.Fetcher.multiple(
         filePath,
         {
@@ -25,15 +25,15 @@ export async function addShp(filePath, view) {
 
         // console.log(parsed)
 
-        return view.addLayer(new itowns.ColorLayer('velib', {
+        return view.addLayer(new itowns.ColorLayer(layerName, {
             source: shp,
             style: new itowns.Style({
                 zoom: { min: 10, max: 20 },
                 // point: { color: 'white', line: 'green' },
                 fill: {
-                    color: setColor
+                    color: fillColor
                 },
-                stroke: { color: "red" }
+                stroke: { color: oulineColor }
             }),
             addLabelLayer: true,
         }));

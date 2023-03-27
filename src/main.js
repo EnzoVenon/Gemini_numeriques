@@ -78,13 +78,50 @@ function addBdTopo() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+function addBdnb() {
 
-// var gpkgSource = new itowns.GpkgSource({
-//     url: '../data/gpkg/bdnb.gpkg',
-//     crs: 'EPSG:4326' // Le système de coordonnées de votre fichier GeoPackage
-// });
+    console.log("addBdnb")
+    // console.log(itowns)
+    console.log(view)
+    console.log(document.getElementById("affiche_bd_nb").checked)
+    if (document.getElementById("affiche_bd_nb").checked) {
+        view.getLayerById("bdnb").opacity = 1
+    }
+    else {
+        if (view.getLayerById("bdnb")) {
+            // view.removeLayer("bdnb")
+            console.log(view.getLayerById("bdnb"))
+            view.getLayerById("bdnb").opacity = 0
 
-console.log(itowns)
+
+        }
+
+    }
+    view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+}
+
+function addBdCadastre() {
+
+    console.log("addCadastre")
+    // console.log(itowns)
+    console.log(view)
+    console.log(document.getElementById("affiche_bd_cadastre").checked)
+    if (document.getElementById("affiche_bd_cadastre").checked) {
+        view.getLayerById("cadastre").opacity = 1
+    }
+    else {
+        if (view.getLayerById("cadastre")) {
+            // view.removeLayer("bdnb")
+            console.log(view.getLayerById("cadastre"))
+            view.getLayerById("cadastre").opacity = 0
+
+
+        }
+
+    }
+    view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+}
+
 
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
@@ -118,7 +155,16 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
 
-    addShp("../data/shp/prg/bdnb_perigeux7", view)
+    document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
+
+    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+
+
+
+    addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+
+    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
+
 
 
     // view.addLayer(surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
