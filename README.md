@@ -1,9 +1,9 @@
-# Jumeaux_num-riques
+# Jumeaux_numeriques
 
 # bdcarto:
  - https://geoservices.ign.fr/services-web-experts-cartovecto
  
-#BDNB (Base de données nationale des bâtiments)
+# BDNB (Base de données nationale des bâtiments)
  - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
 
 # installation: 
