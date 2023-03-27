@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-03-27T14:33:47.787Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="zGGb_vbOH4JqTK_U6HxE" version="21.1.1" type="github">
+<mxfile host="app.diagrams.net" modified="2023-03-27T14:34:19.421Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="X22yIFBMJtAQjQCiInnT" version="21.1.1" type="github">
   <diagram name="Page-1" id="HIEHrfZLS2LJmifFWxkU">
-    <mxGraphModel dx="988" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="748" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -169,7 +169,7 @@
             <mxPoint x="400" y="470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cFTcSejxlXXtRCKA9RDN-1" value="Changement de point de vue" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cFTcSejxlXXtRCKA9RDN-1" value="Changement de point de vue" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="205" y="110" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="cFTcSejxlXXtRCKA9RDN-2" value="2D" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
