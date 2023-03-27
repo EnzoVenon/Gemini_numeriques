@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-03-27T10:18:46.357Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="VOOQ6VV6SmT-2ktNvHMJ" version="21.1.1" type="github">
+<mxfile host="app.diagrams.net" modified="2023-03-27T10:23:28.315Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="73T8EAGdEU8c0l1NAprB" version="21.1.1" type="github">
   <diagram name="Page-1" id="HIEHrfZLS2LJmifFWxkU">
     <mxGraphModel dx="880" dy="869" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -79,7 +79,7 @@
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-43" value="BD Ortho" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
           <mxGeometry x="40" y="160" width="70" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-30" value="BDNB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
+        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-30" value="BDNB" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
           <mxGeometry x="40" y="200" width="70" height="30" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-50" value="Cadastre" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="0HWwTG7SeUn4EHq8_ZQe-31">
@@ -91,11 +91,11 @@
             <mxPoint x="420" y="410" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-36" value="Dégradé d&#39;une couleur" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="520" y="320" width="130" height="30" as="geometry" />
+        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-36" value="Dégradé d&#39;une couleur" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="300" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-37" value="Classification de couleurs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="520" y="360" width="130" height="30" as="geometry" />
+        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-37" value="Classification de couleurs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="520" y="350" width="130" height="40" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-38" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="0HWwTG7SeUn4EHq8_ZQe-26" target="0HWwTG7SeUn4EHq8_ZQe-36">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -109,8 +109,8 @@
             <mxPoint x="420" y="380" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-40" value="Extrusion 3D par valeur d&#39;attribut " style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="520" y="400" width="130" height="30" as="geometry" />
+        <mxCell id="0HWwTG7SeUn4EHq8_ZQe-40" value="Extrusion 3D par valeur d&#39;attribut " style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="520" y="400" width="130" height="40" as="geometry" />
         </mxCell>
         <mxCell id="0HWwTG7SeUn4EHq8_ZQe-41" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="0HWwTG7SeUn4EHq8_ZQe-26" target="0HWwTG7SeUn4EHq8_ZQe-40">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
