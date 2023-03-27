@@ -13,6 +13,16 @@ function style_menu_func() {
         input_champ.type = "text";
         label_champ.appendChild(input_champ);
 
+        style_menu.appendChild(document.createElement("br"));
+
+        const label_valeur = document.createElement("label");
+        label_valeur.innerText = "Valeur";
+        style_menu.appendChild(label_valeur);
+
+        const input_valeur = document.createElement("input");
+        input_valeur.type = "text";
+        label_valeur.appendChild(input_valeur);
+
         const label_couleur = document.createElement("label");
         label_couleur.innerText = "Couleur";
         style_menu.appendChild(label_couleur);
