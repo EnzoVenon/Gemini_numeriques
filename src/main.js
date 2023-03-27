@@ -6,7 +6,7 @@ import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
-
+import { addShp } from "./models/addShpLayer"
 setUpMenu();
 
 
@@ -40,7 +40,6 @@ itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
 
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
-
 const wfsBuildingLayer = buildingLayer(
     'https://wxs.ign.fr/topographie/geoportail/wfs?',
     '2.0.0',
@@ -49,36 +48,66 @@ const wfsBuildingLayer = buildingLayer(
     'IGN',
     'application/json',
     {
-        west: 0.67289,
+        west: 0.69289,
         east: 0.74665,
-        south: 45.17272,
+        south: 45.19272,
         north: 45.2135,
     }
 );
 view.addLayer(wfsBuildingLayer);
 
+function addBdTopo() {
+
+    console.log("addBdTopo")
+    // console.log(itowns)
+    console.log(view)
+    console.log(document.getElementById("affiche_bd_topo").checked)
+    if (document.getElementById("affiche_bd_topo").checked) {
+        view.getLayerById("WFS Building").opacity = 1
+    }
+    else {
+        if (view.getLayerById("WFS Building")) {
+            // view.removeLayer("WFS Building")
+            console.log(view.getLayerById("WFS Building"))
+            view.getLayerById("WFS Building").opacity = 0
+
+
+        }
+
+    }
+    view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+}
+
+
+// var gpkgSource = new itowns.GpkgSource({
+//     url: '../data/gpkg/bdnb.gpkg',
+//     crs: 'EPSG:4326' // Le système de coordonnées de votre fichier GeoPackage
+// });
+
+console.log(itowns)
+
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view, menuGlobe));
 
-let iris_layer = addStreamSurfaceFeature(
-    'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
-    '2.0.0',
-    'STATISTICALUNITS.IRIS:contours_iris',
-    'EPSG:4326',
-    10,
-    "iris",
-    {
-        west: 0.67289,
-        east: 0.74665,
-        south: 45.17272,
-        north: 45.2135,
-    }
-)
+// let iris_layer = addStreamSurfaceFeature(
+//     'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
+//     '2.0.0',
+//     'STATISTICALUNITS.IRIS:contours_iris',
+//     'EPSG:4326',
+//     10,
+//     "iris",
+//     {
+//         west: 0.67289,
+//         east: 0.74665,
+//         south: 45.17272,
+//         north: 45.2135,
+//     }
+// )
 
 
-let iris_surface_layer = iris_layer.surface_layer
-let iris_geom_layer = iris_layer.geom
+// let iris_surface_layer = iris_layer.surface_layer
+// let iris_geom_layer = iris_layer.geom
 
 // console.log(departement_layer)
 
@@ -87,33 +116,37 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
+    document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
+
+    addShp("../data/shp/prg/bdnb_perigeux7", view)
+
 
     // view.addLayer(surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
     // view.addLayer(label_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
-    view.addLayer(iris_geom_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    // view.addLayer(iris_geom_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
 
-    view.addLayer(iris_surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    // view.addLayer(iris_surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
 
-    console.log(iris_surface_layer)
+    // console.log(iris_surface_layer)
 
 });
 
 debug.createTileDebugUI(menuGlobe.gui, view);
 
 
-for (const layer of view.getLayers()) {
-    if (layer.id === 'WFS Building') {
-        layer.whenReady.then(function _(layer) {
-            const gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
-            debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
-            window.addEventListener(
-                'click',
-                (event) => { picking(event, view) },
-                false);
-        });
-    }
+// for (const layer of view.getLayers()) {
+//     if (layer.id === 'WFS Building') {
+//         layer.whenReady.then(function _(layer) {
+//             const gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
+//             debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
+//             window.addEventListener(
+//                 'click',
+//                 (event) => { picking(event, view) },
+//                 false);
+//         });
+//     }
 
-}
+// }
 
