@@ -1,4 +1,7 @@
 /* global itowns */
+
+// const { GeometryLayer } = require("itowns");
+
 /**
  * A tooltip that can display some useful information about a feature when
  * hovering it.
@@ -65,7 +68,11 @@ var FeatureToolTip = (function _() {
     }
 
     function getGeometryProperties(geometry) {
-        return function properties() { return geometry.properties; };
+        return function properties() {
+            // console.log(' ------------- getGeometryProperties ------------- ');
+            // console.log(geometry.properties);
+            return geometry.properties;
+        };
     }
 
     function fillToolTip(features, layer, options) {
@@ -77,14 +84,17 @@ var FeatureToolTip = (function _() {
         var stroke;
         var symb = '';
         var prop;
-
+        const layerName = 'cadastre';
+        if (layer.id == layerName) {
+            // console.log(' -------------------------- fillToolTip -------------------------- ');
+            // console.log(layer.id);
+        }
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
-
             if (feature.type === itowns.FEATURE_TYPES.POLYGON) {
                 symb = '&#9724';
                 if (style) {
@@ -109,7 +119,10 @@ var FeatureToolTip = (function _() {
             content += '</span>';
 
             if (geometry.properties) {
-                content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || '');
+                if (layer.id === layerName) {
+                    console.log(geometry.properties);
+                }
+                content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || layer.id || '');
             }
 
             if (feature.type === itowns.FEATURE_TYPES.POINT) {
@@ -229,7 +242,8 @@ var FeatureToolTip = (function _() {
             if (!layer.isLayer) {
                 return layer;
             }
-
+            // console.log(' ------------- addLayer ------------- ');
+            // console.log(options)
             var opts = options || { filterAllProperties: true };
             opts.filterProperties = opts.filterProperties == undefined ? [] : opts.filterProperties;
             opts.filterProperties.concat(['name', 'nom', 'style', 'description']);

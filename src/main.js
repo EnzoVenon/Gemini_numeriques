@@ -26,6 +26,7 @@ const viewerDiv = document.getElementById('viewerDiv');
 // Instanciate iTowns GlobeView
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
+FeatureToolTip.init(viewerDiv, view);
 
 const menuGlobe = new GuiTools('menuDiv', view);
 
@@ -45,15 +46,15 @@ function addBdTopo() {
 
     console.log("bd_topo")
     // console.log(itowns)
-    console.log(view)
-    console.log(document.getElementById("affiche_bd_topo").checked)
+    // console.log(view)
+    // console.log(document.getElementById("affiche_bd_topo").checked)
     if (document.getElementById("affiche_bd_topo").checked) {
         view.getLayerById("bd_topo").opacity = 1
     }
     else {
         if (view.getLayerById("bd_topo")) {
             // view.removeLayer("bd_topo")
-            console.log(view.getLayerById("bd_topo"))
+            // console.log(view.getLayerById("bd_topo"))
             view.getLayerById("bd_topo").opacity = 0
 
 
@@ -67,15 +68,15 @@ function addBdnb() {
 
     console.log("addBdnb")
     // console.log(itowns)
-    console.log(view)
-    console.log(document.getElementById("affiche_bd_nb").checked)
+    // console.log(view)
+    // console.log(document.getElementById("affiche_bd_nb").checked)
     if (document.getElementById("affiche_bd_nb").checked) {
         view.getLayerById("bdnb").opacity = 1
     }
     else {
         if (view.getLayerById("bdnb")) {
             // view.removeLayer("bdnb")
-            console.log(view.getLayerById("bdnb"))
+            // console.log(view.getLayerById("bdnb"))
             view.getLayerById("bdnb").opacity = 0
 
 
@@ -89,15 +90,15 @@ function addBdCadastre() {
 
     console.log("addCadastre")
     // console.log(itowns)
-    console.log(view)
-    console.log(document.getElementById("affiche_bd_cadastre").checked)
+    // console.log(view)
+    // console.log(document.getElementById("affiche_bd_cadastre").checked)
     if (document.getElementById("affiche_bd_cadastre").checked) {
         view.getLayerById("cadastre").opacity = 1
     }
     else {
         if (view.getLayerById("cadastre")) {
             // view.removeLayer("bdnb")
-            console.log(view.getLayerById("cadastre"))
+            // console.log(view.getLayerById("cadastre"))
             view.getLayerById("cadastre").opacity = 0
 
 
@@ -111,15 +112,15 @@ function addBdOsm() {
 
     console.log("addOsm")
     // console.log(itowns)
-    console.log(view)
-    console.log(document.getElementById("affiche_bd_osm").checked)
+    // console.log(view)
+    // console.log(document.getElementById("affiche_bd_osm").checked)
     if (document.getElementById("affiche_bd_osm").checked) {
         view.getLayerById("osm").opacity = 1
     }
     else {
         if (view.getLayerById("osm")) {
             // view.removeLayer("bdnb")
-            console.log(view.getLayerById("osm"))
+            // console.log(view.getLayerById("osm"))
             view.getLayerById("osm").opacity = 0
 
 
@@ -198,3 +199,139 @@ debug.createTileDebugUI(menuGlobe.gui, view);
 
 // }
 
+// Geometry.properties
+// Couche com
+    // CAPITALE: "Non"
+    // CL_ARROND: "Oui"
+    // CL_COLLTER: "Oui"
+    // CL_DEPART: "Oui"
+    // CL_REGION: "Non"
+    // CODE_POST: "24000"
+    // CODE_SIREN: "212403224"
+    // DATE_APP: Date Thu Nov 30 1899 00:00:00 GMT+0009 (heure normale d’Europe centrale)
+    // DATE_CONF: Date Thu Nov 30 1899 00:00:00 GMT+0009 (heure normale d’Europe centrale)
+    // DATE_CREAT: "2006-08-02 08:36:54"
+    // DATE_MAJ: "2022-05-16 17:06:46"
+    // DATE_RCT: Date Tue Jan 01 2019 00:00:00 GMT+0100 (heure normale d’Europe centrale)
+    // ID: "COMMUNE_0000000009754332"
+    // ID_AUT_ADM: "SURFACTI0000000049445044"
+    // ID_CH_LIEU: "PAIHABIT0000000049513040"
+    // INSEE_ARR: "3"
+    // INSEE_COL: "24D"
+    // INSEE_COM: "24322"
+    // INSEE_DEP: "24"
+    // INSEE_REG: "75"
+    // NOM: "Périgueux"
+    // POPULATION: 29896
+    // RECENSEUR: "INSEE"
+    // SIREN_EPCI: "200040392"
+    // SURFACE_HA: 982
+    // style: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     fill: Object { color: Getter & Setter, opacity: Getter & Setter, pattern: Getter & Setter, … }
+    //     icon: Object { source: Getter & Setter, key: Getter & Setter, anchor: Getter & Setter, … }
+    //     isStyle: true
+    //     order: 0
+    //     parent: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     point: Object { color: Getter & Setter, line: Getter & Setter, opacity: Getter & Setter, … }
+    //     stroke: Object { color: Getter & Setter, opacity: Getter & Setter, width: Getter & Setter, … }
+    //     text: Object { field: Getter & Setter, zOrder: Getter & Setter, color: Getter & Setter, … }
+    //     zoom: Object { min: Getter & Setter, max: Getter & Setter }
+
+// Couche Bd Topo
+    // ACQU_ALTI: "Interpolation bâti BDTopo"
+    // ACQU_PLANI: "BDParcellaire recalée"
+    // APP_FF: "C 0.9"
+    // DATE_APP: Date Tue Jan 01 1850 00:00:00 GMT+0009 (heure normale d’Europe centrale)
+    // DATE_CONF: Date Thu Nov 30 1899 00:00:00 GMT+0009 (heure normale d’Europe centrale)
+    // DATE_CREAT: "2012-02-13 11:09:07"
+    // DATE_MAJ: "2022-05-13 00:43:33"
+    // ETAT: "En service"
+    // HAUTEUR: 8.3
+    // ID: "BATIMENT0000000295374782"
+    // ID_SOURCE: ""
+    // LEGER: "Non"
+    // MAT_MURS: "19"
+    // MAT_TOITS: "10"
+    // NATURE: "Indifférenciée"
+    // NB_ETAGES: 3
+    // NB_LOGTS: 3
+    // ORIGIN_BAT: "Cadastre"
+    // PREC_ALTI: 2.5
+    // PREC_PLANI: 3
+    // SOURCE: ""
+    // USAGE1: "Résidentiel"
+    // USAGE2: "Commercial et services"
+    // Z_MAX_SOL: 86.6
+    // Z_MAX_TOIT: 95.2
+    // Z_MIN_SOL: 86
+    // Z_MIN_TOIT: 94.3
+    // style: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     fill: Object { color: Getter & Setter, opacity: Getter & Setter, pattern: Getter & Setter, … }
+    //     icon: Object { source: Getter & Setter, key: Getter & Setter, anchor: Getter & Setter, … }
+    //     isStyle: true
+    //     order: 0
+    //     parent: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     point: Object { color: Getter & Setter, line: Getter & Setter, opacity: Getter & Setter, … }
+    //     stroke: Object { color: Getter & Setter, opacity: Getter & Setter, width: Getter & Setter, … }
+    //     text: Object { field: Getter & Setter, zOrder: Getter & Setter, color: Getter & Setter, … }
+    //     zoom: Object { min: Getter & Setter, max: Getter & Setter }
+
+// Couche Cadastre
+    // commune: "24322"
+    // created: Date Mon Oct 23 2006 00:00:00 GMT+0200 (heure d’été d’Europe centrale)
+    // nom: ""
+    // style: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     fill: Object { color: Getter & Setter, opacity: Getter & Setter, pattern: Getter & Setter, … }
+    //     icon: Object { source: Getter & Setter, key: Getter & Setter, anchor: Getter & Setter, … }
+    //     isStyle: true
+    //     order: 0
+    //     parent: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     point: Object { color: Getter & Setter, line: Getter & Setter, opacity: Getter & Setter, … }
+    //     stroke: Object { color: Getter & Setter, opacity: Getter & Setter, width: Getter & Setter, … }
+    //     text: Object { field: Getter & Setter, zOrder: Getter & Setter, color: Getter & Setter, … }
+    //     zoom: Object { min: Getter & Setter, max: Getter & Setter }
+    //     <prototype>: Object { … }
+    //     type: "01"
+    // updated: Date Tue Jun 12 2018 00:00:00 GMT+0200 (heure d’été d’Europe centrale)
+
+// Couche osm
+    // code: 1500
+    // fclass: "building"
+    // name: ""
+    // osm_id: "75344703"
+    // style: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     fill: Object { color: Getter & Setter, opacity: Getter & Setter, pattern: Getter & Setter, … }
+    //     icon: Object { source: Getter & Setter, key: Getter & Setter, anchor: Getter & Setter, … }
+    //     isStyle: true
+    //     order: 0
+    //     parent: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     point: Object { color: Getter & Setter, line: Getter & Setter, opacity: Getter & Setter, … }
+    //     stroke: Object { color: Getter & Setter, opacity: Getter & Setter, width: Getter & Setter, … }
+    //     text: Object { field: Getter & Setter, zOrder: Getter & Setter, color: Getter & Setter, … }
+    //     zoom: Object { min: Getter & Setter, max: Getter & Setter }
+    //     <prototype>: Object { … }
+    //     type: ""
+
+
+// Couche bdnb
+
+    // altitude_s: 86
+    // batiment_c: "BATIMENT0000000295375054-2"
+    // batiment_g: "24322000BR0208_c7642ee6a31bfc8"
+    // code_commu: "24322"
+    // code_depar: "24"
+    // code_iris: "243220101"
+    // fictive_ge: 0
+    // fid: 25191
+    // hauteur: 5.9
+    // s_geom_cst: 125
+    // style: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     fill: Object { color: Getter & Setter, opacity: Getter & Setter, pattern: Getter & Setter, … }
+    //     icon: Object { source: Getter & Setter, key: Getter & Setter, anchor: Getter & Setter, … }
+    //     isStyle: true
+    //     order: 0
+    //     parent: Object { isStyle: true, order: 0, parent: {…}, … }
+    //     point: Object { color: Getter & Setter, line: Getter & Setter, opacity: Getter & Setter, … }
+    //     stroke: Object { color: Getter & Setter, opacity: Getter & Setter, width: Getter & Setter, … }
+    //     text: Object { field: Getter & Setter, zOrder: Getter & Setter, color: Getter & Setter, … }
+    //     zoom: Object { min: Getter & Setter, max: Getter & Setter }
