@@ -86,8 +86,8 @@ var FeatureToolTip = (function _() {
         var prop;
         const layerName = 'cadastre';
         if (layer.id == layerName) {
-            // console.log(' -------------------------- fillToolTip -------------------------- ');
-            // console.log(layer.id);
+            console.log(' -------------------------- fillToolTip -------------------------- ');
+            console.log(layer.id);
         }
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
@@ -119,9 +119,7 @@ var FeatureToolTip = (function _() {
             content += '</span>';
 
             if (geometry.properties) {
-                if (layer.id === layerName) {
-                    console.log(geometry.properties);
-                }
+
                 content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || layer.id || '');
             }
 
@@ -130,11 +128,15 @@ var FeatureToolTip = (function _() {
                 content += '<br/><span class="coord">lat ' + feature.coordinates[1].toFixed(4) + '</span>';
             }
 
+            console.log(geometry.properties)
+            console.log(options)
+            console.log(options.filterAllProperties)
             if (geometry.properties && !options.filterAllProperties) {
                 if (options.format) {
                     for (prop in geometry.properties) {
                         if (!options.filterProperties.includes(prop)) {
                             content += options.format(prop, geometry.properties[prop]) || '';
+
                         }
                     }
                 } else {
@@ -185,7 +187,9 @@ var FeatureToolTip = (function _() {
 
             // Mouse movement listening
             function onMouseMove(event) {
-                if (!mouseDown) {
+                // console.log('  ------------------ onMouseMove ------------------ ')
+                // console.log(mouseDown)
+                if (mouseDown) {
                     moveToolTip(event);
                 } else {
                     tooltip.style.left = view.eventToViewCoords(event).x + 'px';
@@ -193,7 +197,7 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            document.addEventListener('mousemove', onMouseMove, false);
+            // document.addEventListener('mousemove', onMouseMove, false);
             document.addEventListener('mousedown', onMouseMove, false);
         },
 
