@@ -16,9 +16,9 @@ setUpMenu();
 
 // Define initial camera position
 const placement = {
-    coord: new itowns.Coordinates('EPSG:4326', 0.71829, 45.18260),
-    range: 3000,
-    tilt: 30,
+    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    range: 500,
+    tilt: 7,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -40,36 +40,21 @@ itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
 
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
-const wfsBuildingLayer = buildingLayer(
-    'https://wxs.ign.fr/topographie/geoportail/wfs?',
-    '2.0.0',
-    'BDTOPO_V3:batiment',
-    'EPSG:4326',
-    'IGN',
-    'application/json',
-    {
-        west: 0.67289,
-        east: 0.74665,
-        south: 45.17272,
-        north: 45.2135,
-    }
-);
-view.addLayer(wfsBuildingLayer);
 
 function addBdTopo() {
 
-    console.log("addBdTopo")
+    console.log("bd_topo")
     // console.log(itowns)
     console.log(view)
     console.log(document.getElementById("affiche_bd_topo").checked)
     if (document.getElementById("affiche_bd_topo").checked) {
-        view.getLayerById("WFS Building").opacity = 1
+        view.getLayerById("bd_topo").opacity = 1
     }
     else {
-        if (view.getLayerById("WFS Building")) {
-            // view.removeLayer("WFS Building")
-            console.log(view.getLayerById("WFS Building"))
-            view.getLayerById("WFS Building").opacity = 0
+        if (view.getLayerById("bd_topo")) {
+            // view.removeLayer("bd_topo")
+            console.log(view.getLayerById("bd_topo"))
+            view.getLayerById("bd_topo").opacity = 0
 
 
         }
@@ -122,22 +107,44 @@ function addBdCadastre() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+function addBdOsm() {
+
+    console.log("addOsm")
+    // console.log(itowns)
+    console.log(view)
+    console.log(document.getElementById("affiche_bd_osm").checked)
+    if (document.getElementById("affiche_bd_osm").checked) {
+        view.getLayerById("osm").opacity = 1
+    }
+    else {
+        if (view.getLayerById("osm")) {
+            // view.removeLayer("bdnb")
+            console.log(view.getLayerById("osm"))
+            view.getLayerById("osm").opacity = 0
+
+
+        }
+
+    }
+    view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+}
+
 
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view, menuGlobe));
 
 // let iris_layer = addStreamSurfaceFeature(
-//     'https://wxs.ign.fr/cartovecto/geoportail/wfs?',
+//     'https://wxs.ign.fr/parcellaire/geoportail/wfs?',
 //     '2.0.0',
-//     'STATISTICALUNITS.IRIS:contours_iris',
+//     'CADASTRALPARCELS.PARCELLAIRE_EXPRESS:commune',
 //     'EPSG:4326',
 //     10,
 //     "iris",
 //     {
-//         west: 0.67289,
+//         west: 0.74289,
 //         east: 0.74665,
-//         south: 45.17272,
+//         south: 45.19272,
 //         north: 45.2135,
 //     }
 // )
@@ -146,7 +153,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // let iris_surface_layer = iris_layer.surface_layer
 // let iris_geom_layer = iris_layer.geom
 
-// console.log(departement_layer)
+
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -159,23 +166,18 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
-
+    document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
     addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
     addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
 
+    addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
 
+    addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    // view.addLayer(surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-    // view.addLayer(label_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
 
-    // view.addLayer(iris_geom_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-
-
-    // view.addLayer(iris_surface_layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
-
-    // console.log(iris_surface_layer)
 
 });
 
