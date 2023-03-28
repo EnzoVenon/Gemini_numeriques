@@ -1,51 +1,10 @@
 // Menu d'édition des styles ----------------------------------
 function style_menu_func() {
+    const style_menu = document.getElementById("style_menu");
     if (document.getElementById("bouton_style").checked) {
-        const style_menu = document.createElement("div");
-        style_menu.id = "style_menu";
-        style_menu.style = "position: absolute;top: 200px;left: 200px;background-color: rgb(248, 248, 255, 1);z-index: 2;padding: 1em;border-radius: 10px;";
-
-        const titre = document.createElement("h2");
-        titre.innerText = "Style BD Topo";
-        style_menu.appendChild(titre);
-
-        const label_champ = document.createElement("label");
-        label_champ.innerText = "Champ";
-        style_menu.appendChild(label_champ);
-
-        const input_champ = document.createElement("input");
-        input_champ.type = "text";
-        label_champ.appendChild(input_champ);
-
-        style_menu.appendChild(document.createElement("br"));
-
-        const label_valeur = document.createElement("label");
-        label_valeur.innerText = "Valeur";
-        style_menu.appendChild(label_valeur);
-
-        const input_valeur = document.createElement("input");
-        input_valeur.type = "text";
-        label_valeur.appendChild(input_valeur);
-
-        const label_couleur = document.createElement("label");
-        label_couleur.innerText = "Couleur";
-        style_menu.appendChild(label_couleur);
-
-        const input_couleur = document.createElement("input");
-        input_couleur.type = "text";
-        label_couleur.appendChild(input_couleur);
-
-        const le_bon_bouton = document.createElement("button");
-        le_bon_bouton.innerText = "Ok";
-        style_menu.appendChild(le_bon_bouton);
-        le_bon_bouton.addEventListener("click", () => {
-            //TODO
-        });
-
-        document.body.appendChild(style_menu);
+        style_menu.style.zIndex = 2;
     } else {
-        const style_menu = document.getElementById("style_menu");
-        document.body.removeChild(style_menu);
+        style_menu.style.zIndex = -1;
     }
 }
 
