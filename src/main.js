@@ -7,6 +7,11 @@ import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
 import { addShp } from "./models/addShpLayer"
+
+
+
+// var shapefile = require("shapefile");
+
 setUpMenu();
 
 
@@ -160,25 +165,170 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
+    // document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
 
-    document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
+    // document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
 
-    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+    // document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
-    document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
+    // document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
-    addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
-    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
+    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
 
-    addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
+    // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
 
-    addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
+    // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
+    // addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
+
+    // let parser = new itowns.GeoJsonParser();
+
+    // itowns.ShapefileParser.parse({
+    //     type: "feature",
+    //     geometry: {
+    //         type: "polygon",
+    //         coordinates: [[0.7190659, 45.1846609],
+    //         [0.7190952, 45.1846911],
+    //         [0.7191215, 45.1846785],
+    //         [0.7190917, 45.1846484],
+    //         [0.7190659, 45.1846609]]
+    //     },
+
+    // }, {
+    //     in: { crs: 'EPSG:4326' },
+    //     out: {
+    //         crs: 'EPSG:4326',
+    //     }
+    // })
 
 
+    let pars = new itowns.FileSource({
+        fetchedData: {
+            "type": "feature",
+            "geometry": {
+                "type": "polygon",
+                "coordinates": [[0.7190659, 45.1846609],
+                [0.7190952, 45.1846911],
+                [0.7191215, 45.1846785],
+                [0.7190917, 45.1846484],
+                [0.7190659, 45.1846609]]
+            },
+            "properties": {
+                "name": "Dinagat Islands"
+            }
+        },
+        format: 'application/json',
+        crs: 'EPSG:4326',
+        parser: itowns.GeoJsonParser.parse
+
+    }
+    )
+
+    console.log(pars)
+
+    const geomLayer = new itowns.FeatureGeometryLayer('test', {
+        source: pars,
+        onMeshCreated: function scaleZ(mesh) {
+            mesh.children.forEach(c => {
+                c.scale.set(3000, 300, 390)
+            })
+        },
+
+        zoom: { min: 0 },
+        style: new itowns.Style({
+            fill: {
+                color: (p) => { console.log(p); return "red" },
+                extrusion_height: 100000,
+                base_altitude: 1000,
+            }
+        }),
+        addLabelLayer: true,
+
+    });
+
+    view.addLayer(geomLayer)
+    view.notifyChange();
+
+
+    console.log(geomLayer)
+
+    // var object3D = new itowns.THREE.Object3D();
+    // var mesh = itowns.GeoJsonParser.parse({
+    //     type: "feature",
+    //     geometry: {
+    //         "type": "polygon",
+    //         "coordinates": [[0.7190659, 45.1846609],
+    //         [0.7190952, 45.1846911],
+    //         [0.7191215, 45.1846785],
+    //         [0.7190917, 45.1846484],
+    //         [0.7190659, 45.1846609]]
+    //     },
+    //     properties: {
+    //         name: "Dinagat Islands"
+    //     }
+    // });
+
+    // mesh.scale.set(10, 10, 10); // Réglez l'échelle de l'objet pour l'afficher correctement
+    // object3D.add(mesh);
+
+    // view.scene.add(object3D);
+
+
+
+
+
+
+
+    shapefile.open("../data/shp/prg/osm.shp")
+        .then(source => source.read()
+            .then(function log(result) {
+                if (result.done) return;
+                // console.log(result.value);
+
+                // Load the shapefile
+                // var shp = new Shapefile();
+                // shp.load('buildings.shp', function(featureCollection) {
+
+                //   // Loop through each building feature
+                //   featureCollection.features.forEach(function(feature) {
+
+                //     // Extrude the building footprint
+                //     var height = feature.properties.height; // Get the building height from the shapefile attribute
+                //     var geometry = earcut.flatten(feature.geometry.coordinates[0]); // Triangulate the footprint
+                //     var extruded = Extrusion.createExtrudedPolyline(geometry, height);
+
+                //     // Create a Three.js mesh for the building geometry
+                //     var mesh = new THREE.Mesh(extruded.geometry, new THREE.MeshPhongMaterial({color: 0x999999}));
+
+                //     // Add the mesh to the scene
+                //     scene.add(mesh);
+                //   });
+                // });
+
+
+
+                //     {
+                //         in: { src: 'EPSG:4326' },
+                //         out: {
+                //             src: view.tileLayer.extent.src,
+                //         }
+                //     }
+                // )
+
+                // view.addLayer(pars)
+                // let parser = new itowns.GeoJsonParser();
+
+                // console.log(itowns)
+                // // parser.rea
+
+
+
+
+                return source.read().then(log);
+            }))
+        .catch(error => console.error(error.stack));
 });
 
 debug.createTileDebugUI(menuGlobe.gui, view);
