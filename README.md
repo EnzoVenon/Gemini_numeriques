@@ -2,6 +2,12 @@
 
 # bdcarto:
  - https://geoservices.ign.fr/services-web-experts-cartovecto
+
+# openstreet map data osm 
+ - https://download.geofabrik.de/europe/france.html
+
+# Energie 
+ https://data.ademe.fr/datasets/dpe-france
  
 # BDNB (Base de données nationale des bâtiments)
  - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
@@ -22,3 +28,4 @@ npm run start
 
 # api insee: 
   - https://pyris.datajazz.io/
+

@@ -29,6 +29,9 @@ export function buildingLayer(serverURL, version, nameType, crs, ipr, format, ex
         typeName: nameType,
         crs: crs,
         ipr: ipr,
+        networkOptions: {
+            "crossOrigin": "allow"
+        },
         format: format,
         extent: extent
     });
