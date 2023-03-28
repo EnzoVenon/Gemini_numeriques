@@ -3,7 +3,11 @@ function style_menu_func() {
     if (document.getElementById("bouton_style").checked) {
         const style_menu = document.createElement("div");
         style_menu.id = "style_menu";
-        style_menu.style = "position: absolute;top: 200px;left: 200px;background-color: rgb(248, 248, 255, 1);z-index: 2;";
+        style_menu.style = "position: absolute;top: 200px;left: 200px;background-color: rgb(248, 248, 255, 1);z-index: 2;padding: 1em;border-radius: 10px;";
+
+        const titre = document.createElement("h2");
+        titre.innerText = "Style BD Topo";
+        style_menu.appendChild(titre);
 
         const label_champ = document.createElement("label");
         label_champ.innerText = "Champ";
