@@ -6,6 +6,9 @@ properties: filter accroding to --valuesOfPerperties-- of properties => id, type
 Color for the object
 */
 export function addSpecificBuilings(databaseType, height, properties, valuesOfPerperties, color, view) {
+
+
+
     if (databaseType === "osm") {
         shapefile.open("../data/shp/prg/osm.shp")
             .then(source => source.read()
@@ -43,6 +46,8 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             });
 
                             view.addLayer(bat)
+
+                            document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
 
                         }
                     } catch (e) {

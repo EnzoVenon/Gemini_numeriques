@@ -28,6 +28,8 @@ var FeatureToolTip = (function _() {
     var layers = [];
     var layersId = [];
 
+    var mouseevent;
+
     var mouseDown = 0;
     document.body.addEventListener('mousedown', function _() {
         ++mouseDown;
@@ -92,7 +94,10 @@ var FeatureToolTip = (function _() {
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
-            tooltip.value = geometry.properties
+
+            console.log(geometry)
+
+            tooltip.value = geometry
 
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
@@ -186,7 +191,15 @@ var FeatureToolTip = (function _() {
             tooltip.className = 'tooltip';
             tooltip.id = 'tooltip';
 
+            mouseevent = document.createElement('div');
+            mouseevent.className = 'mouseevent';
+            mouseevent.id = 'mouseevent';
+
+
             viewerDiv.appendChild(tooltip);
+
+            viewerDiv.appendChild(mouseevent);
+
 
             // View binding
             view = viewer;
@@ -195,6 +208,8 @@ var FeatureToolTip = (function _() {
             function onMouseMove(event) {
                 if (mouseDown) {
                     moveToolTip(event);
+
+                    mouseevent.value = event;
 
 
                     tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
