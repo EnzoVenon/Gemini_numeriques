@@ -12,6 +12,21 @@ import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 
 
+let bat = document.createElement('div');
+bat.className = 'bat';
+bat.id = 'bat';
+
+// Create a custom div which will be displayed as a label
+const customDiv = document.createElement('div');
+const bubble = document.createElement('div');
+bubble.classList.add('bubble');
+customDiv.appendChild(bubble);
+const pointer = document.createElement('div');
+pointer.classList.add('pointer');
+customDiv.appendChild(pointer);
+
+
+
 setUpMenu();
 
 
@@ -27,6 +42,7 @@ const placement = {
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
+viewerDiv.appendChild(bat)
 
 // Instanciate iTowns GlobeView
 const view = new itowns.GlobeView(viewerDiv, placement);
@@ -223,6 +239,8 @@ view.addLayer(marne)
 
 
 
+
+
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
@@ -267,13 +285,69 @@ const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
 tooltip.addEventListener(
     'DOMSubtreeModified',
-    () => {
+    (event) => {
         console.log(tooltip.value);
 
-        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+        const mouseevent = document.getElementById('mouseevent')
+        console.log(mouseevent.value);
+
+        mouseevent.value.clientY -= 100
+
+
+        let a = addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+
+        console.log(document.getElementById('bat').value.coord);
+        console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+        // const featureCoord = new itowns.Coordinates(view.referenceCrs, document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1]);
+        const featureCoord = new itowns.Coordinates(view.referenceCrs)
+
+        console.log(event)
+
+        featureCoord.setFromVector3(view.getPickingPositionFromDepth(view.eventToViewCoords(mouseevent.value)));
+
+        const features = createFeatureAt(featureCoord);
+
+        bubble.textContent = "batid and more: " + tooltip.value.properties.osm_id
+
+        // the source of the feature layer
+        const source = new itowns.FileSource({ features });
+
+        // create labelLayer
+        const layer = new itowns.LabelLayer("#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), {
+            source: source,
+            domElement: customDiv,
+            style: new itowns.Style({
+                text: { anchor: [-0.8, -1] },
+            }),
+        });
+
+        view.addLayer(layer);
 
 
     },
     false
 )
 debug.createTileDebugUI(menuGlobe.gui, view);
+
+
+function createFeatureAt(coordinate) {
+    // create new featureCollection
+    const collection = new itowns.FeatureCollection({
+        crs: view.tileLayer.extent.crs,
+    });
+
+    // create new feature
+    const feature = collection.requestFeatureByType(itowns.FEATURE_TYPES.POINT);
+
+    // add geometries to feature
+    const geometry = feature.bindNewGeometry();
+    geometry.startSubGeometry(1, feature);
+    geometry.pushCoordinates(coordinate, feature);
+    geometry.properties.position = coordinate;
+
+    geometry.updateExtent();
+    feature.updateExtent(geometry);
+    collection.updateExtent(feature.extent);
+
+    return collection;
+}
