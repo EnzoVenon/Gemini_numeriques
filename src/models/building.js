@@ -200,5 +200,6 @@ export function applyStyle(view, id, serverURL, version, nameType, crs, ipr, for
     });
 
     view.addLayer(geomLayer);
-    update(view); // this line does nothing. Supposed to refresh view
+    view.notifyChange(); // this line does nothing. Supposed to refresh view
+    update(view); // this one neither
 }

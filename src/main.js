@@ -111,7 +111,8 @@ for (const layer of view.getLayers()) {
             window.addEventListener(
                 'click',
                 (event) => { picking(event, view) },
-                false);
+                false
+            );
         });
     }
 
