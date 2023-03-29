@@ -241,7 +241,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     document.getElementById("affiche_innondation_forte").addEventListener("change", addBdOsm)
 
-    addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
 
     // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
@@ -266,7 +266,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
 tooltip.addEventListener(
-    'click',
+    'DOMSubtreeModified',
     () => {
         console.log(tooltip.value);
 
