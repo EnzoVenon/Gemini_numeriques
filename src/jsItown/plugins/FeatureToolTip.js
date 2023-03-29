@@ -45,6 +45,7 @@ var FeatureToolTip = (function _() {
         var features = view.pickFeaturesAt.apply(view, [event, 3].concat(layersId));
 
         var layer;
+
         for (var layerId in features) {
             if (features[layerId].length == 0) {
                 continue;
@@ -58,6 +59,7 @@ var FeatureToolTip = (function _() {
                 features[layerId] = layer.options.filterGeometries(features[layerId], layer.layer) || [];
             }
             tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
+
         }
 
         if (tooltip.innerHTML != '') {
@@ -65,18 +67,23 @@ var FeatureToolTip = (function _() {
             tooltip.style.left = view.eventToViewCoords(event).x + 'px';
             tooltip.style.top = view.eventToViewCoords(event).y + 'px';
         }
+
+
+        // console.log(tooltip.innerHTML)
+
+
     }
 
     function getGeometryProperties(geometry) {
         return function properties() {
-            // console.log(' ------------- getGeometryProperties ------------- ');
-            // console.log(geometry.properties);
             return geometry.properties;
         };
     }
 
+
     function fillToolTip(features, layer, options) {
         var content = '';
+
         var feature;
         var geometry;
         var style;
@@ -84,11 +91,6 @@ var FeatureToolTip = (function _() {
         var stroke;
         var symb = '';
         var prop;
-        const layerName = 'cadastre';
-        if (layer.id == layerName) {
-            console.log(' -------------------------- fillToolTip -------------------------- ');
-            console.log(layer.id);
-        }
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
@@ -113,14 +115,15 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            content += '<div>';
-            content += '<span style="color: ' + fill + '; -webkit-text-stroke: ' + stroke + '">';
-            content += symb + ' ';
-            content += '</span>';
+
+            content += '<div class="tab">'
+            content += '<input type="radio" name="css-tabs" id="' + layer.id + '" class="tab-switch" checked>'
+            content += '<label for="' + layer.id + '" class="tab-label">'
 
             if (geometry.properties) {
 
                 content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || layer.id || '');
+                content += '</label>';
             }
 
             if (feature.type === itowns.FEATURE_TYPES.POINT) {
@@ -128,9 +131,6 @@ var FeatureToolTip = (function _() {
                 content += '<br/><span class="coord">lat ' + feature.coordinates[1].toFixed(4) + '</span>';
             }
 
-            console.log(geometry.properties)
-            console.log(options)
-            console.log(options.filterAllProperties)
             if (geometry.properties && !options.filterAllProperties) {
                 if (options.format) {
                     for (prop in geometry.properties) {
@@ -140,6 +140,7 @@ var FeatureToolTip = (function _() {
                         }
                     }
                 } else {
+                    content += '<div class="tab-content">'
                     content += '<ul>';
                     for (prop in geometry.properties) {
                         if (!options.filterProperties.includes(prop)) {
@@ -151,12 +152,15 @@ var FeatureToolTip = (function _() {
                         content = content.replace('<ul>', '');
                     } else {
                         content += '</ul>';
+                        content += '</div>'
                     }
                 }
             }
 
             content += '</div>';
+            content += '</div>';
         }
+
 
         return content;
     }
@@ -187,10 +191,24 @@ var FeatureToolTip = (function _() {
 
             // Mouse movement listening
             function onMouseMove(event) {
-                // console.log('  ------------------ onMouseMove ------------------ ')
-                // console.log(mouseDown)
                 if (mouseDown) {
                     moveToolTip(event);
+
+
+                    tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
+                    // const popup = document.getElementById('TEST');
+                    // console.log('------------------------popup----------------------')
+                    // console.log(popup)
+                    tooltip.addEventListener('mouseover', () => {
+                        console.log('YOOOOOOOOOOOOOOOOOOOOO')
+                        document.removeEventListener('mousedown', onMouseMove);
+                    })
+                    tooltip.addEventListener('mouseout', () => {
+                        console.log('out')
+                        document.addEventListener('mousedown', onMouseMove);
+                    })
+
+                    console.log(tooltip)
                 } else {
                     tooltip.style.left = view.eventToViewCoords(event).x + 'px';
                     tooltip.style.top = view.eventToViewCoords(event).y + 'px';
@@ -246,8 +264,6 @@ var FeatureToolTip = (function _() {
             if (!layer.isLayer) {
                 return layer;
             }
-            // console.log(' ------------- addLayer ------------- ');
-            // console.log(options)
             var opts = options || { filterAllProperties: true };
             opts.filterProperties = opts.filterProperties == undefined ? [] : opts.filterProperties;
             opts.filterProperties.concat(['name', 'nom', 'style', 'description']);

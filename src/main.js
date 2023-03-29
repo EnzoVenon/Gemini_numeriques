@@ -6,7 +6,9 @@ import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
-import { addShp } from "./models/addShpLayer"
+import { addShp } from "./models/addShpLayer";
+import * as itowns_widgets from "../node_modules/itowns/dist/itowns_widgets";
+
 setUpMenu();
 
 
@@ -29,7 +31,6 @@ setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 
 const menuGlobe = new GuiTools('menuDiv', view);
-
 
 // ----------------- Layer Setup ----------------- //
 
@@ -181,6 +182,41 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 
 });
+
+const widgets = new itowns_widgets.Navigation(view);
+
+// Example on how to add a new button to the widgets menu
+widgets.addButton(
+    'rotate-up',
+    '<p style="font-size: 20px">&#8595</p>',
+    'rotate camera up',
+    () => {
+        view.controls.lookAtCoordinate({
+            tilt: view.controls.getTilt() - 10,
+            time: 500,
+        });
+    },
+    'button-bar-rotation',
+);
+widgets.addButton(
+    'rotate-down',
+    '<p style="font-size: 20px">&#8593</p>',
+    'rotate camera down',
+    () => {
+        view.controls.lookAtCoordinate({
+            tilt: view.controls.getTilt() + 10,
+            time: 500,
+        });
+    },
+    'button-bar-rotation',
+);
+widgets.addButton(
+    'reset-position',
+    '&#8634',
+    'reset position',
+    () => { view.controls.lookAtCoordinate(placement) },
+);
+
 
 debug.createTileDebugUI(menuGlobe.gui, view);
 

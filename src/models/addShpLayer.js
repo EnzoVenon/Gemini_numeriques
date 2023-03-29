@@ -10,7 +10,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         },
     ).then((fetched) => {
         // Once our Shapefile data is fetched, we can parse it by running itowns built-in Shapefile parser.
-        console.log(fetched)
+        // console.log(fetched)
         return itowns.ShapefileParser.parse(fetched, {
             // Options indicating how the features should be built from data.
             out: {
@@ -39,7 +39,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         }));
     }).then((layer => {
         // Finally, we generate tooltip for when the mouse hovers the data displayed within our created layer.
-        FeatureToolTip.addLayer(layer, { filterAllProperties: true });
+        FeatureToolTip.addLayer(layer, { filterAllProperties: false });
 
         return layer
     }));
