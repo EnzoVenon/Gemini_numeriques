@@ -44,6 +44,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         return layer
     }));
 
+    /*
     function setColor(properties) {
         console.log(properties)
         var num = Math.round(0xffffff * Math.random());
@@ -52,6 +53,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         var b = num & 255;
         return 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
     }
+    */
 
     return layer;
 

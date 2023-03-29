@@ -1,4 +1,3 @@
-/* global itowns */
 /**
  * This module can be added to a web page or in a web application. It provides a
  * simple behavior where single files can be drag and dropped onto a viewer. No

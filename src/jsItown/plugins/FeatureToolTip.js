@@ -1,5 +1,3 @@
-/* global itowns */
-
 // const { GeometryLayer } = require("itowns");
 
 /**

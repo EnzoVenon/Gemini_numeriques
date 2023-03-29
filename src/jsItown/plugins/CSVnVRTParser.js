@@ -1,5 +1,3 @@
-/* global itowns, Promise */
-
 /**
  * A module to parse OGR Virtual Format files.
  *

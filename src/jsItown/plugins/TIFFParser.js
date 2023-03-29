@@ -1,4 +1,4 @@
-/* global itowns, Promise, THREE, UTIF */
+/* global THREE, UTIF */
 
 /**
  * The TIFFParser module provides a [parse]{@link module:TIFFParser.parse}
@@ -20,7 +20,7 @@
  * @module TIFFParser
  */
 var TIFFParser = (function _() {
-    if (typeof THREE == 'undefined'  && itowns.THREE) {
+    if (typeof THREE == 'undefined' && itowns.THREE) {
         // eslint-disable-next-line no-global-assign
         THREE = itowns.THREE;
     }

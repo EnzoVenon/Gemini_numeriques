@@ -1,10 +1,10 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
-import { update, buildingLayer } from "./models/building";
-import { picking } from "./models/connectDataToBuidlings"
+import { update/*, buildingLayer */ } from "./models/building";
+//import { picking } from "./models/connectDataToBuidlings"
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
-import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
+//import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
 import { addShp } from "./models/addShpLayer"
 setUpMenu();
