@@ -43,6 +43,7 @@ var FeatureToolTip = (function _() {
         var features = view.pickFeaturesAt.apply(view, [event, 3].concat(layersId));
 
         var layer;
+
         for (var layerId in features) {
             if (features[layerId].length == 0) {
                 continue;
@@ -56,6 +57,7 @@ var FeatureToolTip = (function _() {
                 features[layerId] = layer.options.filterGeometries(features[layerId], layer.layer) || [];
             }
             tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
+
         }
 
         if (tooltip.innerHTML != '') {
@@ -63,18 +65,23 @@ var FeatureToolTip = (function _() {
             tooltip.style.left = view.eventToViewCoords(event).x + 'px';
             tooltip.style.top = view.eventToViewCoords(event).y + 'px';
         }
+
+
+        // console.log(tooltip.innerHTML)
+
+
     }
 
     function getGeometryProperties(geometry) {
         return function properties() {
-            // console.log(' ------------- getGeometryProperties ------------- ');
-            // console.log(geometry.properties);
             return geometry.properties;
         };
     }
 
+
     function fillToolTip(features, layer, options) {
         var content = '';
+
         var feature;
         var geometry;
         var style;
@@ -82,14 +89,11 @@ var FeatureToolTip = (function _() {
         var stroke;
         var symb = '';
         var prop;
-        const layerName = 'cadastre';
-        if (layer.id == layerName) {
-            // console.log(' -------------------------- fillToolTip -------------------------- ');
-            // console.log(layer.id);
-        }
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
+            tooltip.value = geometry.properties
+
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
@@ -111,16 +115,15 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            content += '<div>';
-            content += '<span style="color: ' + fill + '; -webkit-text-stroke: ' + stroke + '">';
-            content += symb + ' ';
-            content += '</span>';
+
+            content += '<div class="tab">'
+            content += '<input type="radio" name="css-tabs" id="' + layer.id + '" class="tab-switch" checked>'
+            content += '<label for="' + layer.id + '" class="tab-label">'
 
             if (geometry.properties) {
-                if (layer.id === layerName) {
-                    console.log(geometry.properties);
-                }
+
                 content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || layer.id || '');
+                content += '</label>';
             }
 
             if (feature.type === itowns.FEATURE_TYPES.POINT) {
@@ -133,9 +136,11 @@ var FeatureToolTip = (function _() {
                     for (prop in geometry.properties) {
                         if (!options.filterProperties.includes(prop)) {
                             content += options.format(prop, geometry.properties[prop]) || '';
+
                         }
                     }
                 } else {
+                    content += '<div class="tab-content">'
                     content += '<ul>';
                     for (prop in geometry.properties) {
                         if (!options.filterProperties.includes(prop)) {
@@ -147,12 +152,15 @@ var FeatureToolTip = (function _() {
                         content = content.replace('<ul>', '');
                     } else {
                         content += '</ul>';
+                        content += '</div>'
                     }
                 }
             }
 
             content += '</div>';
+            content += '</div>';
         }
+
 
         return content;
     }
@@ -176,6 +184,8 @@ var FeatureToolTip = (function _() {
             // HTML element
             tooltip = document.createElement('div');
             tooltip.className = 'tooltip';
+            tooltip.id = 'tooltip';
+
             viewerDiv.appendChild(tooltip);
 
             // View binding
@@ -183,15 +193,29 @@ var FeatureToolTip = (function _() {
 
             // Mouse movement listening
             function onMouseMove(event) {
-                if (!mouseDown) {
+                if (mouseDown) {
                     moveToolTip(event);
+
+
+                    tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
+
+                    tooltip.addEventListener('mouseover', () => {
+                        document.removeEventListener('mousedown', onMouseMove);
+                    })
+                    tooltip.addEventListener('mouseout', () => {
+                        document.addEventListener('mousedown', onMouseMove);
+                    })
+
+                    tooltip.addEventListener
+
+                    console.log(tooltip)
                 } else {
-                    tooltip.style.left = view.eventToViewCoords(event).x + 'px';
-                    tooltip.style.top = view.eventToViewCoords(event).y + 'px';
+                    tooltip.style.left = (view.eventToViewCoords(event).x - 200) + 'px';
+                    tooltip.style.top = (view.eventToViewCoords(event).y - 200) + 'px';
                 }
             }
 
-            document.addEventListener('mousemove', onMouseMove, false);
+            // document.addEventListener('mousemove', onMouseMove, false);
             document.addEventListener('mousedown', onMouseMove, false);
         },
 
@@ -240,8 +264,6 @@ var FeatureToolTip = (function _() {
             if (!layer.isLayer) {
                 return layer;
             }
-            // console.log(' ------------- addLayer ------------- ');
-            // console.log(options)
             var opts = options || { filterAllProperties: true };
             opts.filterProperties = opts.filterProperties == undefined ? [] : opts.filterProperties;
             opts.filterProperties.concat(['name', 'nom', 'style', 'description']);
