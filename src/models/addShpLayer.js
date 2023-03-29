@@ -30,7 +30,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         // let coord = new itowns.Coordinates();
         // coord.crs = parsed.features[0].crs
 
-        console.log(parsed)
+        console.log(shp2)
 
 
         console.log(parsed.features[0].vertices)

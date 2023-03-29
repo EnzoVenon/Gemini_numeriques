@@ -8,6 +8,8 @@ import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
 import { addShp } from "./models/addShpLayer"
 
+import { addSpecificBuilings } from "./models/extrudedBat"
+
 
 
 // var shapefile = require("shapefile");
@@ -21,7 +23,10 @@ setUpMenu();
 
 // Define initial camera position
 const placement = {
+    // coord: new itowns.Coordinates('EPSG:4326', 3.05, 48.95, 2),
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+
+
     range: 500,
     tilt: 7,
 }
@@ -158,6 +163,50 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // let iris_surface_layer = iris_layer.surface_layer
 // let iris_geom_layer = iris_layer.geom
 
+var src = new itowns.FileSource({
+    fetchedData: {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature", "properties": { "gid": 80, "station": "MEAUX", "hdysf": 4.860000 }, "geometry": {
+                    "type": "Polygon", "coordinates": [
+                        [
+                            [2.835295595710605, 49.026303143046405],
+                            [3.262550657367586, 49.026303143046405],
+                            [3.262550657367586, 48.90335704268021],
+                            [2.835295595710605, 48.90335704268021],
+                            [2.835295595710605, 49.026303143046405]
+                        ]
+
+
+                    ]
+                }
+            }]
+    },
+
+    crs: 'EPSG:4326',
+    format: 'application/json',
+})
+
+console.log(src)
+// 3.05, 48.95
+
+var marne = new itowns.FeatureGeometryLayer('Marne', {
+    // Use a FileSource to load a single file once
+    source: src,
+    transparent: true,
+    opacity: 0.7,
+    zoom: { min: 0 },
+    style: new itowns.Style({
+        fill: {
+            color: new itowns.THREE.Color(0xbbffbb),
+            extrusion_height: 10000,
+        }
+    })
+});
+
+view.addLayer(marne)
+
 
 
 // Listen for globe full initialisation event
@@ -181,154 +230,71 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    // addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
+    addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
 
-    // let parser = new itowns.GeoJsonParser();
+    addSpecificBuilings("osm", 1000, "type", "apartments", "red", view)
 
-    // itowns.ShapefileParser.parse({
-    //     type: "feature",
-    //     geometry: {
-    //         type: "polygon",
-    //         coordinates: [[0.7190659, 45.1846609],
-    //         [0.7190952, 45.1846911],
-    //         [0.7191215, 45.1846785],
-    //         [0.7190917, 45.1846484],
-    //         [0.7190659, 45.1846609]]
-    //     },
-
-    // }, {
-    //     in: { crs: 'EPSG:4326' },
-    //     out: {
-    //         crs: 'EPSG:4326',
-    //     }
-    // })
+    // i = 0;
+    // shapefile.open("../data/shp/prg/osm.shp")
+    //     .then(source => source.read()
+    //         .then(function log(result) {
+    //             if (result.done) return;
+    //             // console.log(result.value)
 
 
-    let pars = new itowns.FileSource({
-        fetchedData: {
-            "type": "feature",
-            "geometry": {
-                "type": "polygon",
-                "coordinates": [[0.7190659, 45.1846609],
-                [0.7190952, 45.1846911],
-                [0.7191215, 45.1846785],
-                [0.7190917, 45.1846484],
-                [0.7190659, 45.1846609]]
-            },
-            "properties": {
-                "name": "Dinagat Islands"
-            }
-        },
-        format: 'application/json',
-        crs: 'EPSG:4326',
-        parser: itowns.GeoJsonParser.parse
 
-    }
-    )
+    //             try {
+    //                 if (result.value.properties.type === "apartments") {
+    //                     console.log(result.value.geometry.coordinates)
 
-    console.log(pars)
+    //                     let list = []
+    //                     // result.value.geometry.coordinates[0].forEach(element => {
+    //                     //     console.log(element)
+    //                     // });
+    //                     var src2 = new itowns.FileSource({
+    //                         fetchedData: {
+    //                             "type": "FeatureCollection",
+    //                             "features": [
+    //                                 {
+    //                                     "type": "Feature", "properties": { "gid": 80, "station": "MEAUX", "hdysf": 4.860000 }, "geometry": {
+    //                                         "type": "Polygon", "coordinates": [result.value.geometry.coordinates[0]]
+    //                                     }
+    //                                 }]
+    //                         },
 
-    const geomLayer = new itowns.FeatureGeometryLayer('test', {
-        source: pars,
-        onMeshCreated: function scaleZ(mesh) {
-            mesh.children.forEach(c => {
-                c.scale.set(3000, 300, 390)
-            })
-        },
+    //                         crs: 'EPSG:4326',
+    //                         format: 'application/json',
+    //                     })
 
-        zoom: { min: 0 },
-        style: new itowns.Style({
-            fill: {
-                color: (p) => { console.log(p); return "red" },
-                extrusion_height: 100000,
-                base_altitude: 1000,
-            }
-        }),
-        addLabelLayer: true,
+    //                     var bat = new itowns.FeatureGeometryLayer(result.value.properties.osm_id, {
+    //                         // Use a FileSource to load a single file once
+    //                         source: src2,
+    //                         transparent: true,
+    //                         opacity: 0.7,
+    //                         zoom: { min: 0 },
+    //                         style: new itowns.Style({
+    //                             fill: {
+    //                                 color: new itowns.THREE.Color(0xbbffbb),
+    //                                 extrusion_height: 100,
+    //                             }
+    //                         })
+    //                     });
 
-    });
+    //                     view.addLayer(bat)
 
-    view.addLayer(geomLayer)
-    view.notifyChange();
+    //                 }
+    //             } catch (e) {
 
-
-    console.log(geomLayer)
-
-    // var object3D = new itowns.THREE.Object3D();
-    // var mesh = itowns.GeoJsonParser.parse({
-    //     type: "feature",
-    //     geometry: {
-    //         "type": "polygon",
-    //         "coordinates": [[0.7190659, 45.1846609],
-    //         [0.7190952, 45.1846911],
-    //         [0.7191215, 45.1846785],
-    //         [0.7190917, 45.1846484],
-    //         [0.7190659, 45.1846609]]
-    //     },
-    //     properties: {
-    //         name: "Dinagat Islands"
-    //     }
-    // });
-
-    // mesh.scale.set(10, 10, 10); // Réglez l'échelle de l'objet pour l'afficher correctement
-    // object3D.add(mesh);
-
-    // view.scene.add(object3D);
+    //             }
 
 
 
 
 
 
-
-    shapefile.open("../data/shp/prg/osm.shp")
-        .then(source => source.read()
-            .then(function log(result) {
-                if (result.done) return;
-                // console.log(result.value);
-
-                // Load the shapefile
-                // var shp = new Shapefile();
-                // shp.load('buildings.shp', function(featureCollection) {
-
-                //   // Loop through each building feature
-                //   featureCollection.features.forEach(function(feature) {
-
-                //     // Extrude the building footprint
-                //     var height = feature.properties.height; // Get the building height from the shapefile attribute
-                //     var geometry = earcut.flatten(feature.geometry.coordinates[0]); // Triangulate the footprint
-                //     var extruded = Extrusion.createExtrudedPolyline(geometry, height);
-
-                //     // Create a Three.js mesh for the building geometry
-                //     var mesh = new THREE.Mesh(extruded.geometry, new THREE.MeshPhongMaterial({color: 0x999999}));
-
-                //     // Add the mesh to the scene
-                //     scene.add(mesh);
-                //   });
-                // });
-
-
-
-                //     {
-                //         in: { src: 'EPSG:4326' },
-                //         out: {
-                //             src: view.tileLayer.extent.src,
-                //         }
-                //     }
-                // )
-
-                // view.addLayer(pars)
-                // let parser = new itowns.GeoJsonParser();
-
-                // console.log(itowns)
-                // // parser.rea
-
-
-
-
-                return source.read().then(log);
-            }))
-        .catch(error => console.error(error.stack));
+    //             return source.read().then(log);
+    //         }))
+    //     .catch(error => console.error(error.stack));
 });
 
 debug.createTileDebugUI(menuGlobe.gui, view);
