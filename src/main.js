@@ -169,25 +169,25 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
+    // document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
 
-    document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
+    // document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
 
-    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+    // document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
     document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
-    addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
-    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
+    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
 
-    addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
+    // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
 
-    addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
+    // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
     addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
 
-    addSpecificBuilings("osm", 1000, "type", "apartments", "red", view)
+    addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
 
 });
 
@@ -195,9 +195,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
 tooltip.addEventListener(
-    'change',
+    'click',
     () => {
         console.log(tooltip.value);
+
+        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+
+
     },
     false
 )
