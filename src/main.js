@@ -144,6 +144,28 @@ function addBdCadastre() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+function addBdinnond_fr() {
+
+    console.log("addinnond_fr")
+    // console.log(itowns)
+    // console.log(view)
+    // console.log(document.getElementById("affiche_innondation_forte").checked)
+    if (document.getElementById("affiche_innondation_forte").checked) {
+        view.getLayerById("innond_fr").opacity = 1
+    }
+    else {
+        if (view.getLayerById("innond_fr")) {
+            // view.removeLayer("bdnb")
+            // console.log(view.getLayerById("cadastre"))
+            view.getLayerById("innond_fr").opacity = 0
+
+
+        }
+
+    }
+    view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+}
+
 function addBdOsm() {
 
     console.log("addOsm")
@@ -205,6 +227,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
+    document.getElementById("affiche_innondation_forte").addEventListener("change", addBdOsm)
+
     addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
     addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
@@ -214,6 +238,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
     addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
+
+    addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "innondation_fr", "yellow", "yellow", view)
+
 
 
 });
