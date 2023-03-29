@@ -6,8 +6,13 @@ import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 import { setUpMenu } from "./GUI/BaseMenu";
-import { addShp } from "./models/addShpLayer";
+
+import { addShp } from "./models/addShpLayer"
+
+import { addSpecificBuilings } from "./models/extrudedBat"
+
 import * as itowns_widgets from "../node_modules/itowns/dist/itowns_widgets";
+
 
 setUpMenu();
 
@@ -18,7 +23,10 @@ setUpMenu();
 
 // Define initial camera position
 const placement = {
+    // coord: new itowns.Coordinates('EPSG:4326', 3.05, 48.95, 2),
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+
+
     range: 500,
     tilt: 7,
 }
@@ -155,6 +163,50 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // let iris_surface_layer = iris_layer.surface_layer
 // let iris_geom_layer = iris_layer.geom
 
+var src = new itowns.FileSource({
+    fetchedData: {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature", "properties": { "gid": 80, "station": "MEAUX", "hdysf": 4.860000 }, "geometry": {
+                    "type": "Polygon", "coordinates": [
+                        [
+                            [2.835295595710605, 49.026303143046405],
+                            [3.262550657367586, 49.026303143046405],
+                            [3.262550657367586, 48.90335704268021],
+                            [2.835295595710605, 48.90335704268021],
+                            [2.835295595710605, 49.026303143046405]
+                        ]
+
+
+                    ]
+                }
+            }]
+    },
+
+    crs: 'EPSG:4326',
+    format: 'application/json',
+})
+
+console.log(src)
+// 3.05, 48.95
+
+var marne = new itowns.FeatureGeometryLayer('Marne', {
+    // Use a FileSource to load a single file once
+    source: src,
+    transparent: true,
+    opacity: 0.7,
+    zoom: { min: 0 },
+    style: new itowns.Style({
+        fill: {
+            color: new itowns.THREE.Color(0xbbffbb),
+            extrusion_height: 10000,
+        }
+    })
+});
+
+view.addLayer(marne)
+
 
 
 // Listen for globe full initialisation event
@@ -162,25 +214,87 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
+    // document.getElementById("affiche_bd_topo").addEventListener("change", addBdTopo)
 
-    document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
+    // document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
 
-    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+    // document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
-    document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
+    // document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
-    addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
 
-    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
+    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
 
-    addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
+    // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
 
-    addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
+    // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
     addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
 
+    addSpecificBuilings("osm", 1000, "type", "apartments", "red", view)
 
+    // i = 0;
+    // shapefile.open("../data/shp/prg/osm.shp")
+    //     .then(source => source.read()
+    //         .then(function log(result) {
+    //             if (result.done) return;
+    //             // console.log(result.value)
+
+
+
+    //             try {
+    //                 if (result.value.properties.type === "apartments") {
+    //                     console.log(result.value.geometry.coordinates)
+
+    //                     let list = []
+    //                     // result.value.geometry.coordinates[0].forEach(element => {
+    //                     //     console.log(element)
+    //                     // });
+    //                     var src2 = new itowns.FileSource({
+    //                         fetchedData: {
+    //                             "type": "FeatureCollection",
+    //                             "features": [
+    //                                 {
+    //                                     "type": "Feature", "properties": { "gid": 80, "station": "MEAUX", "hdysf": 4.860000 }, "geometry": {
+    //                                         "type": "Polygon", "coordinates": [result.value.geometry.coordinates[0]]
+    //                                     }
+    //                                 }]
+    //                         },
+
+    //                         crs: 'EPSG:4326',
+    //                         format: 'application/json',
+    //                     })
+
+    //                     var bat = new itowns.FeatureGeometryLayer(result.value.properties.osm_id, {
+    //                         // Use a FileSource to load a single file once
+    //                         source: src2,
+    //                         transparent: true,
+    //                         opacity: 0.7,
+    //                         zoom: { min: 0 },
+    //                         style: new itowns.Style({
+    //                             fill: {
+    //                                 color: new itowns.THREE.Color(0xbbffbb),
+    //                                 extrusion_height: 100,
+    //                             }
+    //                         })
+    //                     });
+
+    //                     view.addLayer(bat)
+
+    //                 }
+    //             } catch (e) {
+
+    //             }
+
+
+
+
+
+
+    //             return source.read().then(log);
+    //         }))
+    //     .catch(error => console.error(error.stack));
 });
 
 const widgets = new itowns_widgets.Navigation(view);

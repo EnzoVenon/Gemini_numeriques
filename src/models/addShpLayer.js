@@ -21,22 +21,37 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
     }).then((parsed) => {
         // We can then instantiate a FileSource, passing the parsed data,
         // and create a Layer bound to this source.
-        const shp = new itowns.FileSource({ features: parsed });
+        const shp2 = new itowns.FileSource({ features: parsed });
 
-        // console.log(parsed)
 
-        return view.addLayer(new itowns.ColorLayer(layerName, {
-            source: shp,
+
+        // view.addLayer(bat)
+
+        // let coord = new itowns.Coordinates();
+        // coord.crs = parsed.features[0].crs
+
+        console.log(shp2)
+
+
+        console.log(parsed.features[0].vertices)
+
+        let colorl = new itowns.ColorLayer(layerName, {
+            source: shp2,
             style: new itowns.Style({
                 zoom: { min: 10, max: 20 },
                 // point: { color: 'white', line: 'green' },
                 fill: {
-                    color: fillColor
+                    color: fillColor,
                 },
                 stroke: { color: oulineColor }
             }),
             addLabelLayer: true,
-        }));
+        });
+
+        console.log(colorl)
+
+
+        return view.addLayer(colorl);
     }).then((layer => {
         // Finally, we generate tooltip for when the mouse hovers the data displayed within our created layer.
         FeatureToolTip.addLayer(layer, { filterAllProperties: false });
@@ -51,6 +66,11 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         var g = num >> 8 & 255;
         var b = num & 255;
         return 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
+    }
+
+    function setheight(properties) {
+        console.log(properties)
+        return 500;
     }
 
     return layer;
