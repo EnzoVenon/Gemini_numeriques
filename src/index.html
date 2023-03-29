@@ -12,7 +12,7 @@
 
     <title>Gemini Numériques</title>
     <link rel="stylesheet" href="index.css">
-
+    <link rel="stylesheet" type="text/css" href="css/widgets.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
 </head>
 
@@ -24,6 +24,9 @@
     <script src="../node_modules/itowns/dist/itowns.js"></script>
     <script src="../node_modules/shapefile/dist/shapefile.js"></script>
     <script src="../node_modules/itowns/dist/debug.js"></script>
+    <script src="../node_modules/itowns/dist/debug.js"></script>    
+    <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
+
     <script src="./GUI/LoadingScreen.js"></script>
 
     <div id="description">
@@ -49,6 +52,9 @@
 
         <input type="checkbox" name="affiche" id="affiche_bd_osm" checked>
         <label for="affiche_bd_osm">Affiche bd_osm</label>
+
+        <input type="checkbox" name="affiche" id="affiche_innondation_forte" checked>
+        <label for="affiche_innondation_forte">Affiche innondation</label>
 
     </div>
 

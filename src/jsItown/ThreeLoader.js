@@ -1,4 +1,3 @@
-/* global itowns, Promise */
 var manager = new itowns.THREE.LoadingManager();
 
 // namespace ThreeLoader.
@@ -58,7 +57,7 @@ ThreeLoader.getThreeJsLoader = function getThreeJsLoader(format) {
  */
 ThreeLoader.useThreeJsLoader = function useThreeJsLoader(loader, url) {
     var deferredPromise = defer();
-    loader.load(url, deferredPromise.resolve, function _() {}, deferredPromise.reject);
+    loader.load(url, deferredPromise.resolve, function _() { }, deferredPromise.reject);
     return deferredPromise.promise;
 };
 

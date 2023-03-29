@@ -87,7 +87,7 @@ function setColor(properties) {
 }
 
 
-function setColorLabel(properties) {
+function setColorLabel() {
     // console.log(properties)
     var num = Math.round(0xffffff * Math.random());
     var r = num >> 16;

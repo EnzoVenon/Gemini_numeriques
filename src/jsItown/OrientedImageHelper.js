@@ -1,5 +1,3 @@
-/* global itowns */
-
 // set object position to the coordinate
 // set object ENH orientation: X to the east, Y (green) to the north, Z (blue) look to the sky.
 function placeObjectFromCoordinate(object, coord) {
