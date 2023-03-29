@@ -30,10 +30,10 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
         // let coord = new itowns.Coordinates();
         // coord.crs = parsed.features[0].crs
 
-        console.log(shp2)
+        // console.log(shp2)
 
 
-        console.log(parsed.features[0].vertices)
+        // console.log(parsed.features[0].vertices)
 
         let colorl = new itowns.ColorLayer(layerName, {
             source: shp2,
@@ -48,7 +48,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
             addLabelLayer: true,
         });
 
-        console.log(colorl)
+        // console.log(colorl)
 
 
         return view.addLayer(colorl);
@@ -60,7 +60,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
     }));
 
     function setColor(properties) {
-        console.log(properties)
+        // console.log(properties)
         var num = Math.round(0xffffff * Math.random());
         var r = num >> 16;
         var g = num >> 8 & 255;
@@ -69,7 +69,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
     }
 
     function setheight(properties) {
-        console.log(properties)
+        // console.log(properties)
         return 500;
     }
 
