@@ -191,4 +191,14 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 });
 
+
+const tooltip = document.getElementById('tooltip');
+console.log(tooltip)
+tooltip.addEventListener(
+    'change',
+    () => {
+        console.log(tooltip.value);
+    },
+    false
+)
 debug.createTileDebugUI(menuGlobe.gui, view);

@@ -94,6 +94,8 @@ var FeatureToolTip = (function _() {
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
+            tooltip.value = geometry.properties
+
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
@@ -184,6 +186,8 @@ var FeatureToolTip = (function _() {
             // HTML element
             tooltip = document.createElement('div');
             tooltip.className = 'tooltip';
+            tooltip.id = 'tooltip';
+
             viewerDiv.appendChild(tooltip);
 
             // View binding
@@ -196,17 +200,15 @@ var FeatureToolTip = (function _() {
 
 
                     tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
-                    // const popup = document.getElementById('TEST');
-                    // console.log('------------------------popup----------------------')
-                    // console.log(popup)
+
                     tooltip.addEventListener('mouseover', () => {
-                        console.log('YOOOOOOOOOOOOOOOOOOOOO')
                         document.removeEventListener('mousedown', onMouseMove);
                     })
                     tooltip.addEventListener('mouseout', () => {
-                        console.log('out')
                         document.addEventListener('mousedown', onMouseMove);
                     })
+
+                    tooltip.addEventListener
 
                     console.log(tooltip)
                 } else {
