@@ -1,5 +1,5 @@
 
-export async function addShp(filePath, layerName, oulineColor, fillColor, view) {
+export async function addShp(filePath, layerName, oulineColor, fillColor, view, tooltipAvailable) {
     let layer = await itowns.Fetcher.multiple(
         filePath,
         {
@@ -53,8 +53,11 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view) 
 
         return view.addLayer(colorl);
     }).then((layer => {
-        // Finally, we generate tooltip for when the mouse hovers the data displayed within our created layer.
-        FeatureToolTip.addLayer(layer, { filterAllProperties: false });
+        if (tooltipAvailable) {
+            // Finally, we generate tooltip for when the mouse hovers the data displayed within our created layer.
+            FeatureToolTip.addLayer(layer, { filterAllProperties: false });
+        }
+
 
         return layer
     }));

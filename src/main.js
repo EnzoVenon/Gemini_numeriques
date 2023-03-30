@@ -255,25 +255,25 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
 
-    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
 
     document.getElementById("affiche_innondation_forte").addEventListener("change", addBdOsm)
 
-    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view)
+    // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
 
 
-    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view)
+    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view, false)
 
-    // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view)
+    // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view, true)
 
     // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    addShp("../data/shp/prg/osm", "osm", "black", "grey", view)
+    addShp("../data/shp/prg/osm", "osm", "black", "grey", view, true)
 
 
     addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
 
-    addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "innondation_fr", "yellow", "yellow", view)
+    addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "innondation_fr", "yellow", "yellow", view, false)
 
 
 
