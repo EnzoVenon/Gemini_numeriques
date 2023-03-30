@@ -267,7 +267,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    addShp("../data/shp/prg/osm", "osm", "red", "", view, true)
+    addShp("../data/shp/prg/osm", "osm", "black", "", view, true)
 
 
     // addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
