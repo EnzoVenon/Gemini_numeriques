@@ -6,12 +6,10 @@
 
 ### Openstreet Map data (OSM)
  - https://download.geofabrik.de/europe/france.html
-
-### Energie 
- https://data.ademe.fr/datasets/dpe-france
  
 ### Base de données nationale des bâtiments (BDNB)
  - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
+ - Energie : https://data.ademe.fr/datasets/dpe-france
 
 ### API INSEE: 
   - https://pyris.datajazz.io/
