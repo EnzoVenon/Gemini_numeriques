@@ -249,9 +249,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     // document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
 
-    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+    // document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
-    // document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
+    document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
 
     // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
@@ -261,13 +261,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
 
 
-    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "red", "", view, true)
+    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "red", "", view, true)
 
     // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view, true)
 
     // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    // addShp("../data/shp/prg/osm", "osm", "black", "grey", view, true)
+    addShp("../data/shp/prg/osm", "osm", "red", "", view, true)
 
 
     // addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
