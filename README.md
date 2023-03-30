@@ -16,7 +16,7 @@
 ### API INSEE: 
   - https://pyris.datajazz.io/
 
-## installation: 
+## Installation: 
 ```
 git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
