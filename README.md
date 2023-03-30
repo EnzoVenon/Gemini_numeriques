@@ -1,18 +1,22 @@
-# Jumeaux_numeriques
+# Jumeaux_numériques
 
-# bdcarto:
+## Sources de données
+### BD Carto:
  - https://geoservices.ign.fr/services-web-experts-cartovecto
 
-# openstreet map data osm 
+### Openstreet Map data (OSM)
  - https://download.geofabrik.de/europe/france.html
 
-# Energie 
+### Energie 
  https://data.ademe.fr/datasets/dpe-france
  
-# BDNB (Base de données nationale des bâtiments)
+### Base de données nationale des bâtiments (BDNB)
  - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
 
-# installation: 
+### API INSEE: 
+  - https://pyris.datajazz.io/
+
+## installation: 
 ```
 git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
@@ -26,6 +30,5 @@ npm run build
 npm run start
 ```
 
-# api insee: 
-  - https://pyris.datajazz.io/
+
 
