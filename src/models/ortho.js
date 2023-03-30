@@ -1,7 +1,7 @@
 
 
-export function addOrthoLayer(configOrtho, view, menuGlobe) {
+export function addOrthoLayer(configOrtho, view) {
     configOrtho.source = new itowns.WMTSSource(configOrtho.source);
     const layer = new itowns.ColorLayer('Ortho', configOrtho);
-    view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    view.addLayer(layer);
 }

@@ -49,7 +49,6 @@ const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 
-const menuGlobe = new GuiTools('menuDiv', view);
 
 
 // ---------- ADD NAVIGATION WIDGET : ----------
@@ -92,9 +91,9 @@ widgets.addButton(
 
 // Elevation layers
 itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
-    .then(result => addElevationLayer(result, view, menuGlobe));
+    .then(result => addElevationLayer(result, view));
 itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
-    .then(result => addElevationLayer(result, view, menuGlobe));
+    .then(result => addElevationLayer(result, view));
 
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
@@ -190,7 +189,7 @@ function addBdOsm() {
 
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
-    .then(result => addOrthoLayer(result, view, menuGlobe));
+    .then(result => addOrthoLayer(result, view));
 
 
 var src = new itowns.FileSource({
@@ -250,9 +249,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     // document.getElementById("affiche_bd_nb").addEventListener("change", addBdnb)
 
-    // document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
+    document.getElementById("affiche_bd_cadastre").addEventListener("change", addBdCadastre)
 
-    document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
+    // document.getElementById("affiche_bd_osm").addEventListener("change", addBdOsm)
 
 
     // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
@@ -262,16 +261,16 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // addShp("../data/shp/prg/bdnb_perigeux7", "bdnb", "red", "pink", view, false)
 
 
-    // addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "orange", "purple", view, false)
+    addShp("../data/shp/prg/cadastre_perigeux8", "cadastre", "red", "", view, true)
 
     // addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "blue", view, true)
 
     // addShp("../data/shp/communes/perigeux", "com", "yellow", "", view)
 
-    addShp("../data/shp/prg/osm", "osm", "black", "grey", view, true)
+    // addShp("../data/shp/prg/osm", "osm", "black", "grey", view, true)
 
 
-    addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
+    // addSpecificBuilings("osm", 100, "type", "apartments", "red", view)
 
     addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "innondation_fr", "yellow", "yellow", view, false)
 
@@ -327,7 +326,6 @@ tooltip.addEventListener(
     },
     false
 )
-debug.createTileDebugUI(menuGlobe.gui, view);
 
 
 function createFeatureAt(coordinate) {
