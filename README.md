@@ -18,15 +18,21 @@
 ```
 git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
-- install node (and npm)
-- go to the folder:  Gemini_numeriques an open it in ther terminal 
-- in the terminal, type these commands
+- Installer Node (et npm)
+- Aller dans le dossier:  Gemini_numeriques et l'ouvrir dans le terminal 
+- Dans le terminal, lancer ces commandes pour tester en local : 
 
 ```bash
 npm install
-npm run build
-npm run start
+npm start
 ```
-
-
-
+- Pour avoir une version "pushable" sur Git, lancer ces commandes avant de Push : 
+```bash
+npm install
+npm run build
+```
+- Pour lancer les tests en local (analyse statique et tests unitaires), lancer ces commandes : 
+```bash
+npm install
+npm test
+```
