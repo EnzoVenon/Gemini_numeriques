@@ -26,7 +26,7 @@ git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 npm install
 npm start
 ```
-- Pour avoir une version "pushable" sur Git, lancer ces commandes avant de Push : 
+- Pour avoir une version utilisable sur Git, lancer ces commandes avant de Push : 
 ```bash
 npm install
 npm run build
