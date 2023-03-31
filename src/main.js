@@ -5,7 +5,7 @@ import { update/*, buildingLayer */ } from "./models/building";
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 //import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
-import { setUpMenu } from "./GUI/BaseMenu";
+// import { setUpMenu } from "./GUI/BaseMenu";
 
 import { addShp } from "./models/addShpLayer"
 
@@ -27,7 +27,7 @@ customDiv.appendChild(pointer);
 
 
 
-setUpMenu();
+// setUpMenu();
 
 
 // ----------------- View Setup ----------------- //
@@ -54,6 +54,7 @@ FeatureToolTip.init(viewerDiv, view);
 // ---------- ADD NAVIGATION WIDGET : ----------
 
 const widgets = new itowns_widgets.Navigation(view);
+console.log(itowns_widgets)
 
 // Example on how to add a new button to the widgets menu
 widgets.addButton(
