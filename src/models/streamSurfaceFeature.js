@@ -16,7 +16,7 @@ export function addStreamSurfaceFeature(url, version, typeName, crs, zoomMin, la
 
 
     var wfsCartoStyle = new itowns.Style({
-        zoom: { min: zoomMin, max: 20 },
+        zoom: { min: zoomMin },
         // point: { color: 'white', line: 'green' },
         fill: {
             color: setColor
@@ -67,18 +67,18 @@ export function addStreamSurfaceFeature(url, version, typeName, crs, zoomMin, la
         addLabelLayer: true,
     });
 
-    const geomLayer = new itowns.FeatureGeometryLayer(layerName + "_geom", {
-        source: wfsCartoSource,
-        style: wfsCartoStyle,
-    });
+    // const geomLayer = new itowns.FeatureGeometryLayer(layerName + "_geom", {
+    //     source: wfsCartoSource,
+    //     style: wfsCartoStyle,
+    // });
 
 
 
-    return { surface_layer: wfsCartoLayer, label_layer: wfsCartoLabelLayer, geom: geomLayer }
+    return { surface_layer: wfsCartoLayer, label_layer: wfsCartoLabelLayer }
 }
 
-function setColor() {
-    // console.log(properties)
+function setColor(properties) {
+    console.log(properties)
     var num = Math.round(0xffffff * Math.random());
     var r = num >> 16;
     var g = num >> 8 & 255;
