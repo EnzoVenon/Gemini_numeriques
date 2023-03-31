@@ -52,8 +52,12 @@
 
     <div id="menu">
         <h2>Menu</h2>
-        <p>test</p>
-        <input type="checkbox" name="affiche" id="bouton_afficher_menu">
+
+        <input type="checkbox" name="bouton_style" id="bouton_style">
+        <label for="bouton_style">Style</label>
+        <br>
+
+        <input type="checkbox" name="bouton_afficher_menu" id="bouton_afficher_menu" checked>
         <label for="bouton_afficher_menu">Afficher le menu</label>
 
         <input type="checkbox" name="affiche" id="affiche_bd_topo" checked>
@@ -72,6 +76,16 @@
         <input type="checkbox" name="affiche" id="affiche_innondation_forte" checked>
         <label for="affiche_innondation_forte">Affiche innondation</label>
 
+    </div>
+
+    <div id="style_menu">
+        <h2>Style BD Topo</h2>
+        <label>Champ <input type="text" id="in_ch1Topo"></label>
+        <br>
+        <label>Valeur <input type="text" id="in_v1Topo"></label>
+        <label>Couleur <input type="text" id="in_co1Topo"></label>
+        <br>
+        <button id="bouton_ok_style">OK</button>
     </div>
 
     <script type="module" src="./main.js"></script>
