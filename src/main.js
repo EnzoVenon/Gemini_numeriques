@@ -8,7 +8,7 @@ import { setUpMenu } from "./GUI/BaseMenu";
 
 import { addShp } from "./models/addShpLayer"
 
-import { addSpecificBuilings } from "./models/extrudedBat"
+//import { addSpecificBuilings } from "./models/extrudedBat"
 
 
 let bat = document.createElement('div');
@@ -97,6 +97,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
 
+// eslint-disable-next-line no-unused-vars
 function addBdTopo() {
 
     console.log("bd_topo")
@@ -112,6 +113,7 @@ function addBdTopo() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+// eslint-disable-next-line no-unused-vars
 function addBdnb() {
 
     console.log("addBdnb")
@@ -129,6 +131,7 @@ function addBdnb() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+// eslint-disable-next-line no-unused-vars
 function addBdCadastre() {
 
     console.log("addCadastre")
@@ -146,6 +149,7 @@ function addBdCadastre() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
+// eslint-disable-next-line no-unused-vars
 function addBdinnond_fr() {
 
     console.log("addinnond_fr")
@@ -291,9 +295,6 @@ tooltip.addEventListener(
 
         mouseevent.value.clientY -= 100
 
-
-        let a = addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-
         console.log(document.getElementById('bat').value.coord);
         console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
         // const featureCoord = new itowns.Coordinates(view.referenceCrs, document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1]);
@@ -303,13 +304,7 @@ tooltip.addEventListener(
 
         featureCoord.setFromVector3(view.getPickingPositionFromDepth(view.eventToViewCoords(mouseevent.value)));
 
-        const features = createFeatureAt(featureCoord);
-
         bubble.textContent = "batid and more: " + tooltip.value.properties.osm_id
-
-
-        // the source of the feature layer
-        const source = new itowns.FileSource({ features });
     },
     false
 )
@@ -337,6 +332,7 @@ document.getElementById("bouton_ok_style").addEventListener('click', () => {
 });
 
 
+// eslint-disable-next-line no-unused-vars
 function createFeatureAt(coordinate) {
     // create new featureCollection
     const collection = new itowns.FeatureCollection({

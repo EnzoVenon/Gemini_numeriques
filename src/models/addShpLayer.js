@@ -76,6 +76,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
     }
     */
 
+    // eslint-disable-next-line no-unused-vars
     function setheight(properties) {
         // console.log(properties)
         return 500;
