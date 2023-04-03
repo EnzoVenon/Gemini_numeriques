@@ -11,6 +11,8 @@ import { addShp } from "./models/addShpLayer"
 
 import { addSpecificBuilings } from "./models/extrudedBat"
 
+import { importCsvFile } from './models/readCsv'
+
 
 let bat = document.createElement('div');
 bat.className = 'bat';
