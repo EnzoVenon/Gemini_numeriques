@@ -26,13 +26,55 @@ git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 npm install
 npm start
 ```
-- Pour avoir une version "pushable" sur Git, lancer ces commandes avant de Push : 
+- Pour avoir une version utilisable sur Git, lancer ces commandes avant de Push : 
 ```bash
 npm install
 npm run build
 ```
-- Pour lancer les tests en local (analyse statique et tests unitaires), lancer ces commandes : 
+
+## Utiliser ESLint
+
+Pour lancer les tests en local (analyse statique et tests unitaires), lancer ces commandes : 
 ```bash
 npm install
 npm test
 ```
+
+### Si ESLint affiche une erreur, que dois-je faire ?
+---
+
+### no-unused-var
+Si l'erreur est :
+```bash
+/chemin/du/fichier.js
+  79:14  error  'myVar' is defined but never used   no-unused-vars
+```
+Il faut aller voir dans le fichier indiqué, à la ligne indiqué (ici ```/chemin/du/fichier.js``` et ligne ```79```) pour trouver la variable.
+
+Si elle ne sert pas et ne servira pas plus tard, on la supprime.
+
+Sinon, si elle sera utile plus tard, on rajoute ce commentaire à la ligne précédente :
+```js
+// eslint-disable-next-line no-unused-vars
+```
+
+### no-undef
+Si l'erreur est :
+```bash
+/chemin/du/fichier.js
+  13:9  error  'myVar' is not defined  no-undef
+```
+Il faut aller voir dans le fichier indiqué, à la ligne indiqué (ici ```/chemin/du/fichier.js``` et ligne ```13```) pour trouver la variable.
+
+Si elle sert, il faut la définir. Ça peut être un oubli de ```let``` ou de ```const``` au moment de la déclaration de la variable.
+
+Si c'est une variable globale, il faut se rendre dans le fichier [.eslintrc.json](/.eslintrc.json) qui est à la racine du projet, et la rajouter dans les variables globales.
+Exemple :
+```json
+{
+  "globals": {
+    "myVar": "readonly",
+  }
+}
+```
+---
