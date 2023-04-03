@@ -31,17 +31,27 @@ var FeatureToolTip = (function _() {
     var mouseevent;
 
     var mouseDown = 0;
-    document.body.addEventListener('mousedown', function _() {
+    document.body.addEventListener('mousedown', function _(event) {
         ++mouseDown;
+        // console.log('++ mousedown')
+        // console.log(mouseDown)
+        // console.log(event.target)
     }, false);
-    document.body.addEventListener('mouseup', function _() {
-        --mouseDown;
+
+    document.body.addEventListener('mouseup', function _(event) {
+        if (event.target.id === "") {
+            --mouseDown;
+            // console.log('-- mouseup')
+            // console.log(mouseDown)
+        }
+        // console.log(event.target.id === '3d-button')
     }, false);
 
     function moveToolTip(event) {
         tooltip.innerHTML = '';
         tooltip.style.display = 'none';
-
+        // console.log('---------------moveToolTip-------------');
+        // console.log(event)
         var features = view.pickFeaturesAt.apply(view, [event, 3].concat(layersId));
 
         var layer;
@@ -59,7 +69,6 @@ var FeatureToolTip = (function _() {
                 features[layerId] = layer.options.filterGeometries(features[layerId], layer.layer) || [];
             }
             tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
-
         }
 
         if (tooltip.innerHTML != '') {
@@ -67,10 +76,6 @@ var FeatureToolTip = (function _() {
             tooltip.style.left = view.eventToViewCoords(event).x + 'px';
             tooltip.style.top = view.eventToViewCoords(event).y + 'px';
         }
-
-
-        // console.log(tooltip.innerHTML)
-
 
     }
 
@@ -97,7 +102,7 @@ var FeatureToolTip = (function _() {
             feature = features[p];
             geometry = feature.geometry;
 
-            console.log(geometry)
+            // console.log(geometry)
 
             tooltip.value = geometry
 
@@ -201,7 +206,6 @@ var FeatureToolTip = (function _() {
 
 
             viewerDiv.appendChild(tooltip);
-
             viewerDiv.appendChild(mouseevent);
 
 
@@ -210,6 +214,13 @@ var FeatureToolTip = (function _() {
 
             // Mouse movement listening
             function onMouseMove(event) {
+                // console.log('----------------onMouseMove--------------')
+                // console.log(event)
+                // console.log('mouseDown')
+                // console.log(mouseDown)
+                // console.log('onmousedown')
+                // console.log(onmousedown)
+                // console.log(document)
                 if (mouseDown) {
                     moveToolTip(event);
 
@@ -235,7 +246,13 @@ var FeatureToolTip = (function _() {
             }
 
             // document.addEventListener('mousemove', onMouseMove, false);
+            // console.log(document)
             document.addEventListener('mousedown', onMouseMove, false);
+            // document.addEventListener('mousedown', () => {
+            //     console.log('mousedown')
+
+            // }, false);
+
         },
 
         /**
