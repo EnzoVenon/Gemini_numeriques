@@ -104,8 +104,7 @@ view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { upda
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
-
-
+let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -113,6 +112,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/osm", "osm", "black", "", view, true)
+
+
+
 
 
 });
@@ -133,7 +135,6 @@ tooltip.addEventListener(
         console.log(document.getElementById('bat').value.coord);
         console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
-        let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
         csv.then(res => { console.log(res) });
 
     },
