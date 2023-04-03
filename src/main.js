@@ -123,7 +123,7 @@ tooltip.addEventListener(
     () => {
         // console.log(tooltip.value);
 
-        const mouseevent = document.getElementById('mouseevent')
+        // const mouseevent = document.getElementById('mouseevent')
         // console.log(mouseevent.value);
 
         addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view);

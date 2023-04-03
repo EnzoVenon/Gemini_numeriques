@@ -31,7 +31,7 @@ var FeatureToolTip = (function _() {
     var mouseevent;
 
     var mouseDown = 0;
-    document.body.addEventListener('mousedown', function _(event) {
+    document.body.addEventListener('mousedown', function _() {
         ++mouseDown;
     }, false);
 
