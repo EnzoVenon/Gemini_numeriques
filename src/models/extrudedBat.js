@@ -51,7 +51,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
 
                         }
                     } catch (e) {
-                        //TODO
+                        console.log(e)
                     }
                     return source.read().then(log);
                 }))

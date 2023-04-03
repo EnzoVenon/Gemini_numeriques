@@ -11,9 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Gemini Numériques</title>
-    <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" type="text/css" href="css/widgets.css">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
 
     <style>
         .bubble {
@@ -38,7 +43,89 @@
 </head>
 
 <body>
+
     <div id="viewerDiv"></div>
+    <div id="apparition">
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollinginfo"
+                    aria-controls="offcanvasScrollinginfo">Info générale</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingbat"
+                    aria-controls="offcanvasScrollingbat">Batiments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingrisq"
+                    aria-controls="offcanvasScrollingrisq">Risques</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingenerg"
+                    aria-controls="offcanvasScrollingenerg">Energie</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasScrollinginfocompl"
+                    aria-controls="offcanvasScrollinginfocompl">Compléments</a>
+            </li>
+        </ul>
+
+
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Bâtiments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Energies</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Compléments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
+
+    </div>
+
+
+
 
     <script src="./jsItown/plugins/FeatureToolTip.js"></script>
     <script src="./GUI/GuiTools.js"></script>
@@ -60,23 +147,7 @@
         <input type="checkbox" name="bouton_afficher_menu" id="bouton_afficher_menu" checked>
         <label for="bouton_afficher_menu">Afficher le menu</label>
 
-        <input type="checkbox" name="affiche" id="affiche_bd_topo" checked>
-        <label for="affiche_bd_topo">Affiche bd_topo</label>
 
-        <input type="checkbox" name="affiche" id="affiche_bd_nb" checked>
-        <label for="affiche_bd_nb">Affiche bd_nb</label>
-
-
-        <input type="checkbox" name="affiche" id="affiche_bd_cadastre" checked>
-        <label for="affiche_bd_cadastre">Affiche bd_cadastre</label>
-
-        <input type="checkbox" name="affiche" id="affiche_bd_osm" checked>
-        <label for="affiche_bd_osm">Affiche bd_osm</label>
-
-        <input type="checkbox" name="affiche" id="affiche_innondation_forte" checked>
-        <label for="affiche_innondation_forte">Affiche innondation</label>
-
-    </div>
 
     <div id="style_menu">
         <h2>Style BD Topo</h2>
