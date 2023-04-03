@@ -1,6 +1,6 @@
 
 export async function addShp(filePath, layerName, oulineColor, fillColor, view, tooltipAvailable) {
-    let layer = await itowns.Fetcher.multiple(
+    await itowns.Fetcher.multiple(
         filePath,
         {
             // fetch all files whose name match the `url` parameter value, and whose format is either `shp`,
@@ -23,17 +23,6 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
         // and create a Layer bound to this source.
         const shp2 = new itowns.FileSource({ features: parsed });
 
-
-
-        // view.addLayer(bat)
-
-        // let coord = new itowns.Coordinates();
-        // coord.crs = parsed.features[0].crs
-
-        // console.log(shp2)
-
-
-        // console.log(parsed.features[0].vertices)
 
         let colorl = new itowns.ColorLayer(layerName, {
             source: shp2,
@@ -74,13 +63,4 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
         var b = num & 255;
         return 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
     }
-    */
-
-    function setheight(properties) {
-        // console.log(properties)
-        return 500;
-    }
-
-    return layer;
-
-}
+    */}

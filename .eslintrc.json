@@ -23,6 +23,7 @@
         "setupLoadingScreen": "readonly",
         "GuiTools": "readonly",
         "FeatureToolTip": "readonly",
-        "itowns_widgets": "readonly"
+        "itowns_widgets": "readonly",
+        "shapefile": "readonly"
     }
 }
