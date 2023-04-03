@@ -148,9 +148,12 @@ tooltip.addEventListener(
             console.log(output)
 
             document.getElementById('batInfo').innerHTML = JSON.stringify(output)
+            document.getElementById("btnOffcanvasScrollingbat").click()
 
 
         });
+
+
 
     },
     false
