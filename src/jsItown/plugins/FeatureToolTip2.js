@@ -33,27 +33,18 @@ var FeatureToolTip = (function _() {
     var mouseDown = 0;
     document.body.addEventListener('mousedown', function _(event) {
         ++mouseDown;
-        // console.log('++ mousedown')
-        // console.log(mouseDown)
-        // console.log(event.target)
     }, false);
 
     document.body.addEventListener('mouseup', function _(event) {
         if (event.target.id === "") {
             --mouseDown;
-            // console.log('-- mouseup')
-            // console.log(mouseDown)
         }
-        // console.log(event.target.id === '3d-button')
     }, false);
 
     function moveToolTip(event) {
         tooltip.innerHTML = '';
         tooltip.style.display = 'none';
-        // console.log('---------------moveToolTip-------------');
-        // console.log(event)
-        var features = view.pickFeaturesAt.apply(view, [event, 3].concat(layersId));
-
+        var features = view.pickFeaturesAt.apply(view, [event, 2].concat(layersId));
         var layer;
 
         for (var layerId in features) {
@@ -92,43 +83,18 @@ var FeatureToolTip = (function _() {
         var feature;
         var geometry;
         var style;
-
-        // var fill;
-        // var stroke;
-        // var symb = '';
-
         var prop;
+
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
 
-            // console.log(geometry)
 
             tooltip.value = geometry
 
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
-
-            // if (feature.type === itowns.FEATURE_TYPES.POLYGON) {
-            //     symb = '&#9724';
-            //     if (style) {
-            //         fill = style.fill && style.fill.color;
-            //         stroke = style.stroke && ('1.25px ' + style.stroke.color);
-            //     }
-            // } else if (feature.type === itowns.FEATURE_TYPES.LINE) {
-            //     symb = '&#9473';
-            //     fill = style && style.stroke && style.stroke.color;
-            //     stroke = '0px';
-            // } else if (feature.type === itowns.FEATURE_TYPES.POINT) {
-            //     // symb = '&#9679';
-            //     if (style && style.point) {  // Style and style.point can be undefined if no style options were passed
-            //         fill = style.point.color;
-            //         stroke = '1.25px ' + style.point.line;
-            //     }
-            // }
-
-
 
             content += '<div class="tab">'
             content += '<input type="radio" name="css-tabs" id="' + layer.id + '" class="tab-switch" checked>'
@@ -214,20 +180,13 @@ var FeatureToolTip = (function _() {
 
             // Mouse movement listening
             function onMouseMove(event) {
-                // console.log('----------------onMouseMove--------------')
-                // console.log(event)
-                // console.log('mouseDown')
-                // console.log(mouseDown)
-                // console.log('onmousedown')
-                // console.log(onmousedown)
-                // console.log(document)
                 if (mouseDown) {
                     moveToolTip(event);
 
                     mouseevent.value = event;
 
 
-                    tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
+                    tooltip.innerHTML = '<div class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
 
                     tooltip.addEventListener('mouseover', () => {
                         document.removeEventListener('mousedown', onMouseMove);
@@ -245,14 +204,7 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            // document.addEventListener('mousemove', onMouseMove, false);
-            // console.log(document)
             document.addEventListener('mousedown', onMouseMove, false);
-            // document.addEventListener('mousedown', () => {
-            //     console.log('mousedown')
-
-            // }, false);
-
         },
 
         /**
