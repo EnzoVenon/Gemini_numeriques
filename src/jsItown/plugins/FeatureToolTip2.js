@@ -34,16 +34,17 @@ var FeatureToolTip = (function _() {
     document.body.addEventListener('mousedown', function _() {
         ++mouseDown;
     }, false);
-    document.body.addEventListener('mouseup', function _() {
-        --mouseDown;
+
+    document.body.addEventListener('mouseup', function _(event) {
+        if (event.target.id === "") {
+            --mouseDown;
+        }
     }, false);
 
     function moveToolTip(event) {
         tooltip.innerHTML = '';
         tooltip.style.display = 'none';
-
-        var features = view.pickFeaturesAt.apply(view, [event, 3].concat(layersId));
-
+        var features = view.pickFeaturesAt.apply(view, [event, 2].concat(layersId));
         var layer;
 
         for (var layerId in features) {
@@ -59,7 +60,6 @@ var FeatureToolTip = (function _() {
                 features[layerId] = layer.options.filterGeometries(features[layerId], layer.layer) || [];
             }
             tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
-
         }
 
         if (tooltip.innerHTML != '') {
@@ -67,10 +67,6 @@ var FeatureToolTip = (function _() {
             tooltip.style.left = view.eventToViewCoords(event).x + 'px';
             tooltip.style.top = view.eventToViewCoords(event).y + 'px';
         }
-
-
-        // console.log(tooltip.innerHTML)
-
 
     }
 
@@ -87,43 +83,18 @@ var FeatureToolTip = (function _() {
         var feature;
         var geometry;
         var style;
-
-        // var fill;
-        // var stroke;
-        // var symb = '';
-
         var prop;
+
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
 
-            console.log(geometry)
 
             tooltip.value = geometry
 
             style = (geometry.properties && geometry.properties.style) || feature.style || layer.style;
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
-
-            // if (feature.type === itowns.FEATURE_TYPES.POLYGON) {
-            //     symb = '&#9724';
-            //     if (style) {
-            //         fill = style.fill && style.fill.color;
-            //         stroke = style.stroke && ('1.25px ' + style.stroke.color);
-            //     }
-            // } else if (feature.type === itowns.FEATURE_TYPES.LINE) {
-            //     symb = '&#9473';
-            //     fill = style && style.stroke && style.stroke.color;
-            //     stroke = '0px';
-            // } else if (feature.type === itowns.FEATURE_TYPES.POINT) {
-            //     // symb = '&#9679';
-            //     if (style && style.point) {  // Style and style.point can be undefined if no style options were passed
-            //         fill = style.point.color;
-            //         stroke = '1.25px ' + style.point.line;
-            //     }
-            // }
-
-
 
             content += '<div class="tab">'
             content += '<input type="radio" name="css-tabs" id="' + layer.id + '" class="tab-switch" checked>'
@@ -201,7 +172,6 @@ var FeatureToolTip = (function _() {
 
 
             viewerDiv.appendChild(tooltip);
-
             viewerDiv.appendChild(mouseevent);
 
 
@@ -216,7 +186,7 @@ var FeatureToolTip = (function _() {
                     mouseevent.value = event;
 
 
-                    tooltip.innerHTML = '<div id="TEST" class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
+                    tooltip.innerHTML = '<div class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
 
                     tooltip.addEventListener('mouseover', () => {
                         document.removeEventListener('mousedown', onMouseMove);
@@ -234,7 +204,6 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            // document.addEventListener('mousemove', onMouseMove, false);
             document.addEventListener('mousedown', onMouseMove, false);
         },
 

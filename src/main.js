@@ -38,7 +38,7 @@ const placement = {
 
 
     range: 500,
-    tilt: 7,
+    tilt: 30,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -117,19 +117,19 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 
 const tooltip = document.getElementById('tooltip');
-console.log(tooltip)
+// console.log(tooltip)
 tooltip.addEventListener(
     'DOMSubtreeModified',
     () => {
-        console.log(tooltip.value);
+        // console.log(tooltip.value);
 
-        const mouseevent = document.getElementById('mouseevent')
-        console.log(mouseevent.value);
+        // const mouseevent = document.getElementById('mouseevent')
+        // console.log(mouseevent.value);
 
-        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view);
 
-        console.log(document.getElementById('bat').value.coord);
-        console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+        // console.log(document.getElementById('bat').value.coord);
+        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
     },
     false

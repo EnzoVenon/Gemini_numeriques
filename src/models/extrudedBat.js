@@ -32,22 +32,28 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 format: 'application/json',
                             })
 
-                            let bat = new itowns.FeatureGeometryLayer(result.value.properties.osm_id, {
-                                source: src2,
-                                transparent: true,
-                                opacity: 0.7,
-                                zoom: { min: 0 },
-                                style: new itowns.Style({
-                                    fill: {
-                                        color: color,
-                                        extrusion_height: height,
-                                    }
-                                })
-                            });
+                            if (!view.getLayerById(result.value.properties.osm_id)) {
+                                let bat = new itowns.FeatureGeometryLayer(result.value.properties.osm_id, {
+                                    source: src2,
+                                    transparent: true,
+                                    opacity: 0.7,
+                                    zoom: { min: 0 },
+                                    style: new itowns.Style({
+                                        fill: {
+                                            color: color,
+                                            extrusion_height: height,
+                                        }
+                                    })
+                                });
 
-                            view.addLayer(bat)
+                                view.addLayer(bat)
 
-                            document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
+                                document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
+                            }
+
+
+
+
 
                         }
                     } catch (e) {
