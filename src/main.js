@@ -12,6 +12,8 @@ import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 
 
+import { importCsvFile } from "./models/readCsv"
+
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
@@ -38,7 +40,7 @@ const placement = {
 
 
     range: 500,
-    tilt: 30,
+    tilt: 7,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -102,8 +104,7 @@ view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { upda
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
-
-
+let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -113,24 +114,31 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     addShp("../data/shp/prg/osm", "osm", "black", "", view, true)
 
 
+
+
+
 });
 
 
 const tooltip = document.getElementById('tooltip');
-// console.log(tooltip)
+console.log(tooltip)
 tooltip.addEventListener(
     'DOMSubtreeModified',
     () => {
-        // console.log(tooltip.value);
+        console.log(tooltip.value);
 
-        // const mouseevent = document.getElementById('mouseevent')
-        // console.log(mouseevent.value);
+        const mouseevent = document.getElementById('mouseevent')
+        console.log(mouseevent.value);
 
-        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view);
+        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
-        // console.log(document.getElementById('bat').value.coord);
-        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+        console.log(document.getElementById('bat').value.coord);
+        console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+
+        csv.then(res => { console.log(res) });
 
     },
     false
 )
+
+
