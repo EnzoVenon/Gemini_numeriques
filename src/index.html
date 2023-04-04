@@ -46,8 +46,14 @@
 
 
     <div id="viewerDiv"></div>
+
+    <!-- navbar div -->
     <div id="apparition">
+
+        <!-- liste d'onglet dans la navbar -->
         <ul class="nav nav-tabs justify-content-center">
+
+            <!-- element avec définition du titre dans la balise <a></a> ,aria-controls permet d'interconnecter la navbar au offcanvas -->
             <li class="nav-item">
                 <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollinginfo"
                     aria-controls="offcanvasScrollinginfo">Infos générale</a>
@@ -79,13 +85,15 @@
             </li>
         </ul>
 
-
+        <!-- offcanvas qui est connecter à la navbar relié grace à l'id -->
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
             id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+            <!-- div qui permet d'encadrer le titre -->
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
+            <!-- La div offcanvas-body est l'emplacement du texte et du rendu -->
             <div class="offcanvas-body">
                 <p>Sélectionnez un batiment pour visualiser ces informations.</p>
             </div>
