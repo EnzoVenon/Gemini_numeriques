@@ -1,17 +1,14 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
+// ----------------- Imports ----------------- //
 import { update/*, buildingLayer */ } from "./models/building";
 //import { picking } from "./models/connectDataToBuidlings"
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 //import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
 // import { setUpMenu } from "./GUI/BaseMenu";
-
 import { addShp } from "./models/addShpLayer"
-
 import { addSpecificBuilings } from "./models/extrudedBat"
-
-
 import { importCsvFile } from "./models/readCsv"
 
 let bat = document.createElement('div');
@@ -53,12 +50,11 @@ FeatureToolTip.init(viewerDiv, view);
 
 
 
-// ---------- ADD NAVIGATION WIDGET : ----------
+// ----------------- Navigation widget ----------------- //
 
 const widgets = new itowns_widgets.Navigation(view);
 console.log(itowns_widgets)
 
-// Example on how to add a new button to the widgets menu
 widgets.addButton(
     'rotate-up',
     '<p style="font-size: 20px">&#8595</p>',
@@ -92,6 +88,7 @@ widgets.addButton(
 
 
 
+// ----------------- Layers Setup ----------------- //
 // Elevation layers
 itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
@@ -106,16 +103,14 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 
 let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
-// Listen for globe full initialisation event
+
+
+// ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
-
-
-
-
 
 });
 

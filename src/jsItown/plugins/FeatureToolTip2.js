@@ -53,6 +53,9 @@ var FeatureToolTip = (function _() {
             }
 
             layer = layers[layersId.indexOf(layerId)];
+            console.log(layer)
+            console.log(layer.layer.source)
+            console.log(layer.layer.source.features)
             if (!layer) {
                 continue;
             }
