@@ -7,6 +7,8 @@ import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
+import * as turf from "@turf/turf"
+console.log(turf)
 
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -159,8 +161,27 @@ tooltip.addEventListener(
         console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
 
-    },
-    false
+        // shapefile.open("../data/shp/prg/bdnb_perigeux8")
+        //     .then(source => source.read()
+        //         .then(function log(result) {
+        //             if (result.done) return "done";
+        //             console.log(result.value)
+
+        //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+        //                 let selectedBatGeom = result.value.geomemtry.coordinates
+
+        //             }
+        //             return source.read().then(log);
+        //         }
+        //         ))
+
+
+    }
+
+
+
+
+
 )
 
 
