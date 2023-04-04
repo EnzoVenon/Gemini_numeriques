@@ -117,6 +117,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 });
 
 
+const htmlTest = document.getElementById('infoGen');
+htmlTest.innerHTML = '';
+htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
 
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
@@ -148,6 +151,18 @@ tooltip.addEventListener(
             })
 
             console.log(tooltip.value.properties)
+
+
+
+            const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+            const dataRelation15 = relation15OuPlus.filter(function (popData) {
+                console.log(popData.slice(4))
+                console.log(tooltip.value.properties[popData])
+                return {
+                    pop: popData.slice(4),
+                    count: tooltip.value.properties[popData]
+                }
+            })
 
             // const entries = Object.entries(uniqueData)
             // console.log(entries)
