@@ -49,7 +49,7 @@ FeatureToolTip.init(viewerDiv, view);
 
 // ----------------- Navigation widget ----------------- //
 const widgets = new itowns_widgets.Navigation(view);
-console.log(itowns_widgets)
+// console.log(itowns_widgets)
 
 widgets.addButton(
     'rotate-up',
@@ -98,7 +98,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 
 // console.log('csv')
 // let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
-console.log('csv2')
+// console.log('csv2')
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 
 // csv2.then(res => {
@@ -118,31 +118,19 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 
 const htmlTest = document.getElementById('infoGen');
-htmlTest.innerHTML = '';
-htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
-
 const tooltip = document.getElementById('tooltip');
-console.log(tooltip)
+// console.log(tooltip)
 tooltip.addEventListener(
     'DOMSubtreeModified',
     () => {
-        // console.log(tooltip.value);
 
         const mouseevent = document.getElementById('mouseevent')
-        // console.log(mouseevent.value);
 
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
-        // console.log(document.getElementById('bat').value.coord);
-        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
-
         csv2.then(res => {
             // console.log(res)
-            // let uniqueData = res.filter(obj => obj.batiment_groupe_id === tooltip.value.properties.batiment_g)[0]
             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-
-            console.log(tooltip.value.properties)
-            console.log(uniqueData)
 
             Object.entries(uniqueData).forEach(([key, value]) => {
                 if (!(value === Number(tooltip.value.properties.code_iris))) {
@@ -150,29 +138,23 @@ tooltip.addEventListener(
                 }
             })
 
-            console.log(tooltip.value.properties)
-
+            htmlTest.innerHTML = '';
+            htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
 
 
             const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-            const dataRelation15 = relation15OuPlus.filter(function (popData) {
-                console.log(popData.slice(4))
-                console.log(tooltip.value.properties[popData])
-                return {
-                    pop: popData.slice(4),
-                    count: tooltip.value.properties[popData]
-                }
+            const dataRelation15 = [];
+            relation15OuPlus.filter(function (popData) {
+                dataRelation15.push({ pop: popData.slice(4), count: tooltip.value.properties[popData] })
             })
 
-            // const entries = Object.entries(uniqueData)
-            // console.log(entries)
-            // const nonEmptyOrNull = entries.filter(([key, val]) => val !== '' && val !== null && key !== null)
-            // const output = Object.fromEntries(nonEmptyOrNull)
+            console.log(dataRelation15)
 
-            // console.log(output)
+            htmlTest.innerHTML += '<li>' + 'Status des 15 ans ou plus' + '</li>';
+            htmlTest.innerHTML += '<div style="width:100%;"><canvas id="pop"></canvas></div>';
+            addChart('pop', dataRelation15, 'pop', 'count', 'Population');
 
-            // document.getElementById('batInfo').innerHTML = JSON.stringify(output)
-            // document.getElementById("btnOffcanvasScrollingbat").click()
+            // document.getElementById("btnOffcanvasScrollinginfo").click()
 
 
         });
