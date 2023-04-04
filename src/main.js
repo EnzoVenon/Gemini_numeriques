@@ -27,8 +27,8 @@ customDiv.appendChild(pointer);
 const placement = {
     // coord: new itowns.Coordinates('EPSG:4326', 3.05, 48.95, 2),
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-    range: 500,
-    tilt: 7,
+    range: 200,
+    tilt: 33,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -111,6 +111,8 @@ tooltip.addEventListener(
         console.log(event)
         console.log(tooltip.value);
 
+        console.log(view)
+
         const mouseevent = document.getElementById('mouseevent')
         console.log(mouseevent.value);
 
@@ -155,6 +157,7 @@ tooltip.addEventListener(
         }
 
         console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
+
 
     },
     false
