@@ -1,4 +1,5 @@
 import { importCsvFile } from "./models/readCsv"
+import { addChart } from "./models/insee/showChart"
 
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
@@ -135,10 +136,18 @@ tooltip.addEventListener(
         csv2.then(res => {
             // console.log(res)
             // let uniqueData = res.filter(obj => obj.batiment_groupe_id === tooltip.value.properties.batiment_g)[0]
-            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))
+            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
 
             console.log(tooltip.value.properties)
-            console.log(uniqueData[0])
+            console.log(uniqueData)
+
+            Object.entries(uniqueData).forEach(([key, value]) => {
+                if (!(value === Number(tooltip.value.properties.code_iris))) {
+                    tooltip.value.properties[key] = value;
+                }
+            })
+
+            console.log(tooltip.value.properties)
 
             // const entries = Object.entries(uniqueData)
             // console.log(entries)
