@@ -142,7 +142,7 @@ tooltip.addEventListener(
 
             const entries = Object.entries(uniqueData)
             console.log(entries)
-            const nonEmptyOrNull = entries.filter(([key, val]) => val !== '' && val !== null)
+            const nonEmptyOrNull = entries.filter(([key, val]) => val !== '' && val !== null && key !== null)
             const output = Object.fromEntries(nonEmptyOrNull)
 
             console.log(output)
