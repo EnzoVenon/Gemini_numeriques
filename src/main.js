@@ -161,19 +161,47 @@ tooltip.addEventListener(
         console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
 
-        // shapefile.open("../data/shp/prg/bdnb_perigeux8")
-        //     .then(source => source.read()
-        //         .then(function log(result) {
-        //             if (result.done) return "done";
-        //             console.log(result.value)
+        shapefile.open("../data/shp/prg/bdnb_perigeux8")
+            .then(source => source.read()
+                .then(async function log(result) {
+                    if (result.done) return "done";
+                    // console.log(result.value)
 
-        //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-        //                 let selectedBatGeom = result.value.geomemtry.coordinates
+                    if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+                        let selectedBatGeom = result.value.geometry.coordinates
+                        let polygon = turf.polygon(selectedBatGeom)
+                        let centroid = turf.centroid(polygon)
 
-        //             }
-        //             return source.read().then(log);
-        //         }
-        //         ))
+                        let long = centroid.geometry.coordinates[0]
+                        let lat = centroid.geometry.coordinates[1]
+
+                        let osm = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];(node(around:${3} , ${lat}, ${long})["building"];way(around:${3}, ${lat}, ${long})["building"];);out;`)
+
+                        let osmId = await osm.json()
+
+                        console.log(osmId.elements[0])
+
+                        shapefile.open("../data/shp/prg/osm")
+                            .then(source => source.read()
+                                .then(function log(result) {
+                                    if (result.done) return "done";
+                                    console.log(result.value.properties["osm_id"])
+                                    if (result.value.properties["osm_id"] == osmId.elements[0].id) {
+                                        console.log(result.value.properties)
+                                    }
+                                }))
+
+
+
+
+
+
+
+                    }
+                    return source.read().then(log);
+                }
+                ))
+
 
 
     }
