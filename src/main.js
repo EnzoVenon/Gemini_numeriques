@@ -111,7 +111,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    addShp("../data/shp/prg/osm", "osm", "black", "", view, true)
+    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
 
 
@@ -130,12 +130,30 @@ tooltip.addEventListener(
         const mouseevent = document.getElementById('mouseevent')
         console.log(mouseevent.value);
 
-        addSpecificBuilings("osm", 100, "osm_id", tooltip.value.properties.osm_id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+        addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
         console.log(document.getElementById('bat').value.coord);
         console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
-        csv.then(res => { console.log(res) });
+        csv.then(res => {
+            console.log(res)
+            let uniqueData = res.filter(obj => obj.batiment_groupe_id === tooltip.value.properties.batiment_g)[0]
+
+
+            const entries = Object.entries(uniqueData)
+            console.log(entries)
+            const nonEmptyOrNull = entries.filter(([key, val]) => val !== '' && val !== null && key !== null)
+            const output = Object.fromEntries(nonEmptyOrNull)
+
+            console.log(output)
+
+            document.getElementById('batInfo').innerHTML = JSON.stringify(output)
+            document.getElementById("btnOffcanvasScrollingbat").click()
+
+
+        });
+
+
 
     },
     false
