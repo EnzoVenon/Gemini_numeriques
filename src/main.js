@@ -189,6 +189,7 @@ tooltip.addEventListener(
                                     if (result.value.properties["osm_id"] == osmId.elements[0].id) {
                                         console.log(result.value.properties)
                                     }
+                                    return source.read().then(log);
                                 }))
 
 
@@ -198,7 +199,7 @@ tooltip.addEventListener(
 
 
                     }
-                    return source.read().then(log);
+
                 }
                 ))
 
