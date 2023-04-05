@@ -2,7 +2,6 @@
 
 // ----------------- Imports ----------------- //
 import { update/*, buildingLayer */ } from "./models/building";
-//import { picking } from "./models/connectDataToBuidlings"
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
 //import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
@@ -12,7 +11,9 @@ import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
 import { addChart } from "./models/insee/showChart"
 import * as contenuOnglet from "./models/contenuOnglets"
-
+import { getBdnbInfo } from "./models/extractBdnbInfo"
+import * as turf from "@turf/turf"
+console.log(turf)
 
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -28,17 +29,12 @@ pointer.classList.add('pointer');
 customDiv.appendChild(pointer);
 
 
-
-// setUpMenu();
-
-
 // ----------------- View Setup ----------------- //
 // Define initial camera position
 const placement = {
-
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-    range: 500,
-    tilt: 30,
+    range: 200,
+    tilt: 33,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -48,8 +44,6 @@ viewerDiv.appendChild(bat)
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
-
-
 
 // ----------------- Navigation widget ----------------- //
 
@@ -103,10 +97,9 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
-let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
-
-
+let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 
 // ----------------- Globe Initialisatioin ----------------- //
@@ -124,8 +117,11 @@ console.log(tooltip)
 
 tooltip.addEventListener(
     'DOMSubtreeModified',
-    () => {
+    async (event) => {
+        console.log(event)
         console.log(tooltip.value);
+
+        console.log(view)
 
         const mouseevent = document.getElementById('mouseevent')
         console.log(mouseevent.value);
@@ -135,25 +131,61 @@ tooltip.addEventListener(
         console.log(document.getElementById('bat').value.coord);
         console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
-        csv.then(res => {
-            console.log(res)
-            let uniqueData = res.filter(obj => obj.batiment_groupe_id === tooltip.value.properties.batiment_g)[0]
+        let batGroupeIdBdnb = tooltip.value.properties.batiment_g
+
+        getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
+            console.log(res),
+                // console.log(output)
+                document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+            document.getElementById('batInfo').value = batGroupeIdBdnb
+        })
+
+        function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
+
+            return csvIdBdnbBdtopo.then(res => {
+                let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
+
+                shapefile.open("../data/shp/prg/bd_topo")
+                    .then(source => source.read()
+                        .then(function log(result) {
+                            if (result.done) return "done";
+                            if (result.value.properties["ID"] === bdTopoId) {
+                                console.log(result.value.properties)
+                                if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
+                                    document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
+                                    document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
+                                    document.getElementById("btnOffcanvasScrollingbat").click()
+                                }
+                                return result.value.properties;
+                            }
+                            else {
+                                return source.read().then(log);
+                            }
+                        }
+                        ))
+            })
+        }
+
+        console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
 
-            const entries = Object.entries(uniqueData)
-            console.log(entries)
-            const nonEmptyOrNull = entries.filter(([key, val]) => val !== '' && val !== null && key !== null)
-            const output = Object.fromEntries(nonEmptyOrNull)
+        // shapefile.open("../data/shp/prg/bdnb_perigeux8")
+        //     .then(source => source.read()
+        //         .then(function log(result) {
+        //             if (result.done) return "done";
+        //             console.log(result.value)
 
-            console.log(output)
+        //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+        //                 let selectedBatGeom = result.value.geomemtry.coordinates
 
-            document.getElementById('batInfo').innerHTML = JSON.stringify(output)
-            // document.getElementById("btnOffcanvasScrollingbat").click()
+        //             }
+        //             return source.read().then(log);
+        //         }
+        //         ))
 
-        });
 
-    },
-    false
+    }
+
 )
 
 
