@@ -241,7 +241,7 @@ viewerDiv.addEventListener(
                 // Generate html accordion item
                 textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
 
-                // ----- Nombre enfants -25 ans par famille ----- //
+                // ----- Nombre de familles avec enfants -25 ans ----- //
                 const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
                 const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
                 // Generate html accordion item
