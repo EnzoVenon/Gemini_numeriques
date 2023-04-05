@@ -102,6 +102,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
+    addShp("../data/shp/prg/osm", "osm", "red", "", view, false)
+
+
 });
 
 
@@ -142,7 +145,7 @@ tooltip.addEventListener(
                         .then(function log(result) {
                             if (result.done) return "done";
                             if (result.value.properties["ID"] === bdTopoId) {
-                                console.log(result.value.properties)
+                                // console.log(result.value.properties)
                                 if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
                                     document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
                                     document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
@@ -165,7 +168,7 @@ tooltip.addEventListener(
             .then(source => source.read()
                 .then(async function log(result) {
                     if (result.done) return "done";
-                    // console.log(result.value)
+                    // console.log(result.value.properties["batiment_g"])
 
                     if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
                         let selectedBatGeom = result.value.geometry.coordinates
@@ -179,16 +182,63 @@ tooltip.addEventListener(
 
                         let osmId = await osm.json()
 
-                        console.log(osmId.elements[0])
+                        console.log("oosm", osmId.elements)
+                        let i = 0
 
+                        osmId.elements.forEach(element => { i++ })
+
+                        // if (i > 0) {
+                        //     let distances = []
+                        //     shapefile.open("../data/shp/prg/osm")
+                        //         .then(source => source.read()
+                        //             .then(function log(result) {
+                        //                 if (result.done) return "done";
+                        //                 // console.log(result.value.properties["osm_id"])
+
+
+
+                        //                 osmId.elements.forEach(element => {
+                        //                     if (result.value.properties["osm_id"] == element.id) {
+                        //                         console.log(result.value.geometry.coordinates)
+                        //                         let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+                        //                         let centroidOsm = turf.centroid(polygonOsm)
+                        //                         let dist = turf.distance(centroid, centroidOsm)
+                        //                         console.log(dist)
+                        //                         distances.push(dist)
+
+                        //                         console.log("osm_propo", element.id)
+                        //                         // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", element.id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                        //                     }
+
+                        //                 });
+                        //                 let minimum = Math.min.apply(null, distances);
+                        //                 let minIndex = distances.indexOf(minimum);
+
+                        //                 if (!minIndex) {
+                        //                     addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", osmId.elements[minIndex].id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                        //                     return "done"
+                        //                 }
+                        //                 return source.read().then(log);
+                        //             }))
+
+                        // }
+
+
+                        console.log("elseeeeeeeeeeeeeeeeeee")
                         shapefile.open("../data/shp/prg/osm")
                             .then(source => source.read()
                                 .then(function log(result) {
                                     if (result.done) return "done";
-                                    console.log(result.value.properties["osm_id"])
-                                    if (result.value.properties["osm_id"] == osmId.elements[0].id) {
-                                        console.log(result.value.properties)
+                                    // console.log(result.value.properties["osm_id"])
+                                    let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+                                    let centroidOsm = turf.centroid(polygonOsm)
+
+                                    console.log(turf.booleanContains(polygon, centroidOsm))
+                                    if (turf.intersect(polygonOsm, polygon)) {
+                                        addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                        return;
                                     }
+
                                     return source.read().then(log);
                                 }))
 
@@ -199,6 +249,8 @@ tooltip.addEventListener(
 
 
                     }
+                    return source.read().then(log)
+
 
                 }
                 ))
@@ -212,5 +264,6 @@ tooltip.addEventListener(
 
 
 )
+
 
 

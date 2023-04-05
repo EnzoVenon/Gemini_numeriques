@@ -12,17 +12,14 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
             .then(function log(result) {
                 if (result.done) return;
                 try {
-                    // console.log(result.value.properties[properties])
-                    // console.log(valuesOfPerperties)
 
-
-                    if (result.value.properties[properties] === valuesOfPerperties) {
+                    if (result.value.properties[properties] == valuesOfPerperties) {
                         let src2 = new itowns.FileSource({
                             fetchedData: {
                                 "type": "FeatureCollection",
                                 "features": [
                                     {
-                                        "type": "Feature", "properties": { "gid": 80, "station": "MEAUX", "hdysf": 4.860000 }, "geometry": {
+                                        "type": "Feature", "properties": result.value.properties, "geometry": {
                                             "type": "Polygon", "coordinates": [result.value.geometry.coordinates[0]]
                                         }
                                     }]
@@ -31,7 +28,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             crs: 'EPSG:4326',
                             format: 'application/json',
                         })
-                        console.log(result.value.geometry.coordinates[0])
+                        // console.log(result.value.geometry.coordinates[0])
 
                         if (!view.getLayerById(result.value.properties[properties])) {
                             let bat = new itowns.FeatureGeometryLayer(result.value.properties[properties], {
