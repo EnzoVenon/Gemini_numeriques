@@ -187,7 +187,6 @@ tooltip.addEventListener(
                                     if (result.done) return "done";
                                     // console.log(result.value.properties["osm_id"])
                                     let polygonOsm = turf.polygon(result.value.geometry.coordinates)
-                                    let centroidOsm = turf.centroid(polygonOsm)
 
                                     // console.log(turf.booleanContains(polygon, centroidOsm))
                                     if (turf.intersect(polygonOsm, polygon)) {
