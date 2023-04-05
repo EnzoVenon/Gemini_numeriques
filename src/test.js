@@ -116,8 +116,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 });
 
-
 const htmlTest = document.getElementById('infoGen');
+htmlTest.innerHTML += '';
+htmlTest.innerHTML += '<div class="accordion accordion-flush" id="accordionFlushExample">';
 const tooltip = document.getElementById('tooltip');
 // console.log(tooltip)
 tooltip.addEventListener(
@@ -128,40 +129,58 @@ tooltip.addEventListener(
 
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
-        csv2.then(res => {
-            // console.log(res)
-            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-
-            Object.entries(uniqueData).forEach(([key, value]) => {
-                if (!(value === Number(tooltip.value.properties.code_iris))) {
-                    tooltip.value.properties[key] = value;
-                }
-            })
-
-            htmlTest.innerHTML = '';
-            htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
 
 
-            const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-            const dataRelation15 = [];
-            relation15OuPlus.filter(function (popData) {
-                dataRelation15.push({ pop: popData.slice(4), count: tooltip.value.properties[popData] })
-            })
 
-            console.log(dataRelation15)
+        csv2
+            .then(res => {
+                // console.log(res)
+                // ----------- POPULATION INSEE ----------- //
+                let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                const currentkey = getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
-            htmlTest.innerHTML += '<li>' + 'Status des 15 ans ou plus' + '</li>';
-            htmlTest.innerHTML += '<div style="width:100%;"><canvas id="pop"></canvas></div>';
-            addChart('pop', dataRelation15, 'pop', 'count', 'Population');
+                htmlTest.innerHTML += '<div class="accordion-item">';
+                htmlTest.innerHTML += '<h2 class="accordion-header" id="flush-' + currentkey + '">';
+                htmlTest.innerHTML += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + currentkey + '" aria-expanded="false" aria-controls="flush-collapse' + currentkey + '">';
+                htmlTest.innerHTML += currentkey;
+                htmlTest.innerHTML += '</button></h2>'
+                htmlTest.innerHTML += '<div id="flush-collapse' + currentkey + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + currentkey + '" data-bs-parent="#accordionFlushExample">'
 
-            // document.getElementById("btnOffcanvasScrollinginfo").click()
+
+                Object.entries(uniqueData).forEach(([key, value]) => {
+                    if (!(value === Number(tooltip.value.properties.code_iris))) {
+                        tooltip.value.properties[key] = value;
+                    }
+                })
+
+                htmlTest.innerHTML += '<div class="accordion-body" style="width:100%;"><canvas id="pop"></canvas></div></div></div>'
+                // htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
+                htmlTest.innerHTML += ''
 
 
-        });
+                const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+                const dataRelation15 = [];
+                relation15OuPlus.filter(function (popData) {
+                    dataRelation15.push({ pop: popData.slice(4), count: tooltip.value.properties[popData] })
+                })
 
+                console.log(htmlTest.innerHTML)
+
+                // htmlTest.innerHTML += '<li>' + 'Status des 15 ans ou plus' + '</li>';
+                // htmlTest.innerHTML += '<div style="width:100%;"><canvas id="pop"></canvas></div>';
+                addChart('pop', dataRelation15, 'pop', 'count', 'Population');
+
+
+
+            });
 
 
     },
     false
 )
+htmlTest.innerHTML += '</div>'
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
 
