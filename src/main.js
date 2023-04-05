@@ -212,7 +212,7 @@ viewerDiv.addEventListener(
 
         htmlTest.innerHTML = '';
         let textHtml = '';
-        textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
+        textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
 
         csv2
             .then(res => {
@@ -250,14 +250,14 @@ viewerDiv.addEventListener(
                 const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
                 const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
                 // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem("Enfants_par_famille_-25ans", 'enfant');
+                textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
 
 
                 htmlTest.innerHTML += textHtml;
 
-                addChart('status', dataRelation15, 'name', 'value', 'Status');
-                addChart('repartition', dataRepartitionPop, 'name', 'value', 'Répartion');
-                addChart('enfant', dataEnfant25, 'name', 'value', 'Enfant');
+                addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
+                addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
+                addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
 
 
 
