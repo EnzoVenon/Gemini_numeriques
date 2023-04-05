@@ -109,6 +109,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
+    addShp("../data/shp/prg/osm", "osm", "red", "", view, false)
+
+
 });
 
 
@@ -150,11 +153,11 @@ tooltip.addEventListener(
                         .then(function log(result) {
                             if (result.done) return "done";
                             if (result.value.properties["ID"] === bdTopoId) {
-                                console.log(result.value.properties)
+                                // console.log(result.value.properties)
                                 if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
                                     document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
                                     document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
-                                    document.getElementById("btnOffcanvasScrollingbat").click()
+                                    // document.getElementById("btnOffcanvasScrollingbat").click()
                                 }
                                 return result.value.properties;
                             }
@@ -169,25 +172,38 @@ tooltip.addEventListener(
         console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
 
-        // shapefile.open("../data/shp/prg/bdnb_perigeux8")
-        //     .then(source => source.read()
-        //         .then(function log(result) {
-        //             if (result.done) return "done";
-        //             console.log(result.value)
+        shapefile.open("../data/shp/prg/bdnb_perigeux8")
+            .then(source => source.read()
+                .then(async function log(result) {
+                    if (result.done) return "done";
+                    // console.log(result.value.properties["batiment_g"])
 
-        //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-        //                 let selectedBatGeom = result.value.geomemtry.coordinates
+                    if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+                        let selectedBatGeom = result.value.geometry.coordinates
+                        let polygon = turf.polygon(selectedBatGeom)
+                        shapefile.open("../data/shp/prg/osm")
+                            .then(source => source.read()
+                                .then(function log(result) {
+                                    if (result.done) return "done";
+                                    // console.log(result.value.properties["osm_id"])
+                                    let polygonOsm = turf.polygon(result.value.geometry.coordinates)
 
-        //             }
-        //             return source.read().then(log);
-        //         }
-        //         ))
+                                    // console.log(turf.booleanContains(polygon, centroidOsm))
+                                    if (turf.intersect(polygonOsm, polygon)) {
+                                        addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                        return;
+                                    }
+
+                                    return source.read().then(log);
+                                }))
+                    }
+                    return source.read().then(log)
 
 
-    }
+                }
+                ))
 
-)
-
+    })
 
 const htmlTest = document.getElementById('infoGen');
 viewerDiv.addEventListener(

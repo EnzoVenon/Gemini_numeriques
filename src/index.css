@@ -67,3 +67,16 @@ p {
     padding: 1em;
     border-radius: 10px;
 }
+
+#container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+#viewerDiv {
+    position: relative;
+    top: 100px;
+    width: 2000px;
+    height: 90vh;
+}
