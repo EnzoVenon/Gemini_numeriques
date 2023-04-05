@@ -96,16 +96,11 @@ view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { upda
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
-// console.log('csv')
-// let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
-// console.log('csv2')
+
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 
-// csv2.then(res => {
-//     console.log(res)
 
 
-// });
 
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -134,43 +129,28 @@ viewerDiv.addEventListener(
 
         csv2
             .then(res => {
-                // console.log(res)
                 // ----------- POPULATION INSEE ----------- //
+                // Retrieve elements where Iris number is same as tooltip
                 let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
                 const currentkey = getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
-
-
+                // Add INSEE value for this IRIS in tooltip properties
                 Object.entries(uniqueData).forEach(([key, value]) => {
                     if (!(value === Number(tooltip.value.properties.code_iris))) {
                         tooltip.value.properties[key] = value;
                     }
                 })
 
-                textHtml += '<div class="accordion-item">';
-                textHtml += '<h2 class="accordion-header" id="flush-' + currentkey + '">';
-                textHtml += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + currentkey + '" aria-expanded="false" aria-controls="flush-collapse' + currentkey + '">';
-                textHtml += currentkey;
-                textHtml += '</button></h2>'
-                textHtml += '<div id="flush-collapse' + currentkey + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + currentkey + '" data-bs-parent="#accordionFlushExample">'
-                textHtml += '<div class="accordion-body" style="width:100%;"><canvas id="pop"></canvas></div></div></div>'
-                // textHtml += '<li>' + 'test iris' + '</li>';
-
-
-
+                // Chart for INSEE values
                 const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                const dataRelation15 = [];
-                relation15OuPlus.filter(function (popData) {
-                    dataRelation15.push({ pop: popData.slice(4), count: tooltip.value.properties[popData] })
-                })
+                const dataRelation15 = dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
 
-                htmlTest.innerHTML += textHtml;
+                // Generate html accordion item
+                htmlTest.innerHTML += generateAccordionItem(currentkey, 'pop');
+                addChart('pop', dataRelation15, 'name', 'value', 'Population');
+
+
                 console.log(htmlTest.innerHTML)
-
-                // htmlTest.innerHTML += '<li>' + 'Status des 15 ans ou plus' + '</li>';
-                // htmlTest.innerHTML += '<div style="width:100%;"><canvas id="pop"></canvas></div>';
-                addChart('pop', dataRelation15, 'pop', 'count', 'Population');
-
 
 
             });
@@ -179,9 +159,51 @@ viewerDiv.addEventListener(
     },
     false
 )
-htmlTest.innerHTML += '</div>'
+htmlTest.innerHTML += '</div>';
+
+
+// ------------------------------ functions ------------------------------ //
+function dataINSEE4Chart(attributeList, attributeSlicingNumber, dataValues) {
+
+    /*
+        
+        Prepares INSEE data for generating a chart 
+        
+    */
+
+    let result = [];
+    attributeList.filter(function (attribute) {
+        result.push({ name: attribute.slice(attributeSlicingNumber), value: dataValues[attribute] })
+    });
+    return result;
+}
+
+function generateAccordionItem(idHTML, idChart) {
+
+    /*
+    
+        Generates a HTML-bootstrap accordion item
+        
+    */
+
+    let divAccordion = '<div class="accordion-item">';
+    divAccordion += '<h2 class="accordion-header" id="flush-' + idHTML + '">';
+    divAccordion += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + idHTML + '" aria-expanded="false" aria-controls="flush-collapse' + idHTML + '">';
+    divAccordion += idHTML;
+    divAccordion += '</button></h2>';
+    divAccordion += '<div id="flush-collapse' + idHTML + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + idHTML + '" data-bs-parent="#accordionFlushExample">';
+    divAccordion += '<div class="accordion-body" style="width:100%;"><canvas id="' + idChart + '"></canvas></div></div></div>'
+    return divAccordion;
+}
 
 function getKeyByValue(object, value) {
+
+    /*
+    
+        Retrieve a key from a dictionary from its value
+        
+    */
+
     return Object.keys(object).find(key => object[key] === value);
 }
 
