@@ -217,11 +217,15 @@ viewerDiv.addEventListener(
         csv2
             .then(res => {
                 // ----------- POPULATION INSEE ----------- //
+                console.log('population insee')
+                console.log(textHtml)
                 // Retrieve elements where Iris number is same as tooltip
                 let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
                 const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
                 // Add INSEE value for this IRIS in tooltip properties
+                console.log('Add INSEE value for this IRIS in tooltip properties')
+                console.log(textHtml)
                 Object.entries(uniqueData).forEach(([key, value]) => {
                     if (!(value === Number(tooltip.value.properties.code_iris))) {
                         tooltip.value.properties[key] = value;
@@ -230,20 +234,28 @@ viewerDiv.addEventListener(
 
                 // Chart for INSEE values
                 // ----- Status 15 ans et plus ----- //
+                console.log('Status 15 ans et plus')
+                console.log(textHtml)
                 const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
                 const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
                 // Generate html accordion item
                 textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-                htmlTest.innerHTML += textHtml;
-                addChart('status', dataRelation15, 'name', 'value', 'Status');
+                textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+++", 'status+');
+                // htmlTest.innerHTML += textHtml;
 
                 // ----- Répartition pop 15 ans et plus ----- //
-                const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
-                const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 5, tooltip.value.properties);
-                // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+                // console.log('Répartition pop 15 ans et plus')
+                // console.log(textHtml)
+                // const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
+                // const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 5, tooltip.value.properties);
+                // // Generate html accordion item
+                // textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+                // console.log(textHtml)
                 htmlTest.innerHTML += textHtml;
-                addChart('repartition', dataRepartitionPop, 'name', 'value', 'Répartion');
+
+                addChart('status', dataRelation15, 'name', 'value', 'Status');
+                addChart('status+', dataRelation15, 'name', 'value', 'Status');
+                // addChart('repartition', dataRepartitionPop, 'name', 'value', 'Répartion');
 
 
                 // ----- Nombre enfants -25 ans par famille ----- //
