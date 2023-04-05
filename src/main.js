@@ -114,6 +114,14 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 });
 
+jsonData = {
+    "batiment": {
+        "hauteur": {}
+    }
+
+}
+
+
 
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
@@ -139,7 +147,11 @@ tooltip.addEventListener(
         getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
             console.log(res),
                 // console.log(output)
-                document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+                // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+                document.getElementById('listHauteur').innerHTML = `<p>${res["bdtopo_bat_hauteur_mean"]}</p>   <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                Hauteur
+            </a>`
             document.getElementById('batInfo').value = batGroupeIdBdnb
         })
 
@@ -155,8 +167,7 @@ tooltip.addEventListener(
                             if (result.value.properties["ID"] === bdTopoId) {
                                 // console.log(result.value.properties)
                                 if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
-                                    document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
-                                    document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
+                                    // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
                                     // document.getElementById("btnOffcanvasScrollingbat").click()
                                 }
                                 return result.value.properties;
