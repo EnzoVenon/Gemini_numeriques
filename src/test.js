@@ -117,12 +117,10 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 });
 
 const htmlTest = document.getElementById('infoGen');
-htmlTest.innerHTML += '';
-htmlTest.innerHTML += '<div class="accordion accordion-flush" id="accordionFlushExample">';
 const tooltip = document.getElementById('tooltip');
 // console.log(tooltip)
-tooltip.addEventListener(
-    'DOMSubtreeModified',
+viewerDiv.addEventListener(
+    'mouseup',
     () => {
 
         const mouseevent = document.getElementById('mouseevent')
@@ -130,7 +128,9 @@ tooltip.addEventListener(
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
 
-
+        htmlTest.innerHTML = '';
+        textHtml = '';
+        textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
 
         csv2
             .then(res => {
@@ -139,12 +139,6 @@ tooltip.addEventListener(
                 let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
                 const currentkey = getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
-                htmlTest.innerHTML += '<div class="accordion-item">';
-                htmlTest.innerHTML += '<h2 class="accordion-header" id="flush-' + currentkey + '">';
-                htmlTest.innerHTML += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + currentkey + '" aria-expanded="false" aria-controls="flush-collapse' + currentkey + '">';
-                htmlTest.innerHTML += currentkey;
-                htmlTest.innerHTML += '</button></h2>'
-                htmlTest.innerHTML += '<div id="flush-collapse' + currentkey + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + currentkey + '" data-bs-parent="#accordionFlushExample">'
 
 
                 Object.entries(uniqueData).forEach(([key, value]) => {
@@ -153,9 +147,15 @@ tooltip.addEventListener(
                     }
                 })
 
-                htmlTest.innerHTML += '<div class="accordion-body" style="width:100%;"><canvas id="pop"></canvas></div></div></div>'
-                // htmlTest.innerHTML += '<li>' + 'test iris' + '</li>';
-                htmlTest.innerHTML += ''
+                textHtml += '<div class="accordion-item">';
+                textHtml += '<h2 class="accordion-header" id="flush-' + currentkey + '">';
+                textHtml += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + currentkey + '" aria-expanded="false" aria-controls="flush-collapse' + currentkey + '">';
+                textHtml += currentkey;
+                textHtml += '</button></h2>'
+                textHtml += '<div id="flush-collapse' + currentkey + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + currentkey + '" data-bs-parent="#accordionFlushExample">'
+                textHtml += '<div class="accordion-body" style="width:100%;"><canvas id="pop"></canvas></div></div></div>'
+                // textHtml += '<li>' + 'test iris' + '</li>';
+
 
 
                 const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
@@ -164,6 +164,7 @@ tooltip.addEventListener(
                     dataRelation15.push({ pop: popData.slice(4), count: tooltip.value.properties[popData] })
                 })
 
+                htmlTest.innerHTML += textHtml;
                 console.log(htmlTest.innerHTML)
 
                 // htmlTest.innerHTML += '<li>' + 'Status des 15 ans ou plus' + '</li>';
