@@ -13,7 +13,7 @@ import { addChart } from "./models/insee/showChart"
 import * as contenuOnglet from "./models/contenuOnglets"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
-console.log(turf)
+// console.log(turf)
 
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -48,7 +48,7 @@ FeatureToolTip.init(viewerDiv, view);
 // ----------------- Navigation widget ----------------- //
 
 const widgets = new itowns_widgets.Navigation(view);
-console.log(itowns_widgets)
+// console.log(itowns_widgets)
 
 widgets.addButton(
     'rotate-up',
@@ -116,30 +116,30 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 
 const tooltip = document.getElementById('tooltip');
-console.log(tooltip)
+// console.log(tooltip)
 
 tooltip.addEventListener(
     'DOMSubtreeModified',
     async (event) => {
-        console.log(event)
-        console.log(tooltip.value);
+        // console.log(event)
+        // console.log(tooltip.value);
 
-        console.log(view)
+        // console.log(view)
 
         const mouseevent = document.getElementById('mouseevent')
-        console.log(mouseevent.value);
+        // console.log(mouseevent.value);
 
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
-        console.log(document.getElementById('bat').value.coord);
-        console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+        // console.log(document.getElementById('bat').value.coord);
+        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
         let batGroupeIdBdnb = tooltip.value.properties.batiment_g
 
         getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
-            console.log(res),
-                // console.log(output)
-                document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+            // console.log(res),
+            // console.log(output)
+            document.getElementById('batInfo').innerHTML = JSON.stringify(res)
             document.getElementById('batInfo').value = batGroupeIdBdnb
         })
 
@@ -169,7 +169,7 @@ tooltip.addEventListener(
             })
         }
 
-        console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
+        // console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
 
         shapefile.open("../data/shp/prg/bdnb_perigeux8")
@@ -205,7 +205,7 @@ tooltip.addEventListener(
 
     })
 
-const htmlTest = document.getElementById('infoGen');
+const htmlTest = document.getElementById('population');
 viewerDiv.addEventListener(
     'mouseup',
     () => {
@@ -229,13 +229,24 @@ viewerDiv.addEventListener(
                 })
 
                 // Chart for INSEE values
+                // ----- Status 15 ans et plus ----- //
                 const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
-
+                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
                 // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
                 htmlTest.innerHTML += textHtml;
-                addChart('pop', dataRelation15, 'name', 'value', 'Population');
+                addChart('status', dataRelation15, 'name', 'value', 'Status');
+
+                // ----- Répartition pop 15 ans et plus ----- //
+                const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
+                const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 5, tooltip.value.properties);
+                // Generate html accordion item
+                textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+                htmlTest.innerHTML += textHtml;
+                addChart('repartition', dataRepartitionPop, 'name', 'value', 'Répartion');
+
+
+                // ----- Nombre enfants -25 ans par famille ----- //
 
 
                 console.log(htmlTest.innerHTML)
