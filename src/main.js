@@ -99,7 +99,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
+// let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 
 // ----------------- Globe Initialisatioin ----------------- //
@@ -121,13 +121,13 @@ const tooltip = document.getElementById('tooltip');
 tooltip.addEventListener(
     'DOMSubtreeModified',
     async (event) => {
-        // console.log(event)
+        console.log(event)
         // console.log(tooltip.value);
 
         // console.log(view)
 
         const mouseevent = document.getElementById('mouseevent')
-        // console.log(mouseevent.value);
+        console.log(mouseevent.value);
 
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
@@ -219,7 +219,7 @@ viewerDiv.addEventListener(
                 // ----------- POPULATION INSEE ----------- //
                 // Retrieve elements where Iris number is same as tooltip
                 let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
+                // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
                 // Add INSEE value for this IRIS in tooltip properties
                 Object.entries(uniqueData).forEach(([key, value]) => {
