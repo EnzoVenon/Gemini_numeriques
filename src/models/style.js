@@ -1,10 +1,12 @@
 export default class Style {
     /**
+     * @param {*} source Source object from iTowns.
      * @param {String} field The name of the field to apply a style on.
      * @param {Boolean} extrude If true, objects will be in 3D. Otherwise, they will be in 2D. Default is false.
      * @param {Boolean} gradation_or_classes If true, the style will be a gradation, otherwise it will be a classification. Default is true.
      */
-    constructor(field, extrude = false, gradation_or_classes = true) {
+    constructor(source, field, extrude = false, gradation_or_classes = true) {
+        this.source = source;
         this.field = field;
         this.extrude = extrude;
         this.gradation_or_classes = gradation_or_classes;
@@ -36,11 +38,13 @@ export default class Style {
         this.color2 = color2;
         if (isNaN(min)) {
             //Trouver et set le min automatiquement
+            //TODO
         } else {
             this.min = min;
         }
         if (isNaN(max)) {
             //Trouver et set le max automatiquement
+            //TODO
         } else {
             this.max = max;
         }
@@ -54,5 +58,46 @@ export default class Style {
     setClasses(map) {
         this.map = map;
         return this;
+    }
+
+    /**
+     * Returns an iTowns layer.
+     * @param {*} view View object from iTowns.
+     * @returns iTowns layer with the style.
+     */
+    itowns_layer(view) {
+        //Comme iTowns ne possède pas de modification dynamique de style, on supprime la couche et on la recrée
+        const id = "style_layer";
+        const previousLayer = view.getLayerById(id);
+        view.removeLayer(id);
+        previousLayer.delete();
+
+        //Create the coloring function
+        let coloring;
+        if (this.gradation_or_classes) {
+            // One or two colors ?
+            if (this.color2 != "") {
+                coloring = function (properties) {
+                    //TODO
+                }
+            } else {
+                coloring = function (properties) {
+                    //TODO
+                }
+            }
+        } else {
+            coloring = function (properties) {
+                //TODO
+            }
+        }
+
+        //Create the layer (2D or 3D)
+        let layer;
+        if (this.extrude) {
+            //TODO
+        } else {
+            //TODO
+        }
+        return layer;
     }
 }
