@@ -21,6 +21,7 @@ export default class Style {
     setExtrude(field_ground, field_height) {
         this.field_ground = field_ground;
         this.field_height = field_height;
+        return this;
     }
 
     /**
@@ -36,6 +37,7 @@ export default class Style {
         this.color2 = color2;
         this.min = min;
         this.max = max;
+        return this;
     }
 
     /**
@@ -44,5 +46,6 @@ export default class Style {
      */
     setClasses(map) {
         this.map = map;
+        return this;
     }
 }
