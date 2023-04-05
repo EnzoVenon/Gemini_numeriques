@@ -10,7 +10,6 @@ import { addElevationLayer } from "./models/elevation";
 import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
-import { importCsvFile } from "./models/readCsv"
 import { addChart } from "./models/insee/showChart"
 import * as contenuOnglet from "./models/contenuOnglets"
 
@@ -164,7 +163,7 @@ viewerDiv.addEventListener(
     () => {
 
         htmlTest.innerHTML = '';
-        textHtml = '';
+        let textHtml = '';
         textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
 
         csv2
@@ -186,7 +185,8 @@ viewerDiv.addEventListener(
                 const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
 
                 // Generate html accordion item
-                htmlTest.innerHTML += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                textHtml += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                htmlTest.innerHTML += textHtml;
                 addChart('pop', dataRelation15, 'name', 'value', 'Population');
 
 
