@@ -1,11 +1,16 @@
 // https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
+// ----------------- Imports ----------------- //
 import { update/*, buildingLayer */ } from "./models/building";
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
+//import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
+// import { setUpMenu } from "./GUI/BaseMenu";
 import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
+import { addChart } from "./models/insee/showChart"
+import * as contenuOnglet from "./models/contenuOnglets"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 console.log(turf)
@@ -27,7 +32,6 @@ customDiv.appendChild(pointer);
 // ----------------- View Setup ----------------- //
 // Define initial camera position
 const placement = {
-    // coord: new itowns.Coordinates('EPSG:4326', 3.05, 48.95, 2),
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
     range: 200,
     tilt: 33,
@@ -41,12 +45,11 @@ const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 
-// ---------- ADD NAVIGATION WIDGET : ----------
+// ----------------- Navigation widget ----------------- //
 
 const widgets = new itowns_widgets.Navigation(view);
 console.log(itowns_widgets)
 
-// Example on how to add a new button to the widgets menu
 widgets.addButton(
     'rotate-up',
     '<p style="font-size: 20px">&#8595</p>',
@@ -79,6 +82,8 @@ widgets.addButton(
 );
 
 
+
+// ----------------- Layers Setup ----------------- //
 // Elevation layers
 itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
@@ -91,11 +96,13 @@ view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { upda
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
+// CSV files
+let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-
 let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
-// Listen for globe full initialisation event
+
+// ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
@@ -107,6 +114,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
+
 tooltip.addEventListener(
     'DOMSubtreeModified',
     async (event) => {
@@ -178,10 +186,49 @@ tooltip.addEventListener(
 
     }
 
-
-
-
-
 )
 
 
+const htmlTest = document.getElementById('infoGen');
+viewerDiv.addEventListener(
+    'mouseup',
+    () => {
+
+        htmlTest.innerHTML = '';
+        let textHtml = '';
+        textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
+
+        csv2
+            .then(res => {
+                // ----------- POPULATION INSEE ----------- //
+                // Retrieve elements where Iris number is same as tooltip
+                let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
+
+                // Add INSEE value for this IRIS in tooltip properties
+                Object.entries(uniqueData).forEach(([key, value]) => {
+                    if (!(value === Number(tooltip.value.properties.code_iris))) {
+                        tooltip.value.properties[key] = value;
+                    }
+                })
+
+                // Chart for INSEE values
+                const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
+
+                // Generate html accordion item
+                textHtml += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                htmlTest.innerHTML += textHtml;
+                addChart('pop', dataRelation15, 'name', 'value', 'Population');
+
+
+                console.log(htmlTest.innerHTML)
+
+
+            });
+
+
+    },
+    false
+)
+htmlTest.innerHTML += '</div>';

@@ -50,7 +50,6 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
             FeatureToolTip.addLayer(layer, { filterAllProperties: false });
         }
 
-
         return layer
     }));
 

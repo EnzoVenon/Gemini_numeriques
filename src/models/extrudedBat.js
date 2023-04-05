@@ -31,7 +31,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             crs: 'EPSG:4326',
                             format: 'application/json',
                         })
-                        console.log(result.value.geometry.coordinates[0])
+                        // console.log(result.value.geometry.coordinates[0])
 
                         if (!view.getLayerById(result.value.properties[properties])) {
                             let bat = new itowns.FeatureGeometryLayer(result.value.properties[properties], {
