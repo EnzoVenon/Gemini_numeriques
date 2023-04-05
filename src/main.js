@@ -10,6 +10,10 @@ import { addElevationLayer } from "./models/elevation";
 import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
+import { importCsvFile } from "./models/readCsv"
+import { addChart } from "./models/insee/showChart"
+import * as contenuOnglet from "./models/contenuOnglets"
+
 
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -32,12 +36,10 @@ customDiv.appendChild(pointer);
 // ----------------- View Setup ----------------- //
 // Define initial camera position
 const placement = {
-    // coord: new itowns.Coordinates('EPSG:4326', 3.05, 48.95, 2),
+
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-
-
     range: 500,
-    tilt: 7,
+    tilt: 30,
 }
 
 const viewerDiv = document.getElementById('viewerDiv');
@@ -101,7 +103,10 @@ view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { upda
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
+// CSV files
 let csv = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
+
 
 
 
@@ -117,6 +122,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 const tooltip = document.getElementById('tooltip');
 console.log(tooltip)
+
 tooltip.addEventListener(
     'DOMSubtreeModified',
     () => {
@@ -143,15 +149,54 @@ tooltip.addEventListener(
             console.log(output)
 
             document.getElementById('batInfo').innerHTML = JSON.stringify(output)
-            document.getElementById("btnOffcanvasScrollingbat").click()
-
+            // document.getElementById("btnOffcanvasScrollingbat").click()
 
         });
-
-
 
     },
     false
 )
 
 
+const htmlTest = document.getElementById('infoGen');
+viewerDiv.addEventListener(
+    'mouseup',
+    () => {
+
+        htmlTest.innerHTML = '';
+        textHtml = '';
+        textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
+
+        csv2
+            .then(res => {
+                // ----------- POPULATION INSEE ----------- //
+                // Retrieve elements where Iris number is same as tooltip
+                let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
+
+                // Add INSEE value for this IRIS in tooltip properties
+                Object.entries(uniqueData).forEach(([key, value]) => {
+                    if (!(value === Number(tooltip.value.properties.code_iris))) {
+                        tooltip.value.properties[key] = value;
+                    }
+                })
+
+                // Chart for INSEE values
+                const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
+
+                // Generate html accordion item
+                htmlTest.innerHTML += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                addChart('pop', dataRelation15, 'name', 'value', 'Population');
+
+
+                console.log(htmlTest.innerHTML)
+
+
+            });
+
+
+    },
+    false
+)
+htmlTest.innerHTML += '</div>';
