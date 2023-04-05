@@ -183,48 +183,7 @@ tooltip.addEventListener(
                         let osmId = await osm.json()
 
                         console.log("oosm", osmId.elements)
-                        let i = 0
 
-                        osmId.elements.forEach(element => { i++ })
-
-                        // if (i > 0) {
-                        //     let distances = []
-                        //     shapefile.open("../data/shp/prg/osm")
-                        //         .then(source => source.read()
-                        //             .then(function log(result) {
-                        //                 if (result.done) return "done";
-                        //                 // console.log(result.value.properties["osm_id"])
-
-
-
-                        //                 osmId.elements.forEach(element => {
-                        //                     if (result.value.properties["osm_id"] == element.id) {
-                        //                         console.log(result.value.geometry.coordinates)
-                        //                         let polygonOsm = turf.polygon(result.value.geometry.coordinates)
-                        //                         let centroidOsm = turf.centroid(polygonOsm)
-                        //                         let dist = turf.distance(centroid, centroidOsm)
-                        //                         console.log(dist)
-                        //                         distances.push(dist)
-
-                        //                         console.log("osm_propo", element.id)
-                        //                         // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", element.id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-                        //                     }
-
-                        //                 });
-                        //                 let minimum = Math.min.apply(null, distances);
-                        //                 let minIndex = distances.indexOf(minimum);
-
-                        //                 if (!minIndex) {
-                        //                     addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", osmId.elements[minIndex].id, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-                        //                     return "done"
-                        //                 }
-                        //                 return source.read().then(log);
-                        //             }))
-
-                        // }
-
-
-                        console.log("elseeeeeeeeeeeeeeeeeee")
                         shapefile.open("../data/shp/prg/osm")
                             .then(source => source.read()
                                 .then(function log(result) {
@@ -241,21 +200,12 @@ tooltip.addEventListener(
 
                                     return source.read().then(log);
                                 }))
-
-
-
-
-
-
-
                     }
                     return source.read().then(log)
 
 
                 }
                 ))
-
-
 
     }
 
