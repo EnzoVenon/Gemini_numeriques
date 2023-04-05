@@ -157,7 +157,7 @@ tooltip.addEventListener(
                                 if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
                                     document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
                                     document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
-                                    document.getElementById("btnOffcanvasScrollingbat").click()
+                                    // document.getElementById("btnOffcanvasScrollingbat").click()
                                 }
                                 return result.value.properties;
                             }
@@ -181,17 +181,6 @@ tooltip.addEventListener(
                     if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
                         let selectedBatGeom = result.value.geometry.coordinates
                         let polygon = turf.polygon(selectedBatGeom)
-                        let centroid = turf.centroid(polygon)
-
-                        let long = centroid.geometry.coordinates[0]
-                        let lat = centroid.geometry.coordinates[1]
-
-                        let osm = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];(node(around:${3} , ${lat}, ${long})["building"];way(around:${3}, ${lat}, ${long})["building"];);out;`)
-
-                        let osmId = await osm.json()
-
-                        console.log("oosm", osmId.elements)
-
                         shapefile.open("../data/shp/prg/osm")
                             .then(source => source.read()
                                 .then(function log(result) {
@@ -200,7 +189,7 @@ tooltip.addEventListener(
                                     let polygonOsm = turf.polygon(result.value.geometry.coordinates)
                                     let centroidOsm = turf.centroid(polygonOsm)
 
-                                    console.log(turf.booleanContains(polygon, centroidOsm))
+                                    // console.log(turf.booleanContains(polygon, centroidOsm))
                                     if (turf.intersect(polygonOsm, polygon)) {
                                         addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
                                         return;
@@ -216,14 +205,6 @@ tooltip.addEventListener(
                 ))
 
     })
-
-
-
-
-
-
-
-
 
 const htmlTest = document.getElementById('infoGen');
 viewerDiv.addEventListener(

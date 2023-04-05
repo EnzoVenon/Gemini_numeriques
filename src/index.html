@@ -44,117 +44,119 @@
 
 <body>
 
+    <div id="container">
 
-    <div id="viewerDiv"></div>
-    <div id="apparition">
-        <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollinginfo"
-                    aria-controls="offcanvasScrollinginfo">Infos générale</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingbat"
-                    aria-controls="offcanvasScrollingbat">Bâtiment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingrisq"
-                    aria-controls="offcanvasScrollingrisq">Risques</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingenerg"
-                    aria-controls="offcanvasScrollingenerg">Énergie</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingpop"
-                    aria-controls="offcanvasScrollingpop">Population</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasScrollinginfocompl"
-                    aria-controls="offcanvasScrollinginfocompl">Compléments</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingstyle"
-                    aria-controls="offcanvasScrollingstyle">Style</a>
-            </li>
-        </ul>
+        <div id="apparition">
+            <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollinginfo" aria-controls="offcanvasScrollinginfo">Infos
+                        générale</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollingbat" aria-controls="offcanvasScrollingbat">Bâtiment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollingrisq" aria-controls="offcanvasScrollingrisq">Risques</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollingenerg" aria-controls="offcanvasScrollingenerg">Énergie</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollingpop" aria-controls="offcanvasScrollingpop">Population</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollinginfocompl"
+                        aria-controls="offcanvasScrollinginfocompl">Compléments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrollingstyle" aria-controls="offcanvasScrollingstyle">Style</a>
+                </li>
+            </ul>
 
 
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body" id="infoGen">
+                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                </div>
             </div>
-            <div class="offcanvas-body" id="infoGen">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Bâtiments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body" id="batInfo">
+                    <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                </div>
             </div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Energies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollingpop" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Population</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Compléments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                id="offcanvasScrollingstyle" aria-labelledby="offcanvasScrollingLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Style</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                </div>
+            </div>
+
         </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Bâtiments</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Energies</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollingpop" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Population</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Compléments</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="offcanvasScrollingstyle" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Style</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
-            </div>
-        </div>
+
+        <div id="viewerDiv"></div>
 
     </div>
-
-
-
 
     <script src="./jsItown/plugins/FeatureToolTip2.js"></script>
     <script src="./GUI/GuiTools.js"></script>
