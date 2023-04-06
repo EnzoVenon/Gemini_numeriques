@@ -31,11 +31,11 @@ var FeatureToolTip = (function _() {
     var mouseevent;
 
     var mouseDown = 0;
-    document.addEventListener('mousedown', function _() {
+    document.body.addEventListener('mousedown', function _() {
         ++mouseDown;
     }, false);
 
-    document.addEventListener('mouseup', function _(event) {
+    document.body.addEventListener('mouseup', function _(event) {
         if (event.target.id === "") {
             --mouseDown;
         }
@@ -192,10 +192,10 @@ var FeatureToolTip = (function _() {
                     tooltip.innerHTML = '<div class="wrapper"><div class="tabs">' + tooltip.innerHTML + '</div></div>';
 
                     tooltip.addEventListener('mouseover', () => {
-                        viewerDiv.removeEventListener('mousedown', onMouseMove);
+                        document.removeEventListener('mousedown', onMouseMove);
                     })
                     tooltip.addEventListener('mouseout', () => {
-                        viewerDiv.addEventListener('mousedown', onMouseMove);
+                        document.addEventListener('mousedown', onMouseMove);
                     })
 
                     tooltip.addEventListener
@@ -207,7 +207,7 @@ var FeatureToolTip = (function _() {
                 }
             }
 
-            viewerDiv.addEventListener('mousedown', onMouseMove, false);
+            document.addEventListener('mousedown', onMouseMove, false);
         },
 
         /**

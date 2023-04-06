@@ -102,7 +102,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-// let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
+let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 
 // ----------------- Globe Initialisatioin ----------------- //
@@ -325,26 +325,3 @@ viewerDiv.addEventListener(
 )
 htmlTest.innerHTML += '</div>';
 
-
-// document.getElementById("extrudeAll").addEventListener('click', () => {
-//     Promise.all([
-//         fetch('../data/shp/prg/osm.shp'),
-//         fetch('../data/shp/prg/osm.dbf'),
-//         fetch('../data/shp/prg/osm.shx')
-//     ])
-//         .then(responses => Promise.all(responses.map(res => res.arrayBuffer())))
-//         .then(buffer => {
-//             const geojson = shpjs.combine(buffer);
-//             console.log(geojson);
-
-//             console.log(shp)
-
-//             shp("../data/shp/prg/cadastre.zip").then(function (g) {
-//                 //do something with your geojson
-//                 console.log(g);
-
-//             });
-
-//         });
-
-// })
