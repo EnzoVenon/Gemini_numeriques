@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Document2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 
@@ -15,60 +15,45 @@
 </head>
 
 <body>
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingStatus_15_ans+">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseStatus_15_ans+" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseStatus_15_ans+">
-                    Status_15_ans+
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseStatus_15_ans+" class="accordion-collapse collapse show"
-                aria-labelledby="panelsStayOpen-headingStatus_15_ans+">
-                <div class="accordion-body" style="width:100%;">
-                    <canvas id="status" style="display: block; box-sizing: border-box; height: 169px; width: 338px;"
-                        width="338" height="169">
-                    </canvas>
+
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                Link with href
+            </a>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <ul class="nav nav-tabs justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasScrollinginfo" aria-controls="offcanvasScrollinginfo">
+                                Infos
+                                générale</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasScrollingbat" aria-controls="offcanvasScrollingbat">
+                                Bâtiment
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingRepartion_pop_15_ans+">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseRepartion_pop_15_ans+" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseRepartion_pop_15_ans+">
-                    Repartion_pop_15_ans+
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseRepartion_pop_15_ans+" class="accordion-collapse collapse show"
-                aria-labelledby="panelsStayOpen-headingRepartion_pop_15_ans+">
-                <div class="accordion-body" style="width:100%;">
-                    <canvas id="repartition"
-                        style="display: block; box-sizing: border-box; height: 169px; width: 338px;" width="338"
-                        height="169">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingEnfants_par_famille_-25ans">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseEnfants_par_famille_-25ans" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseEnfants_par_famille_-25ans">
-                    Enfants_par_famille_-25ans
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseEnfants_par_famille_-25ans" class="accordion-collapse collapse show"
-                aria-labelledby="panelsStayOpen-headingEnfants_par_famille_-25ans">
-                <div class="accordion-body" style="width:100%;">
-                    <canvas id="enfant" style="display: block; box-sizing: border-box; height: 169px; width: 338px;"
-                        width="338" height="169">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollinginfocompl"
+                aria-controls="offcanvasScrollinginfocompl">
+                Compléments
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingstyle"
+                aria-controls="offcanvasScrollingstyle">
+                Style
+            </a>
+        </li>
+    </ul>
 </body>
 
 </html>
