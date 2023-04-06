@@ -81,8 +81,3 @@ p {
     height: 85vh;
     z-index: 0;
 }
-
-.offcanvas-body {
-    z-index: 10000;
-
-}

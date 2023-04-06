@@ -15,8 +15,8 @@ import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 
 
+// console.log(turf)
 
-console.log(turf)
 
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -51,7 +51,7 @@ FeatureToolTip.init(viewerDiv, view);
 // ----------------- Navigation widget ----------------- //
 
 const widgets = new itowns_widgets.Navigation(view);
-console.log(itowns_widgets)
+// console.log(itowns_widgets)
 
 widgets.addButton(
     'rotate-up',
@@ -102,7 +102,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
+// let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 
 // ----------------- Globe Initialisatioin ----------------- //
@@ -120,27 +120,28 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 
 const tooltip = document.getElementById('tooltip');
-console.log(tooltip)
+// console.log(tooltip)
 
 tooltip.addEventListener(
     'DOMSubtreeModified',
     async (event) => {
         console.log(event)
-        console.log(tooltip.value);
+        // console.log(tooltip.value);
 
-        console.log(view)
+        // console.log(view)
 
         const mouseevent = document.getElementById('mouseevent')
         console.log(mouseevent.value);
 
         addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
 
-        console.log(document.getElementById('bat').value.coord);
-        console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+        // console.log(document.getElementById('bat').value.coord);
+        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
 
         let batGroupeIdBdnb = tooltip.value.properties.batiment_g
 
         getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
+
             console.log(res),
                 // console.log(output)
                 // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
@@ -231,7 +232,6 @@ tooltip.addEventListener(
 
         console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
-
         shapefile.open("../data/shp/prg/bdnb_perigeux8")
             .then(source => source.read()
                 .then(async function log(result) {
@@ -265,21 +265,21 @@ tooltip.addEventListener(
 
     })
 
-const htmlTest = document.getElementById('infoGen');
+const htmlTest = document.getElementById('population');
 viewerDiv.addEventListener(
     'mouseup',
     () => {
 
         htmlTest.innerHTML = '';
         let textHtml = '';
-        textHtml += '<div class="accordion accordion-flush" id="accordionFlushExample">';
+        textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
 
         csv2
             .then(res => {
                 // ----------- POPULATION INSEE ----------- //
                 // Retrieve elements where Iris number is same as tooltip
                 let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
+                // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
                 // Add INSEE value for this IRIS in tooltip properties
                 Object.entries(uniqueData).forEach(([key, value]) => {
@@ -289,16 +289,32 @@ viewerDiv.addEventListener(
                 })
 
                 // Chart for INSEE values
+                // ----- Status 15 ans et plus ----- //
                 const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 4, tooltip.value.properties);
-
+                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
                 // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem(currentkey, 'pop');
+                textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+
+                // ----- Répartition pop 15 ans et plus ----- //
+                const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
+                const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 4, tooltip.value.properties);
+                // Generate html accordion item
+                textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+
+                // ----- Nombre de familles avec enfants -25 ans ----- //
+                const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
+                // Generate html accordion item
+                textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
+
                 htmlTest.innerHTML += textHtml;
-                addChart('pop', dataRelation15, 'name', 'value', 'Population');
 
+                // Create charts
+                addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
+                addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
+                addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
 
-                console.log(htmlTest.innerHTML)
+                // console.log(htmlTest.innerHTML)
 
 
             });
