@@ -13,6 +13,10 @@ import { addChart } from "./models/insee/showChart"
 import * as contenuOnglet from "./models/contenuOnglets"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
+
+import * as shpjs from "shpjs"
+
+
 console.log(turf)
 
 let bat = document.createElement('div');
@@ -148,10 +152,34 @@ tooltip.addEventListener(
             console.log(res),
                 // console.log(output)
                 // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
-                document.getElementById('listHauteur').innerHTML = `<p>${res["bdtopo_bat_hauteur_mean"]}</p>   <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
-                aria-expanded="false" aria-controls="collapseExample">
-                Hauteur
-            </a>`
+                document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="custom-tooltip"
+                data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
+                info
+            </a>
+            </div>
+              `
+
+            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+              info
+          </a>
+          </div>
+            `
+
+            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="custom-tooltip"
+            data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+            info
+        </a>
+        </div>
+          `
+
+
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
             document.getElementById('batInfo').value = batGroupeIdBdnb
         })
 
@@ -169,6 +197,34 @@ tooltip.addEventListener(
                                 if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
                                     // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
                                     // document.getElementById("btnOffcanvasScrollingbat").click()
+
+                                    document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="donnée issue de la bdtopo  sur l'attribut HAUTEUR">
+                                    info
+                                </a>
+                                </div>
+                                  `
+                                    document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                  data-bs-custom-class="custom-tooltip"
+                                  data-bs-title="donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
+                                  info
+                              </a>
+                              </div>
+                                `
+
+                                    document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="donnée issue de la bdtopo  sur l'attribut ETAT">
+                                info
+                            </a>
+                            </div>
+                              `
+                                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                                    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+
+
                                 }
                                 return result.value.properties;
                             }
@@ -259,3 +315,27 @@ viewerDiv.addEventListener(
     false
 )
 htmlTest.innerHTML += '</div>';
+
+
+document.getElementById("extrudeAll").addEventListener('click', () => {
+    Promise.all([
+        fetch('../data/shp/prg/osm.shp'),
+        fetch('../data/shp/prg/osm.dbf'),
+        fetch('../data/shp/prg/osm.shx')
+    ])
+        .then(responses => Promise.all(responses.map(res => res.arrayBuffer())))
+        .then(buffer => {
+            const geojson = shpjs.combine(buffer);
+            console.log(geojson);
+
+            console.log(shp)
+
+            shp("../data/shp/prg/cadastre.zip").then(function (g) {
+                //do something with your geojson
+                console.log(g);
+
+            });
+
+        });
+
+})
