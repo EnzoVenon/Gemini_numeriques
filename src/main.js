@@ -143,31 +143,31 @@ tooltip.addEventListener(
             document.getElementById('batInfo').value = batGroupeIdBdnb
         })
 
-        function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
+        // function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
 
-            return csvIdBdnbBdtopo.then(res => {
-                let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
+        //     return csvIdBdnbBdtopo.then(res => {
+        //         let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
 
-                shapefile.open("../data/shp/prg/bd_topo")
-                    .then(source => source.read()
-                        .then(function log(result) {
-                            if (result.done) return "done";
-                            if (result.value.properties["ID"] === bdTopoId) {
-                                // console.log(result.value.properties)
-                                if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
-                                    document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
-                                    document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
-                                    // document.getElementById("btnOffcanvasScrollingbat").click()
-                                }
-                                return result.value.properties;
-                            }
-                            else {
-                                return source.read().then(log);
-                            }
-                        }
-                        ))
-            })
-        }
+        //         shapefile.open("../data/shp/prg/bd_topo")
+        //             .then(source => source.read()
+        //                 .then(function log(result) {
+        //                     if (result.done) return "done";
+        //                     if (result.value.properties["ID"] === bdTopoId) {
+        //                         // console.log(result.value.properties)
+        //                         if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
+        //                             document.getElementById('batInfo').innerHTML += '<br><p>/p><p>"BDTOPO"</p>'
+        //                             document.getElementById('batInfo').innerHTML += JSON.stringify(result.value.properties)
+        //                             // document.getElementById("btnOffcanvasScrollingbat").click()
+        //                         }
+        //                         return result.value.properties;
+        //                     }
+        //                     else {
+        //                         return source.read().then(log);
+        //                     }
+        //                 }
+        //                 ))
+        //     })
+        // }
 
         // console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
 
