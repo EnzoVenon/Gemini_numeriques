@@ -23,11 +23,11 @@ export function generateAccordionItem(idHTML, idChart) {
     */
 
     let divAccordion = '<div class="accordion-item">';
-    divAccordion += '<h2 class="accordion-header" id="flush-' + idHTML + '">';
-    divAccordion += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + idHTML + '" aria-expanded="false" aria-controls="flush-collapse' + idHTML + '">';
+    divAccordion += '<h2 class="accordion-header" id="panelsStayOpen-heading' + idHTML + '">';
+    divAccordion += '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse' + idHTML + '" aria-expanded="true" aria-controls="panelsStayOpen-collapse' + idHTML + '">';
     divAccordion += idHTML;
     divAccordion += '</button></h2>';
-    divAccordion += '<div id="flush-collapse' + idHTML + '" class="accordion-collapse collapse" aria-labelledby="flush-heading' + idHTML + '" data-bs-parent="#accordionFlushExample">';
+    divAccordion += '<div id="panelsStayOpen-collapse' + idHTML + '" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-heading' + idHTML + '">';
     divAccordion += '<div class="accordion-body" style="width:100%;"><canvas id="' + idChart + '"></canvas></div></div></div>'
     return divAccordion;
 }

@@ -79,4 +79,5 @@ p {
     top: 100px;
     width: 2000px;
     height: 90vh;
+    z-index: 0;
 }
