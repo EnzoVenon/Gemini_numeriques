@@ -31,11 +31,11 @@ var FeatureToolTip = (function _() {
     var mouseevent;
 
     var mouseDown = 0;
-    viewerDiv.addEventListener('mousedown', function _() {
+    document.addEventListener('mousedown', function _() {
         ++mouseDown;
     }, false);
 
-    viewerDiv.addEventListener('mouseup', function _(event) {
+    document.addEventListener('mouseup', function _(event) {
         if (event.target.id === "") {
             --mouseDown;
         }

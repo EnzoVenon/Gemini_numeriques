@@ -14,7 +14,6 @@ import * as contenuOnglet from "./models/contenuOnglets"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 
-import * as shpjs from "shpjs"
 
 
 console.log(turf)
@@ -118,13 +117,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 });
 
-jsonData = {
-    "batiment": {
-        "hauteur": {}
-    }
-
-}
-
 
 
 const tooltip = document.getElementById('tooltip');
@@ -178,7 +170,8 @@ tooltip.addEventListener(
 
 
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            const tooltipList = [...tooltipTriggerList]
+            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
             document.getElementById('batInfo').value = batGroupeIdBdnb
         })
@@ -221,8 +214,8 @@ tooltip.addEventListener(
                             </div>
                               `
                                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                                    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
+                                    const tooltipList = [...tooltipTriggerList]
+                                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
                                 }
@@ -257,7 +250,7 @@ tooltip.addEventListener(
 
                                     // console.log(turf.booleanContains(polygon, centroidOsm))
                                     if (turf.intersect(polygonOsm, polygon)) {
-                                        addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                        // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
                                         return;
                                     }
 
@@ -317,25 +310,25 @@ viewerDiv.addEventListener(
 htmlTest.innerHTML += '</div>';
 
 
-document.getElementById("extrudeAll").addEventListener('click', () => {
-    Promise.all([
-        fetch('../data/shp/prg/osm.shp'),
-        fetch('../data/shp/prg/osm.dbf'),
-        fetch('../data/shp/prg/osm.shx')
-    ])
-        .then(responses => Promise.all(responses.map(res => res.arrayBuffer())))
-        .then(buffer => {
-            const geojson = shpjs.combine(buffer);
-            console.log(geojson);
+// document.getElementById("extrudeAll").addEventListener('click', () => {
+//     Promise.all([
+//         fetch('../data/shp/prg/osm.shp'),
+//         fetch('../data/shp/prg/osm.dbf'),
+//         fetch('../data/shp/prg/osm.shx')
+//     ])
+//         .then(responses => Promise.all(responses.map(res => res.arrayBuffer())))
+//         .then(buffer => {
+//             const geojson = shpjs.combine(buffer);
+//             console.log(geojson);
 
-            console.log(shp)
+//             console.log(shp)
 
-            shp("../data/shp/prg/cadastre.zip").then(function (g) {
-                //do something with your geojson
-                console.log(g);
+//             shp("../data/shp/prg/cadastre.zip").then(function (g) {
+//                 //do something with your geojson
+//                 console.log(g);
 
-            });
+//             });
 
-        });
+//         });
 
-})
+// })
