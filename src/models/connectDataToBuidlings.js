@@ -87,6 +87,7 @@ export async function picking(event, view) {
       addChart('pop', data, "pop", "count", 'population')
       addChart('pop2', dataAge, "age", "count", 'population par age')
 
+
     }
   }
 }
