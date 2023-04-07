@@ -327,8 +327,8 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 document.getElementById("showInnondationLayer").click()
 
 let path2 = "../data/shp/prg/bdnb_perigeux8"
-let list2 = loadDataFromShp(path2)
-let list3 = loadBufferDataFromShp(path2)
+// let list2 = loadDataFromShp(path2)
+// let list3 = loadBufferDataFromShp(path2)
 
 console.log(shp)
 
@@ -347,12 +347,12 @@ console.log(shp)
 //     console.log(a)
 // })
 
-fetch('../data/shp/prg/data.zip')
-    .then(response => response.arrayBuffer())
-    .then(buffer => shp.parseZip(buffer)
-        // Do something with the GeoJSON object
-    ).then(geo => console.log(geo))
-    .catch(err => console.error(err));
+// fetch('../data/shp/prg/data.zip')
+//     .then(response => response.arrayBuffer())
+//     .then(buffer => shp.parseZip(buffer)
+//         // Do something with the GeoJSON object
+//     ).then(geo => console.log(geo))
+//     .catch(err => console.error(err));
 
 
 document.getElementById("exploredata").addEventListener("change", () => {
@@ -435,16 +435,6 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 })
 
-data = csvBdnb.then(res => {
-    const properties = attributes.reduce((result, attribute) => {
-        result[attribute.fid] = attribute;
-        // console.log(result)
-        return result
-    }, {});
-
-
-
-})
 
 function colorBuildings(properties) {
     // console.log(uniquecol)
@@ -465,17 +455,17 @@ function generateUniqueColors(values) {
 
     // génère une couleur unique pour chaque valeur unique
     for (let i = 0; i < uniqueValues.length; i++) {
-        const hue = i * (360 / uniqueValues.length); // calcule la teinte (couleur de base)
-        const saturation = 75; // définit la saturation (intensité de la couleur)
-        const lightness = 50; // définit la luminosité (clarté de la couleur)
+        // const hue = i * (360 / uniqueValues.length); // calcule la teinte (couleur de base)
+        // const saturation = 75; // définit la saturation (intensité de la couleur)
+        // const lightness = 50; // définit la luminosité (clarté de la couleur)
 
-        const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`; // crée la couleur en HSL
+        // const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`; // crée la couleur en HSL
 
         colors[uniqueValues[i]] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-    }; // ajoute la valeur et la couleur dans la liste
+    } // ajoute la valeur et la couleur dans la liste
 
 
-    return colors;
+    return colors
 }
 
 
