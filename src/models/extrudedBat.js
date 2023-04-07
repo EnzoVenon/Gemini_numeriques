@@ -48,7 +48,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             zoom: { min: 0 },
                             style: new itowns.Style({
                                 fill: {
-                                    color: color,
+                                    color: "green",
                                     extrusion_height: height,
                                     base_altitude: 20
 
