@@ -12,6 +12,7 @@ import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./models/getBdtopoInfo"
+import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
 
 // console.log(turf)
 let bat = document.createElement('div');
@@ -162,43 +163,9 @@ viewerDiv.addEventListener(
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, letRandomCOlor, view)
 
-            let batGroupeIdBdnb = tooltip.value.properties.batiment_g
-
-            getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
-
-                console.log(res),
-                    // console.log(output)
-                    // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
-                    document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="custom-tooltip"
-                    data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
-                    info
-                </a>
-                </div>
-                  `
-
-                document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                  data-bs-custom-class="custom-tooltip"
-                  data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
-                  info
-              </a>
-              </div>
-                `
-
-                document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="custom-tooltip"
-                data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
-                info
-            </a>
-            </div>
-              `
-
-
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                const tooltipList = [...tooltipTriggerList]
-                tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-                document.getElementById('batInfo').value = batGroupeIdBdnb
+            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
+                console.log(res)
+                bdnbinfoToHtml(res)
             })
 
 
