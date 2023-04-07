@@ -14,6 +14,8 @@ import { widgetNavigation } from "./jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
 
+//global var 
+
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -48,6 +50,7 @@ setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 // ajout de widget de navigation
 widgetNavigation(view)
+
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
@@ -167,7 +170,6 @@ viewerDiv.addEventListener(
                 console.log(res)
                 bdnbinfoToHtml(res)
             })
-
 
 
             getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
