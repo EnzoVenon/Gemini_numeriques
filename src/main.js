@@ -16,6 +16,10 @@ import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
 import { loadDataFromShp, loadBufferDataFromShp } from "./models/loadDataFromShp"
 
 import * as shp from "shpjs"
+
+// import * as mapshp from "leaflet-omnivore"
+
+
 //global var 
 const THREE = itowns.THREE
 // console.log(turf)
@@ -326,19 +330,45 @@ let path2 = "../data/shp/prg/bdnb_perigeux8"
 let list2 = loadDataFromShp(path2)
 let list3 = loadBufferDataFromShp(path2)
 
+console.log(shp)
 
-Promise.all(list3).then(([shpBuffer, dbfBuffer]) => {
-    let a = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-    console.log(a)
-})
+
+// then(buffers => {
+//     console.log(buffers)
+
+//     const shpBuffer = buffers[0];
+//     const dbfBuffer = buffers[1];
+//     const records = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+// })
+
+
+// Promise.all(list3).then(([shpBuffer, dbfBuffer]) => {
+//     let a = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+//     console.log(a)
+// })
+
+fetch('../data/shp/prg/data.zip')
+    .then(response => response.arrayBuffer())
+    .then(buffer => shp.parseZip(buffer)
+        // Do something with the GeoJSON object
+    ).then(geo => console.log(geo))
+    .catch(err => console.error(err));
+
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
-        Promise.all(list3).then(([shpBuffer, dbfBuffer]) => {
+        loadBufferDataFromShp(path2).then(buffers => {
+            console.log(buffers)
 
-            // Générer un GeoJSON à partir des features et des propriétés
+            const shpBuffer = buffers[0];
+            const dbfBuffer = buffers[1];
             const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+            //    console.log(shp)
+
+            //             // Générer un GeoJSON à partir des features et des propriétés
+            //             const geojson = shp.parseSync(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
+
 
 
             // Utiliser le GeoJSON
@@ -405,23 +435,24 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 })
 
-// data = csvBdnb.then(res => {
-//     const properties = attributes.reduce((result, attribute) => {
-//         result[attribute.fid] = attribute;
-//         // console.log(result)
-//         return result
-//     }, {});
+data = csvBdnb.then(res => {
+    const properties = attributes.reduce((result, attribute) => {
+        result[attribute.fid] = attribute;
+        // console.log(result)
+        return result
+    }, {});
 
 
 
-// })
+})
 
 function colorBuildings(properties) {
-    console.log(uniqueTypes)
+    // console.log(uniquecol)
 
     // console.log(properties.code_iris)
 
-    let color = uniqueTypes.code_iris;
+    let color = uniquecol[properties.code_iris];
+    console.log(color)
     // console.log(color)
 
     return color;
@@ -450,4 +481,8 @@ function generateUniqueColors(values) {
 
 
 
-
+//for the shapefiles in the folder called 'files' with the name pandr.shp
+// shp("https://github.com/EnzoVenon/Gemini_numeriques/tree/dev/data/shp/prg/bdnb_perigeux8").then(function (geojson) {
+//     //do something with your geojson
+//     console.log(geojson)
+// });

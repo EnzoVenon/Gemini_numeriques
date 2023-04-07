@@ -44,19 +44,44 @@ export function loadDataFromShp(path) {
 }
 
 export function loadBufferDataFromShp(path) {
-  let shpdata = fetch(path + '.shp')
-    .then(function (response) {
-      // Récupérer les données du fichier .shp en ArrayBuffer
-      return response.arrayBuffer();
-    })
 
-  let dbfdata = fetch(path + '.dbf')
-    .then(function (response) {
-      // Récupérer les données du fichier .dbf en ArrayBuffer
-      return response.arrayBuffer();
-    })
+  console.log("itown")
 
-  return [shpdata, dbfdata]
+
+  let promise = itowns.Fetcher.multiple(
+    path,
+    {
+      // fetch all files whose name match the `url` parameter value, and whose format is either `shp`,
+      // `dbf`, `shx` or `prj`.
+      arrayBuffer: ['shp', 'dbf', 'shx'],
+      text: ['prj'],
+    },
+  ).then((fetched) => {
+    // Once our Shapefile data is fetched, we can parse it by running itowns built-in Shapefile parser.
+    console.log(fetched)
+
+    return Promise.all([
+      fetched.shp,
+      fetched.dbf
+    ])
+  })
+
+
+  // console.log("tes")
+  // let promise = Promise.all([
+  //   fetch(path + '.shp'),
+  //   fetch(path + '.dbf')
+  // ]).then(responses => {
+  //   console.log(responses)
+  //   return Promise.all([
+  //     responses[0].arrayBuffer(),
+  //     responses[1].arrayBuffer()
+  //   ])
+  // })
+
+
+
+  return promise
 }
 
 
