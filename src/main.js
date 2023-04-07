@@ -13,7 +13,12 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
-import { loadDataFromShp } from "./models/loadDataFromShp"
+import { loadDataFromShp, loadBufferDataFromShp } from "./models/loadDataFromShp"
+
+import * as shp from "shpjs"
+
+// import * as mapshp from "leaflet-omnivore"
+
 
 //global var 
 const THREE = itowns.THREE
@@ -25,6 +30,10 @@ bat.id = 'bat';
 let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = []
+let batInorandomId2 = []
+let uniqueTypes;
+let uniquecol;
+
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -317,8 +326,153 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 })
 document.getElementById("showInnondationLayer").click()
 
+let path2 = "../data/shp/prg/bdnb_perigeux8"
+// let list2 = loadDataFromShp(path2)
+// let list3 = loadBufferDataFromShp(path2)
+
+console.log(shp)
+
+
+// then(buffers => {
+//     console.log(buffers)
+
+//     const shpBuffer = buffers[0];
+//     const dbfBuffer = buffers[1];
+//     const records = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+// })
+
+
+// Promise.all(list3).then(([shpBuffer, dbfBuffer]) => {
+//     let a = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+//     console.log(a)
+// })
+
+// fetch('../data/shp/prg/data.zip')
+//     .then(response => response.arrayBuffer())
+//     .then(buffer => shp.parseZip(buffer)
+//         // Do something with the GeoJSON object
+//     ).then(geo => console.log(geo))
+//     .catch(err => console.error(err));
+
+
+document.getElementById("exploredata").addEventListener("change", () => {
+    console.log(document.getElementById("exploredata").checked)
+    if (document.getElementById("exploredata").checked) {
+        loadBufferDataFromShp(path2).then(buffers => {
+            console.log(buffers)
+
+            const shpBuffer = buffers[0];
+            const dbfBuffer = buffers[1];
+            const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+            //    console.log(shp)
+
+            //             // Générer un GeoJSON à partir des features et des propriétés
+            //             const geojson = shp.parseSync(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
+
+
+
+            // Utiliser le GeoJSON
+            console.log(geojson);
+
+            // Récupérer les valeurs uniques de la propriété "type"
+            uniqueTypes = geojson.features.reduce((acc, feature) => {
+                const code_iris = feature.properties.code_iris;
+                if (!acc.includes(code_iris)) {
+                    acc.push(code_iris);
+                }
+                return acc;
+            }, []);
+
+            uniquecol = generateUniqueColors(uniqueTypes)
+
+            console.log(uniquecol); // Output: ["A", "B"]
+
+
+            let src2 = new itowns.FileSource({
+                fetchedData: geojson,
+                crs: 'EPSG:4326',
+                format: 'application/json',
+            })
+            // console.log(result.value.geometry.coordinates[0])
+            let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+
+            batInorandomId2.push(ramdoId2)
+
+
+            let bat = new itowns.FeatureGeometryLayer(ramdoId2, {
+                source: src2,
+                transparent: true,
+                opacity: 0.7,
+                zoom: { min: 0 },
+                style: new itowns.Style({
+                    fill: {
+                        color: colorBuildings,
+                        extrusion_height: 100,
+                        base_altitude: 20
+                    }
+                }),
+                onMeshCreated: (mesh) => {
+                    console.log(mesh.children[0].children[0].children[0].children[0])
+                    let object = mesh.children[0].children[0].children[0].children[0]
+                    var objectEdges = new THREE.LineSegments(
+                        new THREE.EdgesGeometry(object.geometry),
+                        new THREE.LineBasicMaterial({ color: 'black' })
+                    );
+
+                    object.add(objectEdges);
+                }
+            });
+            view.addLayer(bat)
+
+        })
+
+    }
+    else {
+        batInorandomId
+        view.removeLayer(batInorandomId2[0])
+        batInorandomId2 = []
+    }
+
+})
+
+
+function colorBuildings(properties) {
+    // console.log(uniquecol)
+
+    // console.log(properties.code_iris)
+
+    let color = uniquecol[properties.code_iris];
+    console.log(color)
+    // console.log(color)
+
+    return color;
+}
+
+
+function generateUniqueColors(values) {
+    const uniqueValues = [...new Set(values)]; // récupère les valeurs uniques
+    const colors = {};
+
+    // génère une couleur unique pour chaque valeur unique
+    for (let i = 0; i < uniqueValues.length; i++) {
+        // const hue = i * (360 / uniqueValues.length); // calcule la teinte (couleur de base)
+        // const saturation = 75; // définit la saturation (intensité de la couleur)
+        // const lightness = 50; // définit la luminosité (clarté de la couleur)
+
+        // const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`; // crée la couleur en HSL
+
+        colors[uniqueValues[i]] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    } // ajoute la valeur et la couleur dans la liste
+
+
+    return colors
+}
 
 
 
 
-
+//for the shapefiles in the folder called 'files' with the name pandr.shp
+// shp("https://github.com/EnzoVenon/Gemini_numeriques/tree/dev/data/shp/prg/bdnb_perigeux8").then(function (geojson) {
+//     //do something with your geojson
+//     console.log(geojson)
+// });

@@ -1,4 +1,6 @@
 
+import * as shp from "shpjs"
+
 export async function addShp(filePath, layerName, oulineColor, fillColor, view, tooltipAvailable) {
     await itowns.Fetcher.multiple(
         filePath,
@@ -10,7 +12,13 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
         },
     ).then((fetched) => {
         // Once our Shapefile data is fetched, we can parse it by running itowns built-in Shapefile parser.
-        // console.log(fetched)
+        console.log(fetched)
+
+        const features = shp.parseShp(fetched.shp);
+
+        console.log(features)
+
+
         return itowns.ShapefileParser.parse(fetched, {
             // Options indicating how the features should be built from data.
             out: {
@@ -21,6 +29,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
     }).then((parsed) => {
         // We can then instantiate a FileSource, passing the parsed data,
         // and create a Layer bound to this source.
+        console.log(parsed)
         const shp2 = new itowns.FileSource({ features: parsed });
 
 
