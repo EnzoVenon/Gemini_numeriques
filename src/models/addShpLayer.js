@@ -34,7 +34,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
                 },
                 stroke: {
                     color: oulineColor,
-                    width: 2.0
+                    width: 1.0
                 }
             }),
             addLabelLayer: true,
