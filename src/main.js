@@ -315,9 +315,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
         batInorandomId = []
     }
 })
-
-
-
+document.getElementById("showInnondationLayer").click()
 
 
 
