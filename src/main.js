@@ -13,6 +13,7 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
+import { loadDataFromShp } from "./models/loadDataFromShp"
 
 //global var 
 const THREE = itowns.THREE
@@ -23,6 +24,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
+let batInorandomId = []
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -248,94 +250,75 @@ document.getElementById("showCadastreLayer").addEventListener("change", () => {
 
 })
 
+let path = "../data/shp/prg/bat_innondable"
+let list = loadDataFromShp(path)
+
+document.getElementById("showInnondationLayer").addEventListener("change", () => {
+    console.log(document.getElementById("showInnondationLayer").checked)
+    if (document.getElementById("showInnondationLayer").checked) {
+        addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "inno", "black", "blue", view, false)
+        Promise.all(list).then(([geom, att]) => {
+            // Générer un GeoJSON à partir des features et des propriétés
+            const geojson = {
+                type: 'FeatureCollection',
+                features: geom.map((feature) => ({
+                    type: 'Feature',
+                    geometry: feature,
+                    properties: att[att.id]
+                }))
+            };
+
+            // Utiliser le GeoJSON
+            console.log(geojson);
+
+            let src2 = new itowns.FileSource({
+                fetchedData: geojson,
+                crs: 'EPSG:4326',
+                format: 'application/json',
+            })
+            // console.log(result.value.geometry.coordinates[0])
+            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+
+            batInorandomId.push(ramdoId)
 
 
-import * as shp from "shpjs"
+            let bat = new itowns.FeatureGeometryLayer(ramdoId, {
+                source: src2,
+                transparent: true,
+                opacity: 0.7,
+                zoom: { min: 0 },
+                style: new itowns.Style({
+                    fill: {
+                        color: "red",
+                        extrusion_height: 100,
+                        base_altitude: 20
+                    }
+                }),
+                onMeshCreated: (mesh) => {
+                    console.log(mesh.children[0].children[0].children[0].children[0])
+                    let object = mesh.children[0].children[0].children[0].children[0]
+                    var objectEdges = new THREE.LineSegments(
+                        new THREE.EdgesGeometry(object.geometry),
+                        new THREE.LineBasicMaterial({ color: 'black' })
+                    );
 
-let a = fetch('../data/shp/prg/bdnb_perigeux8.shp')
-    .then(function (response) {
-        // Récupérer les données du fichier .shp en ArrayBuffer
-        return response.arrayBuffer();
-    })
-    .then(function (buffer) {
-        // Parser les données géométriques
-        const features = shp.parseShp(buffer);
+                    object.add(objectEdges);
+                }
+            });
+            view.addLayer(bat)
+        })
 
-        // Récupérer les données du fichier .dbf en utilisant fetch
-        return features;
-    })
-
-let b = fetch('../data/shp/prg/bdnb_perigeux8.dbf')
-    .then(function (response) {
-        // Récupérer les données du fichier .dbf en ArrayBuffer
-        return response.arrayBuffer();
-    })
-    .then(function (buffer) {
-        // Parser les données attributaires
-        const attributes = shp.parseDbf(buffer);
-        console.log(attributes)
-
-        // Générer un tableau de propriétés pour chaque feature
-        const properties = attributes.reduce((result, attribute) => {
-            result[attribute.id] = attribute;
-            // console.log(result)
-            return result
-        });
-
-        // console.log(properties)
-
-        return properties
-    })
-
-Promise.all([a, b]).then(([geom, att]) => {
-    // Générer un GeoJSON à partir des features et des propriétés
-    const geojson = {
-        type: 'FeatureCollection',
-        features: geom.map((feature) => ({
-            type: 'Feature',
-            geometry: feature,
-            properties: att[att.id]
-        }))
-    };
-
-    // Utiliser le GeoJSON
-    console.log(geojson);
-
-    let src2 = new itowns.FileSource({
-        fetchedData: geojson,
-        crs: 'EPSG:4326',
-        format: 'application/json',
-    })
-    // console.log(result.value.geometry.coordinates[0])
-
-
-    let bat = new itowns.FeatureGeometryLayer("result.value.properties[properties] + color", {
-        source: src2,
-        transparent: true,
-        opacity: 0.7,
-        zoom: { min: 0 },
-        style: new itowns.Style({
-            fill: {
-                color: "red",
-                extrusion_height: 100,
-            }
-        }),
-        onMeshCreated: (mesh) => {
-            console.log(mesh.children[0].children[0].children[0].children[0])
-            let object = mesh.children[0].children[0].children[0].children[0]
-            var objectEdges = new THREE.LineSegments(
-                new THREE.EdgesGeometry(object.geometry),
-                new THREE.LineBasicMaterial({ color: 'black' })
-            );
-
-            object.add(objectEdges);
-        }
-    });
-
-    view.addLayer(bat)
-
-
+    }
+    else {
+        view.removeLayer("inno")
+        view.removeLayer(batInorandomId[0])
+        batInorandomId = []
+    }
 })
+
+
+
+
 
 
 

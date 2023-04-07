@@ -7,9 +7,6 @@ Color for the object
 */
 const THREE = itowns.THREE
 
-import * as turf from "@turf/turf"
-
-
 export function addSpecificBuilings(databaseType, height, properties, valuesOfPerperties, color, view) {
 
     shapefile.open(databaseType)
@@ -53,14 +50,16 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 fill: {
                                     color: color,
                                     extrusion_height: height,
+                                    base_altitude: 20
+
                                 }
                             }),
                             onMeshCreated: (mesh) => {
                                 console.log(mesh.children[0].children[0].children[0].children[0])
                                 let object = mesh.children[0].children[0].children[0].children[0]
-                                object.scale.x = 1.01;
-                                object.scale.y = 1.01;
-                                object.scale.z = 1.00001;
+                                object.scale.x = 1.05;
+                                object.scale.y = 1.04;
+                                object.scale.z = 1.001;
                                 var objectEdges = new THREE.LineSegments(
                                     new THREE.EdgesGeometry(object.geometry),
                                     new THREE.LineBasicMaterial({ color: 'black' })
