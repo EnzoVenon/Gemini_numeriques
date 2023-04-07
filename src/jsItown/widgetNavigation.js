@@ -32,7 +32,6 @@ export function widgetNavigation(view) {
     'reset-position',
     '&#8634',
     'reset position',
-    () => { view.controls.lookAtCoordinate(placement) },
   );
 
 }
