@@ -48,7 +48,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             zoom: { min: 0 },
                             style: new itowns.Style({
                                 fill: {
-                                    color: color,
+                                    color: "green",
                                     extrusion_height: height,
                                     base_altitude: 20
 
@@ -58,8 +58,8 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 console.log(mesh.children[0].children[0].children[0].children[0])
                                 let object = mesh.children[0].children[0].children[0].children[0]
                                 object.scale.x = 1.05;
-                                object.scale.y = 1.04;
-                                object.scale.z = 1.001;
+                                object.scale.y = 1.05;
+                                object.scale.z = 1.02;
                                 var objectEdges = new THREE.LineSegments(
                                     new THREE.EdgesGeometry(object.geometry),
                                     new THREE.LineBasicMaterial({ color: 'black' })
