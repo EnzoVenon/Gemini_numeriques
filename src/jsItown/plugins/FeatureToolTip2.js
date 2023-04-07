@@ -88,9 +88,13 @@ var FeatureToolTip = (function _() {
         var style;
         var prop;
 
+        console.log(features)
+
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
+
+            console.log(geometry)
 
 
             tooltip.value = geometry

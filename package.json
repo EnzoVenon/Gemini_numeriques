@@ -14,6 +14,7 @@
     "start": "parcel --open",
     "build": "parcel build --dist-dir public",
     "clean": "rm -rf dist",
+    "eslintTest": "npx eslint src",
     "test": "npx eslint src ; jest --coverage",
     "jest": "jest --coverage"
   },

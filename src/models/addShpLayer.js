@@ -27,7 +27,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
         let colorl = new itowns.ColorLayer(layerName, {
             source: shp2,
             style: new itowns.Style({
-                zoom: { min: 10, max: 20 },
+                zoom: { min: 0, max: 20 },
                 // point: { color: 'white', line: 'green' },
                 fill: {
                     color: fillColor,
