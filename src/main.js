@@ -215,3 +215,40 @@ viewerDiv.addEventListener(
 )
 htmlTest.innerHTML += '</div>';
 
+document.getElementById("showIgnLayer").addEventListener("change", () => {
+    console.log(document.getElementById("showIgnLayer").checked)
+    if (document.getElementById("showIgnLayer").checked) {
+        addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "", view, false)
+    }
+    else {
+        view.removeLayer("bd_topo")
+    }
+
+})
+
+document.getElementById("showOsmLayer").addEventListener("change", () => {
+    console.log(document.getElementById("showOsmLayer").checked)
+    if (document.getElementById("showOsmLayer").checked) {
+        addShp("../data/shp/prg/osm", "osm", "yellow", "", view, false)
+    }
+    else {
+        view.removeLayer("osm")
+    }
+
+})
+
+document.getElementById("showCadastreLayer").addEventListener("change", () => {
+    console.log(document.getElementById("showCadastreLayer").checked)
+    if (document.getElementById("showCadastreLayer").checked) {
+        addShp("../data/shp/prg/osm", "cadastre", "red", "", view, false)
+    }
+    else {
+        view.removeLayer("cadastre")
+    }
+
+})
+
+
+
+
+
