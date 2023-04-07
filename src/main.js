@@ -18,6 +18,7 @@ bat.className = 'bat';
 bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
+let fidSelectf = [1, 2]
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -79,95 +80,95 @@ viewerDiv.addEventListener(
     'mouseup',
     () => {
 
-        htmlTest.innerHTML = '';
-        let textHtml = '';
-        textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
+        fidSelectf.push(tooltip.value.properties.fid)
+        console.log(tooltip.value.properties.fid)
 
-        csv2
-            .then(res => {
-                // ----------- POPULATION INSEE ----------- //
-                // Retrieve elements where Iris number is same as tooltip
-                let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
+        console.log(fidSelectf)
 
-                // Add INSEE value for this IRIS in tooltip properties
-                Object.entries(uniqueData).forEach(([key, value]) => {
-                    if (!(value === Number(tooltip.value.properties.code_iris))) {
-                        tooltip.value.properties[key] = value;
-                    }
-                })
-
-                // Chart for INSEE values
-                // ----- Status 15 ans et plus ----- //
-                const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
-                // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-
-                // ----- Répartition pop 15 ans et plus ----- //
-                const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
-                const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 4, tooltip.value.properties);
-                // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-
-                // ----- Nombre de familles avec enfants -25 ans ----- //
-                const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
-                // Generate html accordion item
-                textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                htmlTest.innerHTML += textHtml;
-
-                // Create charts
-                addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
-                addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
-                addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
-
-                // console.log(htmlTest.innerHTML)
-
-            });
-
-        let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-        let randomId = tooltip.value.properties.batiment_g + letRandomCOlor
-
-        listSlect.push(randomId)
-
-        if (listSlect[1]) {
-
-            let layerToRemove = view.getLayerById(listSlect[0]);
-            // view.removeLayer(layerToRemove);
-            console.log(layerToRemove)
-            console.log(view)
-            layerToRemove.delete()
-            view.notifyChange()
-            view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+        if (fidSelectf[fidSelectf.length - 1] != fidSelectf[fidSelectf.length - 2]) {
+            fidSelectf = [fidSelectf[fidSelectf.length - 1]]
 
 
+            htmlTest.innerHTML = '';
+            let textHtml = '';
+            textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
 
+            csv2
+                .then(res => {
+                    // ----------- POPULATION INSEE ----------- //
+                    // Retrieve elements where Iris number is same as tooltip
+                    let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                    // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
 
-            // Dispose of the layer itself
-            if (layerToRemove.dispose) {
-                layerToRemove.dispose();
+                    // Add INSEE value for this IRIS in tooltip properties
+                    Object.entries(uniqueData).forEach(([key, value]) => {
+                        if (!(value === Number(tooltip.value.properties.code_iris))) {
+                            tooltip.value.properties[key] = value;
+                        }
+                    })
+
+                    // Chart for INSEE values
+                    // ----- Status 15 ans et plus ----- //
+                    const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+                    const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
+                    // Generate html accordion item
+                    textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+
+                    // ----- Répartition pop 15 ans et plus ----- //
+                    const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
+                    const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 4, tooltip.value.properties);
+                    // Generate html accordion item
+                    textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+
+                    // ----- Nombre de familles avec enfants -25 ans ----- //
+                    const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                    const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
+                    // Generate html accordion item
+                    textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
+
+                    htmlTest.innerHTML += textHtml;
+
+                    // Create charts
+                    addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
+                    addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
+                    addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
+
+                    // console.log(htmlTest.innerHTML)
+
+                });
+
+            let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+            let randomId = tooltip.value.properties.batiment_g + letRandomCOlor
+
+            listSlect.push(randomId)
+
+            if (listSlect[1]) {
+
+                let layerToRemove = view.getLayerById(listSlect[0]);
+                view.removeLayer(listSlect[0]);
+                console.log(layerToRemove)
+                console.log(view)
+                layerToRemove.delete()
+                view.notifyChange()
+                view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+
+                listSlect = [listSlect[1]]
+            } else {
+                console.log("non")
             }
 
-            listSlect = [listSlect[1]]
-        } else {
-            console.log("non")
-        }
+            console.log(tooltip.value)
 
-        addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, letRandomCOlor, view)
 
-        // console.log(document.getElementById('bat').value.coord);
-        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+            let batGroupeIdBdnb = tooltip.value.properties.batiment_g
 
-        let batGroupeIdBdnb = tooltip.value.properties.batiment_g
+            getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
 
-        getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
-
-            console.log(res),
-                // console.log(output)
-                // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
-                document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                console.log(res),
+                    // console.log(output)
+                    // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+                    document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="custom-tooltip"
                     data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
                     info
@@ -175,7 +176,7 @@ viewerDiv.addEventListener(
                 </div>
                   `
 
-            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                   data-bs-custom-class="custom-tooltip"
                   data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
                   info
@@ -183,7 +184,7 @@ viewerDiv.addEventListener(
               </div>
                 `
 
-            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                 data-bs-custom-class="custom-tooltip"
                 data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
                 info
@@ -192,39 +193,38 @@ viewerDiv.addEventListener(
               `
 
 
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList]
-            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList]
+                tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-            document.getElementById('batInfo').value = batGroupeIdBdnb
-        })
+                document.getElementById('batInfo').value = batGroupeIdBdnb
+            })
 
-        function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
-            console.log("bdtopo")
-            csvIdBdnbBdtopo.then(res => {
-                let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
+            function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
+                csvIdBdnbBdtopo.then(res => {
+                    let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
 
-                shapefile.open("../data/shp/prg/bd_topo")
-                    .then(source => source.read()
-                        .then(function log(result) {
-                            if (result.done) return "done";
-                            console.log("bdtopo")
+                    shapefile.open("../data/shp/prg/bd_topo")
+                        .then(source => source.read()
+                            .then(function log(result) {
+                                if (result.done) return "done";
+                                console.log("bdtopo")
 
-                            if (result.value.properties["ID"] === bdTopoId) {
-                                // console.log(result.value.properties)
-                                if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
-                                    console.log("bdtopoIDoh")
-                                    // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
-                                    // document.getElementById("btnOffcanvasScrollingbat").click()
+                                if (result.value.properties["ID"] === bdTopoId) {
+                                    // console.log(result.value.properties)
+                                    if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
+                                        console.log("bdtopoIDoh")
+                                        // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
+                                        // document.getElementById("btnOffcanvasScrollingbat").click()
 
-                                    document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                        document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                                         data-bs-custom-class="custom-tooltip"
                                         data-bs-title="donnée issue de la bdtopo  sur l'attribut HAUTEUR">
                                         info
                                     </a>
                                     </div>
                                       `
-                                    document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                        document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                                       data-bs-custom-class="custom-tooltip"
                                       data-bs-title="donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
                                       info
@@ -232,61 +232,65 @@ viewerDiv.addEventListener(
                                   </div>
                                     `
 
-                                    document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                        document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                                     data-bs-custom-class="custom-tooltip"
                                     data-bs-title="donnée issue de la bdtopo  sur l'attribut ETAT">
                                     info
                                 </a>
                                 </div>
                                   `
-                                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                                    const tooltipList = [...tooltipTriggerList]
-                                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                                        const tooltipList = [...tooltipTriggerList]
+                                        tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
-                                }
-                                return result.value.properties;
-                            }
-                            else {
-                                return source.read().then(log);
-                            }
-                        }
-                        ))
-            })
-        }
-
-        getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
-
-        shapefile.open("../data/shp/prg/bdnb_perigeux8")
-            .then(source => source.read()
-                .then(async function log(result) {
-                    if (result.done) return "done";
-                    // console.log(result.value.properties["batiment_g"])
-
-                    if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-                        let selectedBatGeom = result.value.geometry.coordinates
-                        let polygon = turf.polygon(selectedBatGeom)
-                        shapefile.open("../data/shp/prg/osm")
-                            .then(source => source.read()
-                                .then(function log(result) {
-                                    if (result.done) return "done";
-                                    // console.log(result.value.properties["osm_id"])
-                                    let polygonOsm = turf.polygon(result.value.geometry.coordinates)
-
-                                    // console.log(turf.booleanContains(polygon, centroidOsm))
-                                    if (turf.intersect(polygonOsm, polygon)) {
-                                        // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-                                        return;
                                     }
-
+                                    return result.value.properties;
+                                }
+                                else {
                                     return source.read().then(log);
-                                }))
+                                }
+                            }
+                            ))
+                })
+            }
+
+            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
+
+            shapefile.open("../data/shp/prg/bdnb_perigeux8")
+                .then(source => source.read()
+                    .then(async function log(result) {
+                        if (result.done) return "done";
+                        // console.log(result.value.properties["batiment_g"])
+
+                        if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+                            let selectedBatGeom = result.value.geometry.coordinates
+                            let polygon = turf.polygon(selectedBatGeom)
+                            shapefile.open("../data/shp/prg/osm")
+                                .then(source => source.read()
+                                    .then(function log(result) {
+                                        if (result.done) return "done";
+                                        // console.log(result.value.properties["osm_id"])
+                                        let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+
+                                        // console.log(turf.booleanContains(polygon, centroidOsm))
+                                        if (turf.intersect(polygonOsm, polygon)) {
+                                            // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                            return;
+                                        }
+
+                                        return source.read().then(log);
+                                    }))
+                        }
+                        return source.read().then(log)
+
+
                     }
-                    return source.read().then(log)
+                    ))
 
 
-                }
-                ))
+
+        }
 
 
 
