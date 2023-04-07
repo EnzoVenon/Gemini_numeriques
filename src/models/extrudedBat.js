@@ -16,6 +16,14 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                 try {
 
                     if (result.value.properties[properties] == valuesOfPerperties) {
+
+                        // let polygon = turf.polygon(result.value.geometry.coordinates[0])
+
+                        // console.log(polygon)
+
+                        // var buffered = turf.buffer(polygon, 0.0001, { units: 'degrees' });
+
+                        // console.log(buffered)
                         let src2 = new itowns.FileSource({
                             fetchedData: {
                                 "type": "FeatureCollection",
@@ -42,11 +50,16 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 fill: {
                                     color: color,
                                     extrusion_height: height,
+                                    base_altitude: 20
+
                                 }
                             }),
                             onMeshCreated: (mesh) => {
                                 console.log(mesh.children[0].children[0].children[0].children[0])
                                 let object = mesh.children[0].children[0].children[0].children[0]
+                                object.scale.x = 1.05;
+                                object.scale.y = 1.04;
+                                object.scale.z = 1.001;
                                 var objectEdges = new THREE.LineSegments(
                                     new THREE.EdgesGeometry(object.geometry),
                                     new THREE.LineBasicMaterial({ color: 'black' })
@@ -60,12 +73,6 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
 
 
                         document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
-
-
-
-
-
-
                     }
                 } catch (e) {
                     console.log(e)
