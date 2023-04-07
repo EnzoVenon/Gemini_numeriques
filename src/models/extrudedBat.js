@@ -5,6 +5,8 @@ hauteur du batiment
 properties: filter accroding to --valuesOfPerperties-- of properties => id, type, usage, .....
 Color for the object
 */
+const THREE = itowns.THREE
+
 export function addSpecificBuilings(databaseType, height, properties, valuesOfPerperties, color, view) {
 
     shapefile.open(databaseType)
@@ -41,10 +43,21 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                     color: color,
                                     extrusion_height: height,
                                 }
-                            })
+                            }),
+                            onMeshCreated: (mesh) => {
+                                console.log(mesh.children[0].children[0].children[0].children[0])
+                                let object = mesh.children[0].children[0].children[0].children[0]
+                                var objectEdges = new THREE.LineSegments(
+                                    new THREE.EdgesGeometry(object.geometry),
+                                    new THREE.LineBasicMaterial({ color: 'black' })
+                                );
+
+                                object.add(objectEdges);
+                            }
                         });
 
                         view.addLayer(bat)
+
 
                         document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
 

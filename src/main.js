@@ -14,6 +14,11 @@ import { widgetNavigation } from "./jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
 
+//global var 
+const THREE = itowns.THREE
+
+
+
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -48,6 +53,13 @@ setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 // ajout de widget de navigation
 widgetNavigation(view)
+
+var ambientLight = new THREE.AmbientLight('red', 1);
+view.scene.add(ambientLight);
+
+var light = new THREE.DirectionalLight('red', 1);
+light.position.set(view.camera.camera3D.position.x, view.camera.camera3D.position.y, view.camera.camera3D.position.z);
+view.scene.add(light);
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
@@ -167,7 +179,6 @@ viewerDiv.addEventListener(
                 console.log(res)
                 bdnbinfoToHtml(res)
             })
-
 
 
             getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
