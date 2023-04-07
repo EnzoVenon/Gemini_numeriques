@@ -30,24 +30,24 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                         })
                         // console.log(result.value.geometry.coordinates[0])
 
-                        if (!view.getLayerById(result.value.properties[properties])) {
-                            let bat = new itowns.FeatureGeometryLayer(result.value.properties[properties], {
-                                source: src2,
-                                transparent: true,
-                                opacity: 0.7,
-                                zoom: { min: 0 },
-                                style: new itowns.Style({
-                                    fill: {
-                                        color: color,
-                                        extrusion_height: height,
-                                    }
-                                })
-                            });
 
-                            view.addLayer(bat)
+                        let bat = new itowns.FeatureGeometryLayer(result.value.properties[properties] + color, {
+                            source: src2,
+                            transparent: true,
+                            opacity: 0.7,
+                            zoom: { min: 0 },
+                            style: new itowns.Style({
+                                fill: {
+                                    color: color,
+                                    extrusion_height: height,
+                                }
+                            })
+                        });
 
-                            document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
-                        }
+                        view.addLayer(bat)
+
+                        document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
+
 
 
 

@@ -191,7 +191,7 @@ export function applyStyle(view, id, serverURL, version, nameType, crs, ipr, for
         },
         filter: acceptFeature,
         source: geometrySource,
-        zoom: { min: 14 },
+        zoom: { min: 0 },
 
         style: new itowns.Style({
             fill: {

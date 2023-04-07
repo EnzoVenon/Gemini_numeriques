@@ -1,11 +1,8 @@
-// https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_3d.html
 
 // ----------------- Imports ----------------- //
 import { update/*, buildingLayer */ } from "./models/building";
 import { addOrthoLayer } from "./models/ortho";
 import { addElevationLayer } from "./models/elevation";
-//import { addStreamSurfaceFeature } from "./models/streamSurfaceFeature"
-// import { setUpMenu } from "./GUI/BaseMenu";
 import { addShp } from "./models/addShpLayer"
 import { addSpecificBuilings } from "./models/extrudedBat"
 import { importCsvFile } from "./models/readCsv"
@@ -13,15 +10,14 @@ import { addChart } from "./models/insee/showChart"
 import * as contenuOnglet from "./models/contenuOnglets"
 import { getBdnbInfo } from "./models/extractBdnbInfo"
 import * as turf from "@turf/turf"
-
+import { widgetNavigation } from "./jsItown/widgetNavigation"
 
 // console.log(turf)
-
-
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
-
+//listBatSelectioner
+let listSlect = []
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -47,44 +43,8 @@ viewerDiv.appendChild(bat)
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
-
-// ----------------- Navigation widget ----------------- //
-
-const widgets = new itowns_widgets.Navigation(view);
-// console.log(itowns_widgets)
-
-widgets.addButton(
-    'rotate-up',
-    '<p style="font-size: 20px">&#8595</p>',
-    'rotate camera up',
-    () => {
-        view.controls.lookAtCoordinate({
-            tilt: view.controls.getTilt() - 10,
-            time: 500,
-        });
-    },
-    'button-bar-rotation',
-);
-widgets.addButton(
-    'rotate-down',
-    '<p style="font-size: 20px">&#8593</p>',
-    'rotate camera down',
-    () => {
-        view.controls.lookAtCoordinate({
-            tilt: view.controls.getTilt() + 10,
-            time: 500,
-        });
-    },
-    'button-bar-rotation',
-);
-widgets.addButton(
-    'reset-position',
-    '&#8634',
-    'reset position',
-    () => { view.controls.lookAtCoordinate(placement) },
-);
-
-
+// ajout de widget de navigation
+widgetNavigation(view)
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
@@ -104,7 +64,6 @@ let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV"
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
-
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
@@ -112,159 +71,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
-    addShp("../data/shp/prg/osm", "osm", "red", "", view, false)
-
-
 });
 
-
-
 const tooltip = document.getElementById('tooltip');
-// console.log(tooltip)
-
-tooltip.addEventListener(
-    'DOMSubtreeModified',
-    async (event) => {
-        console.log(event)
-        // console.log(tooltip.value);
-
-        // console.log(view)
-
-        const mouseevent = document.getElementById('mouseevent')
-        console.log(mouseevent.value);
-
-        addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-
-        // console.log(document.getElementById('bat').value.coord);
-        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
-
-        let batGroupeIdBdnb = tooltip.value.properties.batiment_g
-
-        getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
-
-            console.log(res),
-                // console.log(output)
-                // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
-                document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="custom-tooltip"
-                data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
-                info
-            </a>
-            </div>
-              `
-
-            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="custom-tooltip"
-              data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
-              info
-          </a>
-          </div>
-            `
-
-            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="custom-tooltip"
-            data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
-            info
-        </a>
-        </div>
-          `
-
-
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList]
-            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-            document.getElementById('batInfo').value = batGroupeIdBdnb
-        })
-
-        function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
-
-            return csvIdBdnbBdtopo.then(res => {
-                let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
-
-                shapefile.open("../data/shp/prg/bd_topo")
-                    .then(source => source.read()
-                        .then(function log(result) {
-                            if (result.done) return "done";
-                            if (result.value.properties["ID"] === bdTopoId) {
-                                // console.log(result.value.properties)
-                                if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
-                                    // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
-                                    // document.getElementById("btnOffcanvasScrollingbat").click()
-
-                                    document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                                    data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="donnée issue de la bdtopo  sur l'attribut HAUTEUR">
-                                    info
-                                </a>
-                                </div>
-                                  `
-                                    document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                                  data-bs-custom-class="custom-tooltip"
-                                  data-bs-title="donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
-                                  info
-                              </a>
-                              </div>
-                                `
-
-                                    document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
-                                data-bs-custom-class="custom-tooltip"
-                                data-bs-title="donnée issue de la bdtopo  sur l'attribut ETAT">
-                                info
-                            </a>
-                            </div>
-                              `
-                                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                                    const tooltipList = [...tooltipTriggerList]
-                                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-
-                                }
-                                return result.value.properties;
-                            }
-                            else {
-                                return source.read().then(log);
-                            }
-                        }
-                        ))
-            })
-        }
-
-        console.log(getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g))
-
-        shapefile.open("../data/shp/prg/bdnb_perigeux8")
-            .then(source => source.read()
-                .then(async function log(result) {
-                    if (result.done) return "done";
-                    // console.log(result.value.properties["batiment_g"])
-
-                    if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-                        let selectedBatGeom = result.value.geometry.coordinates
-                        let polygon = turf.polygon(selectedBatGeom)
-                        shapefile.open("../data/shp/prg/osm")
-                            .then(source => source.read()
-                                .then(function log(result) {
-                                    if (result.done) return "done";
-                                    // console.log(result.value.properties["osm_id"])
-                                    let polygonOsm = turf.polygon(result.value.geometry.coordinates)
-
-                                    // console.log(turf.booleanContains(polygon, centroidOsm))
-                                    if (turf.intersect(polygonOsm, polygon)) {
-                                        // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-                                        return;
-                                    }
-
-                                    return source.read().then(log);
-                                }))
-                    }
-                    return source.read().then(log)
-
-
-                }
-                ))
-
-    })
-
 const htmlTest = document.getElementById('population');
 viewerDiv.addEventListener(
     'mouseup',
@@ -316,12 +125,172 @@ viewerDiv.addEventListener(
 
                 // console.log(htmlTest.innerHTML)
 
-
             });
+
+        let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        let randomId = tooltip.value.properties.batiment_g + letRandomCOlor
+
+        listSlect.push(randomId)
+
+        if (listSlect[1]) {
+
+            let layerToRemove = view.getLayerById(listSlect[0]);
+            // view.removeLayer(layerToRemove);
+            console.log(layerToRemove)
+            console.log(view)
+            layerToRemove.delete()
+            view.notifyChange()
+            view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
+
+
+
+
+            // Dispose of the layer itself
+            if (layerToRemove.dispose) {
+                layerToRemove.dispose();
+            }
+
+            listSlect = [listSlect[1]]
+        } else {
+            console.log("non")
+        }
+
+        addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 100, "batiment_g", tooltip.value.properties.batiment_g, letRandomCOlor, view)
+
+        // console.log(document.getElementById('bat').value.coord);
+        // console.log(document.getElementById('bat').value.coord[0][0], document.getElementById('bat').value.coord[0][1], 100);
+
+        let batGroupeIdBdnb = tooltip.value.properties.batiment_g
+
+        getBdnbInfo(csvBdnb, batGroupeIdBdnb).then(res => {
+
+            console.log(res),
+                // console.log(output)
+                // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
+                document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-custom-class="custom-tooltip"
+                    data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
+                    info
+                </a>
+                </div>
+                  `
+
+            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                  data-bs-custom-class="custom-tooltip"
+                  data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+                  info
+              </a>
+              </div>
+                `
+
+            document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${res["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="custom-tooltip"
+                data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+                info
+            </a>
+            </div>
+              `
+
+
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList]
+            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+            document.getElementById('batInfo').value = batGroupeIdBdnb
+        })
+
+        function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
+            console.log("bdtopo")
+            csvIdBdnbBdtopo.then(res => {
+                let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
+
+                shapefile.open("../data/shp/prg/bd_topo")
+                    .then(source => source.read()
+                        .then(function log(result) {
+                            if (result.done) return "done";
+                            console.log("bdtopo")
+
+                            if (result.value.properties["ID"] === bdTopoId) {
+                                // console.log(result.value.properties)
+                                if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
+                                    console.log("bdtopoIDoh")
+                                    // document.getElementById('listHauteur').innerHTML +=`<p> </p>`
+                                    // document.getElementById("btnOffcanvasScrollingbat").click()
+
+                                    document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="donnée issue de la bdtopo  sur l'attribut HAUTEUR">
+                                        info
+                                    </a>
+                                    </div>
+                                      `
+                                    document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                      data-bs-custom-class="custom-tooltip"
+                                      data-bs-title="donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
+                                      info
+                                  </a>
+                                  </div>
+                                    `
+
+                                    document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="donnée issue de la bdtopo  sur l'attribut ETAT">
+                                    info
+                                </a>
+                                </div>
+                                  `
+                                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                                    const tooltipList = [...tooltipTriggerList]
+                                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+
+                                }
+                                return result.value.properties;
+                            }
+                            else {
+                                return source.read().then(log);
+                            }
+                        }
+                        ))
+            })
+        }
+
+        getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
+
+        shapefile.open("../data/shp/prg/bdnb_perigeux8")
+            .then(source => source.read()
+                .then(async function log(result) {
+                    if (result.done) return "done";
+                    // console.log(result.value.properties["batiment_g"])
+
+                    if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+                        let selectedBatGeom = result.value.geometry.coordinates
+                        let polygon = turf.polygon(selectedBatGeom)
+                        shapefile.open("../data/shp/prg/osm")
+                            .then(source => source.read()
+                                .then(function log(result) {
+                                    if (result.done) return "done";
+                                    // console.log(result.value.properties["osm_id"])
+                                    let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+
+                                    // console.log(turf.booleanContains(polygon, centroidOsm))
+                                    if (turf.intersect(polygonOsm, polygon)) {
+                                        // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                        return;
+                                    }
+
+                                    return source.read().then(log);
+                                }))
+                    }
+                    return source.read().then(log)
+
+
+                }
+                ))
+
 
 
     },
-    false
 )
 htmlTest.innerHTML += '</div>';
 
