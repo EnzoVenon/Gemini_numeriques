@@ -1,4 +1,4 @@
-import * as  Papa from '../../node_modules/papaparse/papaparse'
+import * as  Papa from '../../../node_modules/papaparse/papaparse'
 
 export async function importCsvFile(csvFile) {
     // '../data/shp/prg/data_bdnb.csv'
@@ -14,6 +14,5 @@ export async function importCsvFile(csvFile) {
             });
         });
     }
-
     return await parseFile()
 }

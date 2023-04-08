@@ -1,20 +1,20 @@
 
 // ----------------- Imports ----------------- //
-import { update/*, buildingLayer */ } from "./models/building";
-import { addOrthoLayer } from "./models/ortho";
-import { addElevationLayer } from "./models/elevation";
-import { addShp } from "./models/addShpLayer"
-import { addSpecificBuilings } from "./models/extrudedBat"
-import { importCsvFile } from "./models/readCsv"
-import { addChart } from "./models/insee/showChart"
-import * as contenuOnglet from "./models/contenuOnglets"
-import { getBdnbInfo } from "./models/extractBdnbInfo"
+import { update/*, buildingLayer */ } from "./js/models/building";
+import { addOrthoLayer } from "./js/models/ortho";
+import { addElevationLayer } from "./js/models/elevation";
+import { addShp } from "./js/models/addShpLayer"
+import { addSpecificBuilings } from "./js/models/extrudedBat"
+import { importCsvFile } from "./js/models/readCsv"
+import { addChart } from "./js/models/insee/showChart"
+import * as contenuOnglet from "./js/models/contenuOnglets"
+import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
-import { widgetNavigation } from "./jsItown/widgetNavigation"
-import { getBdtopoInfo } from "./models/getBdtopoInfo"
-import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
-import { loadDataFromShp, loadBufferDataFromShp } from "./models/loadDataFromShp"
-
+import { widgetNavigation } from "./js/jsItown/widgetNavigation"
+import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
+import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
+import { loadDataFromShp, loadBufferDataFromShp } from "./js/models/loadDataFromShp"
+import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
 import * as shp from "shpjs"
 
 // import * as mapshp from "leaflet-omnivore"
@@ -437,42 +437,8 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 
 function colorBuildings(properties) {
-    // console.log(uniquecol)
-
-    // console.log(properties.code_iris)
-
     let color = uniquecol[properties.code_iris];
     console.log(color)
     // console.log(color)
-
     return color;
 }
-
-
-function generateUniqueColors(values) {
-    const uniqueValues = [...new Set(values)]; // récupère les valeurs uniques
-    const colors = {};
-
-    // génère une couleur unique pour chaque valeur unique
-    for (let i = 0; i < uniqueValues.length; i++) {
-        // const hue = i * (360 / uniqueValues.length); // calcule la teinte (couleur de base)
-        // const saturation = 75; // définit la saturation (intensité de la couleur)
-        // const lightness = 50; // définit la luminosité (clarté de la couleur)
-
-        // const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`; // crée la couleur en HSL
-
-        colors[uniqueValues[i]] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-    } // ajoute la valeur et la couleur dans la liste
-
-
-    return colors
-}
-
-
-
-
-//for the shapefiles in the folder called 'files' with the name pandr.shp
-// shp("https://github.com/EnzoVenon/Gemini_numeriques/tree/dev/data/shp/prg/bdnb_perigeux8").then(function (geojson) {
-//     //do something with your geojson
-//     console.log(geojson)
-// });
