@@ -13,6 +13,7 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
+import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
