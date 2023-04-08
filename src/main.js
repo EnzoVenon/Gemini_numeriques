@@ -294,13 +294,13 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
             console.log(geojson)
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "USAGE_1", ramdoId, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId
+            batInorandomId.bdtopo_radom_id = ramdoId
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.bdnb_random_id)
+        view.removeLayer(batInorandomId.bdtopo_radom_id)
     }
 
 })
@@ -311,7 +311,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         loadBufferDataFromShp(paths.bdtopo).then(geojson => {
             geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId2
+            batInorandomId.bdtopo_radom_id = ramdoId2
         })
     }
 
