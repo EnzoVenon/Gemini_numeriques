@@ -38,8 +38,9 @@
   "dependencies": {
     "@turf/turf": "^6.5.0",
     "bootstrap": "^5.3.0-alpha2",
+    "bootstrap-icons": "^1.10.4",
     "itowns": "^2.39.0",
-    "leaflet-omnivore": "^0.3.4",
+    "leaflet-omnivore": "^0.3.0",
     "mapshaper": "^0.6.25",
     "shapefile": "^0.6.6",
     "shpjs": "^4.0.2 "

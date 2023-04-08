@@ -92,5 +92,11 @@ p {
 #explorationPanel {
     position: absolute;
     top: 150px;
-    left: 70%;
+    left: 80%;
+    background-color: #cadd84e5;
+    width: max-content
+}
+
+.card-body {
+    background-color: antiquewhite;
 }
