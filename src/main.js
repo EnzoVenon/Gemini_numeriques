@@ -269,11 +269,13 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
 })
 document.getElementById("showInnondationLayer").click()
+let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
+let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
-        loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        bdnbPromisedJson.then(geojson => {
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
@@ -290,10 +292,10 @@ document.getElementById("exploredata").addEventListener("change", () => {
 document.getElementById("exploredataIgn").addEventListener("change", () => {
     console.log(document.getElementById("exploredataIgn").checked)
     if (document.getElementById("exploredataIgn").checked) {
-        loadBufferDataFromShp(paths.bdtopo).then(geojson => {
+        bdtopoPromisedJson.then(geojson => {
             console.log(geojson)
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "USAGE_1", ramdoId, false, view, THREE)
+            geosjontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
             batInorandomId.bdtopo_radom_id = ramdoId
         }
         )
@@ -305,11 +307,18 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
 
 })
 document.getElementById("confirmExporation").addEventListener("click", () => {
+
+    Object.values(batInorandomId).forEach(val => {
+        if (val != "") {
+            view.removeLayer(val)
+        }
+    })
+
     const selectPropValue = document.getElementById('selectProp').value;
     const ign = document.getElementById("exploredataIgn").checked;
     if (ign) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-        loadBufferDataFromShp(paths.bdtopo).then(geojson => {
+        bdtopoPromisedJson.then(geojson => {
             geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.bdtopo_radom_id = ramdoId2
         })
@@ -318,7 +327,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     const bdnb = document.getElementById("exploredata").checked;
     if (bdnb) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-        loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        bdnbPromisedJson.then(geojson => {
             geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
         })
@@ -326,5 +335,4 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
 
 
 })
-
 
