@@ -36,7 +36,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
   }
 
   // Récupérer les valeurs uniques de la propriété "type"
-  uniquePropValues = geojson.features.reduce((acc, feature) => {
+  let uniquePropValues = geojson.features.reduce((acc, feature) => {
     const propfilter = feature.properties[selectOption];
     if (!acc.includes(propfilter)) {
       acc.push(propfilter);
