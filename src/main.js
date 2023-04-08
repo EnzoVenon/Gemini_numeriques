@@ -261,6 +261,7 @@ document.getElementById("showCadastreLayer").addEventListener("change", () => {
 
 let path = "../data/shp/prg/bat_innondable"
 let list = loadDataFromShp(path)
+let selectedPoropo = ""
 
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
     console.log(document.getElementById("showInnondationLayer").checked)
@@ -327,33 +328,6 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 document.getElementById("showInnondationLayer").click()
 
 let path2 = "../data/shp/prg/bdnb_perigeux8"
-// let list2 = loadDataFromShp(path2)
-// let list3 = loadBufferDataFromShp(path2)
-
-console.log(shp)
-
-
-// then(buffers => {
-//     console.log(buffers)
-
-//     const shpBuffer = buffers[0];
-//     const dbfBuffer = buffers[1];
-//     const records = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-// })
-
-
-// Promise.all(list3).then(([shpBuffer, dbfBuffer]) => {
-//     let a = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-//     console.log(a)
-// })
-
-// fetch('../data/shp/prg/data.zip')
-//     .then(response => response.arrayBuffer())
-//     .then(buffer => shp.parseZip(buffer)
-//         // Do something with the GeoJSON object
-//     ).then(geo => console.log(geo))
-//     .catch(err => console.error(err));
-
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
@@ -364,21 +338,49 @@ document.getElementById("exploredata").addEventListener("change", () => {
             const shpBuffer = buffers[0];
             const dbfBuffer = buffers[1];
             const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-            //    console.log(shp)
+            // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
+            // obtenir un tableau des noms de propriétés
+            const propNames = geojson.features.reduce((acc, feature) => {
+                return acc.concat(Object.keys(feature.properties));
+            }, []);
 
-            //             // Générer un GeoJSON à partir des features et des propriétés
-            //             const geojson = shp.parseSync(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
+            // créer un tableau des clés uniques
+            const uniquePropNames = propNames.reduce((acc, propName) => {
+                if (!acc.includes(propName)) {
+                    acc.push(propName);
+                }
+                return acc;
+            }, []);
+
+            console.log(uniquePropNames)
+
+            // Récupération de l'élément HTML de sélection
+            const selectElement = document.getElementById('selectProp');
+            document.getElementById('selectProp').innerHTML = "";
+
+            // Boucle pour ajouter chaque valeur à la sélection
+            uniquePropNames.forEach(value => {
+                // Création d'un élément d'option
+                const option = document.createElement('option');
+                // Ajout de la valeur de l'option
+                option.text = value;
+                // Ajout de la valeur de l'option en tant que valeur d'attribut
+                option.value = value;
+                // Ajout de l'option à l'élément de sélection
+                selectElement.add(option);
+            });
 
 
 
-            // Utiliser le GeoJSON
             console.log(geojson);
+
+            selectedPoropo = "code_iris";
 
             // Récupérer les valeurs uniques de la propriété "type"
             uniqueTypes = geojson.features.reduce((acc, feature) => {
-                const code_iris = feature.properties.code_iris;
-                if (!acc.includes(code_iris)) {
-                    acc.push(code_iris);
+                const propfilter = feature.properties[selectedPoropo];
+                if (!acc.includes(propfilter)) {
+                    acc.push(propfilter);
                 }
                 return acc;
             }, []);
@@ -428,7 +430,6 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
     }
     else {
-        batInorandomId
         view.removeLayer(batInorandomId2[0])
         batInorandomId2 = []
     }
@@ -437,8 +438,83 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 
 function colorBuildings(properties) {
-    let color = uniquecol[properties.code_iris];
-    console.log(color)
+    let color = uniquecol[properties[selectedPoropo]];
+    // console.log(color)
     // console.log(color)
     return color;
 }
+document.getElementById("confirmExporation").addEventListener("click", () => {
+    const selectElement = document.getElementById('selectProp');
+
+    console.log(selectElement.value)
+
+    selectedPoropo = selectElement.value;
+
+    loadBufferDataFromShp(path2).then(buffers => {
+        console.log(buffers)
+
+        const shpBuffer = buffers[0];
+        const dbfBuffer = buffers[1];
+        const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+
+        console.log(geojson);
+
+        // Récupérer les valeurs uniques de la propriété "type"
+        uniqueTypes = geojson.features.reduce((acc, feature) => {
+            const prop = feature.properties[selectElement.value];
+            if (!acc.includes(prop)) {
+                acc.push(prop);
+            }
+            return acc;
+        }, []);
+
+        uniquecol = generateUniqueColors(uniqueTypes)
+
+        console.log(uniquecol)
+
+        console.log(uniquecol); // Output: ["A", "B"]
+
+
+        let src2 = new itowns.FileSource({
+            fetchedData: geojson,
+            crs: 'EPSG:4326',
+            format: 'application/json',
+        })
+        // console.log(result.value.geometry.coordinates[0])
+        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+
+        view.removeLayer(batInorandomId2[0])
+        batInorandomId2 = []
+
+        batInorandomId2.push(ramdoId2)
+
+
+
+        let bat = new itowns.FeatureGeometryLayer(ramdoId2, {
+            source: src2,
+            transparent: true,
+            opacity: 0.7,
+            zoom: { min: 0 },
+            style: new itowns.Style({
+                fill: {
+                    color: colorBuildings,
+                    extrusion_height: 100,
+                    base_altitude: 20
+                }
+            }),
+            onMeshCreated: (mesh) => {
+                console.log(mesh.children[0].children[0].children[0].children[0])
+                let object = mesh.children[0].children[0].children[0].children[0]
+                var objectEdges = new THREE.LineSegments(
+                    new THREE.EdgesGeometry(object.geometry),
+                    new THREE.LineBasicMaterial({ color: 'black' })
+                );
+
+                object.add(objectEdges);
+            }
+        });
+        view.addLayer(bat)
+
+    })
+
+})
