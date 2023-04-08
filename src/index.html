@@ -20,6 +20,10 @@
         integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
         crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+
+
+
     <script scr="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
 
 
@@ -292,21 +296,36 @@
 
         <div class="card text-center" id="explorationPanel">
             <div class="card-header">
-                Featured
+                quickExpolration
             </div>
             <div class="card-body">
-                <h5 class="card-title">Explorer les données bdnb</h5>
+                <h5 class="card-title">Explorer les données</h5>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="exploredata">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled"></label>
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Bdnb <i
+                            class="bi bi-info-circle"></i></label>
                 </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="exploredata">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="exploredata">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="exploredata">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+
                 <p> propriété dipsonible</p>
 
                 <select class="form-select" aria-label="Default select example" id="selectProp">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option selected>Choisir un couche</option>
                 </select>
             </div>
             <div class="card-footer text-body-secondary" id="confirmExporation">
