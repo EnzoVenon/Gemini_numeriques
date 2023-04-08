@@ -15,7 +15,6 @@ import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
 import { loadDataFromShp, loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
-import * as shp from "shpjs"
 
 // les constantes et variable globales
 const THREE = itowns.THREE
