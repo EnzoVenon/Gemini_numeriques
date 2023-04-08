@@ -1,6 +1,6 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 
-export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption, randomId, view, THREE) {
+export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption, randomId, uniqueColor, view, THREE, uniquecolvalue = "red") {
   // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
   // obtenir un tableau des noms de propriétés
   const propNames = geojson.features.reduce((acc, feature) => {
@@ -62,10 +62,16 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
     style: new itowns.Style({
       fill: {
         color: (properties) => {
-          let color = uniquecol[properties[selectOption]];
-          // console.log(color)
-          // console.log(color)
-          return color
+          if (uniqueColor) {
+            return uniquecolvalue
+          }
+          else {
+            let color = uniquecol[properties[selectOption]];
+            // console.log(color)
+            // console.log(color)
+            return color
+          }
+
         }
         ,
         extrusion_height: 100,
