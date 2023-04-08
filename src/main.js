@@ -17,7 +17,7 @@ import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -25,8 +25,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = []
-let batInorandomId2 = []
+let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "" }
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -261,14 +260,12 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
         let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
             geosjontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
-            batInorandomId.push(ramdoId)
+            batInorandomId.ino_random_id = ramdoId
         })
 
     }
     else {
-        view.removeLayer("inno")
-        view.removeLayer(batInorandomId[0])
-        batInorandomId = []
+        view.removeLayer(batInorandomId.ino_random_id)
     }
 })
 document.getElementById("showInnondationLayer").click()
@@ -279,23 +276,55 @@ document.getElementById("exploredata").addEventListener("change", () => {
         loadBufferDataFromShp(paths.bdnb).then(geojson => {
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, false, view, THREE)
-            batInorandomId2.push(ramdoId2)
+            batInorandomId.bdnb_random_id = ramdoId2
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId2[0])
-        batInorandomId2 = []
+        view.removeLayer(batInorandomId.bdnb_random_id)
+    }
+
+})
+
+document.getElementById("exploredataIgn").addEventListener("change", () => {
+    console.log(document.getElementById("exploredataIgn").checked)
+    if (document.getElementById("exploredataIgn").checked) {
+        loadBufferDataFromShp(paths.bdtopo).then(geojson => {
+            console.log(geojson)
+            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+            geosjontToFeatureGeom(geojson, true, "USAGE_1", ramdoId, false, view, THREE)
+            batInorandomId.bdnb_random_id = ramdoId
+        }
+        )
+
+    }
+    else {
+        view.removeLayer(batInorandomId.bdnb_random_id)
     }
 
 })
 document.getElementById("confirmExporation").addEventListener("click", () => {
     const selectPropValue = document.getElementById('selectProp').value;
-    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-    loadBufferDataFromShp(paths.bdnb).then(geojson => {
-        geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-        batInorandomId2.push(ramdoId2)
-    })
+    const ign = document.getElementById("exploredataIgn").checked;
+    if (ign) {
+        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        loadBufferDataFromShp(paths.bdtopo).then(geojson => {
+            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            batInorandomId.bdnb_random_id = ramdoId2
+        })
+    }
+
+    const bdnb = document.getElementById("exploredata").checked;
+    if (bdnb) {
+        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        loadBufferDataFromShp(paths.bdnb).then(geojson => {
+            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            batInorandomId.bdnb_random_id = ramdoId2
+        })
+    }
+
 
 })
+
+
