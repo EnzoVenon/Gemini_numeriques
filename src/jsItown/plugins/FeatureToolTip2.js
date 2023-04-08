@@ -64,6 +64,7 @@ var FeatureToolTip = (function _() {
             }
             tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
         }
+        tooltip.innerHTML = "";
 
         if (tooltip.innerHTML != '') {
             tooltip.style.display = 'block';
@@ -103,49 +104,7 @@ var FeatureToolTip = (function _() {
             var context = { globals: {}, properties: getGeometryProperties(geometry) };
             style = style.drawingStylefromContext(context);
 
-            content += '<div class="tab">'
-            content += '<input type="radio" name="css-tabs" id="' + layer.id + '" class="tab-switch" checked>'
-            content += '<label for="' + layer.id + '" class="tab-label">'
-
-            if (geometry.properties) {
-
-                content += (geometry.properties.name || geometry.properties.nom || geometry.properties.description || layer.name || layer.id || '');
-                content += '</label>';
-            }
-
-            if (feature.type === itowns.FEATURE_TYPES.POINT) {
-                content += '<br/><span class="coord">long ' + feature.coordinates[0].toFixed(4) + '</span>';
-                content += '<br/><span class="coord">lat ' + feature.coordinates[1].toFixed(4) + '</span>';
-            }
-
-            if (geometry.properties && !options.filterAllProperties) {
-                if (options.format) {
-                    for (prop in geometry.properties) {
-                        if (!options.filterProperties.includes(prop)) {
-                            content += options.format(prop, geometry.properties[prop]) || '';
-
-                        }
-                    }
-                } else {
-                    content += '<div class="tab-content">'
-                    content += '<ul>';
-                    for (prop in geometry.properties) {
-                        if (!options.filterProperties.includes(prop)) {
-                            content += '<li>' + prop + ': ' + geometry.properties[prop] + '</li>';
-                        }
-                    }
-
-                    if (content.endsWith('<ul>')) {
-                        content = content.replace('<ul>', '');
-                    } else {
-                        content += '</ul>';
-                        content += '</div>'
-                    }
-                }
-            }
-
-            content += '</div>';
-            content += '</div>';
+            content = ''
         }
 
 
