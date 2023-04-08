@@ -261,6 +261,7 @@ document.getElementById("showCadastreLayer").addEventListener("change", () => {
 
 let path = "../data/shp/prg/bat_innondable"
 let list = loadDataFromShp(path)
+let selectedPoropo = ""
 
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
     console.log(document.getElementById("showInnondationLayer").checked)
@@ -373,11 +374,13 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
             console.log(geojson);
 
+            selectedPoropo = "code_iris";
+
             // Récupérer les valeurs uniques de la propriété "type"
             uniqueTypes = geojson.features.reduce((acc, feature) => {
-                const code_iris = feature.properties.code_iris;
-                if (!acc.includes(code_iris)) {
-                    acc.push(code_iris);
+                const propfilter = feature.properties[selectedPoropo];
+                if (!acc.includes(propfilter)) {
+                    acc.push(propfilter);
                 }
                 return acc;
             }, []);
@@ -427,7 +430,6 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
     }
     else {
-        batInorandomId
         view.removeLayer(batInorandomId2[0])
         batInorandomId2 = []
     }
@@ -436,7 +438,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 
 function colorBuildings(properties) {
-    let color = uniquecol[properties.code_iris];
+    let color = uniquecol[properties[selectedPoropo]];
     // console.log(color)
     // console.log(color)
     return color;
@@ -446,58 +448,29 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
 
     console.log(selectElement.value)
 
+    selectedPoropo = selectElement.value;
+
     loadBufferDataFromShp(path2).then(buffers => {
         console.log(buffers)
 
         const shpBuffer = buffers[0];
         const dbfBuffer = buffers[1];
         const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-        // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
-        // obtenir un tableau des noms de propriétés
-        const propNames = geojson.features.reduce((acc, feature) => {
-            return acc.concat(Object.keys(feature.properties));
-        }, []);
-
-        // créer un tableau des clés uniques
-        const uniquePropNames = propNames.reduce((acc, propName) => {
-            if (!acc.includes(propName)) {
-                acc.push(propName);
-            }
-            return acc;
-        }, []);
-
-        console.log(uniquePropNames)
-
-        // Récupération de l'élément HTML de sélection
-        const selectElement = document.getElementById('selectProp');
-        document.getElementById('selectProp').innerHTML = "";
-
-        // Boucle pour ajouter chaque valeur à la sélection
-        uniquePropNames.forEach(value => {
-            // Création d'un élément d'option
-            const option = document.createElement('option');
-            // Ajout de la valeur de l'option
-            option.text = value;
-            // Ajout de la valeur de l'option en tant que valeur d'attribut
-            option.value = value;
-            // Ajout de l'option à l'élément de sélection
-            selectElement.add(option);
-        });
-
-
 
         console.log(geojson);
 
         // Récupérer les valeurs uniques de la propriété "type"
         uniqueTypes = geojson.features.reduce((acc, feature) => {
-            const code_iris = feature.properties.code_iris;
-            if (!acc.includes(code_iris)) {
-                acc.push(code_iris);
+            const prop = feature.properties[selectElement.value];
+            if (!acc.includes(prop)) {
+                acc.push(prop);
             }
             return acc;
         }, []);
 
         uniquecol = generateUniqueColors(uniqueTypes)
+
+        console.log(uniquecol)
 
         console.log(uniquecol); // Output: ["A", "B"]
 
@@ -510,7 +483,11 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         // console.log(result.value.geometry.coordinates[0])
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
 
+        view.removeLayer(batInorandomId2[0])
+        batInorandomId2 = []
+
         batInorandomId2.push(ramdoId2)
+
 
 
         let bat = new itowns.FeatureGeometryLayer(ramdoId2, {
