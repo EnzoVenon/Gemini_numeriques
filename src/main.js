@@ -25,7 +25,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "" }
+let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "" }
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -271,6 +271,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 document.getElementById("showInnondationLayer").click()
 let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
+let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
@@ -306,6 +307,26 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
     }
 
 })
+
+document.getElementById("exploredataOsm").addEventListener("change", () => {
+    console.log(document.getElementById("exploredataOsm").checked)
+    if (document.getElementById("exploredataOsm").checked) {
+        osmPromisedJson.then(geojson => {
+            console.log(geojson)
+            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+            geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
+            batInorandomId.osm_random_id = ramdoId
+        }
+        )
+
+    }
+    else {
+        view.removeLayer(batInorandomId.osm_random_id)
+    }
+
+})
+
+
 document.getElementById("confirmExporation").addEventListener("click", () => {
 
     Object.values(batInorandomId).forEach(val => {
@@ -332,6 +353,17 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
             batInorandomId.bdnb_random_id = ramdoId2
         })
     }
+
+
+    const osm = document.getElementById("exploredataOsm").checked;
+    if (osm) {
+        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        osmPromisedJson.then(geojson => {
+            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            batInorandomId.osm_random_id = ramdoId2
+        })
+    }
+
 
 
 })
