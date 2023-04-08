@@ -1,19 +1,19 @@
 
 // ----------------- Imports ----------------- //
-import { update/*, buildingLayer */ } from "./models/building";
-import { addOrthoLayer } from "./models/ortho";
-import { addElevationLayer } from "./models/elevation";
-import { addShp } from "./models/addShpLayer"
-import { addSpecificBuilings } from "./models/extrudedBat"
-import { importCsvFile } from "./models/readCsv"
-import { addChart } from "./models/insee/showChart"
-import * as contenuOnglet from "./models/contenuOnglets"
-import { getBdnbInfo } from "./models/extractBdnbInfo"
+import { update/*, buildingLayer */ } from "./js/models/building";
+import { addOrthoLayer } from "./js/models/ortho";
+import { addElevationLayer } from "./js/models/elevation";
+import { addShp } from "./js/models/addShpLayer"
+import { addSpecificBuilings } from "./js/models/extrudedBat"
+import { importCsvFile } from "./js/models/readCsv"
+import { addChart } from "./js/models/insee/showChart"
+import * as contenuOnglet from "./js/models/contenuOnglets"
+import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
-import { getBdtopoInfo } from "./models/getBdtopoInfo"
-import { bdnbinfoToHtml } from "./models/bdnbinfoToHtml"
-import { loadDataFromShp, loadBufferDataFromShp } from "./models/loadDataFromShp"
+import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
+import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
+import { loadDataFromShp, loadBufferDataFromShp } from "./js/models/loadDataFromShp"
 import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
 import * as shp from "shpjs"
 

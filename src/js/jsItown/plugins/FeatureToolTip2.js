@@ -62,7 +62,7 @@ var FeatureToolTip = (function _() {
             if (typeof layer.options.filterGeometries == 'function') {
                 features[layerId] = layer.options.filterGeometries(features[layerId], layer.layer) || [];
             }
-            tooltip.innerHTML += fillToolTip(features[layerId], layer.layer, layer.options);
+            tooltip.innerHTML += fillToolTip(features[layerId], layer.layer);
         }
         tooltip.innerHTML = "";
 
@@ -81,13 +81,12 @@ var FeatureToolTip = (function _() {
     }
 
 
-    function fillToolTip(features, layer, options) {
+    function fillToolTip(features, layer) {
         var content = '';
 
         var feature;
         var geometry;
         var style;
-        var prop;
 
         console.log(features)
 
