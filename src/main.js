@@ -17,7 +17,7 @@ import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -25,7 +25,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "" }
+let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -272,6 +272,7 @@ document.getElementById("showInnondationLayer").click()
 let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
+let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
@@ -326,6 +327,25 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
 
 })
 
+document.getElementById("exploredataCadastre").addEventListener("change", () => {
+    console.log(document.getElementById("exploredataCadastre").checked)
+    if (document.getElementById("exploredataCadastre").checked) {
+        cadastrePromisedJson.then(geojson => {
+            console.log(geojson)
+            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+            geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
+            batInorandomId.cadastre_random_id = ramdoId
+        }
+        )
+
+    }
+    else {
+        view.removeLayer(batInorandomId.cadastre_random_id)
+    }
+
+})
+
+
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
 
@@ -364,7 +384,13 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         })
     }
 
-
-
+    const cad = document.getElementById("exploredataCadastre").checked;
+    if (cad) {
+        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        cadastrePromisedJson.then(geojson => {
+            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            batInorandomId.cadastre_random_id = ramdoId2
+        })
+    }
 })
 
