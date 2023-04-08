@@ -14,7 +14,6 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
 import { loadDataFromShp, loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
-import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
@@ -28,8 +27,6 @@ let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = []
 let batInorandomId2 = []
-let uniqueTypes;
-let uniquecol;
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -322,8 +319,6 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
 })
 document.getElementById("showInnondationLayer").click()
-
-let path2 = "../data/shp/prg/bdnb_perigeux8"
 
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
