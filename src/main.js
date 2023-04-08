@@ -13,12 +13,11 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
-import { loadDataFromShp, loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
-import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
+import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -28,8 +27,6 @@ let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = []
 let batInorandomId2 = []
-let uniqueTypes;
-let uniquecol;
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -256,63 +253,15 @@ document.getElementById("showCadastreLayer").addEventListener("change", () => {
 
 })
 
-let path = "../data/shp/prg/bat_innondable"
-let list = loadDataFromShp(path)
-let selectedPoropo = ""
-
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
     console.log(document.getElementById("showInnondationLayer").checked)
     if (document.getElementById("showInnondationLayer").checked) {
-        addShp("../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "inno", "black", "blue", view, false)
-        Promise.all(list).then(([geom, att]) => {
-            // Générer un GeoJSON à partir des features et des propriétés
-            const geojson = {
-                type: 'FeatureCollection',
-                features: geom.map((feature) => ({
-                    type: 'Feature',
-                    geometry: feature,
-                    properties: att[att.id]
-                }))
-            };
+        addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
-            // Utiliser le GeoJSON
-            console.log(geojson);
-
-            let src2 = new itowns.FileSource({
-                fetchedData: geojson,
-                crs: 'EPSG:4326',
-                format: 'application/json',
-            })
-            // console.log(result.value.geometry.coordinates[0])
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-
+        let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
+            geosjontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
             batInorandomId.push(ramdoId)
-
-
-            let bat = new itowns.FeatureGeometryLayer(ramdoId, {
-                source: src2,
-                transparent: true,
-                opacity: 0.7,
-                zoom: { min: 0 },
-                style: new itowns.Style({
-                    fill: {
-                        color: "red",
-                        extrusion_height: 100,
-                        base_altitude: 20
-                    }
-                }),
-                onMeshCreated: (mesh) => {
-                    console.log(mesh.children[0].children[0].children[0].children[0])
-                    let object = mesh.children[0].children[0].children[0].children[0]
-                    var objectEdges = new THREE.LineSegments(
-                        new THREE.EdgesGeometry(object.geometry),
-                        new THREE.LineBasicMaterial({ color: 'black' })
-                    );
-
-                    object.add(objectEdges);
-                }
-            });
-            view.addLayer(bat)
         })
 
     }
@@ -324,20 +273,14 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 })
 document.getElementById("showInnondationLayer").click()
 
-let path2 = "../data/shp/prg/bdnb_perigeux8"
-
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
         loadBufferDataFromShp(paths.bdnb).then(geojson => {
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-
-            geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, view, THREE)
+            geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, false, view, THREE)
             batInorandomId2.push(ramdoId2)
-
         }
-
-
         )
 
     }
@@ -347,80 +290,12 @@ document.getElementById("exploredata").addEventListener("change", () => {
     }
 
 })
-
-
-function colorBuildings(properties) {
-    let color = uniquecol[properties[selectedPoropo]];
-    // console.log(color)
-    // console.log(color)
-    return color;
-}
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    const selectElement = document.getElementById('selectProp');
-
-    console.log(selectElement.value)
-
-    selectedPoropo = selectElement.value;
-
-    loadBufferDataFromShp(path2).then(geojson => {
-        console.log(geojson);
-
-        // Récupérer les valeurs uniques de la propriété "type"
-        uniqueTypes = geojson.features.reduce((acc, feature) => {
-            const prop = feature.properties[selectElement.value];
-            if (!acc.includes(prop)) {
-                acc.push(prop);
-            }
-            return acc;
-        }, []);
-
-        uniquecol = generateUniqueColors(uniqueTypes)
-
-        console.log(uniquecol)
-
-        console.log(uniquecol); // Output: ["A", "B"]
-
-
-        let src2 = new itowns.FileSource({
-            fetchedData: geojson,
-            crs: 'EPSG:4326',
-            format: 'application/json',
-        })
-        // console.log(result.value.geometry.coordinates[0])
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-
-        view.removeLayer(batInorandomId2[0])
-        batInorandomId2 = []
-
+    const selectPropValue = document.getElementById('selectProp').value;
+    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
         batInorandomId2.push(ramdoId2)
-
-
-
-        let bat = new itowns.FeatureGeometryLayer(ramdoId2, {
-            source: src2,
-            transparent: true,
-            opacity: 0.7,
-            zoom: { min: 0 },
-            style: new itowns.Style({
-                fill: {
-                    color: colorBuildings,
-                    extrusion_height: 100,
-                    base_altitude: 20
-                }
-            }),
-            onMeshCreated: (mesh) => {
-                console.log(mesh.children[0].children[0].children[0].children[0])
-                let object = mesh.children[0].children[0].children[0].children[0]
-                var objectEdges = new THREE.LineSegments(
-                    new THREE.EdgesGeometry(object.geometry),
-                    new THREE.LineBasicMaterial({ color: 'black' })
-                );
-
-                object.add(objectEdges);
-            }
-        });
-        view.addLayer(bat)
-
     })
 
 })
