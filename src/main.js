@@ -15,7 +15,7 @@ import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
 import { loadDataFromShp, loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
-
+import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
 const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8" }
@@ -330,95 +330,15 @@ document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
         loadBufferDataFromShp(paths.bdnb).then(geojson => {
-            // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
-            // obtenir un tableau des noms de propriétés
-            const propNames = geojson.features.reduce((acc, feature) => {
-                return acc.concat(Object.keys(feature.properties));
-            }, []);
-
-            // créer un tableau des clés uniques
-            const uniquePropNames = propNames.reduce((acc, propName) => {
-                if (!acc.includes(propName)) {
-                    acc.push(propName);
-                }
-                return acc;
-            }, []);
-
-            console.log(uniquePropNames)
-
-            // Récupération de l'élément HTML de sélection
-            const selectElement = document.getElementById('selectProp');
-            document.getElementById('selectProp').innerHTML = "";
-
-            // Boucle pour ajouter chaque valeur à la sélection
-            uniquePropNames.forEach(value => {
-                // Création d'un élément d'option
-                const option = document.createElement('option');
-                // Ajout de la valeur de l'option
-                option.text = value;
-                // Ajout de la valeur de l'option en tant que valeur d'attribut
-                option.value = value;
-                // Ajout de l'option à l'élément de sélection
-                selectElement.add(option);
-            });
-
-
-
-            console.log(geojson);
-
-            selectedPoropo = "code_iris";
-
-            // Récupérer les valeurs uniques de la propriété "type"
-            uniqueTypes = geojson.features.reduce((acc, feature) => {
-                const propfilter = feature.properties[selectedPoropo];
-                if (!acc.includes(propfilter)) {
-                    acc.push(propfilter);
-                }
-                return acc;
-            }, []);
-
-            uniquecol = generateUniqueColors(uniqueTypes)
-
-            console.log(uniquecol); // Output: ["A", "B"]
-
-
-            let src2 = new itowns.FileSource({
-                fetchedData: geojson,
-                crs: 'EPSG:4326',
-                format: 'application/json',
-            })
-            // console.log(result.value.geometry.coordinates[0])
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
 
+            geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, view, THREE)
             batInorandomId2.push(ramdoId2)
 
+        }
 
-            let bat = new itowns.FeatureGeometryLayer(ramdoId2, {
-                source: src2,
-                transparent: true,
-                opacity: 0.7,
-                zoom: { min: 0 },
-                style: new itowns.Style({
-                    fill: {
-                        color: colorBuildings,
-                        extrusion_height: 100,
-                        base_altitude: 20
-                    }
-                }),
-                onMeshCreated: (mesh) => {
-                    console.log(mesh.children[0].children[0].children[0].children[0])
-                    let object = mesh.children[0].children[0].children[0].children[0]
-                    var objectEdges = new THREE.LineSegments(
-                        new THREE.EdgesGeometry(object.geometry),
-                        new THREE.LineBasicMaterial({ color: 'black' })
-                    );
 
-                    object.add(objectEdges);
-                }
-            });
-            view.addLayer(bat)
-
-        })
+        )
 
     }
     else {
