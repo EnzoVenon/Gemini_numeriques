@@ -13,15 +13,12 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
-import { loadDataFromShp, loadBufferDataFromShp } from "./js/models/loadDataFromShp"
+import { loadDataFromShp, loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { generateUniqueColors } from "./js/utile/generaRandomColorFromList"
-import * as shp from "shpjs"
 
-// import * as mapshp from "leaflet-omnivore"
-
-
-//global var 
+// les constantes et variable globales
 const THREE = itowns.THREE
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/bdnb_perigeux8" }
 // console.log(turf)
 let bat = document.createElement('div');
 bat.className = 'bat';
@@ -332,12 +329,7 @@ let path2 = "../data/shp/prg/bdnb_perigeux8"
 document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
-        loadBufferDataFromShp(path2).then(buffers => {
-            console.log(buffers)
-
-            const shpBuffer = buffers[0];
-            const dbfBuffer = buffers[1];
-            const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
+        loadBufferDataFromShp(paths.bdnb).then(geojson => {
             // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
             // obtenir un tableau des noms de propriétés
             const propNames = geojson.features.reduce((acc, feature) => {
@@ -450,13 +442,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
 
     selectedPoropo = selectElement.value;
 
-    loadBufferDataFromShp(path2).then(buffers => {
-        console.log(buffers)
-
-        const shpBuffer = buffers[0];
-        const dbfBuffer = buffers[1];
-        const geojson = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)]);
-
+    loadBufferDataFromShp(path2).then(geojson => {
         console.log(geojson);
 
         // Récupérer les valeurs uniques de la propriété "type"

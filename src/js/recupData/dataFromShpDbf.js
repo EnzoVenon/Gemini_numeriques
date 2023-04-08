@@ -45,9 +45,6 @@ export function loadDataFromShp(path) {
 
 export function loadBufferDataFromShp(path) {
 
-  console.log("itown")
-
-
   let promise = itowns.Fetcher.multiple(
     path,
     {
@@ -64,25 +61,12 @@ export function loadBufferDataFromShp(path) {
       fetched.shp,
       fetched.dbf
     ])
+  }).then(buffers => {
+    const shpBuffer = buffers[0];
+    const dbfBuffer = buffers[1];
+    const geojsonPromise = shp.combine([shp.parseShp(shpBuffer, /*optional prj str*/), shp.parseDbf(dbfBuffer)])
+    return geojsonPromise
   })
-
-
-  // console.log("tes")
-  // let promise = Promise.all([
-  //   fetch(path + '.shp'),
-  //   fetch(path + '.dbf')
-  // ]).then(responses => {
-  //   console.log(responses)
-  //   return Promise.all([
-  //     responses[0].arrayBuffer(),
-  //     responses[1].arrayBuffer()
-  //   ])
-  // })
-
-
 
   return promise
 }
-
-
-
