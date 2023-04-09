@@ -295,61 +295,92 @@
 
 
         <div class="card text-center" id="explorationPanel">
+
+
             <div class="card-header">
-                quickExpolration
+                quickExploration
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Explorer les données</h5>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredata">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">Bdnb <i
-                            class="bi bi-info-circle"></i></label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataIgn">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
-                            class="bi bi-info-circle"></i></label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataOsm">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
-                            class="bi bi-info-circle"></i></label>
+
+
+            <div id="carouselExampleIndicators" class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="card-body">
+                            <h5 class="card-title">Explorer les données</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                                    id="exploredata">
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">Bdnb <i
+                                        class="bi bi-info-circle"></i></label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                                    id="exploredataIgn">
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
+                                        class="bi bi-info-circle"></i></label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                                    id="exploredataOsm">
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
+                                        class="bi bi-info-circle"></i></label>
+                            </div>
+
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                                    id="exploredataCadastre">
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
+                                        class="bi bi-info-circle"></i></label>
+                            </div>
+
+                            <p> propriété dipsonible</p>
+
+                            <select class="form-select" aria-label="Default select example" id="selectProp">
+                                <option selected>Choisir un couche</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="carousel-item">
+                        <p> test</p>
+
+                    </div>
                 </div>
 
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                        id="exploredataCadastre">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
-                            class="bi bi-info-circle"></i></label>
-                </div>
 
-                <p> propriété dipsonible</p>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
 
-                <select class="form-select" aria-label="Default select example" id="selectProp">
-                    <option selected>Choisir un couche</option>
-                </select>
+
             </div>
+
             <div class="card-footer text-body-secondary" id="confirmExporation">
                 <button class="btn btn-primary">afficher</button>
             </div>
+
+
         </div>
 
+        <script src="./js/jsItown/plugins/FeatureToolTip2.js"></script>
+        <script src="./js/GUI/GuiTools.js"></script>
+        <script src="../node_modules/itowns/dist/itowns.js"></script>
+        <script src="../node_modules/shapefile/dist/shapefile.js"></script>
+        <script src="../node_modules/itowns/dist/debug.js"></script>
+        <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
+        <script src="../node_modules/shpjs/dist/shp.js"></script>
 
-    </div>
+        <script src="./js/GUI/LoadingScreen.js"></script>
 
-
-    <script src="./js/jsItown/plugins/FeatureToolTip2.js"></script>
-    <script src="./js/GUI/GuiTools.js"></script>
-    <script src="../node_modules/itowns/dist/itowns.js"></script>
-    <script src="../node_modules/shapefile/dist/shapefile.js"></script>
-    <script src="../node_modules/itowns/dist/debug.js"></script>
-    <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
-    <script src="../node_modules/shpjs/dist/shp.js"></script>
-
-    <script src="./js/GUI/LoadingScreen.js"></script>
-
-
-    <script type="module" src="./main.js"></script>
+        <script type="module" src="./main.js"></script>
 
 
 

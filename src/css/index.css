@@ -94,9 +94,10 @@ p {
     top: 150px;
     left: 80%;
     background-color: #cadd84e5;
-    width: max-content
+    width: 15%;
 }
 
 .card-body {
-    background-color: antiquewhite;
+    background-color: rgba(248, 250, 215, 0.644);
+    margin: 35px;
 }
