@@ -14,7 +14,7 @@ export async function addShp(filePath, layerName, oulineColor, fillColor, view, 
         // Once our Shapefile data is fetched, we can parse it by running itowns built-in Shapefile parser.
         // console.log(fetched)
 
-        const features = shp.parseShp(fetched.shp);
+        // const features = shp.parseShp(fetched.shp);
 
         // console.log(features)
 
