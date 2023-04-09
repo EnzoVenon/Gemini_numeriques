@@ -14,7 +14,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
     return acc;
   }, []);
 
-  console.log(uniquePropNames)
+  // console.log(uniquePropNames)
 
   if (updateSlectOptions) {
     // Récupération de l'élément HTML de sélection
@@ -46,7 +46,24 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   let uniquecol = generateUniqueColors(uniquePropValues)
 
-  console.log(uniquecol)
+  // console.log(uniquecol)
+
+  let newFeatures = geojson.features.map(feature => {
+    return {
+      type: feature.type,
+      geometry: feature.geometry,
+      properties: {
+        nom: feature.properties[selectOption]
+      }
+    };
+  });
+  geojson = {
+    type: geojson.type,
+    features: newFeatures
+  };
+
+  // console.log(newgeo)
+
 
   let src = new itowns.FileSource({
     fetchedData: geojson,
@@ -66,8 +83,8 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
             return uniquecolvalue
           }
           else {
-            let color = uniquecol[properties[selectOption]];
-            // console.log(color)
+            let color = uniquecol[properties["nom"]];
+            // console.log(properties)
             // console.log(color)
             return color
           }

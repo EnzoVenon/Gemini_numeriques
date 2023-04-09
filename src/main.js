@@ -349,8 +349,9 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
 
-    Object.values(batInorandomId).forEach(val => {
-        if (val != "") {
+
+    Object.entries(batInorandomId).forEach(([key, val]) => {
+        if (key != "ino_random_id") {
             view.removeLayer(val)
         }
     })

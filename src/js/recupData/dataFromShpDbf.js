@@ -8,11 +8,11 @@ export function loadDataFromShp(path) {
     })
     .then(function (buffer) {
       // Parser les données géométriques
-      console.log(buffer)
+      // console.log(buffer)
 
       const features = shp.parseShp(buffer);
 
-      console.log(features)
+      // console.log(features)
 
       // Récupérer les données du fichier .dbf en utilisant fetch
       return features;
@@ -26,7 +26,7 @@ export function loadDataFromShp(path) {
     .then(function (buffer) {
       // Parser les données attributaires
       const attributes = shp.parseDbf(buffer);
-      console.log(attributes)
+      // console.log(attributes)
 
       // Générer un tableau de propriétés pour chaque feature
       const properties = attributes.reduce((result, attribute) => {
@@ -35,7 +35,7 @@ export function loadDataFromShp(path) {
         return result
       }, {});
 
-      console.log(properties)
+      // console.log(properties)
 
       return properties
     })
@@ -55,7 +55,6 @@ export function loadBufferDataFromShp(path) {
     },
   ).then((fetched) => {
     // Once our Shapefile data is fetched, we can parse it by running itowns built-in Shapefile parser.
-    console.log(fetched)
 
     return Promise.all([
       fetched.shp,
