@@ -1,5 +1,4 @@
 
-import * as shp from "shpjs"
 
 export async function addShp(filePath, layerName, oulineColor, fillColor, view, tooltipAvailable) {
     await itowns.Fetcher.multiple(
