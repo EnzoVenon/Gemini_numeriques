@@ -101,7 +101,12 @@ export default class Style {
             }
         } else {
             coloring = function (properties) {
-                //TODO
+                let color = new itowns.THREE.Color();
+                for (const key of Object.keys(this.classes_map)) {
+                    if (properties[this.field] == key) {
+                        return color.set(this.classes_map[key]);
+                    }
+                }
             }
         }
 
