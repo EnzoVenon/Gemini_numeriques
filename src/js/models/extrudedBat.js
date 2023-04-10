@@ -50,7 +50,17 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 fill: {
                                     color: "yellow",
                                     extrusion_height: height,
-                                    base_altitude: 20
+                                    base_altitude: (properties) => {
+                                        if (properties.altitude_s) {
+                                            return properties.altitude_s
+                                        }
+                                        else if (properties.Z_MIN_SOL) {
+                                            return properties.Z_MIN_SOL
+                                        }
+                                        else {
+                                            return 20
+                                        }
+                                    }
 
                                 }
                             }),

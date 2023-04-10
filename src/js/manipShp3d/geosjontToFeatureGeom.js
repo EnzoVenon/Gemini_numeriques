@@ -48,19 +48,19 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   // console.log(uniquecol)
 
-  let newFeatures = geojson.features.map(feature => {
-    return {
-      type: feature.type,
-      geometry: feature.geometry,
-      properties: {
-        nom: feature.properties[selectOption]
-      }
-    };
-  });
-  geojson = {
-    type: geojson.type,
-    features: newFeatures
-  };
+  // let newFeatures = geojson.features.map(feature => {
+  //   return {
+  //     type: feature.type,
+  //     geometry: feature.geometry,
+  //     properties: {
+  //       nom: feature.properties[selectOption]
+  //     }
+  //   };
+  // });
+  // geojson = {
+  //   type: geojson.type,
+  //   features: newFeatures
+  // };
 
   // console.log(newgeo)
 
@@ -83,7 +83,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
             return uniquecolvalue
           }
           else {
-            let color = uniquecol[properties["nom"]];
+            let color = uniquecol[properties[selectOption]];
             // console.log(properties)
             // console.log(color)
             return color
@@ -91,8 +91,18 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
         }
         ,
-        extrusion_height: 100,
-        base_altitude: 20
+        extrusion_height: 20,
+        base_altitude: (properties) => {
+          if (properties.altitude_s) {
+            return properties.altitude_s
+          }
+          else if (properties.Z_MIN_SOL) {
+            return properties.Z_MIN_SOL
+          }
+          else {
+            return 20
+          }
+        }
       }
     }),
     onMeshCreated: (mesh) => {
