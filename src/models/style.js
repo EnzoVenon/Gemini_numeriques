@@ -66,7 +66,7 @@ export default class Style {
                 visible: false
             });
             await this.view.addLayer(layer);
-            update(this.view);
+            this.view.notifyChange(this.view.camera.camera3D, true);
             this.view.removeLayer("to_delete");
             layer.delete();
         }
@@ -91,7 +91,7 @@ export default class Style {
                 visible: false
             });
             await this.view.addLayer(layer);
-            update(this.view);
+            this.view.notifyChange(this.view.camera.camera3D, true);
             this.view.removeLayer("to_delete");
             layer.delete();
         }
@@ -132,6 +132,7 @@ export default class Style {
             } else {
                 coloring = (properties) => {
                     //TODO
+                    return properties;
                 }
             }
         } else {
@@ -190,7 +191,7 @@ export default class Style {
         }
 
         await this.view.addLayer(layer);
-        update(this.view);
+        this.view.notifyChange(this.view.camera.camera3D, true);
         return layer;
     }
 
