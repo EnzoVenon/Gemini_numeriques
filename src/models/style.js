@@ -65,7 +65,7 @@ export default class Style {
     }
 
     /**
-     * Returns an iTowns layer.
+     * Add a style itowns layer to the view and returns it.
      * @param {*} view View object from iTowns.
      * @returns iTowns layer with the style.
      */
@@ -80,9 +80,14 @@ export default class Style {
         let coloring;
         if (this.gradation_or_classes) {
             // One or two colors ?
-            if (this.color2 != "") {
+            if (this.color2 == undefined) {
                 coloring = function (properties) {
-                    //TODO
+                    let color = new itowns.THREE.Color();
+                    const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
+                    const red = intensity * (255 - this.color1.r) + this.color1.r;
+                    const green = intensity * (255 - this.color1.g) + this.color1.g;
+                    const blue = intensity * (255 - this.color1.b) + this.color1.b;
+                    return color.set("rgb(" + red + "," + green + "," + blue + ")");
                 }
             } else {
                 coloring = function (properties) {
@@ -102,6 +107,9 @@ export default class Style {
         } else {
             //TODO
         }
+
+        view.addLayer(geomLayer);
+        update(view);
         return layer;
     }
 }
