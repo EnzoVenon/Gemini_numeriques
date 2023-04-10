@@ -28,7 +28,7 @@ export default class Style {
 
     /**
      * Sets the color(s) and min and max values to use for gradation.
-     * @param {String} color1 Color of the gradation. Must be in rgb format. Example: "rgb(241,0,60)"
+     * @param {String} color1 Color of the gradation. Must be in rgb format. Example: "rgb(241,0,60)".
      * @param {String} color2 Second color, in case you want for example to go from blue to red. Default value is "".
      * @param {Number} min If you want the white or the second color to be set to a specific min rather than it being detected automatically. Default is NaN (so the min is automatically detected).
      * @param {Number} max If you want your color to be set to a specific max rather than it being detected automatically. Default is NaN (so the max is automatically detected).
@@ -57,7 +57,7 @@ export default class Style {
 
     /**
      * Sets the colors used during the classification.
-     * @param {Map<String,String>} map Map having the field different values as keys and colors as values.
+     * @param {Map<String,String>} map Map having the field different values as keys and colors as values. Colors must be in the rgb format. Example: "rgb(241,0,60)".
      */
     setClasses(map) {
         this.map = map;
@@ -102,6 +102,7 @@ export default class Style {
                         return color.set(this.classes_map[key]);
                     }
                 }
+                return color.set("rgb(169,169,169)");
             }
         }
 
