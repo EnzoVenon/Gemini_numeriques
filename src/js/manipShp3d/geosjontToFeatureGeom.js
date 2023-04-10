@@ -91,7 +91,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
         }
         ,
-        extrusion_height: 100,
+        extrusion_height: 20,
         base_altitude: (properties) => {
           if (properties.altitude_s) {
             return properties.altitude_s
