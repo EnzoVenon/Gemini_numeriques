@@ -35,24 +35,65 @@ export default class Style {
      * @param {Number} min If you want the white or the second color to be set to a specific min rather than it being detected automatically. Default is NaN (so the min is automatically detected).
      * @param {Number} max If you want your color to be set to a specific max rather than it being detected automatically. Default is NaN (so the max is automatically detected).
      */
-    setGradation(color1, color2 = "", min = NaN, max = NaN) {
+    async setGradation(color1, color2 = "", min = NaN, max = NaN) {
+        //Set this.color1
         color1 = color1.replace(" ", "").slice(4, -1).split(",");
         this.color1 = { "r": +color1[0], "g": +color1[1], "b": +color1[2] };
+
+        //Set this.color2
         if (color2 != "") {
             color2 = color2.replace(" ", "").slice(4, -1).split(",");
             this.color2 = { "r": +color2[0], "g": +color2[1], "b": +color2[2] };
         }
-        if (isNaN(min)) {
-            //Trouver et set le min automatiquement
-            //TODO
-        } else {
-            this.min = min;
+
+        //Set this.min
+        this.min = min;
+        //Automatically find and set this.min ?
+        if (isNaN(this.min)) {
+            //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
+            const findMin = (properties) => {
+                if (!isNaN(properties[this.field])) {
+                    if (isNaN(this.min) || (properties[this.field] < this.min)) {
+                        this.min = properties[this.field];
+                    }
+                }
+                return true;
+            }
+            const layer = new itowns.FeatureGeometryLayer("to_delete", {
+                batchId: function (property, featureId) { return featureId; },
+                filter: findMin,
+                source: this.source,
+                visible: false
+            });
+            await this.view.addLayer(layer);
+            update(this.view);
+            this.view.removeLayer("to_delete");
+            layer.delete();
         }
-        if (isNaN(max)) {
-            //Trouver et set le max automatiquement
-            //TODO
-        } else {
-            this.max = max;
+
+        //Set this.max
+        this.max = max;
+        //Automatically find and set this.max ?
+        if (isNaN(this.max)) {
+            //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
+            const findMax = (properties) => {
+                if (!isNaN(properties[this.field])) {
+                    if (isNaN(this.max) || (properties[this.field] < this.max)) {
+                        this.max = properties[this.field];
+                    }
+                }
+                return true;
+            }
+            const layer = new itowns.FeatureGeometryLayer("to_delete", {
+                batchId: function (property, featureId) { return featureId; },
+                filter: findMax,
+                source: this.source,
+                visible: false
+            });
+            await this.view.addLayer(layer);
+            update(this.view);
+            this.view.removeLayer("to_delete");
+            layer.delete();
         }
         return this;
     }
