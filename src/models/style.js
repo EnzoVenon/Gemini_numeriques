@@ -82,7 +82,7 @@ export default class Style {
         if (this.gradation_or_classes) {
             // One or two colors ?
             if (this.color2 == undefined) {
-                coloring = function (properties) {
+                coloring = (properties) => {
                     let color = new itowns.THREE.Color();
                     const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
                     const red = intensity * (255 - this.color1.r) + this.color1.r;
@@ -91,12 +91,12 @@ export default class Style {
                     return color.set("rgb(" + red + "," + green + "," + blue + ")");
                 }
             } else {
-                coloring = function (properties) {
+                coloring = (properties) => {
                     //TODO
                 }
             }
         } else {
-            coloring = function (properties) {
+            coloring = (properties) => {
                 let color = new itowns.THREE.Color();
                 for (const key of Object.keys(this.classes_map)) {
                     if (properties[this.field] == key) {
@@ -111,13 +111,13 @@ export default class Style {
         let layer;
         if (this.extrude) {
             //Create the functions to place the object on the ground and to extrude it.
-            function altitudeFeature(properties) {
+            const altitudeFeature = (properties) => {
                 return properties[this.field_ground];
             }
-            function extrudeFeature(properties) {
+            const extrudeFeature = (properties) => {
                 return properties[this.field_height];
             }
-            function acceptFeature(properties) {
+            const acceptFeature = (properties) => {
                 return !!properties.hauteur;
             }
 
