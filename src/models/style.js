@@ -70,7 +70,7 @@ export default class Style {
      * @returns iTowns layer with the style.
      */
     itowns_layer(view) {
-        //Comme iTowns ne possède pas de modification dynamique de style, on supprime la couche et on la recrée
+        //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         const id = "style_layer";
         const previousLayer = view.getLayerById(id);
         view.removeLayer(id);
@@ -106,15 +106,50 @@ export default class Style {
             }
         }
 
-        //Create the layer (2D or 3D)
+        //Create the layer (3D or 2D)
         let layer;
         if (this.extrude) {
-            //TODO
+            //Create the functions to place the object on the ground and to extrude it.
+            function altitudeFeature(properties) {
+                return properties[this.field_ground];
+            }
+            function extrudeFeature(properties) {
+                return properties[this.field_height];
+            }
+            function acceptFeature(properties) {
+                return !!properties.hauteur;
+            }
+
+            // Create the style layer
+            layer = new itowns.FeatureGeometryLayer(id, {
+                batchId: function (property, featureId) { return featureId; },
+                filter: acceptFeature,
+                source: this.source,
+                zoom: { min: 14 },
+
+                style: new itowns.Style({
+                    fill: {
+                        color: coloring,
+                        base_altitude: altitudeFeature,
+                        extrusion_height: extrudeFeature,
+                    }
+                })
+            });
         } else {
-            //TODO
+            // Create the style layer
+            layer = new itowns.ColorLayer(id, {
+                batchId: function (property, featureId) { return featureId; },
+                source: this.source,
+                zoom: { min: 14 },
+                style: new itowns.Style({
+                    fill: {
+                        color: coloring
+                    }
+                })
+            });
         }
 
-        view.addLayer(geomLayer);
+        view.addLayer(layer);
         update(view);
         return layer;
     }
