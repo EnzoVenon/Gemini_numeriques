@@ -1,11 +1,13 @@
 export default class Style {
     /**
+     * @param {*} view View object from iTowns.
      * @param {*} source Source object from iTowns.
      * @param {String} field The name of the field to apply a style on.
      * @param {Boolean} extrude If true, objects will be in 3D. Otherwise, they will be in 2D. Default is false.
      * @param {Boolean} gradation_or_classes If true, the style will be a gradation, otherwise it will be a classification. Default is true.
      */
-    constructor(source, field, extrude = false, gradation_or_classes = true) {
+    constructor(view, source, field, extrude = false, gradation_or_classes = true) {
+        this.view = view;
         this.source = source;
         this.field = field;
         this.extrude = extrude;
@@ -66,14 +68,13 @@ export default class Style {
 
     /**
      * Add a style itowns layer to the view and returns it.
-     * @param {*} view View object from iTowns.
      * @returns iTowns layer with the style.
      */
-    async itowns_layer(view) {
+    async itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         const id = "style_layer";
-        const previousLayer = view.getLayerById(id);
-        view.removeLayer(id);
+        const previousLayer = this.view.getLayerById(id);
+        this.view.removeLayer(id);
         previousLayer.delete();
 
         //Create the coloring function
@@ -149,8 +150,8 @@ export default class Style {
             });
         }
 
-        await view.addLayer(layer);
-        update(view);
+        await this.view.addLayer(layer);
+        update(this.view);
         return layer;
     }
 }
