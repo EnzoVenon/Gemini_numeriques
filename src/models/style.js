@@ -69,7 +69,7 @@ export default class Style {
      * @param {*} view View object from iTowns.
      * @returns iTowns layer with the style.
      */
-    itowns_layer(view) {
+    async itowns_layer(view) {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         const id = "style_layer";
         const previousLayer = view.getLayerById(id);
@@ -149,7 +149,7 @@ export default class Style {
             });
         }
 
-        view.addLayer(layer);
+        await view.addLayer(layer);
         update(view);
         return layer;
     }
