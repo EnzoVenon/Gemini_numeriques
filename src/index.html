@@ -125,7 +125,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body" id="infoGen">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <div class="accordion" id="infoGenAccordion">
+                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                    </div>
                 </div>
             </div>
 
@@ -194,7 +196,7 @@
                     <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div class="offcanvas-body" id="risqueInfo">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
                         <label class="form-check-label" for="showInnondationLayer"> zone inndoable (en blue) et
@@ -212,7 +214,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div class="accordion" id="EnergieAccordion">
+                    <div class="accordion" id="energieAccordion">
 
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingEnergieOne">

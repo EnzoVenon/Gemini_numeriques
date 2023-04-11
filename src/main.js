@@ -218,26 +218,60 @@ viewerDiv.addEventListener(
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
                 // Dispatch Bdnb data for each tab
+                let valDisplayed;
                 Object.entries(res).forEach(([key, value]) => {
-                    loadDataToJSON(key, value, "bdnb")
+                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                 })
                 // console.log(valuesToDisplay)
                 bdnbinfoToHtml(res)
-            })
-
-            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
-                // Dispatch BdTopo data for each tab
-                Object.entries(res).forEach(([key, value]) => {
-                    loadDataToJSON(key, value, "bdtopo")
+                return valDisplayed;
+            }).then(result => {
+                console.log(result)
+                let valBdTopo = getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
+                    // Dispatch BdTopo data for each tab
+                    let valDisplayedBdTopo;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                    })
+                    // console.log(valuesToDisplay)
+                    return valDisplayedBdTopo;
                 })
-                // console.log(valuesToDisplay)
+                return valBdTopo
+            }).then(res => {
+                console.log(res)
+                Object.entries(valuesToDisplay).forEach(([key, value]) => {
+
+                    let textTest = ''
+                    const infoGen = document.getElementById('infoGenAccordion');
+                    const batInfo = document.getElementById('batInfo');
+                    const risqueInfo = document.getElementById('risqueInfo');
+                    const energieAccordion = document.getElementById('energieAccordion');
+
+                    if (key.includes('tabInfoGen')) {
+                        console.log('dans le if')
+                        infoGen.innerHTML = ''
+                        console.log(key)
+                        console.log(value)
+                        value.forEach((valeur) => {
+                            textTest = generateAccordion4Attribute(valeur.attribut, valeur.val, valeur.source)
+                            // textTest += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
+                            // textTest += '<span>' + valeur.val + 'm</span>'
+                            // textTest += '<a  href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" '
+                            // textTest += 'data-bs-title="donnée issue de la ' + valeur.source + ' sur ' + valeur.attribut + '">'
+                            // textTest += 'info </a></div>'
+                            infoGen.innerHTML += textTest
+                        })
+                    }
+
+
+                    console.log(infoGen.innerHTML)
+                })
             })
 
 
-            Object.entries(valuesToDisplay).forEach(([key, value]) => {
-                console.log(key)
-                console.log(value)
-            })
+
+
+
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
@@ -500,17 +534,36 @@ fileInput.addEventListener('change', (event) => {
 
 
 // ----------------------------------------- functions ----------------------------------------- //
-function loadDataToJSON(key, value, base) {
+function loadDataToJSON(dictionaryTofill, key, value, base) {
     const jsonData = {
-        key: key,
-        value: value,
+        attribut: key,
+        val: value,
         source: base
     }
     if (ongletInfoGen.includes(key)) {
-        valuesToDisplay.tabInfoGen.push(jsonData)
+        dictionaryTofill.tabInfoGen.push(jsonData)
     } else if (ongletBatiment.includes(key)) {
-        valuesToDisplay.tabBatiment.push(jsonData)
+        dictionaryTofill.tabBatiment.push(jsonData)
     } else if (ongletRisque.includes(key)) {
-        valuesToDisplay.tabRisques.push(jsonData)
+        dictionaryTofill.tabRisques.push(jsonData)
     }
+
+    return dictionaryTofill;
+}
+
+function generateAccordion4Attribute(attributeName, value, source) {
+    let htmlText = '';
+    htmlText += '<div class="accordion-item">'
+    htmlText += '<h2 class="accordion-header" id="heading' + attributeName + '">'
+    htmlText += '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + attributeName + '" aria-expanded="false" aria-controls="collapse' + attributeName + '">'
+    htmlText += attributeName
+    htmlText += '</button></h2></div>'
+    htmlText += '<div id="collapse' + attributeName + '" class="accordion-collapse collapse" aria-labelledby="heading' + attributeName + '">'
+    htmlText += '<div class="accordion-body" id="info' + attributeName + '">'
+    htmlText += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
+    htmlText += '<span>' + value + '</span>'
+    htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
+    htmlText += 'info'
+    htmlText += '</a></div></div></div>'
+    return htmlText;
 }
