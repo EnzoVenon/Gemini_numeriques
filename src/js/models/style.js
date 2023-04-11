@@ -23,7 +23,8 @@ export default class Style {
      * @param {String} field_ground Name of the field corresponding to the ground.
      * @param {String} field_height Name of the field corresponding to the height.
      */
-    setExtrude(field_ground, field_height) {
+    setExtrude(field_ground = NaN, field_height = NaN, extrude = true) {
+        this.extrude = extrude;
         this.field_ground = field_ground;
         this.field_height = field_height;
         return this;
