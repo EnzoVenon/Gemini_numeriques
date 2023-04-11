@@ -50,14 +50,14 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   let uniquecol = generateUniqueColors(uniquePropValues)
 
-  console.log()
+  document.getElementById("exampleModalLabel").innerText = selectOption;
 
-  let legendHtml = '<ul>';
+  let legendHtml = '<div>';
   for (const [label, color] of Object.entries(uniquecol)) {
     console.log(color)
-    legendHtml += `<li style="background-color:${color};">${label}</li>`;
+    legendHtml += `<div style="display:flex;flex-direction:row"> <div style="background-color:${color};width: 31px;height: 16px; margin-right: 20px;"></div><div>${label}</div></div>`;
   }
-  legendHtml += '</ul>';
+  legendHtml += '</div>';
 
   // create a div element to hold the legend
   document.getElementById("legend").innerHTML = legendHtml;
