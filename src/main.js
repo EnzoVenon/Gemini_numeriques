@@ -247,11 +247,6 @@ viewerDiv.addEventListener(
                 })
             })
 
-
-
-
-
-
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
                     .then(async function log(result) {
@@ -370,7 +365,6 @@ document.getElementById("exploredata").addEventListener("change", () => {
             batInorandomId.bdnb_random_id = ramdoId2
         }
         )
-
     }
     else {
         view.removeLayer(batInorandomId.bdnb_random_id)
@@ -542,6 +536,8 @@ function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
             htmlElement.innerHTML += textTest
         })
     }
+
+    console.log(htmlElement)
 }
 
 function generateAccordion4Attribute(attributeName, value, source) {
@@ -558,5 +554,6 @@ function generateAccordion4Attribute(attributeName, value, source) {
     htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
     htmlText += 'info'
     htmlText += '</a></div></div></div>'
+    console.log(htmlText)
     return htmlText;
 }
