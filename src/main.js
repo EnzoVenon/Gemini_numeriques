@@ -148,9 +148,11 @@ viewerDiv.addEventListener(
                 });
 
             let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            let randomId = tooltip.value.properties.batiment_g + letRandomCOlor
+            let randomId = tooltip.value.properties.batiment_c + letRandomCOlor
 
             listSlect.push(randomId)
+
+            console.log(listSlect)
 
             if (listSlect[1]) {
 
@@ -169,7 +171,7 @@ viewerDiv.addEventListener(
 
             console.log(tooltip.value)
 
-            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 20, "batiment_g", tooltip.value.properties.batiment_g, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 20, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
                 console.log(res)
