@@ -15,6 +15,7 @@ export default class Style {
         this.setExtrude(NaN, NaN);
         this.setGradation("rgb(250,0,0)");
         this.setClasses({});
+        return this;
     }
 
     /**
