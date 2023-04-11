@@ -181,7 +181,7 @@ viewerDiv.addEventListener(
             })
 
 
-            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
+            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g, paths.bdtopo)
 
             shapefile.open("./data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
