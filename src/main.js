@@ -223,7 +223,7 @@ viewerDiv.addEventListener(
                     valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                 })
                 // console.log(valuesToDisplay)
-                bdnbinfoToHtml(res)
+                // bdnbinfoToHtml(res)
                 return valDisplayed;
             }).then(result => {
                 console.log(result)
@@ -240,31 +240,10 @@ viewerDiv.addEventListener(
             }).then(res => {
                 console.log(res)
                 Object.entries(valuesToDisplay).forEach(([key, value]) => {
+                    generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                    generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                    generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
 
-                    let textTest = ''
-                    const infoGen = document.getElementById('infoGenAccordion');
-                    const batInfo = document.getElementById('batInfo');
-                    const risqueInfo = document.getElementById('risqueInfo');
-                    const energieAccordion = document.getElementById('energieAccordion');
-
-                    if (key.includes('tabInfoGen')) {
-                        console.log('dans le if')
-                        infoGen.innerHTML = ''
-                        console.log(key)
-                        console.log(value)
-                        value.forEach((valeur) => {
-                            textTest = generateAccordion4Attribute(valeur.attribut, valeur.val, valeur.source)
-                            // textTest += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
-                            // textTest += '<span>' + valeur.val + 'm</span>'
-                            // textTest += '<a  href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" '
-                            // textTest += 'data-bs-title="donnée issue de la ' + valeur.source + ' sur ' + valeur.attribut + '">'
-                            // textTest += 'info </a></div>'
-                            infoGen.innerHTML += textTest
-                        })
-                    }
-
-
-                    console.log(infoGen.innerHTML)
                 })
             })
 
@@ -549,6 +528,20 @@ function loadDataToJSON(dictionaryTofill, key, value, base) {
     }
 
     return dictionaryTofill;
+}
+
+function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
+    let textTest = ''
+    const htmlElement = document.getElementById(htmlID);
+
+    if (keyTab.includes(tabName)) {
+        // console.log('dans le if')
+        htmlElement.innerHTML = ''
+        listOfAttributes.forEach((value) => {
+            textTest = generateAccordion4Attribute(value.attribut, value.val, value.source)
+            htmlElement.innerHTML += textTest
+        })
+    }
 }
 
 function generateAccordion4Attribute(attributeName, value, source) {
