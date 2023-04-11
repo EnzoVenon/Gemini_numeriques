@@ -198,7 +198,7 @@ export default class Style {
     /**
      * Delete the style layer.
      */
-    clean_itowns_layer() {
+    static clean_itowns_layer() {
         const id = "style_layer";
         const layer = this.view.getLayerById(id);
         this.view.removeLayer(id);
