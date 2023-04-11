@@ -15,6 +15,7 @@ import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
+import Style from "./js/models/style.js";
 // les constantes et variable globales
 const THREE = itowns.THREE
 const records = {}
@@ -76,11 +77,47 @@ let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 // ----------------- Globe Initialisatioin ----------------- //
-view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
+view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+
+    let checkbox_3D = document.getElementById("checkbox_style_3D");
+    let select_style = document.getElementById("select_style");
+    let button_style_apply = document.getElementById("button_style_apply");
+
+    //Styles definition
+    let style_list = [];
+    style_list.push(
+        new Style("Notes consommation d'énergie", view, view.getLayerById("bdnb").source, "dpe_class_conso_ener_mean", false, false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean", false)
+            .setClasses({
+                "A": "rgb(1,149,65)",
+                "B": "rgb(83,174,50)",
+                "C": "rgb(202,211,0)",
+                "D": "rgb(255,223,1)",
+                "E": "rgb(251,185,1)",
+                "F": "rgb(237,102,7)",
+                "G": "rgb(228,19,18)"
+            })
+    );
+
+    //Setting the predefined styles
+    for (let i = 0; i < style_list.length; i++) {
+        select_style.innerHTML += "<option value='" + i + "'>" + style_list[i].name + "</option>";
+    }
+
+    button_style_apply.addEventListener("click", () => {
+        if (select_style.value == -1) {
+            Style.clean();
+        } else {
+            const style = style_list[select_style.value];
+            //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
+            style.to3D(checkbox_3D.checked && style.field_ground != "" && style.field_height != "");
+            style.to_itowns_layer();
+        }
+    });
 
 });
 

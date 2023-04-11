@@ -14,8 +14,8 @@ export default class Style {
         this.field = field;
         this.extrude = extrude;
         this.gradation_or_classes = gradation_or_classes;
-        this.setExtrude(NaN, NaN);
-        this.setGradation("rgb(250,0,0)");
+        this.setExtrude();
+        this.setGradation("rgb(250,0,0)", "", 0, 0);
         this.setClasses({});
         return this;
     }
@@ -25,10 +25,19 @@ export default class Style {
      * @param {String} field_ground Name of the field corresponding to the ground.
      * @param {String} field_height Name of the field corresponding to the height.
      */
-    setExtrude(field_ground = NaN, field_height = NaN, extrude = true) {
-        this.extrude = extrude;
+    setExtrude(field_ground = "", field_height = "") {
         this.field_ground = field_ground;
         this.field_height = field_height;
+        return this;
+    }
+
+    /**
+     * 
+     * @param {Boolean} extrude Whether to set the style to 3D or not.
+     * @returns 
+     */
+    to3D(extrude) {
+        this.extrude = extrude;
         return this;
     }
 
@@ -118,7 +127,7 @@ export default class Style {
     async to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         const id = "style_layer";
-        this.clean_itowns_layer();
+        Style.clean();
 
         //Create the coloring function
         let coloring;
@@ -202,7 +211,7 @@ export default class Style {
     /**
      * Delete the style layer.
      */
-    static clean_itowns_layer() {
+    static clean() {
         const id = "style_layer";
         const layer = this.view.getLayerById(id);
         this.view.removeLayer(id);
