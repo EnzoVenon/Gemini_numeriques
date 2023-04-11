@@ -1,0 +1,117 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+#viewerDiv {
+    margin: auto;
+    height: 1800px;
+    width: 100%;
+    padding: 0;
+
+}
+
+.navbar {
+    width: 100%;
+}
+
+.nav {
+    width: 100%;
+}
+
+.offcanvas {
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    z-index: 10;
+
+}
+
+canvas {
+    display: block
+}
+
+#menu {
+    position: absolute;
+    top: 90%;
+    left: 40%;
+    background-color: rgb(248, 248, 255, 0.8);
+    z-index: 1;
+}
+
+p {
+    margin: 0;
+}
+
+#apparition {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 1;
+}
+
+#style_menu {
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    background-color: rgb(248, 248, 255, 1);
+    z-index: -1;
+    padding: 1em;
+    border-radius: 10px;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+#viewerDiv {
+    position: relative;
+    top: 100px;
+    width: 100%;
+    height: 85vh;
+    z-index: 0;
+}
+
+
+#sourceGeom {
+    background-color: rgb(171, 206, 106);
+    padding: 6px;
+    border-radius: 5px;
+}
+
+#explorationPanel {
+    position: absolute;
+    top: 150px;
+    left: 80%;
+    background-color: #cadd84e5;
+    width: 18%;
+}
+
+.card-body {
+    background-color: rgba(248, 250, 215, 0.644);
+    margin: 35px;
+}
+
+#modalButton {
+    width: fit-content;
+}
+
+.modal-dialog {
+    position: absolute;
+    left: 20px;
+}
+
+/* 
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.407);
+} */

@@ -21,6 +21,10 @@
         "debug": "readonly",
         "dat": "readonly",
         "setupLoadingScreen": "readonly",
-        "GuiTools": "readonly"
+        "GuiTools": "readonly",
+        "FeatureToolTip": "readonly",
+        "itowns_widgets": "readonly",
+        "shapefile": "readonly",
+        "bootstrap": "readonly"
     }
 }
