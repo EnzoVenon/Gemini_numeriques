@@ -218,7 +218,7 @@ export default class Style {
             this.view.removeLayer(id);
             layer.delete();
         } catch (error) {
-            console.error(error);
+            console.log("Cleaning");
         }
         return this;
     }
