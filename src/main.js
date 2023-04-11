@@ -303,6 +303,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
     }
     else {
         view.removeLayer(batInorandomId.bdnb_random_id)
+        batInorandomId.bdnb_random_id = ""
     }
 
 })
@@ -321,6 +322,7 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
     }
     else {
         view.removeLayer(batInorandomId.bdtopo_radom_id)
+        batInorandomId.bdtopo_radom_id = ""
     }
 
 })
@@ -339,6 +341,7 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
     }
     else {
         view.removeLayer(batInorandomId.osm_random_id)
+        batInorandomId.osm_random_id = ""
     }
 
 })
@@ -357,6 +360,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
     }
     else {
         view.removeLayer(batInorandomId.cadastre_random_id)
+        batInorandomId.cadastre_random_id = ""
     }
 
 })
