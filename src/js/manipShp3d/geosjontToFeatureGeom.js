@@ -31,6 +31,10 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
       option.value = value;
       // Ajout de l'option à l'élément de sélection
       selectElement.add(option);
+
+      if (value == selectOption) {
+        option.selected = true;
+      }
     });
 
   }
