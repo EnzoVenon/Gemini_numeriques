@@ -27,8 +27,6 @@ bat.id = 'bat';
 let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
-let inoRandomId = { "ino_random_id": "", "ino_shp": "" }
-
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
