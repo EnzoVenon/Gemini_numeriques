@@ -266,7 +266,8 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
         view.removeLayer(batInorandomId.ino_random_id)
     }
 })
-document.getElementById("showInnondationLayer").click()
+// document.getElementById("showInnondationLayer").click()
+
 let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)

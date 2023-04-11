@@ -100,7 +100,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
             return properties.Z_MIN_SOL
           }
           else {
-            return 20
+            return 100
           }
         }
       }
