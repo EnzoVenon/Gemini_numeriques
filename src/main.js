@@ -59,7 +59,7 @@ widgetNavigation(view)
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
-itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
+itowns.Fetcher.json('./data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
 itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
     .then(result => addElevationLayer(result, view));
@@ -67,12 +67,12 @@ itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
 // Ortho Layer
-itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
+itowns.Fetcher.json('./data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
-let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
-let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csv2 = importCsvFile("./data/csv/base-ic-couples-familles-menages-2019.CSV")
+let csvBdnb = importCsvFile("./data/shp/prg/data_bdnb.csv")
 let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 // ----------------- Globe Initialisatioin ----------------- //
@@ -81,6 +81,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+
+
 
 });
 
