@@ -171,7 +171,7 @@ viewerDiv.addEventListener(
 
             console.log(tooltip.value)
 
-            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 20, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
                 console.log(res)
