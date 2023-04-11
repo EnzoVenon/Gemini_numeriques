@@ -127,7 +127,7 @@ export default class Style {
     async to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         const id = "style_layer";
-        Style.clean();
+        this.clean();
 
         //Create the coloring function
         let coloring;
@@ -211,11 +211,15 @@ export default class Style {
     /**
      * Delete the style layer.
      */
-    static clean() {
+    clean() {
         const id = "style_layer";
-        const layer = this.view.getLayerById(id);
-        this.view.removeLayer(id);
-        layer.delete();
+        try {
+            const layer = this.view.getLayerById(id);
+            this.view.removeLayer(id);
+            layer.delete();
+        } catch (error) {
+            console.error(error);
+        }
         return this;
     }
 }
