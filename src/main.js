@@ -84,6 +84,48 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
 });
 
+// ----------------- Variables to display content in tabs ----------------- //
+let valuesToDisplay = {
+    tabInfoGen: [],
+    tabBatiment: [],
+    tabRisques: [],
+    tabPopulation: []
+}
+// Onglet batiment
+let ongletBatiment = [
+    "bdtopo_bat_altitude_sol_mean",
+    "bdtopo_bat_hauteur_mean",
+    "bdtopo_bat_l_etat",
+    "ffo_bat_usage_niveau_1_txt",
+    "DATE_CREAT",
+    "ETAT",
+    "HAUTEUR",
+    "NATURE",
+    "NB_ETAGES",
+    "USAGE1",
+    "USAGE2"
+]
+// Onglet risque
+let ongletRisque = [
+    "radon_alea"
+]
+// Onglet Infos Générales 
+let ongletInfoGen = [
+    "code_commune_insee",
+    "code_departement_insee",
+    "code_iris",
+    "fiabilite_cr_adr_niv_1",
+    "libelle_adr_principale_ban",
+    "ffo_bat_usage_niveau_1_txt",
+    "DATE_CREAT",
+    "ETAT",
+    "HAUTEUR",
+    "NATURE",
+    "NB_ETAGES",
+    "USAGE1",
+    "USAGE2"
+]
+
 const tooltip = document.getElementById('tooltip');
 const htmlTest = document.getElementById('population');
 viewerDiv.addEventListener(
@@ -91,9 +133,9 @@ viewerDiv.addEventListener(
     () => {
 
         fidSelectf.push(tooltip.value.properties.fid)
-        console.log(tooltip.value.properties.fid)
+        // console.log(tooltip.value.properties.fid)
 
-        console.log(fidSelectf)
+        // console.log(fidSelectf)
 
         if (fidSelectf[fidSelectf.length - 1] != fidSelectf[fidSelectf.length - 2]) {
             fidSelectf = [fidSelectf[fidSelectf.length - 1]]
@@ -147,19 +189,20 @@ viewerDiv.addEventListener(
 
                 });
 
+
             let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             let randomId = tooltip.value.properties.batiment_c + letRandomCOlor
 
             listSlect.push(randomId)
 
-            console.log(listSlect)
+            // console.log(listSlect)
 
             if (listSlect[1]) {
 
                 let layerToRemove = view.getLayerById(listSlect[0]);
                 view.removeLayer(listSlect[0]);
-                console.log(layerToRemove)
-                console.log(view)
+                // console.log(layerToRemove)
+                // console.log(view)
                 layerToRemove.delete()
                 view.notifyChange()
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
@@ -169,17 +212,32 @@ viewerDiv.addEventListener(
                 console.log("non")
             }
 
-            console.log(tooltip.value)
+            // console.log(tooltip.value)
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
-                console.log(res)
+                // Dispatch Bdnb data for each tab
+                Object.entries(res).forEach(([key, value]) => {
+                    loadDataToJSON(key, value, "bdnb")
+                })
+                // console.log(valuesToDisplay)
                 bdnbinfoToHtml(res)
             })
 
+            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
+                // Dispatch BdTopo data for each tab
+                Object.entries(res).forEach(([key, value]) => {
+                    loadDataToJSON(key, value, "bdtopo")
+                })
+                // console.log(valuesToDisplay)
+            })
 
-            getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g)
+
+            Object.entries(valuesToDisplay).forEach(([key, value]) => {
+                console.log(key)
+                console.log(value)
+            })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
@@ -220,7 +278,7 @@ viewerDiv.addEventListener(
 htmlTest.innerHTML += '</div>';
 
 document.getElementById("showIgnLayer").addEventListener("change", () => {
-    console.log(document.getElementById("showIgnLayer").checked)
+    // console.log(document.getElementById("showIgnLayer").checked)
     if (document.getElementById("showIgnLayer").checked) {
         addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "", view, false)
     }
@@ -231,7 +289,7 @@ document.getElementById("showIgnLayer").addEventListener("change", () => {
 })
 
 document.getElementById("showOsmLayer").addEventListener("change", () => {
-    console.log(document.getElementById("showOsmLayer").checked)
+    // console.log(document.getElementById("showOsmLayer").checked)
     if (document.getElementById("showOsmLayer").checked) {
         addShp("../data/shp/prg/osm", "osm", "yellow", "", view, false)
     }
@@ -242,7 +300,7 @@ document.getElementById("showOsmLayer").addEventListener("change", () => {
 })
 
 document.getElementById("showCadastreLayer").addEventListener("change", () => {
-    console.log(document.getElementById("showCadastreLayer").checked)
+    // console.log(document.getElementById("showCadastreLayer").checked)
     if (document.getElementById("showCadastreLayer").checked) {
         addShp("../data/shp/prg/osm", "cadastre", "red", "", view, false)
     }
@@ -253,7 +311,7 @@ document.getElementById("showCadastreLayer").addEventListener("change", () => {
 })
 
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
-    console.log(document.getElementById("showInnondationLayer").checked)
+    // console.log(document.getElementById("showInnondationLayer").checked)
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
@@ -278,11 +336,11 @@ let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
 document.getElementById("exploredata").addEventListener("change", () => {
-    console.log(document.getElementById("exploredata").checked)
+    // console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
         bdnbPromisedJson.then(geojson => {
 
-            console.log(geojson)
+            // console.log(geojson)
 
             geojson.features.forEach((feature) => {
                 // console.log(feature.properties["batiment_g"])
@@ -308,10 +366,10 @@ document.getElementById("exploredata").addEventListener("change", () => {
 })
 
 document.getElementById("exploredataIgn").addEventListener("change", () => {
-    console.log(document.getElementById("exploredataIgn").checked)
+    // console.log(document.getElementById("exploredataIgn").checked)
     if (document.getElementById("exploredataIgn").checked) {
         bdtopoPromisedJson.then(geojson => {
-            console.log(geojson)
+            // console.log(geojson)
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
             batInorandomId.bdtopo_radom_id = ramdoId
@@ -326,10 +384,10 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
 })
 
 document.getElementById("exploredataOsm").addEventListener("change", () => {
-    console.log(document.getElementById("exploredataOsm").checked)
+    // console.log(document.getElementById("exploredataOsm").checked)
     if (document.getElementById("exploredataOsm").checked) {
         osmPromisedJson.then(geojson => {
-            console.log(geojson)
+            // console.log(geojson)
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
             batInorandomId.osm_random_id = ramdoId
@@ -344,10 +402,10 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
 })
 
 document.getElementById("exploredataCadastre").addEventListener("change", () => {
-    console.log(document.getElementById("exploredataCadastre").checked)
+    // console.log(document.getElementById("exploredataCadastre").checked)
     if (document.getElementById("exploredataCadastre").checked) {
         cadastrePromisedJson.then(geojson => {
-            console.log(geojson)
+            // console.log(geojson)
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
             batInorandomId.cadastre_random_id = ramdoId
@@ -364,7 +422,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
 
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    console.log(batInorandomId)
+    // console.log(batInorandomId)
 
     Object.entries(batInorandomId).forEach(([key, val]) => {
         if (key != "ino_random_id" && val != "") {
@@ -434,8 +492,25 @@ fileInput.addEventListener('change', (event) => {
             records[record.batiment_groupe_id] = record;
         }
 
-        console.log(records);
+        // console.log(records);
     };
 
     reader.readAsText(file);
 });
+
+
+// ----------------------------------------- functions ----------------------------------------- //
+function loadDataToJSON(key, value, base) {
+    const jsonData = {
+        key: key,
+        value: value,
+        source: base
+    }
+    if (ongletInfoGen.includes(key)) {
+        valuesToDisplay.tabInfoGen.push(jsonData)
+    } else if (ongletBatiment.includes(key)) {
+        valuesToDisplay.tabBatiment.push(jsonData)
+    } else if (ongletRisque.includes(key)) {
+        valuesToDisplay.tabRisques.push(jsonData)
+    }
+}
