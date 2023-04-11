@@ -54,7 +54,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   let legendHtml = '<div>';
   for (const [label, color] of Object.entries(uniquecol)) {
-    console.log(color)
+    // console.log(color)
     legendHtml += `<div style="display:flex;flex-direction:row"> <div style="background-color:${color};width: 31px;height: 16px; margin-right: 20px;"></div><div>${label}</div></div>`;
   }
   legendHtml += '</div>';
@@ -115,7 +115,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
       }
     }),
     onMeshCreated: (mesh) => {
-      console.log(mesh.children[0].children[0].children[0].children[0])
+      // console.log(mesh.children[0].children[0].children[0].children[0])
       let object = mesh.children[0].children[0].children[0].children[0]
       var objectEdges = new THREE.LineSegments(
         new THREE.EdgesGeometry(object.geometry),
