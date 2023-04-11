@@ -266,6 +266,8 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
     else {
         view.removeLayer(batInorandomId.ino_random_id)
+        view.removeLayer("inno")
+
     }
 })
 // document.getElementById("showInnondationLayer").click()
