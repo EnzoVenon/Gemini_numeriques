@@ -1,12 +1,14 @@
 export default class Style {
     /**
+     * @param {String} name Name of your style.
      * @param {*} view View object from iTowns.
      * @param {*} source Source object from iTowns.
      * @param {String} field The name of the field to apply a style on.
      * @param {Boolean} extrude If true, objects will be in 3D. Otherwise, they will be in 2D. Default is false.
      * @param {Boolean} gradation_or_classes If true, the style will be a gradation, otherwise it will be a classification. Default is true.
      */
-    constructor(view, source, field, extrude = false, gradation_or_classes = true) {
+    constructor(name, view, source, field, extrude = false, gradation_or_classes = true) {
+        this.name = name;
         this.view = view;
         this.source = source;
         this.field = field;
@@ -141,7 +143,7 @@ export default class Style {
             coloring = (properties) => {
                 let color = new itowns.THREE.Color();
                 for (const key of Object.keys(this.classes_map)) {
-                    if (properties[this.field] == key) {
+                    if (properties[this.field].toLowerCase() == key.toLowerCase()) {
                         return color.set(this.classes_map[key]);
                     }
                 }
