@@ -101,3 +101,7 @@ p {
     background-color: rgba(248, 250, 215, 0.644);
     margin: 35px;
 }
+
+#modalButton {
+    width: fit-content;
+}

@@ -50,23 +50,17 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   let uniquecol = generateUniqueColors(uniquePropValues)
 
-  // console.log(uniquecol)
+  console.log()
 
-  // let newFeatures = geojson.features.map(feature => {
-  //   return {
-  //     type: feature.type,
-  //     geometry: feature.geometry,
-  //     properties: {
-  //       nom: feature.properties[selectOption]
-  //     }
-  //   };
-  // });
-  // geojson = {
-  //   type: geojson.type,
-  //   features: newFeatures
-  // };
+  let legendHtml = '<ul>';
+  for (const [label, color] of Object.entries(uniquecol)) {
+    console.log(color)
+    legendHtml += `<li style="background-color:${color};">${label}</li>`;
+  }
+  legendHtml += '</ul>';
 
-  // console.log(newgeo)
+  // create a div element to hold the legend
+  document.getElementById("legend").innerHTML = legendHtml;
 
 
   let src = new itowns.FileSource({
