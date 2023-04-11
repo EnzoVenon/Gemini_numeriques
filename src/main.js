@@ -17,6 +17,7 @@ import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 // les constantes et variable globales
 const THREE = itowns.THREE
+const records = {}
 const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 // console.log(turf)
 let bat = document.createElement('div');
@@ -212,9 +213,6 @@ viewerDiv.addEventListener(
 
 
         }
-
-
-
     },
 )
 htmlTest.innerHTML += '</div>';
@@ -278,6 +276,19 @@ document.getElementById("exploredata").addEventListener("change", () => {
     console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
         bdnbPromisedJson.then(geojson => {
+
+            console.log(geojson)
+
+            geojson.features.forEach((feature) => {
+                // console.log(feature.properties["batiment_g"])
+                // console.log(records[feature.properties["batiment_g"]])
+                let data = records[feature.properties["batiment_g"]]
+                if (data) {
+                    feature.properties = data
+                }
+
+            });
+
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
@@ -395,3 +406,31 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     }
 })
 
+
+const fileInput = document.getElementById('fileInput');
+
+fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        const data = reader.result;
+        const rows = data.split('\n');
+        const headers = rows[0].split(',');
+
+        for (let i = 1; i < rows.length; i++) {
+            const values = rows[i].split(',');
+            const record = {};
+
+            for (let j = 0; j < headers.length; j++) {
+                record[headers[j]] = values[j];
+            }
+
+            records[record.batiment_groupe_id] = record;
+        }
+
+        console.log(records);
+    };
+
+    reader.readAsText(file);
+});
