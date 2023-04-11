@@ -24,6 +24,7 @@
         "GuiTools": "readonly",
         "FeatureToolTip": "readonly",
         "itowns_widgets": "readonly",
-        "shapefile": "readonly"
+        "shapefile": "readonly",
+        "bootstrap": "readonly"
     }
 }

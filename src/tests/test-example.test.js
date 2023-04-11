@@ -3,7 +3,7 @@
  * Ici, il n'est pas nécessaire.
  * beforeEach pourra être très utile (appelé avant chaque test).
 */
-const sum = require("../test-example.js");
+const sum = require("../js/tetUnitaire/test-example.js");
 
 test('adds 1 + 2 to equal 3', () => {
     // Example de mock, ici pas essentiel
