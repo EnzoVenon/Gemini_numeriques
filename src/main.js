@@ -85,12 +85,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 });
 
 // ----------------- Variables to display content in tabs ----------------- //
-let valuesToDisplay = {
-    tabInfoGen: [],
-    tabBatiment: [],
-    tabRisques: [],
-    tabPopulation: []
-}
+
 // Onglet batiment
 let ongletBatiment = [
     "bdtopo_bat_altitude_sol_mean",
@@ -140,7 +135,12 @@ viewerDiv.addEventListener(
         if (fidSelectf[fidSelectf.length - 1] != fidSelectf[fidSelectf.length - 2]) {
             fidSelectf = [fidSelectf[fidSelectf.length - 1]]
 
-
+            let valuesToDisplay = {
+                tabInfoGen: [],
+                tabBatiment: [],
+                tabRisques: [],
+                tabPopulation: []
+            }
             htmlTest.innerHTML = '';
             let textHtml = '';
             textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
@@ -226,7 +226,6 @@ viewerDiv.addEventListener(
                 // bdnbinfoToHtml(res)
                 return valDisplayed;
             }).then(result => {
-                console.log(result)
                 let valBdTopo = getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
                     // Dispatch BdTopo data for each tab
                     let valDisplayedBdTopo;
@@ -238,13 +237,15 @@ viewerDiv.addEventListener(
                 })
                 return valBdTopo
             }).then(res => {
-                console.log(res)
                 Object.entries(valuesToDisplay).forEach(([key, value]) => {
                     generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
                     generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
                     generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
 
                 })
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList]
+                tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
@@ -529,15 +530,14 @@ function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
     const htmlElement = document.getElementById(htmlID);
 
     if (keyTab.includes(tabName)) {
-        // console.log('dans le if')
         htmlElement.innerHTML = ''
         listOfAttributes.forEach((value) => {
             textTest = generateAccordion4Attribute(value.attribut, value.val, value.source)
             htmlElement.innerHTML += textTest
         })
     }
+    console.log(htmlElement.outerHTML)
 
-    console.log(htmlElement)
 }
 
 function generateAccordion4Attribute(attributeName, value, source) {
@@ -554,6 +554,5 @@ function generateAccordion4Attribute(attributeName, value, source) {
     htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
     htmlText += 'info'
     htmlText += '</a></div></div></div>'
-    console.log(htmlText)
     return htmlText;
 }
