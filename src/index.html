@@ -57,9 +57,13 @@
 
     <div id=" container">
 
+        <!-- The div in which the navbar is -->
         <div id="apparition">
+
+            <!-- the navbar centered with bootstrap -->
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
+
                     <a class="nav-link active" data-bs-toggle="collapse" href="#collapseExample" role="button"
                         aria-expanded="false" aria-controls="collapseExample">
                         Données liées à l'objet sélectionné
@@ -68,6 +72,7 @@
                         <div class="card card-body">
                             <ul class="nav nav-tabs justify-content-center">
                                 <li class="nav-item">
+                                    <!-- particularity the data-bs-target is the same as aria-controls their name is important because linked to the sidebar -->
                                     <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvasScrollinginfo" aria-controls="offcanvasScrollinginfo">
                                         Contexte géographique
@@ -117,13 +122,15 @@
 
             </ul>
 
-
+            <!-- Here the important sidebar id corresponds to the navbar -->
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+                <!-- The header -->
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
+                <!-- The body -->
                 <div class="offcanvas-body" id="infoGen">
                     <div class="accordion" id="infoGenAccordion">
                         <p>Try scrolling the rest of the page to see this option in action.</p>
