@@ -1,4 +1,7 @@
 export default class Style {
+    //Static variable solving a display issue of iTowns
+    static id_counter = 0;
+
     /**
      * @param {String} name Name of your style.
      * @param {*} view View object from iTowns.
@@ -126,7 +129,6 @@ export default class Style {
      */
     async to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
-        const id = "style_layer";
         this.clean();
 
         //Create the coloring function
@@ -161,6 +163,8 @@ export default class Style {
         }
 
         //Create the layer (3D or 2D)
+        Style.id_counter += 1;
+        const id = "style_layer_" + Style.id_counter;
         let layer;
         if (this.extrude) {
             //Create the functions to place the object on the ground and to extrude it.
@@ -212,13 +216,13 @@ export default class Style {
      * Delete the style layer.
      */
     clean() {
-        const id = "style_layer";
+        const id = "style_layer_" + Style.id_counter;
         try {
             const layer = this.view.getLayerById(id);
             this.view.removeLayer(id);
             layer.delete();
         } catch (error) {
-            console.log("Cleaning");
+            console.log("Cleaning style layer");
         }
         return this;
     }
