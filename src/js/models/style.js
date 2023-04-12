@@ -67,7 +67,7 @@ export default class Style {
         //Automatically find and set this.min ?
         if (isNaN(this.min)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            const findMin = (properties) => {
+            function hackMin(properties) {
                 if (!isNaN(properties[this.field])) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
@@ -75,6 +75,7 @@ export default class Style {
                 }
                 return true;
             }
+            const findMin = hackMin.bind(this);
             const layer = new itowns.FeatureGeometryLayer("to_delete", {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMin,
@@ -92,14 +93,15 @@ export default class Style {
         //Automatically find and set this.max ?
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            const findMax = (properties) => {
+            function hackMax(properties) {
                 if (!isNaN(properties[this.field])) {
-                    if (isNaN(this.max) || (properties[this.field] < this.max)) {
+                    if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
                     }
                 }
                 return true;
             }
+            const findMax = hackMax.bind(this);
             const layer = new itowns.FeatureGeometryLayer("to_delete", {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMax,
@@ -119,7 +121,7 @@ export default class Style {
      * @param {Map<String,String>} map Map having the field different values as keys and colors as values. Colors must be in the rgb format. Example: "rgb(241,0,60)".
      */
     setClasses(map) {
-        this.map = map;
+        this.classes_map = map;
         return this;
     }
 
@@ -136,7 +138,7 @@ export default class Style {
         if (this.gradation_or_classes) {
             // One or two colors ?
             if (this.color2 == undefined) {
-                coloring = (properties) => {
+                coloring = function f(properties) {
                     let color = new itowns.THREE.Color();
                     const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
                     const red = intensity * (255 - this.color1.r) + this.color1.r;
@@ -145,13 +147,13 @@ export default class Style {
                     return color.set("rgb(" + red + "," + green + "," + blue + ")");
                 }
             } else {
-                coloring = (properties) => {
+                coloring = function f(properties) {
                     //TODO
                     return properties;
                 }
             }
         } else {
-            coloring = (properties) => {
+            coloring = function f(properties) {
                 let color = new itowns.THREE.Color();
                 for (const key of Object.keys(this.classes_map)) {
                     if (properties[this.field].toLowerCase() == key.toLowerCase()) {
@@ -161,6 +163,7 @@ export default class Style {
                 return color.set("rgb(169,169,169)");
             }
         }
+        const drawing = coloring.bind(this);
 
         //Create the layer (3D or 2D)
         Style.id_counter += 1;
@@ -168,13 +171,15 @@ export default class Style {
         let layer;
         if (this.extrude) {
             //Create the functions to place the object on the ground and to extrude it.
-            const altitudeFeature = (properties) => {
+            function alti(properties) {
                 return properties[this.field_ground];
             }
-            const extrudeFeature = (properties) => {
+            const altitudeFeature = alti.bind(this);
+            function extr(properties) {
                 return properties[this.field_height];
             }
-            const acceptFeature = (properties) => {
+            const extrudeFeature = extr.bind(this);
+            function acceptFeature(properties) {
                 return !!properties.hauteur;
             }
 
@@ -187,10 +192,11 @@ export default class Style {
 
                 style: new itowns.Style({
                     fill: {
-                        color: coloring,
+                        color: drawing,
                         base_altitude: altitudeFeature,
                         extrusion_height: extrudeFeature,
-                    }
+                    },
+                    stroke: { color: "black" }
                 })
             });
         } else {
@@ -201,7 +207,7 @@ export default class Style {
                 zoom: { min: 14 },
                 style: new itowns.Style({
                     fill: {
-                        color: coloring
+                        color: drawing
                     }
                 })
             });
@@ -222,7 +228,7 @@ export default class Style {
             this.view.removeLayer(id);
             layer.delete();
         } catch (error) {
-            console.log("Cleaning style layer");
+            console.log("Cleaning unexistent style layer");
         }
         return this;
     }
