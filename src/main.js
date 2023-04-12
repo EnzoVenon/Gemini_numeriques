@@ -207,7 +207,7 @@ viewerDiv.addEventListener(
             }).then(res => {
 
                 // ----------- Generate html accordion item for each value ----------- //
-                Object.entries(valuesToDisplay).forEach(([key, value]) => {
+                Object.entries(res).forEach(([key, value]) => {
                     generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
                     generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
                     generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
