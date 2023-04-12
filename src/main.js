@@ -12,9 +12,12 @@ import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
-import { bdnbinfoToHtml } from "./js/models/bdnbinfoToHtml"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
+import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
+
+
+// ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
 const records = {}
@@ -85,42 +88,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 });
 
 // ----------------- Variables to display content in tabs ----------------- //
-
-// Onglet batiment
-let ongletBatiment = [
-    "bdtopo_bat_altitude_sol_mean",
-    "bdtopo_bat_hauteur_mean",
-    "bdtopo_bat_l_etat",
-    "ffo_bat_usage_niveau_1_txt",
-    "DATE_CREAT",
-    "ETAT",
-    "HAUTEUR",
-    "NATURE",
-    "NB_ETAGES",
-    "USAGE1",
-    "USAGE2"
-]
-// Onglet risque
-let ongletRisque = [
-    "radon_alea"
-]
-// Onglet Infos Générales 
-let ongletInfoGen = [
-    "code_commune_insee",
-    "code_departement_insee",
-    "code_iris",
-    "fiabilite_cr_adr_niv_1",
-    "libelle_adr_principale_ban",
-    "ffo_bat_usage_niveau_1_txt",
-    "DATE_CREAT",
-    "ETAT",
-    "HAUTEUR",
-    "NATURE",
-    "NB_ETAGES",
-    "USAGE1",
-    "USAGE2"
-]
-
 const tooltip = document.getElementById('tooltip');
 const htmlTest = document.getElementById('population');
 viewerDiv.addEventListener(
@@ -217,32 +184,36 @@ viewerDiv.addEventListener(
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
+
+                // ----------- Get Bdnb data ----------- //
                 // Dispatch Bdnb data for each tab
                 let valDisplayed;
                 Object.entries(res).forEach(([key, value]) => {
                     valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                 })
-                // console.log(valuesToDisplay)
-                // bdnbinfoToHtml(res)
                 return valDisplayed;
             }).then(result => {
+
+                // ----------- Get BdTopo data ----------- //
                 let valBdTopo = getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
                     // Dispatch BdTopo data for each tab
                     let valDisplayedBdTopo;
                     Object.entries(res).forEach(([key, value]) => {
                         valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
                     })
-                    // console.log(valuesToDisplay)
                     return valDisplayedBdTopo;
                 })
                 return valBdTopo
             }).then(res => {
+
+                // ----------- Generate html accordion item for each value ----------- //
                 Object.entries(valuesToDisplay).forEach(([key, value]) => {
                     generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
                     generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
                     generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
 
                 })
+                // for info link
                 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                 const tooltipList = [...tooltipTriggerList]
                 tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -505,54 +476,3 @@ fileInput.addEventListener('change', (event) => {
 
     reader.readAsText(file);
 });
-
-
-// ----------------------------------------- functions ----------------------------------------- //
-function loadDataToJSON(dictionaryTofill, key, value, base) {
-    const jsonData = {
-        attribut: key,
-        val: value,
-        source: base
-    }
-    if (ongletInfoGen.includes(key)) {
-        dictionaryTofill.tabInfoGen.push(jsonData)
-    } else if (ongletBatiment.includes(key)) {
-        dictionaryTofill.tabBatiment.push(jsonData)
-    } else if (ongletRisque.includes(key)) {
-        dictionaryTofill.tabRisques.push(jsonData)
-    }
-
-    return dictionaryTofill;
-}
-
-function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
-    let textTest = ''
-    const htmlElement = document.getElementById(htmlID);
-
-    if (keyTab.includes(tabName)) {
-        htmlElement.innerHTML = ''
-        listOfAttributes.forEach((value) => {
-            textTest = generateAccordion4Attribute(value.attribut, value.val, value.source)
-            htmlElement.innerHTML += textTest
-        })
-    }
-    console.log(htmlElement.outerHTML)
-
-}
-
-function generateAccordion4Attribute(attributeName, value, source) {
-    let htmlText = '';
-    htmlText += '<div class="accordion-item">'
-    htmlText += '<h2 class="accordion-header" id="heading' + attributeName + '">'
-    htmlText += '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + attributeName + '" aria-expanded="false" aria-controls="collapse' + attributeName + '">'
-    htmlText += attributeName
-    htmlText += '</button></h2></div>'
-    htmlText += '<div id="collapse' + attributeName + '" class="accordion-collapse collapse" aria-labelledby="heading' + attributeName + '">'
-    htmlText += '<div class="accordion-body" id="info' + attributeName + '">'
-    htmlText += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
-    htmlText += '<span>' + value + '</span>'
-    htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
-    htmlText += 'info'
-    htmlText += '</a></div></div></div>'
-    return htmlText;
-}
