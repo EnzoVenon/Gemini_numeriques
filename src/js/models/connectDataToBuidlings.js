@@ -1,5 +1,123 @@
 import { addChart } from "./insee/showChart"
 
+// Onglet batiment
+let ongletBatiment = [
+  "bdtopo_bat_altitude_sol_mean",
+  "bdtopo_bat_hauteur_mean",
+  "bdtopo_bat_l_etat",
+  "ffo_bat_usage_niveau_1_txt",
+  "DATE_CREAT",
+  "ETAT",
+  "HAUTEUR",
+  "NATURE",
+  "NB_ETAGES",
+  "USAGE1",
+  "USAGE2"
+]
+// Onglet risque
+let ongletRisque = [
+  "radon_alea"
+]
+// Onglet Infos Générales 
+let ongletInfoGen = [
+  "code_commune_insee",
+  "code_departement_insee",
+  "code_iris",
+  "fiabilite_cr_adr_niv_1",
+  "libelle_adr_principale_ban",
+  "ffo_bat_usage_niveau_1_txt",
+  "DATE_CREAT",
+  "ETAT",
+  "HAUTEUR",
+  "NATURE",
+  "NB_ETAGES",
+  "USAGE1",
+  "USAGE2"
+]
+
+export function loadDataToJSON(dictionaryTofill, key, value, base) {
+
+  /* 
+  
+      Load data into a JSON. 
+      The returned variable's format is as follow:
+          {
+            tabInfoGen: [ { attribute: key, val: value, source: base },
+                          { attribute: key, val: value, source: base },
+                          ... ]
+            tabBatiment: [ { attribute: key, val: value, source: base },
+                          { attribute: key, val: value, source: base },
+                          ... ]
+            tabRisques: [ { attribute: key, val: value, source: base },
+                          { attribute: key, val: value, source: base },
+                          ... ]
+          }
+  
+  */
+
+  const jsonData = {
+    attribut: key,
+    val: value,
+    source: base
+  }
+  if (ongletInfoGen.includes(key)) {
+    dictionaryTofill.tabInfoGen.push(jsonData)
+  } else if (ongletBatiment.includes(key)) {
+    dictionaryTofill.tabBatiment.push(jsonData)
+  } else if (ongletRisque.includes(key)) {
+    dictionaryTofill.tabRisques.push(jsonData)
+  }
+
+  return dictionaryTofill;
+}
+
+export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
+  /*
+
+    Generates html accordion item for each attribute in the list of attributes given
+
+  */
+
+  let textTest = ''
+  const htmlElement = document.getElementById(htmlID);
+
+  if (keyTab.includes(tabName)) {
+    htmlElement.innerHTML = ''
+    listOfAttributes.forEach((value) => {
+      textTest = generateAccordion4Attribute(value.attribut, value.val, value.source)
+      htmlElement.innerHTML += textTest
+    })
+  }
+  console.log(htmlElement.outerHTML)
+
+}
+
+export function generateAccordion4Attribute(attributeName, value, source) {
+
+  /*
+
+    Generate html accordion for the given attribute
+
+  */
+
+  let htmlText = '';
+  htmlText += '<div class="accordion-item">'
+  htmlText += '<h2 class="accordion-header" id="heading' + attributeName + '">'
+  htmlText += '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + attributeName + '" aria-expanded="false" aria-controls="collapse' + attributeName + '">'
+  htmlText += attributeName
+  htmlText += '</button></h2></div>'
+  htmlText += '<div id="collapse' + attributeName + '" class="accordion-collapse collapse" aria-labelledby="heading' + attributeName + '">'
+  htmlText += '<div class="accordion-body" id="info' + attributeName + '">'
+  htmlText += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
+  htmlText += '<span>' + value + '</span>'
+  htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
+  htmlText += 'info'
+  htmlText += '</a></div></div></div>'
+  return htmlText;
+}
+
+
+
 export async function picking(event, view) {
   if (view.controls.isPaused) {
 

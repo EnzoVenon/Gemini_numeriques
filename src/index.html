@@ -125,7 +125,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body" id="infoGen">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <div class="accordion" id="infoGenAccordion">
+                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                    </div>
                 </div>
             </div>
 
@@ -137,56 +139,11 @@
                 </div>
 
                 <div class="offcanvas-body" id="batInfo">
-
                     <div class="accordion" id="batimentAccordion">
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    Hauteur
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
-                            <div class="accordion-body" id="listHauteur">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-                            </div>
-                        </div>
-
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading2">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                    Etage
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2">
-                            <div class="accordion-body" id="listEtage">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading3">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse3">
-                                    Etat
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3">
-                            <div class="accordion-body" id="listEtat">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-                            </div>
-                        </div>
-
-
-
+                        <p>Try scrolling the rest of the page to see this option in action.</p>
                     </div>
                 </div>
+
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
@@ -194,15 +151,16 @@
                     <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div class="offcanvas-body" id="risqueInfo">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
                         <label class="form-check-label" for="showInnondationLayer"> zone inndoable (en blue) et
                             batiment en zone innoable en rouge</label>
                     </div>
 
-
-                    <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                    <div class="accordion" id="RisquesAccordion">
+                        <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                    </div>
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
@@ -212,7 +170,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div class="accordion" id="EnergieAccordion">
+                    <div class="accordion" id="energieAccordion">
 
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingEnergieOne">
