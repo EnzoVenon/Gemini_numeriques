@@ -84,7 +84,6 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
       htmlElement.innerHTML += textTest
     })
   }
-  console.log(htmlElement.outerHTML)
 
 }
 
@@ -119,8 +118,6 @@ export async function picking(event, view) {
 
     const htmlInfo = document.getElementById('info');
     const intersects = view.pickObjectsAt(event, 3, 'WFS Building');
-    // const intersects2 = view.pickObjectsAt(event, 10000000, 'iris');
-    // console.log(intersects2)
     let properties;
     let info;
     let batchId;
@@ -128,14 +125,12 @@ export async function picking(event, view) {
     htmlInfo.innerHTML = ' ';
 
     if (intersects.length) {
-      // console.log(intersects[0])
       batchId = intersects[0].object.geometry.attributes.batchId.array[intersects[0].face.a];
       properties = intersects[0].object.feature.geometries[batchId].properties;
       let iris_code;
       let importantKey = ["usage_1", "usage_2", "hauteur", "nombre_de_logements", "nombre_d_etage"]
 
       let keys = Object.keys(properties)
-      // Object.keys(properties).map(async function (objectKey) 
       for (let i = 0; i < keys.length; i++) {
         let objectKey = keys[i]
 
@@ -143,14 +138,12 @@ export async function picking(event, view) {
 
         if (value) {
           const key = objectKey.toString();
-          console.log('------------------- Key ---------------')
           if (key === 'bbox') {
             const lon = (value[0] + value[2]) / 2;
             const lat = (value[1] + value[3]) / 2;
             const res = await fetch("https://pyris.datajazz.io/api/coords?lat=" + lat + "&lon=" + lon)
             const json = await res.json();
 
-            console.log('result')
             iris_code = json.complete_code
           }
           if (key[0] !== '_' && key !== 'geometry_name' && (importantKey.includes(key))) {
@@ -161,8 +154,6 @@ export async function picking(event, view) {
       }
       htmlInfo.innerHTML += '<li>' + 'test iris' + '</li>';
 
-      console.log('iris_code')
-      console.log(iris_code)
 
       // getPopdata
       let apiUrl = "https://pyris.datajazz.io/api/insee/population/" + iris_code
@@ -172,11 +163,9 @@ export async function picking(event, view) {
 
       let dataPromise = await fetch(apiUrl)
       let dataJson = await dataPromise.json()
-      console.log(dataJson)
 
       let dataPromiseAge = await fetch(apiUrl2)
       let dataJsonAge = await dataPromiseAge.json()
-      console.log(dataJsonAge.data)
       delete dataJsonAge.data.census;
 
       htmlInfo.innerHTML += '<li>' + 'population par groupe paté de maison' + '</li>';
@@ -193,7 +182,6 @@ export async function picking(event, view) {
 
       let dataAge = [];
       Object.entries(dataJsonAge.data).forEach(([key, val]) => {
-        console.log(val)
         dataAge.push({ age: key, count: val })
 
       })
