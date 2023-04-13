@@ -8,7 +8,7 @@ let ongletBatiment = [
   "ffo_bat_usage_niveau_1_txt",
   "DATE_CREAT",
   "ETAT",
-  "HAUTEUR",
+  // "HAUTEUR",
   "NATURE",
   "NB_ETAGES",
   "USAGE1",
@@ -16,7 +16,8 @@ let ongletBatiment = [
 ]
 // Onglet risque
 let ongletRisque = [
-  "radon_alea"
+  "radon_alea",
+  "argiles_alea"
 ]
 // Onglet Infos Générales 
 let ongletInfoGen = [
@@ -25,14 +26,9 @@ let ongletInfoGen = [
   "code_iris",
   "fiabilite_cr_adr_niv_1",
   "libelle_adr_principale_ban",
-  "ffo_bat_usage_niveau_1_txt",
-  "DATE_CREAT",
-  "ETAT",
-  "HAUTEUR",
-  "NATURE",
-  "NB_ETAGES",
-  "USAGE1",
-  "USAGE2"
+  "libelle_commune_insee",
+  "bdtopo_zoa_l_toponyme"
+
 ]
 
 export function loadDataToJSON(dictionaryTofill, key, value, base) {
