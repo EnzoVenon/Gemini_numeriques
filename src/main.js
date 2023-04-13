@@ -43,22 +43,60 @@ customDiv.appendChild(pointer);
 
 // ----------------- View Setup ----------------- //
 // Define initial camera position
-const placement = {
-    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+
+const perigcoord = new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2)
+const parisgcoord = new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2)
+
+let placement = {
+    //  Coordinates of Perigueux
+    coord: perigcoord,
     range: 200,
     tilt: 33,
 }
+
+
+
+
+
+
+
+
+
+
 
 const viewerDiv = document.getElementById('viewerDiv');
 viewerDiv.appendChild(bat)
 
 // Instanciate iTowns GlobeView
-const view = new itowns.GlobeView(viewerDiv, placement);
+let view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 // ajout de widget de navigation
 widgetNavigation(view)
 
+const switchbutton = document.getElementById('site_state')
+console.log(switchbutton)
+document.getElementById("changloc").addEventListener("click", () => {
+    if (switchbutton.checked) {
+        placement.coord = parisgcoord
+        // Instanciate iTowns GlobeView
+        let view = new itowns.GlobeView(viewerDiv, placement);
+        setupLoadingScreen(viewerDiv, view);
+        FeatureToolTip.init(viewerDiv, view);
+        console.log(switchbutton)
+        console.log(placement)
+    }
+    else {
+        placement.coord = perigcoord
+        console.log(switchbutton)
+        // Instanciate iTowns GlobeView
+        let view = new itowns.GlobeView(viewerDiv, placement);
+        setupLoadingScreen(viewerDiv, view);
+        FeatureToolTip.init(viewerDiv, view);
+
+    }
+
+})
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
