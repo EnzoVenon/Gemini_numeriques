@@ -78,12 +78,49 @@ let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV"
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
+let dataBdnb;
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+
+    csvBdnb.then(res => {
+        console.log(res);
+        // Récupérer les valeurs uniques de la propriété "type"
+        dataBdnb = res.reduce((result, prop) => {
+            result[prop.batiment_groupe_id] = Object.entries(prop).reduce((a, [k, v]) => (v === null ? a : (a[k] = v, a)), {})
+            // console.log(prop)
+            return result;
+        }, {});
+        // argiles_alea
+        console.log(dataBdnb)
+
+        // bdnbPromisedJson.then(geojson => {
+
+        //     // console.log(geojson)
+
+        //     geojson.features.forEach((feature) => {
+        //         // console.log(feature.properties["batiment_g"])
+        //         // console.log(records[feature.properties["batiment_g"]])
+        //         let data = dataBdnb[feature.properties["batiment_g"]]
+        //         if (data) {
+        //             feature.properties = data
+        //         }
+
+        //     });
+
+        //     let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        //     geosjontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
+        //     batInorandomId.bdnb_random_id = ramdoId2
+        // })
+
+
+
+    }
+
+    )
 
 });
 
@@ -321,11 +358,10 @@ document.getElementById("exploredata").addEventListener("change", () => {
         bdnbPromisedJson.then(geojson => {
 
             // console.log(geojson)
-
             geojson.features.forEach((feature) => {
                 // console.log(feature.properties["batiment_g"])
                 // console.log(records[feature.properties["batiment_g"]])
-                let data = records[feature.properties["batiment_g"]]
+                let data = dataBdnb[feature.properties["batiment_g"]]
                 if (data) {
                     feature.properties = data
                 }
@@ -333,7 +369,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
             });
 
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "code_iris", ramdoId2, false, view, THREE)
+            geosjontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
         }
         )
