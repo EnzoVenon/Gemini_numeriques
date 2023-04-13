@@ -134,7 +134,7 @@ export default class Style {
      */
     to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
-        this.clean();
+        this.clean(Style.#id_counter);
 
         //Create the coloring function
         let coloring;
@@ -241,14 +241,15 @@ export default class Style {
     /**
      * Delete the style layer.
      */
-    clean() {
-        const id = "style_layer_" + Style.#id_counter;
-        try {
-            const layer = this.view.getLayerById(id);
-            this.view.removeLayer(id);
-            layer.delete();
-        } catch (error) {
-            console.log("Cleaning unexistent style layer");
+    clean(id_counter) {
+        for (let i = 0; i <= id_counter; i++) {
+            const id = "style_layer_" + i;
+            try {
+                const layer = this.view.getLayerById(id);
+                this.view.removeLayer(id);
+                layer.delete();
+            } catch (error) {
+            }
         }
         return this;
     }
