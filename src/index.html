@@ -302,14 +302,40 @@
                             <select class="form-select" aria-label="Default select example" id="selectProp">
                                 <option selected>Choisir une couche</option>
                             </select>
+
+
                         </div>
+
+                        <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+
 
                     </div>
 
                     <div class="carousel-item">
-                        <h5 class="card-title">Import de fichier</h5>
-                        <input type="file" id="fileInput">
-                        <button id="recupPath">Test</button>
+                        <div id="drop-zone">Drop your ZIP file here</div>
+
+                        <select class="form-select" aria-label="Default select example" id="select2dZiped">
+                            <option selected>Choisir une couche</option>
+                        </select>
+
+                        <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+
+                        <div>
+                            <label for="name">suprimer la couche</label>
+                            <input type="checkbox" id="checkbox-supprime-2ddrop" name="name">
+                        </div>
                     </div>
                 </div>
 
@@ -329,13 +355,6 @@
             </div>
 
             <div class="card-footer">
-                <button class="btn btn-primary" id="confirmExporation">Afficher</button>
-
-                <!-- Button trigger modal -->
-                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Légende
-                </button>
-
             </div>
 
         </div>
@@ -371,9 +390,6 @@
         <script src="./js/GUI/LoadingScreen.js"></script>
 
         <script type="module" src="./main.js"></script>
-
-
-
 
 </body>
 

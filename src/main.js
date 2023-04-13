@@ -15,6 +15,9 @@ import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
+import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+
+import * as shp from "shpjs";
 
 
 // ----------------- Variables ----------------- //
@@ -30,7 +33,7 @@ bat.id = 'bat';
 let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
-
+let dropedGeojson = { "2dDrop": {}, "2dDropId": "" };
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -489,30 +492,69 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
 })
 
 
-const fileInput = document.getElementById('fileInput');
+let dropZone = document.getElementById('drop-zone');
 
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-        const data = reader.result;
-        const rows = data.split('\n');
-        const headers = rows[0].split(',');
-
-        for (let i = 1; i < rows.length; i++) {
-            const values = rows[i].split(',');
-            const record = {};
-
-            for (let j = 0; j < headers.length; j++) {
-                record[headers[j]] = values[j];
-            }
-
-            records[record.batiment_groupe_id] = record;
-        }
-
-        // console.log(records);
-    };
-
-    reader.readAsText(file);
+dropZone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
 });
+
+dropZone.addEventListener('dragleave', function () {
+    dropZone.classList.remove('drag-over');
+});
+
+dropZone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        var file = files[0];
+        if (file.type === 'application/zip') {
+            // Handle the ZIP file
+            // console.log(file);
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var arrayBuffer = event.target.result;
+                // Handle the arrayBuffer
+                console.log(arrayBuffer);
+                //for the shapefiles in the files folder called pandr.shp
+                shp(arrayBuffer).then(function (geojson) {
+                    //see bellow for whats here this internally call shp.parseZip()
+                    console.log(geojson)
+
+                    updateSelectOption(geojson, "select2dZiped", true)
+
+                    dropedGeojson["2dDrop"] = geojson
+                });
+
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            alert('Please drop a ZIP file');
+        }
+    }
+});
+
+
+var affiche2dFile = document.getElementById('afficheDrop2d');
+
+affiche2dFile.addEventListener("click", () => {
+    console.log("sqfsqfsqdfd")
+    console.log(dropedGeojson)
+
+    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    let geojson = dropedGeojson["2dDrop"]
+    console.log(geojson)
+    const select2dZiped = document.getElementById('select2dZiped').value;
+    geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
+
+}
+)
+
+// document.getElementById("checkbox-supprime-2ddrop").addEventListener("change", () => {
+//     if (document.getElementById("checkbox-supprime-2ddrop").checked) {
+//         view.removeLayer(dropedGeojson["2dDropId"])
+//     }
+// })
+
+
