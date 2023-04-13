@@ -93,6 +93,10 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
           if (properties.hauteur) {
             return properties.hauteur
           }
+          else if (properties.bdtopo_bat_hauteur_mean) {
+            return properties.bdtopo_bat_hauteur_mean
+          }
+
           else if (properties.HAUTEUR) {
             return properties.HAUTEUR
           }
@@ -104,6 +108,10 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
         base_altitude: (properties) => {
           if (properties.altitude_s) {
             return properties.altitude_s
+
+          }
+          else if (properties.bdtopo_bat_altitude_sol_mean) {
+            return properties.bdtopo_bat_altitude_sol_mean
           }
           else if (properties.Z_MIN_SOL) {
             return properties.Z_MIN_SOL
