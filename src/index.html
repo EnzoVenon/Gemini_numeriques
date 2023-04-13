@@ -24,11 +24,7 @@
 
     <link rel="stylesheet" href="css/index.css">
 
-
-
-
     <script scr="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
-
 
 
     <style>
@@ -127,13 +123,13 @@
                 id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
                 <!-- The header -->
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Contexte géographique</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <!-- The body -->
                 <div class="offcanvas-body" id="infoGen">
                     <div class="accordion" id="infoGenAccordion">
-                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                     </div>
                 </div>
             </div>
@@ -141,13 +137,13 @@
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Bâtiments</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Infos sur l'objet</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
                 <div class="offcanvas-body" id="batInfo">
                     <div class="accordion" id="batimentAccordion">
-                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                     </div>
                 </div>
 
@@ -161,19 +157,19 @@
                 <div class="offcanvas-body" id="risqueInfo">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
-                        <label class="form-check-label" for="showInnondationLayer"> zone inndoable (en blue) et
-                            batiment en zone innoable en rouge</label>
+                        <label class="form-check-label" for="showInnondationLayer"> Zone inondable (en bleu) et
+                            bâtiments en zone inondable (en rouge)</label>
                     </div>
 
                     <div class="accordion" id="RisquesAccordion">
-                        <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                     </div>
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Energies</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Énergie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -184,14 +180,14 @@
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseEnergieOne" aria-expanded="false"
                                     aria-controls="collapseEnergieOne">
-                                    Consommation energétique
+                                    Consommation énergétique
                                 </button>
                             </h2>
                         </div>
                         <div id="collapseEnergieOne" class="accordion-collapse collapse"
                             aria-labelledby="headingEnergieOne">
                             <div class="accordion-body" id="listConsoEnergie">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                                <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                             </div>
                         </div>
 
@@ -205,26 +201,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body" id="population">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Compléments</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">En savoir plus</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div id="sourceGeom">
 
-                        <p>Source de donnée géométrique</p>
+                        <p>Sources de données géométriques</p>
 
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showBdnbLayer" checked
                                 disabled>
-                            <label class="form-check-label" for="flexSwitchCheckDefault">base de donnée nationale
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Base de Données Nationale
                                 des
-                                batiments (en noir)</label>
+                                Bâtiments (en noir)</label>
                         </div>
 
                         <div class="form-check form-switch">
@@ -233,12 +229,12 @@
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showOsmLayer">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">openstreet map (en
+                            <label class="form-check-label" for="flexSwitchCheckChecked">OpenStreetMap (en
                                 jaune)</label>
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showCadastreLayer">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">cadastre (en
+                            <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre (en
                                 rouge)</label>
                         </div>
 
@@ -253,7 +249,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <p>A venir</p>
                 </div>
             </div>
 
@@ -266,7 +262,7 @@
 
 
             <div class="card-header">
-                quickExploration
+                Exploration
             </div>
 
 
@@ -274,11 +270,11 @@
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="card-body">
-                            <h5 class="card-title">Explorer les données</h5>
+                            <h5 class="card-title">Sources</h5>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="selectData" role="switch"
                                     id="exploredata">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">Bdnb <i
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
                                         class="bi bi-info-circle"></i></label>
                             </div>
                             <div class="form-check form-switch">
@@ -301,18 +297,19 @@
                                         class="bi bi-info-circle"></i></label>
                             </div>
 
-                            <p> propriété dipsonible</p>
+                            <p>Attributs disponibles</p>
 
                             <select class="form-select" aria-label="Default select example" id="selectProp">
-                                <option selected>Choisir un couche</option>
+                                <option selected>Choisir une couche</option>
                             </select>
                         </div>
 
                     </div>
 
                     <div class="carousel-item">
+                        <h5 class="card-title">Import de fichier</h5>
                         <input type="file" id="fileInput">
-                        <button id="recupPath">Get file path</button>
+                        <button id="recupPath">Test</button>
                     </div>
                 </div>
 
@@ -332,11 +329,11 @@
             </div>
 
             <div class="card-footer">
-                <button class="btn btn-primary" id="confirmExporation">afficher</button>
+                <button class="btn btn-primary" id="confirmExporation">Afficher</button>
 
                 <!-- Button trigger modal -->
                 <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Legend
+                    Légende
                 </button>
 
             </div>
