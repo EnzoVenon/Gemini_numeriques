@@ -90,8 +90,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Styles definition
     let style_list = [];
     style_list.push(
-        new Style("Notes consommation d'énergie", view, view.getLayerById("bdnb").source, "dpe_class_conso_ener_mean", false, false)
-            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean", false)
+        new Style("Notes consommation d'énergie", view, view.getLayerById("bdnb").source, "dpe_logtype_classe_conso_ener", false, false)
+            .setExtrude("altitude_s", "hauteur", false)
             .setClasses({
                 "A": "rgb(1,149,65)",
                 "B": "rgb(83,174,50)",
@@ -101,6 +101,15 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "F": "rgb(237,102,7)",
                 "G": "rgb(228,19,18)"
             })
+    );
+    style_list.push(
+        new Style("Hauteur dégradée", view, view.getLayerById("bdnb").source, "hauteur", false, true)
+            .setExtrude("altitude_s", "hauteur", false)
+            .setGradation("rgb(255,0,0)", "", 1, 30)
+    );
+    style_list.push(
+        new Style("Iris", view, view.getLayerById("bdnb").source, "code_iris", false, false)
+            .setExtrude("altitude_s", "hauteur", false)
     );
 
     //Setting the predefined styles

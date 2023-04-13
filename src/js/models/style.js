@@ -1,6 +1,7 @@
 export default class Style {
     //Static variable solving a display issue of iTowns
-    static id_counter = 0;
+    static #id_counter = 0;
+    static #id_counter2 = 0;
 
     /**
      * @param {String} name Name of your style.
@@ -18,7 +19,7 @@ export default class Style {
         this.extrude = extrude;
         this.gradation_or_classes = gradation_or_classes;
         this.setExtrude();
-        this.setGradation("rgb(250,0,0)", "", 0, 0);
+        this.setGradation("rgb(255,0,0)", "", 0, 0);
         this.setClasses({});
         return this;
     }
@@ -48,10 +49,10 @@ export default class Style {
      * Sets the color(s) and min and max values to use for gradation.
      * @param {String} color1 Color of the gradation. Must be in rgb format. Example: "rgb(241,0,60)".
      * @param {String} color2 Second color, in case you want for example to go from blue to red. Default value is "".
-     * @param {Number} min If you want the white or the second color to be set to a specific min rather than it being detected automatically. Default is NaN (so the min is automatically detected).
-     * @param {Number} max If you want your color to be set to a specific max rather than it being detected automatically. Default is NaN (so the max is automatically detected).
+     * @param {Number} min If you want the white or the second color to be set to a specific min rather than it being detected automatically.
+     * @param {Number} max If you want your color to be set to a specific max rather than it being detected automatically.
      */
-    async setGradation(color1, color2 = "", min = NaN, max = NaN) {
+    setGradation(color1, color2 = "", min = this.min, max = this.max) {
         //Set this.color1
         color1 = color1.replace(" ", "").slice(4, -1).split(",");
         this.color1 = { "r": +color1[0], "g": +color1[1], "b": +color1[2] };
@@ -68,7 +69,7 @@ export default class Style {
         if (isNaN(this.min)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
             function hackMin(properties) {
-                if (!isNaN(properties[this.field])) {
+                if ((properties.hasOwnProperty(this.field)) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
                     }
@@ -76,15 +77,16 @@ export default class Style {
                 return true;
             }
             const findMin = hackMin.bind(this);
-            const layer = new itowns.FeatureGeometryLayer("to_delete", {
+            Style.#id_counter2 += 1;
+            const layer = new itowns.FeatureGeometryLayer("to_delete_min_style" + Style.#id_counter2, {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMin,
                 source: this.source,
                 visible: false
             });
-            await this.view.addLayer(layer);
+            this.view.addLayer(layer);
             this.view.notifyChange(this.view.camera.camera3D, true);
-            this.view.removeLayer("to_delete");
+            this.view.removeLayer("to_delete_min_style" + Style.#id_counter2);
             layer.delete();
         }
 
@@ -94,7 +96,7 @@ export default class Style {
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
             function hackMax(properties) {
-                if (!isNaN(properties[this.field])) {
+                if ((properties.hasOwnProperty(this.field)) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
                     }
@@ -102,15 +104,16 @@ export default class Style {
                 return true;
             }
             const findMax = hackMax.bind(this);
-            const layer = new itowns.FeatureGeometryLayer("to_delete", {
+            Style.#id_counter2 += 1;
+            const layer = new itowns.FeatureGeometryLayer("to_delete_max_style" + Style.#id_counter2, {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMax,
                 source: this.source,
                 visible: false
             });
-            await this.view.addLayer(layer);
+            this.view.addLayer(layer);
             this.view.notifyChange(this.view.camera.camera3D, true);
-            this.view.removeLayer("to_delete");
+            this.view.removeLayer("to_delete_max_style" + Style.#id_counter2);
             layer.delete();
         }
         return this;
@@ -129,7 +132,7 @@ export default class Style {
      * Add a style itowns layer to the view and returns it.
      * @returns iTowns layer with the style.
      */
-    async to_itowns_layer() {
+    to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         this.clean();
 
@@ -137,37 +140,54 @@ export default class Style {
         let coloring;
         if (this.gradation_or_classes) {
             // One or two colors ?
-            if (this.color2 == undefined) {
+            if (!this.color2) {
+                console.log("Affichage de style de dégradé 1 couleur");
                 coloring = function f(properties) {
-                    let color = new itowns.THREE.Color();
-                    const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
-                    const red = intensity * (255 - this.color1.r) + this.color1.r;
-                    const green = intensity * (255 - this.color1.g) + this.color1.g;
-                    const blue = intensity * (255 - this.color1.b) + this.color1.b;
-                    return color.set("rgb(" + red + "," + green + "," + blue + ")");
+                    if (properties.hasOwnProperty(this.field)) {
+                        const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
+                        const red = Math.floor(intensity * (255 - this.color1.r) + this.color1.r);
+                        const green = Math.floor(intensity * (255 - this.color1.g) + this.color1.g);
+                        const blue = Math.floor(intensity * (255 - this.color1.b) + this.color1.b);
+                        return "rgb(" + red + "," + green + "," + blue + ")";
+                    } else {
+                        return "rgb(169,169,169)";
+                    }
                 }
             } else {
+                console.log("Affichage de style de dégradé 2 couleurs");
                 coloring = function f(properties) {
                     //TODO
                     return properties;
                 }
             }
         } else {
-            coloring = function f(properties) {
-                let color = new itowns.THREE.Color();
-                for (const key of Object.keys(this.classes_map)) {
-                    if (properties[this.field].toLowerCase() == key.toLowerCase()) {
-                        return color.set(this.classes_map[key]);
+            //If the map associating classes and colors is empty, we classify automatically
+            if (Object.keys(this.classes_map).length == 0) {
+                console.log("Affichage de style de classif auto");
+                coloring = function f(properties) {
+                    if (properties.hasOwnProperty(this.field)) {
+                        if (!this.classes_map.hasOwnProperty(properties[this.field])) {
+                            this.classes_map[properties[this.field]] = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+                        }
+                        return this.classes_map[properties[this.field]];
                     }
+                    return "rgb(169,169,169)";
                 }
-                return color.set("rgb(169,169,169)");
+            } else {
+                console.log("Affichage de style de classif");
+                coloring = function f(properties) {
+                    if (properties.hasOwnProperty(this.field) && this.classes_map.hasOwnProperty(properties[this.field])) {
+                        return this.classes_map[properties[this.field]];
+                    }
+                    return "rgb(169,169,169)";
+                }
             }
         }
         const drawing = coloring.bind(this);
 
         //Create the layer (3D or 2D)
-        Style.id_counter += 1;
-        const id = "style_layer_" + Style.id_counter;
+        Style.#id_counter += 1;
+        const id = "style_layer_" + Style.#id_counter;
         let layer;
         if (this.extrude) {
             //Create the functions to place the object on the ground and to extrude it.
@@ -213,7 +233,7 @@ export default class Style {
             });
         }
 
-        await this.view.addLayer(layer);
+        this.view.addLayer(layer);
         this.view.notifyChange(this.view.camera.camera3D, true);
         return layer;
     }
@@ -222,7 +242,7 @@ export default class Style {
      * Delete the style layer.
      */
     clean() {
-        const id = "style_layer_" + Style.id_counter;
+        const id = "style_layer_" + Style.#id_counter;
         try {
             const layer = this.view.getLayerById(id);
             this.view.removeLayer(id);
