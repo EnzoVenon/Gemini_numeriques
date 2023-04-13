@@ -2,6 +2,10 @@
 
 Lien vers le visualisateur web : https://enzovenon.github.io/Gemini_numeriques/
 
+Si vous avez eu un problème avec l'interface, que vous souhaitez laisser des commentaires ou même pour des idées d'améliorations, vous pouvez créer des Issues :
+- Si vous êtes memebre du comité de suivi, vous pouvez créer une Issue avec le label : Comité de suivi.
+- Si vous êtes un utilisateur, vous pouvez créer une Issue avec le label : Utilisateur.
+
 ## Sources de données
 ### BD Carto:
  - https://geoservices.ign.fr/services-web-experts-cartovecto
