@@ -31,10 +31,7 @@ let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
 
-let dropedGeojson = { "2dDrop": {}, "2dDropId": "" };
-
-
-
+let dropedGeojson = { "2dDrop": {}, "2dDropId": "", "3dDropId": "" };
 
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
@@ -372,7 +369,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
         let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
-            geosjontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
+            geojsontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
             batInorandomId.ino_random_id = ramdoId
         })
 
@@ -398,7 +395,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
             });
 
             let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
+            geojsontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
         }
         )
@@ -414,7 +411,7 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
     if (document.getElementById("exploredataIgn").checked) {
         bdtopoPromisedJson.then(geojson => {
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
+            geojsontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
             batInorandomId.bdtopo_radom_id = ramdoId
         }
         )
@@ -431,7 +428,7 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
     if (document.getElementById("exploredataOsm").checked) {
         osmPromisedJson.then(geojson => {
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
+            geojsontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
             batInorandomId.osm_random_id = ramdoId
         }
         )
@@ -448,7 +445,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
     if (document.getElementById("exploredataCadastre").checked) {
         cadastrePromisedJson.then(geojson => {
             let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geosjontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
+            geojsontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
             batInorandomId.cadastre_random_id = ramdoId
         }
         )
@@ -475,7 +472,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     if (ign) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         bdtopoPromisedJson.then(geojson => {
-            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.bdtopo_radom_id = ramdoId2
         })
     }
@@ -484,7 +481,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     if (bdnb) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         bdnbPromisedJson.then(geojson => {
-            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.bdnb_random_id = ramdoId2
         })
     }
@@ -494,7 +491,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     if (osm) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         osmPromisedJson.then(geojson => {
-            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.osm_random_id = ramdoId2
         })
     }
@@ -503,7 +500,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     if (cad) {
         let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
         cadastrePromisedJson.then(geojson => {
-            geosjontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
+            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
             batInorandomId.cadastre_random_id = ramdoId2
         })
     }
@@ -575,12 +572,98 @@ affiche2dFile.addEventListener("click", () => {
 )
 
 document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
-    if (document.getElementById("checkbox-supprime-2ddrop").checked) {
-        console.log(dropedGeojson)
-        view.removeLayer(dropedGeojson["2dDropId"])
-        dropedGeojson["2dDropId"] = ""
-    }
+    console.log(dropedGeojson)
+    view.removeLayer(dropedGeojson["2dDropId"])
+    dropedGeojson["2dDropId"] = ""
 })
+
+
+//================================== Drop zone 3d =========================================//
+let dropZone3d = document.getElementById('drop-zone-3D');
+
+dropZone3d.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZone3d.classList.add('drag-over');
+});
+
+dropZone3d.addEventListener('dragleave', function () {
+    dropZone3d.classList.remove('drag-over');
+});
+
+dropZone3d.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZone3d.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        var file = files[0];
+        if (file.type === 'application/zip') {
+            // Handle the ZIP file
+            // console.log(file);
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var arrayBuffer = event.target.result;
+                // Handle the arrayBuffer
+                console.log(arrayBuffer);
+                //for the shapefiles in the files folder called pandr.shp
+                shp(arrayBuffer).then(function (geojson) {
+                    //see bellow for whats here this internally call shp.parseZip()
+                    console.log(geojson)
+
+                    updateSelectOption(geojson, "selectHauteur3dZiped", true)
+
+                    updateSelectOption(geojson, "selectAltiSol3dZiped", true)
+
+                    updateSelectOption(geojson, "selectCol3dZiped", true)
+
+                    dropedGeojson["3dDrop"] = geojson
+                });
+
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            alert('Please drop a ZIP file');
+        }
+    }
+});
+
+
+
+var affiche3dFile = document.getElementById('afficheDrop3d');
+
+affiche3dFile.addEventListener("click", () => {
+    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    let geojson = dropedGeojson["3dDrop"]
+    console.log(geojson)
+
+    if (dropedGeojson["3dDropId"] !== '') {
+        view.removeLayer(dropedGeojson["3dDropId"])
+        dropedGeojson["3dDropId"] = ""
+    }
+
+    dropedGeojson["3dDropId"] = ramdoId2
+
+    const selectHauteur3dZiped = document.getElementById('selectHauteur3dZiped').value;
+    const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
+    const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
+
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
+
+    console.log(selectCol3dZiped)
+    // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
+}
+)
+
+
+
+document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
+    console.log("suprime3D")
+    console.log(dropedGeojson)
+    view.removeLayer(dropedGeojson["3dDropId"])
+    dropedGeojson["3dDropId"] = ""
+
+})
+
+
 
 
 
