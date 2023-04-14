@@ -1,6 +1,6 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 
-export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption, randomId, uniqueColor, view, THREE, uniquecolvalue = "red") {
+export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, randomId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
   // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
   // obtenir un tableau des noms de propriétés
   const propNames = geojson.features.reduce((acc, feature) => {
@@ -90,7 +90,12 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
         }
         ,
         extrusion_height: (properties) => {
-          if (properties.hauteur) {
+          if (heightAttribut !== "") {
+            // console.log("personal height")
+            return properties[heightAttribut]
+          }
+
+          else if (properties.hauteur) {
             return properties.hauteur
           }
           else if (properties.bdtopo_bat_hauteur_mean) {
@@ -100,13 +105,16 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
           else if (properties.HAUTEUR) {
             return properties.HAUTEUR
           }
-
           else {
             return 20
           }
         },
         base_altitude: (properties) => {
-          if (properties.altitude_s) {
+          if (altiSolAttribut !== "") {
+            // console.log("personal alti")
+            return properties[altiSolAttribut]
+          }
+          else if (properties.altitude_s) {
             return properties.altitude_s
 
           }
@@ -116,6 +124,7 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
           else if (properties.Z_MIN_SOL) {
             return properties.Z_MIN_SOL
           }
+
           else {
             return 100
           }
