@@ -22,7 +22,7 @@ import * as shp from "shpjs";
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "./data/shp/prg/bdnb_perigeux8", "bdtopo": "./data/shp/prg/bd_topo_2", "osm": "./data/shp/prg/osm", "cadastre": "./data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "./data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "./data/shp/prg/bat_innondable" }
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
@@ -93,20 +93,20 @@ document.getElementById("changloc").addEventListener("click", () => {
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
-itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
+itowns.Fetcher.json('./data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
-itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
+itowns.Fetcher.json('./data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
     .then(result => addElevationLayer(result, view));
 
 view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
 // Ortho Layer
-itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
+itowns.Fetcher.json('./data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
-let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
-let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csv2 = importCsvFile("./data/csv/base-ic-couples-familles-menages-2019.CSV")
+let csvBdnb = importCsvFile("./data/shp/prg/data_bdnb.csv")
 
 let dataBdnb;
 
@@ -123,9 +123,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     console.info('Globe initialized');
 
 
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+    addShp("./data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
-    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
+    await addShp("./data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
@@ -282,7 +282,7 @@ viewerDiv.addEventListener(
             }
 
 
-            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("./data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
             getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
 
@@ -332,7 +332,7 @@ viewerDiv.addEventListener(
 
             })
 
-            shapefile.open("../data/shp/prg/bdnb_perigeux8")
+            shapefile.open("./data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
                     .then(async function log(result) {
                         if (result.done) return "done";
@@ -340,14 +340,14 @@ viewerDiv.addEventListener(
                         if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
                             let selectedBatGeom = result.value.geometry.coordinates
                             let polygon = turf.polygon(selectedBatGeom)
-                            shapefile.open("../data/shp/prg/osm")
+                            shapefile.open("./data/shp/prg/osm")
                                 .then(source => source.read()
                                     .then(function log(result) {
                                         if (result.done) return "done";
                                         let polygonOsm = turf.polygon(result.value.geometry.coordinates)
 
                                         if (turf.intersect(polygonOsm, polygon)) {
-                                            // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                            // addSpecificBuilings("./data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
                                             return;
                                         }
 
@@ -369,7 +369,7 @@ htmlTest.innerHTML += '</div>';
 
 document.getElementById("showIgnLayer").addEventListener("change", () => {
     if (document.getElementById("showIgnLayer").checked) {
-        addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "", view, false)
+        addShp("./data/shp/prg/bd_topo", "bd_topo", "green", "", view, false)
     }
     else {
         view.removeLayer("bd_topo")
@@ -379,7 +379,7 @@ document.getElementById("showIgnLayer").addEventListener("change", () => {
 
 document.getElementById("showOsmLayer").addEventListener("change", () => {
     if (document.getElementById("showOsmLayer").checked) {
-        addShp("../data/shp/prg/osm", "osm", "yellow", "", view, false)
+        addShp("./data/shp/prg/osm", "osm", "yellow", "", view, false)
     }
     else {
         view.removeLayer("osm")
@@ -389,7 +389,7 @@ document.getElementById("showOsmLayer").addEventListener("change", () => {
 
 document.getElementById("showCadastreLayer").addEventListener("change", () => {
     if (document.getElementById("showCadastreLayer").checked) {
-        addShp("../data/shp/prg/osm", "cadastre", "red", "", view, false)
+        addShp("./data/shp/prg/osm", "cadastre", "red", "", view, false)
     }
     else {
         view.removeLayer("cadastre")
