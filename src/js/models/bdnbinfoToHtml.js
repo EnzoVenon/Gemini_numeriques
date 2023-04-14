@@ -3,7 +3,7 @@ export function bdnbinfoToHtml(dataBatBdnb) {
   // document.getElementById('batInfo').innerHTML = JSON.stringify(res)
   document.getElementById('listHauteur').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${dataBatBdnb["bdtopo_bat_hauteur_mean"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="custom-tooltip"
-                    data-bs-title="donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
+                    data-bs-title="Donnée issue de la bdnb sur l'attribut bdtopo_bat_hauteur_mean">
                     info
                 </a>
                 </div>
@@ -11,7 +11,7 @@ export function bdnbinfoToHtml(dataBatBdnb) {
 
   document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${dataBatBdnb["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                   data-bs-custom-class="custom-tooltip"
-                  data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+                  data-bs-title="Donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
                   info
               </a>
               </div>
@@ -19,7 +19,7 @@ export function bdnbinfoToHtml(dataBatBdnb) {
 
   document.getElementById('listConsoEnergie').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${dataBatBdnb["dpe_logtype_classe_conso_ener"]} m</span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
                 data-bs-custom-class="custom-tooltip"
-                data-bs-title="donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
+                data-bs-title="Donnée issue de la bdnb sur l'attribut dpe_logtype_classe_conso_ener">
                 info
             </a>
             </div>

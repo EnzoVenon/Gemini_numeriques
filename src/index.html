@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 
 <head>
     <title>Itowns - Globe + WFS</title>
@@ -24,11 +24,7 @@
 
     <link rel="stylesheet" href="css/index.css">
 
-
-
-
     <script scr="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
-
 
 
     <style>
@@ -57,9 +53,13 @@
 
     <div id=" container">
 
+        <!-- The div in which the navbar is -->
         <div id="apparition">
+
+            <!-- the navbar centered with bootstrap -->
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
+
                     <a class="nav-link active" data-bs-toggle="collapse" href="#collapseExample" role="button"
                         aria-expanded="false" aria-controls="collapseExample">
                         Données liées à l'objet sélectionné
@@ -68,6 +68,7 @@
                         <div class="card card-body">
                             <ul class="nav nav-tabs justify-content-center">
                                 <li class="nav-item">
+                                    <!-- particularity the data-bs-target is the same as aria-controls their name is important because linked to the sidebar -->
                                     <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvasScrollinginfo" aria-controls="offcanvasScrollinginfo">
                                         Contexte géographique
@@ -98,6 +99,7 @@
                                         Population
                                     </a>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -112,81 +114,81 @@
                     <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasScrollingstyle" aria-controls="offcanvasScrollingstyle">Style</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" id="switchville">
+                        <div class="d-flex" id="changloc">
+                            Perigueux
+                            <div class="form-switch form-check ms-2">
+                                <input type="checkbox" class="form-check-input" id="site_state">
+                            </div>
+                            <label for="site_state" class="form-check-label">Paris</label>
+                        </div>
+                    </a>
+                </li>
 
 
             </ul>
 
-
+            <!-- Here the important sidebar id corresponds to the navbar -->
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+                <!-- The header -->
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info générale</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Contexte géographique</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
+                <!-- The body -->
                 <div class="offcanvas-body" id="infoGen">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+
+                    <div class="accordion" id="infoGenAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingInfoOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseInfoOne" aria-expanded="false"
+                                    aria-controls="collapseInfoOne">
+                                    Contexte général
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseInfoOne" class="accordion-collapse collapse" aria-labelledby="headingInfoOne">
+                            <div class="accordion-body" id="listConsoInfo">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Bâtiments</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Infos sur l'objet</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
                 <div class="offcanvas-body" id="batInfo">
 
                     <div class="accordion" id="batimentAccordion">
-
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
+                            <h2 class="accordion-header" id="headingBatimentOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    Hauteur
+                                    data-bs-target="#collapseBatimentOne" aria-expanded="false"
+                                    aria-controls="collapseBatimentOne">
+                                    Informations liées au bâtiment
                                 </button>
                             </h2>
                         </div>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
-                            <div class="accordion-body" id="listHauteur">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                        <div id="collapseBatimentOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingBatimentOne">
+                            <div class="accordion-body" id="listConsoBatiment">
+                                <p>Pas d'informations disponibles</p>
                             </div>
                         </div>
-
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading2">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                    Etage
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2">
-                            <div class="accordion-body" id="listEtage">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading3">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse3">
-                                    Etat
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3">
-                            <div class="accordion-body" id="listEtat">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
-                            </div>
-                        </div>
-
-
-
                     </div>
+
                 </div>
+
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
@@ -194,43 +196,59 @@
                     <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div class="offcanvas-body" id="risqueInfo">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
-                        <label class="form-check-label" for="showInnondationLayer"> zone inndoable (en blue) et
-                            batiment en zone innoable en rouge</label>
+                        <label class="form-check-label" for="showInnondationLayer"> Zone inondable (en bleu) et
+                            bâtiments en zone inondable (en rouge)</label>
                     </div>
 
+                    <div class="accordion" id="RisquesAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingRisqueOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseRisqueOne" aria-expanded="false"
+                                    aria-controls="collapseRisqueOne">
+                                    Risques liés au bâtiment
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseRisqueOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingRisqueOne">
+                            <div class="accordion-body" id="listConsoRisque">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
+                    </div>
 
-                    <p>Sélectionnez un batiment pour visualiser ces informations.</p>
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Energies</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Énergie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div class="accordion" id="EnergieAccordion">
 
+                    <div class="accordion" id="energieAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingEnergieOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseEnergieOne" aria-expanded="false"
                                     aria-controls="collapseEnergieOne">
-                                    Consommation energétique
+                                    Consommation énergétique
                                 </button>
                             </h2>
                         </div>
                         <div id="collapseEnergieOne" class="accordion-collapse collapse"
                             aria-labelledby="headingEnergieOne">
                             <div class="accordion-body" id="listConsoEnergie">
-                                <p>Sélectionnez un batiment pour visualiser ces informations.</p>
+                                <p>Pas d'informations disponibles</p>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
@@ -240,26 +258,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body" id="population">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                 id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Compléments</h5>
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">En savoir plus</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div id="sourceGeom">
 
-                        <p>Source de donnée géométrique</p>
+                        <p>Sources de données géométriques</p>
 
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showBdnbLayer" checked
                                 disabled>
-                            <label class="form-check-label" for="flexSwitchCheckDefault">base de donnée nationale
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Base de Données Nationale
                                 des
-                                batiments (en noir)</label>
+                                Bâtiments (en noir)</label>
                         </div>
 
                         <div class="form-check form-switch">
@@ -268,12 +286,12 @@
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showOsmLayer">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">openstreet map (en
+                            <label class="form-check-label" for="flexSwitchCheckChecked">OpenStreetMap (en
                                 jaune)</label>
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="showCadastreLayer">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">cadastre (en
+                            <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre (en
                                 rouge)</label>
                         </div>
 
@@ -288,7 +306,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <label>3D <input id="checkbox_style_3D" type="checkbox"></label>
+                    <br>
+                    <label>Style
+                        <select id="select_style">
+                            <option value="-1" selected>Aucun</option>
+                        </select>
+                    </label>
+                    <br>
+                    <button id="button_style_apply">Appliquer</button>
                 </div>
             </div>
 
@@ -301,7 +327,7 @@
 
 
             <div class="card-header">
-                quickExploration
+                Exploration
             </div>
 
 
@@ -309,11 +335,11 @@
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="card-body">
-                            <h5 class="card-title">Explorer les données</h5>
+                            <h5 class="card-title">Sources</h5>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="selectData" role="switch"
                                     id="exploredata">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">Bdnb <i
+                                <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
                                         class="bi bi-info-circle"></i></label>
                             </div>
                             <div class="form-check form-switch">
@@ -336,82 +362,133 @@
                                         class="bi bi-info-circle"></i></label>
                             </div>
 
-                            <p> propriété dipsonible</p>
+                            <p>Attributs disponibles</p>
 
                             <select class="form-select" aria-label="Default select example" id="selectProp">
-                                <option selected>Choisir un couche</option>
+                                <option selected>Choisir une couche</option>
                             </select>
+
+
                         </div>
+
+                        <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+
 
                     </div>
 
                     <div class="carousel-item">
-                        <input type="file" id="fileInput">
-                        <button id="recupPath">Get file path</button>
+                        <div class="drop-zone" id="drop-zone">Drop your ZIP 2D shp/dbf/shx/prg file here</div>
+
+                        <select class="form-select" aria-label="Default select example" id="select2dZiped">
+                            <option selected>déposer un zip</option>
+                        </select>
+
+                        <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+                        <div>
+                            <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
+                                Supprimer la couche
+                            </button>
+                        </div>
                     </div>
                 </div>
 
+                <div class="carousel-item">
+                    <div class="drop-zone" id="drop-zone-3D">Drop your ZIP 3D shp/dbf/shx/prg file here</div>
 
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                    <label>attribut de hauteur Hauteur</label>
+                    <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
 
+                    <label>attribut d'altitude au sol</label>
+                    <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
 
+                    <label>attribut de couleur</label>
+                    <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
+
+                    <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
+                    <!-- Button trigger modal -->
+                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Légende
+                    </button>
+                    <div>
+                        <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
+                            Supprimer la couche
+                        </button>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="card-footer">
-                <button class="btn btn-primary" id="confirmExporation">afficher</button>
 
-                <!-- Button trigger modal -->
-                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Legend
-                </button>
 
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
 
         </div>
 
+        <div class="card-footer">
+        </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="legend">
-                        Choisir une couche
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="legend">
+                    Choisir une couche
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
 
+    <script src="./js/jsItown/plugins/FeatureToolTip2.js"></script>
+    <script src="./js/jsItown/GUI/GuiTools.js"></script>
+    <script src="../node_modules/itowns/dist/itowns.js"></script>
+    <script src="../node_modules/shapefile/dist/shapefile.js"></script>
+    <script src="../node_modules/itowns/dist/debug.js"></script>
+    <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
+    <script src="../node_modules/shpjs/dist/shp.js"></script>
 
-        <script src="./js/jsItown/plugins/FeatureToolTip2.js"></script>
-        <script src="./js/GUI/GuiTools.js"></script>
-        <script src="../node_modules/itowns/dist/itowns.js"></script>
-        <script src="../node_modules/shapefile/dist/shapefile.js"></script>
-        <script src="../node_modules/itowns/dist/debug.js"></script>
-        <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
-        <script src="../node_modules/shpjs/dist/shp.js"></script>
+    <script src="./js/jsItown/GUI/LoadingScreen.js"></script>
 
-        <script src="./js/GUI/LoadingScreen.js"></script>
-
-        <script type="module" src="./main.js"></script>
-
-
-
+    <script type="module" src="./mainDeploy.js"></script>
 
 </body>
 
