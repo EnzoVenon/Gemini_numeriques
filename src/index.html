@@ -302,63 +302,118 @@
                             <select class="form-select" aria-label="Default select example" id="selectProp">
                                 <option selected>Choisir une couche</option>
                             </select>
+
+
                         </div>
+
+                        <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+
 
                     </div>
 
                     <div class="carousel-item">
-                        <h5 class="card-title">Import de fichier</h5>
-                        <input type="file" id="fileInput">
-                        <button id="recupPath">Test</button>
+                        <div class="drop-zone" id="drop-zone">Drop your ZIP 2D shp/dbf/shx/prg file here</div>
+
+                        <select class="form-select" aria-label="Default select example" id="select2dZiped">
+                            <option selected>déposer un zip</option>
+                        </select>
+
+                        <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+
+                        <!-- Button trigger modal -->
+                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Légende
+                        </button>
+                        <div>
+                            <button id=" checkbox-supprime-2ddrop" class="btn btn-primary">
+                                Supprimer la couche
+                            </button>
+                        </div>
                     </div>
                 </div>
 
+                <div class="carousel-item">
+                    <div class="drop-zone" id="drop-zone-3D">Drop your ZIP 3D shp/dbf/shx/prg file here</div>
 
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                    <label>attribut de hauteur Hauteur</label>
+                    <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
 
+                    <label>attribut d'altitude au sol</label>
+                    <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
 
-            </div>
-
-            <div class="card-footer">
-                <button class="btn btn-primary" id="confirmExporation">Afficher</button>
-
-                <!-- Button trigger modal -->
-                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Légende
-                </button>
-
-            </div>
-
-        </div>
+                    <label>attribut de couleur</label>
+                    <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
+                        <option selected>Choisir une couche</option>
+                    </select>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="legend">
-                        Choisir une couche
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                    <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
+
+                    <!-- Button trigger modal -->
+                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Légende
+                    </button>
+                    <div>
+                        <button id=" checkbox-supprime-3ddrop" class="btn btn-primary">
+                            Supprimer la couche
+                        </button>
                     </div>
                 </div>
             </div>
+
+
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
+
         </div>
 
+        <div class="card-footer">
+        </div>
+
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="legend">
+                    Choisir une couche
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <script src="./js/jsItown/plugins/FeatureToolTip2.js"></script>
         <script src="./js/jsItown/GUI/GuiTools.js"></script>
@@ -370,10 +425,7 @@
 
         <script src="./js/jsItown/GUI/LoadingScreen.js"></script>
 
-        <script type="module" src="./main.js"></script>
-
-
-
+    <script type="module" src="./main.js"></script>
 
 </body>
 

@@ -111,7 +111,7 @@ p {
     left: 20px;
 }
 
-/* 
-.modal-content {
-    background-color: rgba(255, 255, 255, 0.407);
-} */
+.drop-zone {
+    height: 50;
+    border-style: dashed;
+}
