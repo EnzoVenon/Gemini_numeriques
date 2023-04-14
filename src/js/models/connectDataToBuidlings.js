@@ -196,7 +196,7 @@ export function generateAccordion4Attribute(attributeName, name4User, value, sou
   htmlText += '<div class="accordion-body" id="info' + attributeName + '">'
   htmlText += '<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around">'
   htmlText += '<span>' + value + '</span>'
-  htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="donnée issue de la ' + source + ' sur ' + attributeName + '">'
+  htmlText += '<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de la ' + source + ' sur ' + attributeName + '">'
   htmlText += 'info'
   htmlText += '</a></div></div></div>'
   return htmlText;
