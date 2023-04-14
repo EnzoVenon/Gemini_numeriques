@@ -128,9 +128,24 @@
                 </div>
                 <!-- The body -->
                 <div class="offcanvas-body" id="infoGen">
+
                     <div class="accordion" id="infoGenAccordion">
-                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingInfoOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseInfoOne" aria-expanded="false"
+                                    aria-controls="collapseInfoOne">
+                                    Contexte générale
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseInfoOne" class="accordion-collapse collapse" aria-labelledby="headingInfoOne">
+                            <div class="accordion-body" id="listConsoInfo">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -142,9 +157,25 @@
                 </div>
 
                 <div class="offcanvas-body" id="batInfo">
+
                     <div class="accordion" id="batimentAccordion">
-                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingBatimentOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseBatimentOne" aria-expanded="false"
+                                    aria-controls="collapseBatimentOne">
+                                    Informations liées au bâtiment
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseBatimentOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingBatimentOne">
+                            <div class="accordion-body" id="listConsoBatiment">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
             </div>
@@ -162,8 +193,23 @@
                     </div>
 
                     <div class="accordion" id="RisquesAccordion">
-                        <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingRisqueOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseRisqueOne" aria-expanded="false"
+                                    aria-controls="collapseRisqueOne">
+                                    Risques liés au bâtiment
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseRisqueOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingRisqueOne">
+                            <div class="accordion-body" id="listConsoRisque">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
@@ -173,8 +219,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div class="accordion" id="energieAccordion">
 
+                    <div class="accordion" id="energieAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingEnergieOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -187,11 +233,11 @@
                         <div id="collapseEnergieOne" class="accordion-collapse collapse"
                             aria-labelledby="headingEnergieOne">
                             <div class="accordion-body" id="listConsoEnergie">
-                                <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
+                                <p>Pas d'informations disponibles</p>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"

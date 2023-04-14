@@ -127,7 +127,7 @@ viewerDiv.addEventListener(
                 tabInfoGen: [],
                 tabBatiment: [],
                 tabRisques: [],
-                tabPopulation: []
+                tabEnergie: []
             }
             htmlTest.innerHTML = '';
             let textHtml = '';
@@ -229,12 +229,13 @@ viewerDiv.addEventListener(
                         }
                     })
                     .then(res => {
-
+                        console.log(res)
                         // ----------- Generate html accordion item for each value ----------- //
                         Object.entries(res).forEach(([key, value]) => {
                             generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
                             generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
                             generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                            generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
 
                         })
                         // for info link
