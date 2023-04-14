@@ -101,3 +101,17 @@ p {
     background-color: rgba(248, 250, 215, 0.644);
     margin: 35px;
 }
+
+#modalButton {
+    width: fit-content;
+}
+
+.modal-dialog {
+    position: absolute;
+    left: 20px;
+}
+
+.drop-zone {
+    height: 50;
+    border-style: dashed;
+}

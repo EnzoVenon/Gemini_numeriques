@@ -49,7 +49,18 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             style: new itowns.Style({
                                 fill: {
                                     color: "yellow",
-                                    extrusion_height: height,
+                                    extrusion_height: (properties) => {
+                                        if (properties.hauteur) {
+                                            return properties.hauteur
+                                        }
+                                        else if (properties.HAUTEUR) {
+                                            return properties.HAUTEUR
+                                        }
+
+                                        else {
+                                            return 20
+                                        }
+                                    },
                                     base_altitude: (properties) => {
                                         if (properties.altitude_s) {
                                             return properties.altitude_s
