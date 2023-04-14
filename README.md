@@ -1,26 +1,36 @@
-# Jumeaux_numériques
+# ***Gemini numérique***
 
-Lien vers le visualisateur web : https://enzovenon.github.io/Gemini_numeriques/
+## **Présentation**
+### <u>Le projet</u>
+Cet outil est un prototype d'un projet porté par l'IGN, le CEREMA et l'INRIA qui souhaite créer un *Jumeau Numérique France Entière*.
+Le projet étudiant TSI "Gemimi Numérique" permet d'être une base de réflection pour ce projet. Le but est d'**Interconnecter différentes sources de données dans un outil qui permettra de les visualiser**. 
+Les informations que nous visualisons sont liées aux bâtiments. De plus, l'outil est centré sur Périgueux et sur le 11ème arrondissement de Paris. 
 
-Si vous avez eu un problème avec l'interface, que vous souhaitez laisser des commentaires ou même pour des idées d'améliorations, vous pouvez créer des Issues :
-- Si vous êtes memebre du comité de suivi, vous pouvez créer une Issue avec le label : Comité de suivi.
-- Si vous êtes un utilisateur, vous pouvez créer une Issue avec le label : Utilisateur.
+### <u>Les données</u>
+Nous interconnectons les diverses sources de données suivantes : 
 
-## Sources de données
-### BD Carto:
- - https://geoservices.ign.fr/services-web-experts-cartovecto
+- *BD Carto* : https://geoservices.ign.fr/services-web-experts-cartovecto
 
-### Openstreet Map data (OSM)
- - https://download.geofabrik.de/europe/france.html
+- *OpenStreetMap (OSM)* : https://download.geofabrik.de/europe/france.html
+
+- *API INSEE* : https://pyris.datajazz.io/
  
-### Base de données nationale des bâtiments (BDNB)
- - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
- - Energie : https://data.ademe.fr/datasets/dpe-france
+- *Base de données nationale des bâtiments (BDNB)* : 
+  - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
+  - Energie : https://data.ademe.fr/datasets/dpe-france
 
-### API INSEE: 
-  - https://pyris.datajazz.io/
 
-## Installation:    
+
+### <u>Accès et améliorations</u>
+Vous pouvez copier ce dépôt (pour accéder à la version en cours) ou alors accéder au visualisateur web à l'adresse suivante (pour accéder à la version stable) : https://enzovenon.github.io/Gemini_numeriques/.
+
+Si vous avez eu un problème avec l'interface, que vous souhaitez laisser des commentaires ou si vous avez des idées d'améliorations, vous pouvez créer des *Issues* :
+- Si vous êtes membre du comité de suivi, vous pouvez créer une Issue avec le label : *Comité de suivi*.
+- Si vous êtes un utilisateur, vous pouvez créer une Issue avec le label : *Utilisateur*.
+
+
+
+## **Installation**   
 ```
 git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
@@ -38,7 +48,7 @@ npm install
 npm run build
 ```
 
-## Utiliser ESLint
+## **Utiliser ESLint**
 
 Pour lancer les tests en local (analyse statique et tests unitaires), lancer ces commandes : 
 ```bash
