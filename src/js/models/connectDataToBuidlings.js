@@ -14,8 +14,8 @@ const attribut2UserName = {
   ETAT: "État du bâtiment",
   NATURE: "Nature",
   ffo_bat_usage_niveau_1_txt: "Usage",
-  USAGE1: "Usage",
-  USAGE2: "Usage",
+  USAGE1: "Usage 1",
+  USAGE2: "Usage 2",
   bdtopo_bat_altitude_sol_mean: "Altitude au sol",
   bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
   NB_ETAGES: "Nombre d'étages",
@@ -54,63 +54,63 @@ const attribut2UserName = {
 
 
 // Onglet batiment
-let ongletBatiment = [
-  "bdtopo_bat_altitude_sol_mean",
-  "bdtopo_bat_hauteur_mean",
-  "ffo_bat_usage_niveau_1_txt",
-  "ffo_bat_annee_construction",
-  "DATE_CREAT",
-  "ETAT",
-  "NATURE",
-  "NB_ETAGES",
-  "USAGE1",
-  "USAGE2"
-]
-// Onglet risque
-let ongletRisque = [
-  "radon_alea",
-  "argiles_alea"
-]
-// Onglet contexte géographique 
-let ongletInfoGen = [
-  "code_commune_insee",
-  "code_departement_insee",
-  "code_iris",
-  "fiabilite_cr_adr_niv_1",
-  "libelle_adr_principale_ban",
-  "libelle_commune_insee",
-  "bdtopo_zoa_l_toponyme"
+const tabs = {
+  ongletBatiment: [
+    "bdtopo_bat_altitude_sol_mean",
+    "bdtopo_bat_hauteur_mean",
+    "ffo_bat_usage_niveau_1_txt",
+    "ffo_bat_annee_construction",
+    "DATE_CREAT",
+    "ETAT",
+    "NATURE",
+    "NB_ETAGES",
+    "USAGE1",
+    "USAGE2"
+  ],
+  ongletRisque: [
+    "radon_alea",
+    "argiles_alea"
+  ],
+  ongletInfoGen: [
+    "code_commune_insee",
+    "code_departement_insee",
+    "code_iris",
+    "fiabilite_cr_adr_niv_1",
+    "libelle_adr_principale_ban",
+    "libelle_commune_insee",
+    "bdtopo_zoa_l_toponyme"
 
-]
-// Onglet énergie
-let ongletEnergie = [
-  "dpe_arrete_2021_nb_classe_conso_energie_arrete_2012",
-  "dpe_nb_classe_ener_a",
-  "dpe_nb_classe_ener_b",
-  "dpe_nb_classe_ener_c",
-  "dpe_nb_classe_ener_d",
-  "dpe_nb_classe_ener_e",
-  "dpe_nb_classe_ener_f",
-  "dpe_nb_classe_ener_g",
-  "dpe_nb_classe_ener_nc",
-  "dpe_nb_classe_ges_a",
-  "dpe_nb_classe_ges_b",
-  "dpe_nb_classe_ges_c",
-  "dpe_nb_classe_ges_d",
-  "dpe_nb_classe_ges_e",
-  "dpe_nb_classe_ges_f",
-  "dpe_nb_classe_ges_g",
-  "dpe_nb_classe_ges_nc",
-  "dpe_class_conso_ener_mean",
-  "dpe_conso_ener_mean",
-  "dpe_conso_ener_std",
-  "dpe_class_estim_ges_mean",
-  "dpe_estim_ges_mean",
-  "dpe_estim_ges_std",
-  "dpe_logtype_mur_pos_isol_ext",
-  "dpe_logtype_pb_pos_isol",
-  "dpe_logtype_ph_pos_isol"
-]
+  ],
+  ongletEnergie: [
+    "dpe_arrete_2021_nb_classe_conso_energie_arrete_2012",
+    "dpe_nb_classe_ener_a",
+    "dpe_nb_classe_ener_b",
+    "dpe_nb_classe_ener_c",
+    "dpe_nb_classe_ener_d",
+    "dpe_nb_classe_ener_e",
+    "dpe_nb_classe_ener_f",
+    "dpe_nb_classe_ener_g",
+    "dpe_nb_classe_ener_nc",
+    "dpe_nb_classe_ges_a",
+    "dpe_nb_classe_ges_b",
+    "dpe_nb_classe_ges_c",
+    "dpe_nb_classe_ges_d",
+    "dpe_nb_classe_ges_e",
+    "dpe_nb_classe_ges_f",
+    "dpe_nb_classe_ges_g",
+    "dpe_nb_classe_ges_nc",
+    "dpe_class_conso_ener_mean",
+    "dpe_conso_ener_mean",
+    "dpe_conso_ener_std",
+    "dpe_class_estim_ges_mean",
+    "dpe_estim_ges_mean",
+    "dpe_estim_ges_std",
+    "dpe_logtype_mur_pos_isol_ext",
+    "dpe_logtype_pb_pos_isol",
+    "dpe_logtype_ph_pos_isol"
+  ],
+}
+
 
 export function loadDataToJSON(dictionaryTofill, key, value, base) {
 
@@ -142,13 +142,13 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     val: value,
     source: base
   }
-  if (ongletInfoGen.includes(key)) {
+  if (tabs.ongletInfoGen.includes(key)) {
     dictionaryTofill.tabInfoGen.push(jsonData)
-  } else if (ongletBatiment.includes(key)) {
+  } else if (tabs.ongletBatiment.includes(key)) {
     dictionaryTofill.tabBatiment.push(jsonData)
-  } else if (ongletRisque.includes(key)) {
+  } else if (tabs.ongletRisque.includes(key)) {
     dictionaryTofill.tabRisques.push(jsonData)
-  } else if (ongletEnergie.includes(key)) {
+  } else if (tabs.ongletEnergie.includes(key)) {
     dictionaryTofill.tabEnergie.push(jsonData)
   }
 
