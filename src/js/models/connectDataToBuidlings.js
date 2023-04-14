@@ -88,7 +88,7 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
       htmlElement.innerHTML += textTest
     })
   }
-  console.log(htmlElement.outerHTML)
+  // console.log(htmlElement.outerHTML)
 
 }
 

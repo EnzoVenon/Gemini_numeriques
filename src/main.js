@@ -44,59 +44,54 @@ customDiv.appendChild(pointer);
 // ----------------- View Setup ----------------- //
 // Define initial camera position
 
-const perigcoord = new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2)
-const parisgcoord = new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2)
 
 let placement = {
     //  Coordinates of Perigueux
-    coord: perigcoord,
+    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
     range: 200,
     tilt: 33,
 }
 
 
-
-
-
-
-
-
-
-
+const switchbutton = document.getElementById('site_state')
 
 const viewerDiv = document.getElementById('viewerDiv');
 viewerDiv.appendChild(bat)
 
 // Instanciate iTowns GlobeView
-let view = new itowns.GlobeView(viewerDiv, placement);
+const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 // ajout de widget de navigation
 widgetNavigation(view)
 
-const switchbutton = document.getElementById('site_state')
-console.log(switchbutton)
+
 document.getElementById("changloc").addEventListener("click", () => {
     if (switchbutton.checked) {
-        placement.coord = parisgcoord
-        // Instanciate iTowns GlobeView
-        let view = new itowns.GlobeView(viewerDiv, placement);
-        setupLoadingScreen(viewerDiv, view);
-        FeatureToolTip.init(viewerDiv, view);
-        console.log(switchbutton)
-        console.log(placement)
+        let cameraTargetPosition = view.controls.getLookAtCoordinate();
+        cameraTargetPosition.x = 2.380015
+        cameraTargetPosition.y = 48.859424
+        cameraTargetPosition.z = 86
+        view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+        view.camera.camera3D.updateMatrixWorld();
+        view.notifyChange(view.camera.camera3D, true);
+        console.log(view.camera)
     }
     else {
-        placement.coord = perigcoord
-        console.log(switchbutton)
-        // Instanciate iTowns GlobeView
-        let view = new itowns.GlobeView(viewerDiv, placement);
-        setupLoadingScreen(viewerDiv, view);
-        FeatureToolTip.init(viewerDiv, view);
-
+        let cameraTargetPosition = view.controls.getLookAtCoordinate();
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+        view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+        view.camera.camera3D.updateMatrixWorld();
+        view.notifyChange(view.camera.camera3D, true);
+        console.log(view.camera)
     }
 
 })
+
+
+
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
@@ -122,6 +117,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+
+
 
 });
 
@@ -201,7 +198,7 @@ viewerDiv.addEventListener(
             listSlect.push(randomId)
 
             // console.log(listSlect)
-
+            console.log(view.camera)
             if (listSlect[1]) {
 
                 let layerToRemove = view.getLayerById(listSlect[0]);
@@ -210,6 +207,7 @@ viewerDiv.addEventListener(
                 // console.log(view)
                 layerToRemove.delete()
                 view.notifyChange()
+                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
