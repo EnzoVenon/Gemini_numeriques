@@ -11,7 +11,6 @@ import * as contenuOnglet from "./js/models/contenuOnglets"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
-import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
@@ -54,6 +53,7 @@ viewerDiv.appendChild(bat)
 
 // Instanciate iTowns GlobeView
 const view = new itowns.GlobeView(viewerDiv, placement);
+console.log(view)
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
 // ajout de widget de navigation
@@ -76,9 +76,16 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 let dataBdnb;
+
+
+// Geojson for each source
+let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
+let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
+let osmPromisedJson = loadBufferDataFromShp(paths.osm)
+let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
+
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
@@ -96,28 +103,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
         }, {});
         // argiles_alea
         console.log(dataBdnb)
-
-        // bdnbPromisedJson.then(geojson => {
-
-        //     // console.log(geojson)
-
-        //     geojson.features.forEach((feature) => {
-        //         // console.log(feature.properties["batiment_g"])
-        //         // console.log(records[feature.properties["batiment_g"]])
-        //         let data = dataBdnb[feature.properties["batiment_g"]]
-        //         if (data) {
-        //             feature.properties = data
-        //         }
-
-        //     });
-
-        //     let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-        //     geosjontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
-        //     batInorandomId.bdnb_random_id = ramdoId2
-        // })
-
-
-
     }
 
     )
@@ -229,31 +214,43 @@ viewerDiv.addEventListener(
                     valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                 })
                 return valDisplayed;
+
             }).then(result => {
-
                 // ----------- Get BdTopo data ----------- //
-                let valBdTopo = getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
-                    // Dispatch BdTopo data for each tab
-                    let valDisplayedBdTopo;
-                    Object.entries(res).forEach(([key, value]) => {
-                        valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                bdtopoPromisedJson
+                    .then(geojson => {
+                        let dataBdTopo = geojson.features.filter(obj => {
+                            if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
+                                return obj;
+                            }
+                        })
+                        return dataBdTopo[0]
                     })
-                    return valDisplayedBdTopo;
-                })
-                return valBdTopo
-            }).then(res => {
+                    .then(res => {
+                        console.log(res)
+                        let valDisplayedBdTopo;
+                        if (res.properties) {
+                            Object.entries(res.properties).forEach(([key, value]) => {
+                                valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                            })
+                            return valDisplayedBdTopo;
+                        }
+                    })
+                    .then(res => {
 
-                // ----------- Generate html accordion item for each value ----------- //
-                Object.entries(res).forEach(([key, value]) => {
-                    generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                    generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                    generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                        // ----------- Generate html accordion item for each value ----------- //
+                        Object.entries(res).forEach(([key, value]) => {
+                            generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                            generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                            generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
 
-                })
-                // for info link
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                const tooltipList = [...tooltipTriggerList]
-                tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                        })
+                        // for info link
+                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                        const tooltipList = [...tooltipTriggerList]
+                        tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    })
+
             })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
@@ -345,22 +342,14 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
     }
 })
-// document.getElementById("showInnondationLayer").click()
 
-let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
-let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
-let osmPromisedJson = loadBufferDataFromShp(paths.osm)
-let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
 document.getElementById("exploredata").addEventListener("change", () => {
     // console.log(document.getElementById("exploredata").checked)
     if (document.getElementById("exploredata").checked) {
         bdnbPromisedJson.then(geojson => {
 
-            // console.log(geojson)
             geojson.features.forEach((feature) => {
-                // console.log(feature.properties["batiment_g"])
-                // console.log(records[feature.properties["batiment_g"]])
                 let data = dataBdnb[feature.properties["batiment_g"]]
                 if (data) {
                     feature.properties = data
