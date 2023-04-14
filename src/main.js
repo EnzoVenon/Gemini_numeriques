@@ -23,7 +23,6 @@ import * as shp from "shpjs";
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
-const records = {}
 const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 // console.log(turf)
 let bat = document.createElement('div');
