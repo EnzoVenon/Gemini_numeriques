@@ -45,11 +45,17 @@ customDiv.appendChild(pointer);
 
 // ----------------- View Setup ----------------- //
 // Define initial camera position
-const placement = {
+
+
+let placement = {
+    //  Coordinates of Perigueux
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
     range: 200,
     tilt: 33,
 }
+
+
+const switchbutton = document.getElementById('site_state')
 
 const viewerDiv = document.getElementById('viewerDiv');
 viewerDiv.appendChild(bat)
@@ -58,8 +64,31 @@ viewerDiv.appendChild(bat)
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
-// ajout de widget de navigation
+// add de widget navigation
 widgetNavigation(view)
+
+// Instanciate changement localisation
+document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
+    if (switchbutton.checked) {
+        cameraTargetPosition.x = 2.380015
+        cameraTargetPosition.y = 48.859424
+        cameraTargetPosition.z = 86
+
+    }
+    else {
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
+})
+
+
 
 
 // ----------------- Layers Setup ----------------- //
@@ -92,6 +121,9 @@ let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
+
+
+    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
@@ -234,12 +266,14 @@ viewerDiv.addEventListener(
 
             listSlect.push(randomId)
 
+
             if (listSlect[1]) {
 
                 let layerToRemove = view.getLayerById(listSlect[0]);
                 view.removeLayer(listSlect[0]);
                 layerToRemove.delete()
                 view.notifyChange()
+                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
