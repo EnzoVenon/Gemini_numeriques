@@ -31,6 +31,10 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
       option.value = value;
       // Ajout de l'option à l'élément de sélection
       selectElement.add(option);
+
+      if (value == selectOption) {
+        option.selected = true;
+      }
     });
 
   }
@@ -46,23 +50,17 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
   let uniquecol = generateUniqueColors(uniquePropValues)
 
-  // console.log(uniquecol)
+  document.getElementById("exampleModalLabel").innerText = selectOption;
 
-  // let newFeatures = geojson.features.map(feature => {
-  //   return {
-  //     type: feature.type,
-  //     geometry: feature.geometry,
-  //     properties: {
-  //       nom: feature.properties[selectOption]
-  //     }
-  //   };
-  // });
-  // geojson = {
-  //   type: geojson.type,
-  //   features: newFeatures
-  // };
+  let legendHtml = '<div>';
+  for (const [label, color] of Object.entries(uniquecol)) {
+    // console.log(color)
+    legendHtml += `<div style="display:flex;flex-direction:row"> <div style="background-color:${color};width: 31px;height: 16px; margin-right: 20px;"></div><div>${label}</div></div>`;
+  }
+  legendHtml += '</div>';
 
-  // console.log(newgeo)
+  // create a div element to hold the legend
+  document.getElementById("legend").innerHTML = legendHtml;
 
 
   let src = new itowns.FileSource({
@@ -91,22 +89,41 @@ export function geosjontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
         }
         ,
-        extrusion_height: 20,
+        extrusion_height: (properties) => {
+          if (properties.hauteur) {
+            return properties.hauteur
+          }
+          else if (properties.bdtopo_bat_hauteur_mean) {
+            return properties.bdtopo_bat_hauteur_mean
+          }
+
+          else if (properties.HAUTEUR) {
+            return properties.HAUTEUR
+          }
+
+          else {
+            return 20
+          }
+        },
         base_altitude: (properties) => {
           if (properties.altitude_s) {
             return properties.altitude_s
+
+          }
+          else if (properties.bdtopo_bat_altitude_sol_mean) {
+            return properties.bdtopo_bat_altitude_sol_mean
           }
           else if (properties.Z_MIN_SOL) {
             return properties.Z_MIN_SOL
           }
           else {
-            return 20
+            return 100
           }
         }
       }
     }),
     onMeshCreated: (mesh) => {
-      console.log(mesh.children[0].children[0].children[0].children[0])
+      // console.log(mesh.children[0].children[0].children[0].children[0])
       let object = mesh.children[0].children[0].children[0].children[0]
       var objectEdges = new THREE.LineSegments(
         new THREE.EdgesGeometry(object.geometry),
