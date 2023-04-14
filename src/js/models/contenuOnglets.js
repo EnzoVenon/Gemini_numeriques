@@ -1,5 +1,5 @@
 // ------------------------------ functions ------------------------------ //
-export function dataINSEE4Chart(attributeList, attributeSlicingNumber, dataValues) {
+export function dataINSEE4Chart(attributeList, popValues) {
 
     /*
         
@@ -8,9 +8,15 @@ export function dataINSEE4Chart(attributeList, attributeSlicingNumber, dataValue
     */
 
     let result = [];
-    attributeList.filter(function (attribute) {
-        result.push({ name: attribute.slice(attributeSlicingNumber), value: dataValues[attribute] })
-    });
+    Object.entries(popValues).forEach(([key, value]) => {
+        if (attributeList.includes(value.attribut)) {
+            result.push({ name: value.name4User, value: value.val })
+        }
+    })
+    // attributeList.filter(function (attribute) {
+
+    //     result.push({ name: attribute.name4User, value: attribute.val })
+    // });
     return result;
 }
 

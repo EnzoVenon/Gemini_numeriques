@@ -79,7 +79,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
-let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
+let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
 let dataBdnb;
@@ -127,55 +127,12 @@ viewerDiv.addEventListener(
                 tabInfoGen: [],
                 tabBatiment: [],
                 tabRisques: [],
-                tabEnergie: []
+                tabEnergie: [],
+                tabPopulation: []
             }
             htmlTest.innerHTML = '';
             let textHtml = '';
             textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
-
-            csv2
-                .then(res => {
-                    // ----------- POPULATION INSEE ----------- //
-                    // Retrieve elements where Iris number is same as tooltip
-                    let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                    // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
-
-                    // Add INSEE value for this IRIS in tooltip properties
-                    Object.entries(uniqueData).forEach(([key, value]) => {
-                        if (!(value === Number(tooltip.value.properties.code_iris))) {
-                            tooltip.value.properties[key] = value;
-                        }
-                    })
-
-                    // Chart for INSEE values
-                    // ----- Status 15 ans et plus ----- //
-                    const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                    const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-
-                    // ----- Répartition pop 15 ans et plus ----- //
-                    const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
-                    const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 4, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-
-                    // ----- Nombre de familles avec enfants -25 ans ----- //
-                    const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                    const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                    htmlTest.innerHTML += textHtml;
-
-                    // Create charts
-                    addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
-                    addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
-                    addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
-
-
-                });
-
 
             let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             let randomId = tooltip.value.properties.batiment_c + letRandomCOlor
@@ -208,43 +165,87 @@ viewerDiv.addEventListener(
                 })
                 return valDisplayed;
 
-            }).then(result => {
-                // ----------- Get BdTopo data ----------- //
-                bdtopoPromisedJson
-                    .then(geojson => {
-                        let dataBdTopo = geojson.features.filter(obj => {
-                            if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                return obj;
+            })
+                .then(result => {
+                    console.log(result)
+                    let valDisplay2 = csvMenageINSEE
+                        .then(res => {
+                            // ----------- POPULATION INSEE ----------- //
+                            let valDisplayedPop;
+                            // Retrieve elements where Iris number is same as tooltip
+                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                            console.log(uniqueData)
+                            // Add INSEE value for this IRIS in tooltip properties
+                            Object.entries(uniqueData).forEach(([key, value]) => {
+                                valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
+                            })
+                            console.log(valDisplayedPop)
+
+
+                            // Chart for INSEE values
+                            // ----- Status 15 ans et plus ----- //
+                            const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
+                            const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, valDisplayedPop.tabPopulation);
+                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+
+                            // ----- Répartition pop 15 ans et plus ----- //
+                            const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
+                            const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, valDisplayedPop.tabPopulation);
+                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+
+                            // ----- Nombre de familles avec enfants -25 ans ----- //
+                            const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                            const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, valDisplayedPop.tabPopulation);
+                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
+
+                            htmlTest.innerHTML += textHtml;
+
+                            // Create charts
+                            addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
+                            addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
+                            addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
+
+                            return valDisplayedPop;
+                        })
+                    return valDisplay2
+                })
+                .then(result => {
+                    // ----------- Get BdTopo data ----------- //
+                    bdtopoPromisedJson
+                        .then(geojson => {
+                            let dataBdTopo = geojson.features.filter(obj => {
+                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
+                                    return obj;
+                                }
+                            })
+                            return dataBdTopo[0]
+                        })
+                        .then(res => {
+                            let valDisplayedBdTopo;
+                            if (res.properties) {
+                                Object.entries(res.properties).forEach(([key, value]) => {
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                })
+                                return valDisplayedBdTopo;
                             }
                         })
-                        return dataBdTopo[0]
-                    })
-                    .then(res => {
-                        let valDisplayedBdTopo;
-                        if (res.properties) {
-                            Object.entries(res.properties).forEach(([key, value]) => {
-                                valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                        .then(res => {
+                            console.log(res)
+                            // ----------- Generate html accordion item for each value ----------- //
+                            Object.entries(res).forEach(([key, value]) => {
+                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
+
                             })
-                            return valDisplayedBdTopo;
-                        }
-                    })
-                    .then(res => {
-                        console.log(res)
-                        // ----------- Generate html accordion item for each value ----------- //
-                        Object.entries(res).forEach(([key, value]) => {
-                            generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                            generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                            generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-                            generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
-
+                            // for info link
+                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                            const tooltipList = [...tooltipTriggerList]
+                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                         })
-                        // for info link
-                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                        const tooltipList = [...tooltipTriggerList]
-                        tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    })
 
-            })
+                })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
