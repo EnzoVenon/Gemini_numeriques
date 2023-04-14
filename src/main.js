@@ -62,32 +62,28 @@ viewerDiv.appendChild(bat)
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
-// ajout de widget de navigation
+// add de widget navigation
 widgetNavigation(view)
 
-
+// Instanciate changement localisation
 document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
     if (switchbutton.checked) {
-        let cameraTargetPosition = view.controls.getLookAtCoordinate();
         cameraTargetPosition.x = 2.380015
         cameraTargetPosition.y = 48.859424
         cameraTargetPosition.z = 86
-        view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
-        view.camera.camera3D.updateMatrixWorld();
-        view.notifyChange(view.camera.camera3D, true);
-        console.log(view.camera)
+
     }
     else {
-        let cameraTargetPosition = view.controls.getLookAtCoordinate();
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
         cameraTargetPosition.z = 86
-        view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
-        view.camera.camera3D.updateMatrixWorld();
-        view.notifyChange(view.camera.camera3D, true);
-        console.log(view.camera)
-    }
 
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
 })
 
 
@@ -117,6 +113,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+    addShp("../public/data/shp/prg/paris11bdnb", "bdnbparis", "black", "red", view, true)
+    addShp("../public/data/shp/paris_11/bdtopo_paris11", "bdtopoparis", "black", "", view, true)
 
 
 
