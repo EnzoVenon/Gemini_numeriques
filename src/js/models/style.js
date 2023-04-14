@@ -69,7 +69,7 @@ export default class Style {
         if (isNaN(this.min)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
             function hackMin(properties) {
-                if ((properties.hasOwnProperty(this.field)) && (!isNaN(properties[this.field]))) {
+                if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
                     }
@@ -96,7 +96,7 @@ export default class Style {
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
             function hackMax(properties) {
-                if ((properties.hasOwnProperty(this.field)) && (!isNaN(properties[this.field]))) {
+                if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
                     }
@@ -143,7 +143,7 @@ export default class Style {
             if (!this.color2) {
                 console.log("Affichage de style de dégradé 1 couleur");
                 coloring = function f(properties) {
-                    if (properties.hasOwnProperty(this.field)) {
+                    if (properties[this.field] !== undefined) {
                         const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
                         let rgb = [];
                         rgb.push(Math.floor(intensity * (255 - this.color1.r) + this.color1.r));
@@ -173,8 +173,8 @@ export default class Style {
             if (Object.keys(this.classes_map).length == 0) {
                 console.log("Affichage de style de classif auto");
                 coloring = function f(properties) {
-                    if (properties.hasOwnProperty(this.field)) {
-                        if (!this.classes_map.hasOwnProperty(properties[this.field])) {
+                    if (properties[this.field] !== undefined) {
+                        if (this.classes_map[properties[this.field]] === undefined) {
                             this.classes_map[properties[this.field]] = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
                         }
                         return this.classes_map[properties[this.field]];
@@ -184,7 +184,7 @@ export default class Style {
             } else {
                 console.log("Affichage de style de classif");
                 coloring = function f(properties) {
-                    if (properties.hasOwnProperty(this.field) && this.classes_map.hasOwnProperty(properties[this.field])) {
+                    if ((properties[this.field] !== undefined) && (this.classes_map[properties[this.field]] !== undefined)) {
                         return this.classes_map[properties[this.field]];
                     }
                     return "rgb(169,169,169)";
@@ -266,6 +266,7 @@ export default class Style {
                 this.view.removeLayer(id);
                 layer.delete();
             } catch (error) {
+                //Empty
             }
         }
         return this;
