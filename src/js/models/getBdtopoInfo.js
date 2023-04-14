@@ -1,8 +1,9 @@
-export function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
-  let csvBdnbBdtopo = csvIdBdnbBdtopo.then(res => {
+
+export function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId, bdtopoPath) {
+  csvIdBdnbBdtopo.then(res => {
     let bdTopoId = res.filter(obj => obj.batiment_g === bdnbGoupeBatId)[0].bdtopo
 
-    let result = shapefile.open("../../data/shp/prg/bd_topo")
+    shapefile.open(bdtopoPath)
       .then(source => source.read()
         .then(function log(result) {
           if (result.done) return "done";
