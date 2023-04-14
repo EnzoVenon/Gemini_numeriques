@@ -1,10 +1,62 @@
 import { addChart } from "./insee/showChart"
 
+// Json attribute name in source to name for user
+const attribut2UserName = {
+  libelle_adr_principale_ban: "Adresse",
+  fiabilite_cr_adr_niv_1: "Fiabilité de l'adresse ",
+  code_iris: "Code IRIS",
+  libelle_commune_insee: "Commune",
+  code_departement_insee: "Numéro de département",
+  bdtopo_zoa_l_toponyme: "Toponyme",
+  code_commune_insee: "Code INSEE",
+
+  ffo_bat_annee_construction: "Année de construction",
+  ETAT: "État du bâtiment",
+  NATURE: "Nature",
+  ffo_bat_usage_niveau_1_txt: "Usage",
+  USAGE1: "Usage",
+  USAGE2: "Usage",
+  bdtopo_bat_altitude_sol_mean: "Altitude au sol",
+  bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
+  NB_ETAGES: "Nombre d'étages",
+  DATE_CREAT: "Date de Création",
+
+  argiles_alea: "Risque argile",
+  radon_alea: "Risque radon",
+
+  dpe_arrete_2021_nb_classe_conso_energie_arrete_2012: "Notes énergétique des logements",
+  dpe_nb_classe_ener_a: "Notes énergétique des logements",
+  dpe_nb_classe_ener_b: "Notes énergétique des logements",
+  dpe_nb_classe_ener_c: "Notes énergétique des logements",
+  dpe_nb_classe_ener_d: "Notes énergétique des logements",
+  dpe_nb_classe_ener_e: "Notes énergétique des logements",
+  dpe_nb_classe_ener_f: "Notes énergétique des logements",
+  dpe_nb_classe_ener_g: "Notes énergétique des logements",
+  dpe_nb_classe_ener_nc: "Notes énergétique des logements",
+  dpe_nb_classe_ges_a: "Notes énergétique des logements",
+  dpe_nb_classe_ges_b: "Notes énergétique des logements",
+  dpe_nb_classe_ges_c: "Notes énergétique des logements",
+  dpe_nb_classe_ges_d: "Notes énergétique des logements",
+  dpe_nb_classe_ges_e: "Notes énergétique des logements",
+  dpe_nb_classe_ges_f: "Notes énergétique des logements",
+  dpe_nb_classe_ges_g: "Notes énergétique des logements",
+  dpe_nb_classe_ges_nc: "Notes énergétique des logements",
+  dpe_class_conso_ener_mean: "Notes énergétique des logements",
+  dpe_conso_ener_mean: "Notes énergétique des logements",
+  dpe_conso_ener_std: "Notes énergétique des logements",
+  dpe_class_estim_ges_mean: "Notes énergétique des logements",
+  dpe_estim_ges_mean: "Notes énergétique des logements",
+  dpe_estim_ges_std: "Notes énergétique des logements",
+  dpe_logtype_mur_pos_isol_ext: "Notes énergétique des logements",
+  dpe_logtype_pb_pos_isol: "Notes énergétique des logements",
+  dpe_logtype_ph_pos_isol: "Notes énergétique des logements",
+}
+
+
 // Onglet batiment
 let ongletBatiment = [
   "bdtopo_bat_altitude_sol_mean",
   "bdtopo_bat_hauteur_mean",
-  "bdtopo_bat_l_etat",
   "ffo_bat_usage_niveau_1_txt",
   "ffo_bat_annee_construction",
   "DATE_CREAT",
@@ -19,7 +71,7 @@ let ongletRisque = [
   "radon_alea",
   "argiles_alea"
 ]
-// Onglet Infos Générales 
+// Onglet contexte géographique 
 let ongletInfoGen = [
   "code_commune_insee",
   "code_departement_insee",
@@ -30,6 +82,35 @@ let ongletInfoGen = [
   "bdtopo_zoa_l_toponyme"
 
 ]
+// Onglet énergie
+let ongletEnergie = [
+  "dpe_arrete_2021_nb_classe_conso_energie_arrete_2012",
+  "dpe_nb_classe_ener_a",
+  "dpe_nb_classe_ener_b",
+  "dpe_nb_classe_ener_c",
+  "dpe_nb_classe_ener_d",
+  "dpe_nb_classe_ener_e",
+  "dpe_nb_classe_ener_f",
+  "dpe_nb_classe_ener_g",
+  "dpe_nb_classe_ener_nc",
+  "dpe_nb_classe_ges_a",
+  "dpe_nb_classe_ges_b",
+  "dpe_nb_classe_ges_c",
+  "dpe_nb_classe_ges_d",
+  "dpe_nb_classe_ges_e",
+  "dpe_nb_classe_ges_f",
+  "dpe_nb_classe_ges_g",
+  "dpe_nb_classe_ges_nc",
+  "dpe_class_conso_ener_mean",
+  "dpe_conso_ener_mean",
+  "dpe_conso_ener_std",
+  "dpe_class_estim_ges_mean",
+  "dpe_estim_ges_mean",
+  "dpe_estim_ges_std",
+  "dpe_logtype_mur_pos_isol_ext",
+  "dpe_logtype_pb_pos_isol",
+  "dpe_logtype_ph_pos_isol"
+]
 
 export function loadDataToJSON(dictionaryTofill, key, value, base) {
 
@@ -38,21 +119,26 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
       Load data into a JSON. 
       The returned variable's format is as follow:
           {
-            tabInfoGen: [ { attribute: key, val: value, source: base },
-                          { attribute: key, val: value, source: base },
-                          ... ]
-            tabBatiment: [ { attribute: key, val: value, source: base },
-                          { attribute: key, val: value, source: base },
-                          ... ]
-            tabRisques: [ { attribute: key, val: value, source: base },
-                          { attribute: key, val: value, source: base },
+            tabInfoGen: [ { attribute: key, name4User: name4User, val: value, source: base },
+                          { attribute: key, name4User: name4User, val: value, source: base },
+                          ... ],
+            tabBatiment: [ { attribute: key, name4User: name4User, val: value, source: base },
+                          { attribute: key, name4User: name4User, val: value, source: base },
+                          ... ],
+            tabRisques: [ { attribute: key, name4User: name4User, val: value, source: base },
+                          { attribute: key, name4User: name4User, val: value, source: base },
+                          ... ],
+            tabEnergie: [ { attribute: key, name4User: name4User, val: value, source: base },
+                          { attribute: key, name4User: name4User, val: value, source: base },
                           ... ]
           }
   
   */
+  let name4User = attribut2UserName[key]
 
   const jsonData = {
     attribut: key,
+    name4User: name4User,
     val: value,
     source: base
   }
@@ -62,6 +148,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     dictionaryTofill.tabBatiment.push(jsonData)
   } else if (ongletRisque.includes(key)) {
     dictionaryTofill.tabRisques.push(jsonData)
+  } else if (ongletEnergie.includes(key)) {
+    dictionaryTofill.tabEnergie.push(jsonData)
   }
 
   return dictionaryTofill;
@@ -74,20 +162,23 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
 
   */
 
-  let textTest = ''
-  const htmlElement = document.getElementById(htmlID);
+  if (listOfAttributes.length !== 0) {
+    let textTest = ''
+    const htmlElement = document.getElementById(htmlID);
 
-  if (keyTab.includes(tabName)) {
-    htmlElement.innerHTML = ''
-    listOfAttributes.forEach((value) => {
-      textTest = generateAccordion4Attribute(value.attribut, value.val, value.source)
-      htmlElement.innerHTML += textTest
-    })
+    if (keyTab.includes(tabName)) {
+      htmlElement.innerHTML = ''
+      listOfAttributes.forEach((value) => {
+        textTest = generateAccordion4Attribute(value.attribut, value.name4User, value.val, value.source)
+        htmlElement.innerHTML += textTest
+      })
+    }
   }
+
 
 }
 
-export function generateAccordion4Attribute(attributeName, value, source) {
+export function generateAccordion4Attribute(attributeName, name4User, value, source) {
 
   /*
 
@@ -99,7 +190,7 @@ export function generateAccordion4Attribute(attributeName, value, source) {
   htmlText += '<div class="accordion-item">'
   htmlText += '<h2 class="accordion-header" id="heading' + attributeName + '">'
   htmlText += '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' + attributeName + '" aria-expanded="false" aria-controls="collapse' + attributeName + '">'
-  htmlText += attributeName
+  htmlText += name4User
   htmlText += '</button></h2></div>'
   htmlText += '<div id="collapse' + attributeName + '" class="accordion-collapse collapse" aria-labelledby="heading' + attributeName + '">'
   htmlText += '<div class="accordion-body" id="info' + attributeName + '">'
