@@ -207,25 +207,33 @@ export default class Style {
                 return properties[this.field_height];
             }
             const extrudeFeature = extr.bind(this);
-            function acceptFeature(properties) {
-                return !!properties.hauteur;
+            function accept(properties) {
+                return !!properties[this.field_height] && !!properties[this.field_ground];
             }
+            const acceptFeature = accept.bind(this);
 
             // Create the style layer
             layer = new itowns.FeatureGeometryLayer(id, {
                 batchId: function (property, featureId) { return featureId; },
                 filter: acceptFeature,
                 source: this.source,
-                zoom: { min: 14 },
+                zoom: { min: 0, max: 12 },
 
                 style: new itowns.Style({
                     fill: {
                         color: drawing,
-                        base_altitude: altitudeFeature,
                         extrusion_height: extrudeFeature,
-                    },
-                    stroke: { color: "black" }
-                })
+                        base_altitude: altitudeFeature
+                    }
+                }),
+                onMeshCreated: (mesh) => {
+                    let object = mesh.children[0].children[0].children[0].children[0];
+                    let objectEdges = new itowns.THREE.LineSegments(
+                        new itowns.THREE.EdgesGeometry(object.geometry),
+                        new itowns.THREE.LineBasicMaterial({ color: 'black' })
+                    );
+                    object.add(objectEdges);
+                }
             });
         } else {
             // Create the style layer
