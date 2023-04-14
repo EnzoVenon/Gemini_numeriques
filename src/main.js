@@ -540,21 +540,28 @@ var affiche2dFile = document.getElementById('afficheDrop2d');
 
 affiche2dFile.addEventListener("click", () => {
     console.log("sqfsqfsqdfd")
-    console.log(dropedGeojson)
+    console.log(dropedGeojson["2dDropId"] === "")
+
+    if (dropedGeojson["2dDropId"] !== '') {
+        view.removeLayer(dropedGeojson["2dDropId"])
+        dropedGeojson["2dDropId"] = ""
+    }
 
     let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    dropedGeojson["2dDropId"] = ramdoId2
     let geojson = dropedGeojson["2dDrop"]
     console.log(geojson)
     const select2dZiped = document.getElementById('select2dZiped').value;
     geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
-
 }
 )
 
-// document.getElementById("checkbox-supprime-2ddrop").addEventListener("change", () => {
-//     if (document.getElementById("checkbox-supprime-2ddrop").checked) {
-//         view.removeLayer(dropedGeojson["2dDropId"])
-//     }
-// })
+document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
+    if (document.getElementById("checkbox-supprime-2ddrop").checked) {
+        console.log(dropedGeojson)
+        view.removeLayer(dropedGeojson["2dDropId"])
+        dropedGeojson["2dDropId"] = ""
+    }
+})
 
 
