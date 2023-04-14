@@ -14,10 +14,9 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
-
+import { geosjontToColorLayer } from "./js/dropData/drop2dData"
+import { updateSelectOption } from "./js/dropData/updateSelection"
 import * as shp from "shpjs";
-
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -29,7 +28,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
+let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0" }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0" }, "osm_random_id": { name: "osm", num: 0, id: "osm_0" }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0" } }
 
 let dropedGeojson = { "2dDrop": {}, "2dDropId": "", "3dDropId": "" };
 
@@ -82,11 +81,17 @@ let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let dataBdnb;
 
 
-// Geojson for each source
+// Promise Geojson for each source
 let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
+
+//  Geojson for each source
+let bdnbGeoJson
+let bdtopoGeoJson
+let osmGeoJson
+let cadastreGeoJson
 
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
@@ -94,6 +99,12 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+
+    //charger les geosjon des couche de base 
+    bdnbPromisedJson.then(geojson => { bdnbGeoJson = geojson })
+    bdtopoPromisedJson.then(geojson => { bdtopoGeoJson = geojson })
+    osmPromisedJson.then(geojson => { osmGeoJson = geojson })
+    cadastrePromisedJson.then(geojson => { cadastreGeoJson = geojson })
 
     csvBdnb.then(res => {
         // Récupérer les valeurs uniques de la propriété "type"
@@ -312,15 +323,15 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
-        let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        batInorandomId.ino_random_id.num += 1;
+        batInorandomId.ino_random_id.id = batInorandomId.ino_random_id.name + "_" + batInorandomId.ino_random_id.num
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
-            geojsontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
-            batInorandomId.ino_random_id = ramdoId
+            geojsontToFeatureGeom(geojson, false, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
         })
 
     }
     else {
-        view.removeLayer(batInorandomId.ino_random_id)
+        view.removeLayer(batInorandomId.ino_random_id.id)
         view.removeLayer("inno")
 
     }
@@ -329,25 +340,20 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        bdnbPromisedJson.then(geojson => {
+        let geojson = bdnbGeoJson;
+        geojson.features.forEach((feature) => {
+            let data = dataBdnb[feature.properties["batiment_g"]]
+            if (data) {
+                feature.properties = data
+            }
 
-            geojson.features.forEach((feature) => {
-                let data = dataBdnb[feature.properties["batiment_g"]]
-                if (data) {
-                    feature.properties = data
-                }
-
-            });
-
-            let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId2
-        }
-        )
+        });
+        batInorandomId.bdnb_random_id.num += 1;
+        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+        geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
     }
     else {
-        view.removeLayer(batInorandomId.bdnb_random_id)
-        batInorandomId.bdnb_random_id = ""
+        view.removeLayer(batInorandomId.bdnb_random_id.id)
     }
 
 })
@@ -406,11 +412,11 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
 
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    Object.entries(batInorandomId).forEach(([key, val]) => {
-        if (key != "ino_random_id" && val != "") {
-            view.removeLayer(val)
-        }
-    })
+    // Object.entries(batInorandomId).forEach(([key, val]) => {
+    //     if (key != "ino_random_id" && val != "") {
+    //         view.removeLayer(val)
+    //     }
+    // })
 
     const selectPropValue = document.getElementById('selectProp').value;
     const ign = document.getElementById("exploredataIgn").checked;
@@ -424,10 +430,12 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
 
     const bdnb = document.getElementById("exploredata").checked;
     if (bdnb) {
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        view.removeLayer(batInorandomId.bdnb_random_id.id)
+        batInorandomId.bdnb_random_id.num += 1;
+        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+        console.log(batInorandomId.bdnb_random_id)
         bdnbPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId2
+            geojsontToFeatureGeom(geojson, false, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
         })
     }
 
