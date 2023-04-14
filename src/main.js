@@ -167,35 +167,38 @@ viewerDiv.addEventListener(
 
             })
                 .then(result => {
-                    console.log(result)
                     let valDisplay2 = csvMenageINSEE
                         .then(res => {
                             // ----------- POPULATION INSEE ----------- //
                             let valDisplayedPop;
                             // Retrieve elements where Iris number is same as tooltip
                             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                            console.log(uniqueData)
+
                             // Add INSEE value for this IRIS in tooltip properties
                             Object.entries(uniqueData).forEach(([key, value]) => {
                                 valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
                             })
-                            console.log(valDisplayedPop)
-
 
                             // Chart for INSEE values
                             // ----- Status 15 ans et plus ----- //
-                            const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                            const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, valDisplayedPop.tabPopulation);
+                            const dataList4Chart = {
+                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
+                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
+                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                            }
+
+                            let data4Chart = {
+
+                            }
+                            const dataRelation15 = contenuOnglet.dataINSEE4Chart(dataList4Chart.status15OuPlus, valDisplayedPop.tabPopulation);
                             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
 
                             // ----- Répartition pop 15 ans et plus ----- //
-                            const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
-                            const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, valDisplayedPop.tabPopulation);
+                            const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(dataList4Chart.repartitionPop, valDisplayedPop.tabPopulation);
                             textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
 
                             // ----- Nombre de familles avec enfants -25 ans ----- //
-                            const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                            const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, valDisplayedPop.tabPopulation);
+                            const dataEnfant25 = contenuOnglet.dataINSEE4Chart(dataList4Chart.enfant25, valDisplayedPop.tabPopulation);
                             textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
 
                             htmlTest.innerHTML += textHtml;
@@ -230,7 +233,6 @@ viewerDiv.addEventListener(
                             }
                         })
                         .then(res => {
-                            console.log(res)
                             // ----------- Generate html accordion item for each value ----------- //
                             Object.entries(res).forEach(([key, value]) => {
                                 generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
