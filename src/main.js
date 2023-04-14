@@ -683,7 +683,6 @@ affiche3dFile.addEventListener("click", () => {
     geojsontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
 
     console.log(selectCol3dZiped)
-    // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
 }
 )
 
