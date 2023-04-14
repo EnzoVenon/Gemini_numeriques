@@ -11,7 +11,6 @@ import * as contenuOnglet from "./js/models/contenuOnglets"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
-import { getBdtopoInfo } from "./js/models/getBdtopoInfo"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
@@ -77,7 +76,6 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
-let csvIdBdnbBdtopo = importCsvFile("../data/linker/bdnb_bdtopo.csv")
 
 let dataBdnb;
 
