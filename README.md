@@ -1,4 +1,4 @@
-# ***Gemini numérique***
+# **Gemini numérique**
 
 ## **Présentation**
 ### <u>Le projet</u>
