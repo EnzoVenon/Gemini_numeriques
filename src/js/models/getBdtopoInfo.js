@@ -17,14 +17,14 @@ export function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
 
               // document.getElementById('listHauteur').innerHTML += `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["HAUTEUR"]} m </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
               //             data-bs-custom-class="custom-tooltip"
-              //             data-bs-title="donnée issue de la bdtopo  sur l'attribut HAUTEUR">
+              //             data-bs-title="Donnée issue de la bdtopo  sur l'attribut HAUTEUR">
               //             info
               //         </a>
               //         </div>
               //           `
               // document.getElementById('listEtage').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["NB_ETAGES"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
               //           data-bs-custom-class="custom-tooltip"
-              //           data-bs-title="donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
+              //           data-bs-title="Donnée issue de la bdtopo  sur l'attribut NB_ETAGES">
               //           info
               //       </a>
               //       </div>
@@ -32,7 +32,7 @@ export function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
 
               // document.getElementById('listEtat').innerHTML = `<div style="width:100%;display:flex; flex-direction:row;justify-content:space-around"> <span>${result.value.properties["ETAT"]} </span><a  href="#" data-bs-toggle="tooltip" data-bs-placement="right"
               //         data-bs-custom-class="custom-tooltip"
-              //         data-bs-title="donnée issue de la bdtopo  sur l'attribut ETAT">
+              //         data-bs-title="Donnée issue de la bdtopo  sur l'attribut ETAT">
               //         info
               //     </a>
               //     </div>
