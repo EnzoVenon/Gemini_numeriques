@@ -590,7 +590,7 @@ affiche3dFile.addEventListener("click", () => {
     const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
     const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
 
-    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE,)
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
 
     console.log(selectCol3dZiped)
     // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
