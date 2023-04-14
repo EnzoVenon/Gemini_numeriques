@@ -81,16 +81,26 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
     let button_style_apply = document.getElementById("button_style_apply");
 
+    //Getting the source (as something other than a Shp because itowns can't extrude them)
+    let src_bdnb;
+    await loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        src_bdnb = new itowns.FileSource({
+            fetchedData: geojson,
+            crs: 'EPSG:4326',
+            format: 'application/json',
+        })
+    });
+
     //Styles definition
     let style_list = [];
     style_list.push(
-        new Style("Notes consommation d'énergie", view, view.getLayerById("bdnb").source, "dpe_logtype_classe_conso_ener", false, false)
+        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false, false)
             .setExtrude("altitude_s", "hauteur", false)
             .setClasses({
                 "A": "rgb(1,149,65)",
@@ -103,12 +113,12 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, view.getLayerById("bdnb").source, "hauteur", false, true)
+        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", false, true)
             .setExtrude("altitude_s", "hauteur", false)
             .setGradation("rgb(255,0,0)", "", 1, 30)
     );
     style_list.push(
-        new Style("Iris", view, view.getLayerById("bdnb").source, "code_iris", false, false)
+        new Style("Iris", view, src_bdnb, "code_iris", false, false)
             .setExtrude("altitude_s", "hauteur", false)
     );
 
