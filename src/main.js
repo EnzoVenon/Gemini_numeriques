@@ -527,4 +527,73 @@ document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", ()
 })
 
 
+//================================== Drop zone 3d =========================================//
+let dropZone3d = document.getElementById('drop-zone-3D');
+
+dropZone3d.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZone3d.classList.add('drag-over');
+});
+
+dropZone3d.addEventListener('dragleave', function () {
+    dropZone3d.classList.remove('drag-over');
+});
+
+dropZone3d.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZone3d.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        var file = files[0];
+        if (file.type === 'application/zip') {
+            // Handle the ZIP file
+            // console.log(file);
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var arrayBuffer = event.target.result;
+                // Handle the arrayBuffer
+                console.log(arrayBuffer);
+                //for the shapefiles in the files folder called pandr.shp
+                shp(arrayBuffer).then(function (geojson) {
+                    //see bellow for whats here this internally call shp.parseZip()
+                    console.log(geojson)
+
+                    updateSelectOption(geojson, "selectHauteur3dZiped", true)
+
+                    updateSelectOption(geojson, "selectAltiSol3dZiped", true)
+
+                    updateSelectOption(geojson, "selectCol3dZiped", true)
+
+                    dropedGeojson["3dDrop"] = geojson
+                });
+
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            alert('Please drop a ZIP file');
+        }
+    }
+});
+
+
+
+var affiche3dFile = document.getElementById('afficheDrop3d');
+
+affiche3dFile.addEventListener("click", () => {
+    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+    let geojson = dropedGeojson["3dDrop"]
+    console.log(geojson)
+    const selectHauteur3dZiped = document.getElementById('selectHauteur3dZiped').value;
+    const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
+    const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
+
+    geosjontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE)
+
+    console.log(selectCol3dZiped)
+    // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
+}
+)
+
+
+
 
