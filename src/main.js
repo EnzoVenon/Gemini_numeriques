@@ -12,7 +12,7 @@ import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
-import { geosjontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
+import { geojsontToFeatureGeom } from "./js/manipShp3d/geosjontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
