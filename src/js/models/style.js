@@ -68,7 +68,7 @@ export default class Style {
         //Automatically find and set this.min ?
         if (isNaN(this.min)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            function hackMin(properties) {
+            const findMin = (properties) => {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
@@ -76,7 +76,6 @@ export default class Style {
                 }
                 return true;
             }
-            const findMin = hackMin.bind(this);
             Style.#id_counter2 += 1;
             const layer = new itowns.FeatureGeometryLayer("to_delete_min_style" + Style.#id_counter2, {
                 batchId: function (property, featureId) { return featureId; },
@@ -95,7 +94,7 @@ export default class Style {
         //Automatically find and set this.max ?
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            function hackMax(properties) {
+            const findMax = (properties) => {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
@@ -103,7 +102,6 @@ export default class Style {
                 }
                 return true;
             }
-            const findMax = hackMax.bind(this);
             Style.#id_counter2 += 1;
             const layer = new itowns.FeatureGeometryLayer("to_delete_max_style" + Style.#id_counter2, {
                 batchId: function (property, featureId) { return featureId; },
@@ -199,18 +197,15 @@ export default class Style {
         let layer;
         if (this.extrude) {
             //Create the functions to place the object on the ground and to extrude it.
-            function alti(properties) {
+            const altitudeFeature = (properties) => {
                 return properties[this.field_ground];
             }
-            const altitudeFeature = alti.bind(this);
-            function extr(properties) {
+            const extrudeFeature = (properties) => {
                 return properties[this.field_height];
             }
-            const extrudeFeature = extr.bind(this);
-            function accept(properties) {
+            const acceptFeature = (properties) => {
                 return !!properties[this.field_height] && !!properties[this.field_ground];
             }
-            const acceptFeature = accept.bind(this);
 
             // Create the style layer
             layer = new itowns.FeatureGeometryLayer(id, {
