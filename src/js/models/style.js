@@ -49,8 +49,8 @@ export default class Style {
      * Sets the color(s) and min and max values to use for gradation.
      * @param {String} color1 Color of the gradation. Must be in rgb format. Example: "rgb(241,0,60)".
      * @param {String} color2 Second color, in case you want for example to go from blue to red. Default value is "".
-     * @param {Number} min If you want the white or the second color to be set to a specific min rather than it being detected automatically.
-     * @param {Number} max If you want your color to be set to a specific max rather than it being detected automatically.
+     * @param {Number} min Optional. If you want the white or the second color to be set to a specific min rather than it being detected automatically.
+     * @param {Number} max Optional. If you want your color to be set to a specific max rather than it being detected automatically.
      */
     setGradation(color1, color2 = "", min = this.min, max = this.max) {
         //Set this.color1
@@ -145,10 +145,18 @@ export default class Style {
                 coloring = function f(properties) {
                     if (properties.hasOwnProperty(this.field)) {
                         const intensity = 1 - ((properties[this.field] - this.min) / (this.max - this.min));
-                        const red = Math.floor(intensity * (255 - this.color1.r) + this.color1.r);
-                        const green = Math.floor(intensity * (255 - this.color1.g) + this.color1.g);
-                        const blue = Math.floor(intensity * (255 - this.color1.b) + this.color1.b);
-                        return "rgb(" + red + "," + green + "," + blue + ")";
+                        let rgb = [];
+                        rgb.push(Math.floor(intensity * (255 - this.color1.r) + this.color1.r));
+                        rgb.push(Math.floor(intensity * (255 - this.color1.g) + this.color1.g));
+                        rgb.push(Math.floor(intensity * (255 - this.color1.b) + this.color1.b));
+                        for (let i = 0; i < 3; i++) {
+                            if (rgb[i] < 0) {
+                                rgb[i] = 0;
+                            } else if (rgb[i] > 255) {
+                                rgb[i] = 255;
+                            }
+                        }
+                        return "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
                     } else {
                         return "rgb(169,169,169)";
                     }
@@ -228,7 +236,8 @@ export default class Style {
                 style: new itowns.Style({
                     fill: {
                         color: drawing
-                    }
+                    },
+                    stroke: { color: "black" }
                 })
             });
         }
