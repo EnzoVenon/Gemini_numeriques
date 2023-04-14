@@ -216,52 +216,43 @@ viewerDiv.addEventListener(
                     valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                 })
                 return valDisplayed;
-            }).then(result => {
 
+            }).then(result => {
+                // ----------- Get BdTopo data ----------- //
                 bdtopoPromisedJson
                     .then(geojson => {
-                        console.log(geojson.features)
-                        console.log(tooltip.value.properties)
                         let dataBdTopo = geojson.features.filter(obj => {
-                            // console.log(obj.properties.ID)
-                            // console.log(tooltip.value.properties.batiment_g)
-                            if (obj.properties.ID === tooltip.value.properties.batiment_g) {
-                                console.log(obj)
+                            if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
                                 return obj;
                             }
-
                         })
-                        return dataBdTopo
+                        return dataBdTopo[0]
                     })
                     .then(res => {
+                        console.log(res)
+                        let valDisplayedBdTopo;
+                        if (res.properties) {
+                            Object.entries(res.properties).forEach(([key, value]) => {
+                                valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                            })
+                            return valDisplayedBdTopo;
+                        }
+                    })
+                    .then(res => {
+
+                        // ----------- Generate html accordion item for each value ----------- //
                         Object.entries(res).forEach(([key, value]) => {
-                            console.log(key)
-                            console.log(value)
+                            generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                            generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                            generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+
                         })
+                        // for info link
+                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                        const tooltipList = [...tooltipTriggerList]
+                        tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                     })
-                // ----------- Get BdTopo data ----------- //
-                let valBdTopo = getBdtopoInfo(csvIdBdnbBdtopo, tooltip.value.properties.batiment_g).then(res => {
-                    // Dispatch BdTopo data for each tab
-                    let valDisplayedBdTopo;
-                    Object.entries(res).forEach(([key, value]) => {
-                        valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
-                    })
-                    return valDisplayedBdTopo;
-                })
-                return valBdTopo
-            }).then(res => {
 
-                // ----------- Generate html accordion item for each value ----------- //
-                Object.entries(res).forEach(([key, value]) => {
-                    generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                    generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                    generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-
-                })
-                // for info link
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                const tooltipList = [...tooltipTriggerList]
-                tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
@@ -353,7 +344,6 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
     }
 })
-// document.getElementById("showInnondationLayer").click()
 
 
 document.getElementById("exploredata").addEventListener("change", () => {
@@ -361,10 +351,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
         bdnbPromisedJson.then(geojson => {
 
-            // console.log(geojson)
             geojson.features.forEach((feature) => {
-                // console.log(feature.properties["batiment_g"])
-                // console.log(records[feature.properties["batiment_g"]])
                 let data = dataBdnb[feature.properties["batiment_g"]]
                 if (data) {
                     feature.properties = data
