@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-04-17T08:05:57.601Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="6twW5Kt0YEcgUcRJmj-P" version="21.1.8" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-17T08:07:28.864Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="W8BbKzCOeiOTNpD1oQTe" version="21.1.8" type="github">
   <diagram name="Page-1" id="RKlKr9zLwDHz_0O1cyM0">
     <mxGraphModel dx="828" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -22,31 +22,31 @@
         <mxCell id="FjnJGpuL3dfxn8dWNNj--6" value="Territoires à Risques importants d’Inondation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
           <mxGeometry x="370" y="720" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--3" target="FjnJGpuL3dfxn8dWNNj--1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--9" value="&lt;div&gt;Centroïde &lt;br&gt;&lt;/div&gt;&lt;div&gt;Intersection spatiale&lt;br&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--3" target="FjnJGpuL3dfxn8dWNNj--1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="520" y="580" as="sourcePoint" />
             <mxPoint x="570" y="530" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--10" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#4e9a06;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--2" target="FjnJGpuL3dfxn8dWNNj--1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--10" value="ID - ID" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#4e9a06;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--2" target="FjnJGpuL3dfxn8dWNNj--1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="520" y="580" as="sourcePoint" />
             <mxPoint x="570" y="530" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--6" target="FjnJGpuL3dfxn8dWNNj--1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--11" value="Intersection spatiale" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--6" target="FjnJGpuL3dfxn8dWNNj--1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="520" y="580" as="sourcePoint" />
             <mxPoint x="570" y="530" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--12" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--4" target="FjnJGpuL3dfxn8dWNNj--1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--12" value="&lt;div&gt;Centroïde&lt;/div&gt;&lt;div&gt;Intersection spatiale&lt;br&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#ce5c00;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--4" target="FjnJGpuL3dfxn8dWNNj--1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="520" y="580" as="sourcePoint" />
             <mxPoint x="570" y="530" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeColor=#4e9a06;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--5" target="FjnJGpuL3dfxn8dWNNj--1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--13" value="ID - ID" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeColor=#4e9a06;" edge="1" parent="1" source="FjnJGpuL3dfxn8dWNNj--5" target="FjnJGpuL3dfxn8dWNNj--1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="520" y="580" as="sourcePoint" />
             <mxPoint x="570" y="530" as="targetPoint" />
