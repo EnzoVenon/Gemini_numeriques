@@ -117,15 +117,13 @@ let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
-//  Geojson for each source
-let bdnbGeoJson
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
 
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
+    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
 
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
@@ -421,17 +419,19 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        let geojson = bdnbGeoJson;
-        geojson.features.forEach((feature) => {
-            let data = dataBdnb[feature.properties["batiment_g"]]
-            if (data) {
-                feature.properties = data
-            }
+        bdnbPromisedJson.then(geojson => {
+            geojson.features.forEach((feature) => {
+                let data = dataBdnb[feature.properties["batiment_g"]]
+                if (data) {
+                    feature.properties = data
+                }
 
-        });
-        batInorandomId.bdnb_random_id.num += 1;
-        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
+            });
+            batInorandomId.bdnb_random_id.num += 1;
+            batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+            geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
+
+        })
     }
     else {
         view.removeLayer(batInorandomId.bdnb_random_id.id)
