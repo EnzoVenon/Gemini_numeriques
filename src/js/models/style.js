@@ -248,7 +248,7 @@ export default class Style {
             layer = new itowns.ColorLayer(id, {
                 batchId: function (property, featureId) { return featureId; },
                 source: this.source,
-                zoom: { min: 0, max: 12 },
+                zoom: { min: 14 },
                 style: new itowns.Style({
                     fill: {
                         color: drawing
