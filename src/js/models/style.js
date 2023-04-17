@@ -2,23 +2,22 @@ export default class Style {
     //Static variable solving a display issue of iTowns
     static #id_counter = 0;
     static #id_counter2 = 0;
+    #extrude;
 
     /**
      * @param {String} name Name of your style.
      * @param {*} view View object from iTowns.
      * @param {*} source Source object from iTowns.
      * @param {String} field The name of the field to apply a style on.
-     * @param {Boolean} extrude If true, objects will be in 3D. Otherwise, they will be in 2D. Default is false.
-     * @param {Boolean} gradation_or_classes If true, the style will be a gradation, otherwise it will be a classification. Default is true.
+     * @param {Boolean} gradation_or_classes If true, the style will be a gradation, otherwise it will be a classification. Default is false.
      */
-    constructor(name, view, source, field, extrude = false, gradation_or_classes = true) {
+    constructor(name, view, source, field, gradation_or_classes = false) {
         this.name = name;
         this.view = view;
         this.source = source;
         this.field = field;
-        this.extrude = extrude;
         this.gradation_or_classes = gradation_or_classes;
-        this.setExtrude();
+        this.#extrude = false;
         this.setGradation("rgb(255,0,0)", "", 0, 0);
         this.setClasses({});
         return this;
@@ -29,9 +28,10 @@ export default class Style {
      * @param {String} field_ground Name of the field corresponding to the ground.
      * @param {String} field_height Name of the field corresponding to the height.
      */
-    setExtrude(field_ground = "", field_height = "") {
+    setExtrude(field_ground, field_height) {
         this.field_ground = field_ground;
         this.field_height = field_height;
+        this.#extrude = true;
         return this;
     }
 
@@ -41,7 +41,11 @@ export default class Style {
      * @returns 
      */
     to3D(extrude) {
-        this.extrude = extrude;
+        if (this.field_ground === undefined || this.field_height === undefined) {
+            this.#extrude = false;
+            return this;
+        }
+        this.#extrude = extrude;
         return this;
     }
 
@@ -195,7 +199,7 @@ export default class Style {
         Style.#id_counter += 1;
         const id = "style_layer_" + Style.#id_counter;
         let layer;
-        if (this.extrude) {
+        if (this.#extrude) {
             //Create the functions to place the object on the ground and to extrude it.
             const altitudeFeature = (properties) => {
                 return properties[this.field_ground];
