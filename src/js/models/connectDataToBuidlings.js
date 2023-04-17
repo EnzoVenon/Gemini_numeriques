@@ -20,6 +20,9 @@ const attribut2UserName = {
   bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
   NB_ETAGES: "Nombre d'étages",
   DATE_CREAT: "Date de Création",
+  nbEntrances: "Nombre d'entrées",
+  nbHousing: "Nombre de logements",
+  nbWorkingPlace: "Nombre de lieux de travail",
 
   argiles_alea: "Risque argile",
   radon_alea: "Risque radon",
@@ -81,7 +84,11 @@ const tabs = {
     "NATURE",
     "NB_ETAGES",
     "USAGE1",
-    "USAGE2"
+    "USAGE2",
+    "nbEntrances",
+    "nbHousing",
+    "nbWorkingPlace"
+
   ],
   ongletRisque: [
     "radon_alea",
@@ -143,8 +150,6 @@ const tabs = {
     'C19_NE24F4P'
   ]
 }
-
-
 
 
 export function loadDataToJSON(dictionaryTofill, key, value, base) {

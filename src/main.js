@@ -107,6 +107,7 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csvBdnbParis = importCsvFile("../data/csv/bdnb_paris11.csv")
 
 let csvBuildingICI = importCsvFile("../data/csv/ICI-csv/building.csv")
 let csvAddressICI = importCsvFile("../data/csv/ICI-csv/address.csv")
@@ -130,7 +131,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
-    addShp("../data/shp/paris_11/bdtopo_paris11", "bdtopoParis", "red", "", view, true)
+    addShp("../data/shp/prg/paris11bdnb", "bdnbParis", "red", "", view, true)
 
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
@@ -249,33 +250,60 @@ viewerDiv.addEventListener(
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
 
-            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
+            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g)
+                .then(res => {
 
-                // ----------- Get Bdnb data ----------- //
-                // Dispatch Bdnb data for each tab
-                let valDisplayed;
-                Object.entries(res).forEach(([key, value]) => {
-                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
                 })
-                return valDisplayed;
-
-            })
                 .then(result => {
+                    console.log(result)
                     csvBuildingICI
                         .then(res => {
-                            console.log(tooltip.value.properties.ID)
+                            let dataBuildingICI;
                             Object.entries(res).forEach((value) => {
                                 if (value[1].idBdTopo) {
                                     if (value[1].idBdTopo.includes(tooltip.value.properties.ID)) {
+                                        console.log(tooltip.value.properties.ID)
                                         console.log(value)
+                                        dataBuildingICI = value[1];
                                     }
-
                                 }
                             })
+                            console.log(dataBuildingICI)
+                            return dataBuildingICI
+                        })
+                        .then(res => {
+
+                            let valDisplayBuildingICI
+                            Object.entries(res).forEach(([key, value]) => {
+                                valDisplayBuildingICI = loadDataToJSON(result, key, value, "Building ICI")
+                            })
+                            return valDisplayBuildingICI
 
                         })
+                        .then(res => console.log(res))
                     return result;
                 })
+
+            // getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g)
+            //     .then(res => {
+
+            //         // ----------- Get Bdnb data ----------- //
+            //         // Dispatch Bdnb data for each tab
+            //         let valDisplayed;
+            //         Object.entries(res).forEach(([key, value]) => {
+            //             valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+            //         })
+            //         return valDisplayed;
+
+            //     })
             // .then(result => {
             //     let valDisplay2 = csvMenageINSEE
             //         .then(res => {
