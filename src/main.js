@@ -187,6 +187,7 @@ viewerDiv.addEventListener(
                             }
                             let data4Chart = [];
                             Object.entries(dataList4Chart).forEach(([key, value]) => {
+                                console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
 
