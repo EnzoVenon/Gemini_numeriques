@@ -19,7 +19,7 @@ export default class Style {
         this.gradation_or_classes = gradation_or_classes;
         this.#extrude = false;
         if (gradation_or_classes) {
-            this.setGradation("rgb(255,0,0)", "", NaN, NaN);
+            this.setGradation("rgb(255,0,0)", "", 0, 0); //The two last parameters should be NaN instead of 0 to automatically set min and max, but the feature is not working yet.
         } else {
             this.setClasses({});
         }
@@ -105,7 +105,6 @@ export default class Style {
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
             let hackMax = function hMa(properties) {
-                console.log("Là, je suis sensé rentrer dans la fonction findMax.");
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
