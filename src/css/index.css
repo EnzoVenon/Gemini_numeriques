@@ -95,8 +95,18 @@ p {
     border-radius: 5px;
     margin-top: 5px;
 }
-.tireEnSavoiPlus{
+
+#liensSources a {
+    text-decoration: none;
+}
+
+.titreEnSavoiPlus{
     font-weight: bold;
+}
+.sousTitreEnSavoiPlus{
+    font-style: italic;
+    text-decoration: underline;
+    margin-top: 10px;
 }
 
 #explorationPanel {
