@@ -114,6 +114,7 @@ p {
     font-style: italic;
     text-decoration: underline;
     margin-top: 7px;
+    margin-bottom: 0px;
 }
 
 #explorationPanel {
