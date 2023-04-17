@@ -18,8 +18,11 @@ export default class Style {
         this.field = field;
         this.gradation_or_classes = gradation_or_classes;
         this.#extrude = false;
-        this.setGradation("rgb(255,0,0)", "", 0, 0);
-        this.setClasses({});
+        if (gradation_or_classes) {
+            this.setGradation("rgb(255,0,0)", "", NaN, NaN);
+        } else {
+            this.setClasses({});
+        }
         return this;
     }
 
@@ -72,7 +75,7 @@ export default class Style {
         //Automatically find and set this.min ?
         if (isNaN(this.min)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            const findMin = (properties) => {
+            let hackMin = function hMi(properties) {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
@@ -80,17 +83,20 @@ export default class Style {
                 }
                 return true;
             }
+            const findMin = hackMin.bind(this);
             Style.#id_counter2 += 1;
-            const layer = new itowns.FeatureGeometryLayer("to_delete_min_style" + Style.#id_counter2, {
+            const id = Style.#id_counter2;
+            const layer = new itowns.FeatureGeometryLayer("to_delete_min_style" + id, {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMin,
                 source: this.source,
                 visible: false
             });
-            this.view.addLayer(layer);
-            this.view.notifyChange(this.view.camera.camera3D, true);
-            this.view.removeLayer("to_delete_min_style" + Style.#id_counter2);
-            layer.delete();
+            this.view.addLayer(layer).then(() => {
+                this.view.notifyChange(this.view.camera.camera3D, true);
+                this.view.removeLayer("to_delete_min_style" + id);
+                layer.delete();
+            });
         }
 
         //Set this.max
@@ -98,7 +104,8 @@ export default class Style {
         //Automatically find and set this.max ?
         if (isNaN(this.max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            const findMax = (properties) => {
+            let hackMax = function hMa(properties) {
+                console.log("Là, je suis sensé rentrer dans la fonction findMax.");
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
@@ -106,17 +113,20 @@ export default class Style {
                 }
                 return true;
             }
+            const findMax = hackMax.bind(this);
             Style.#id_counter2 += 1;
-            const layer = new itowns.FeatureGeometryLayer("to_delete_max_style" + Style.#id_counter2, {
+            const id = Style.#id_counter2;
+            const layer = new itowns.FeatureGeometryLayer("to_delete_max_style" + id, {
                 batchId: function (property, featureId) { return featureId; },
                 filter: findMax,
                 source: this.source,
                 visible: false
             });
-            this.view.addLayer(layer);
-            this.view.notifyChange(this.view.camera.camera3D, true);
-            this.view.removeLayer("to_delete_max_style" + Style.#id_counter2);
-            layer.delete();
+            this.view.addLayer(layer).then(() => {
+                this.view.notifyChange(this.view.camera.camera3D, true);
+                this.view.removeLayer("to_delete_max_style" + id);
+                layer.delete();
+            });
         }
         return this;
     }
@@ -239,7 +249,7 @@ export default class Style {
             layer = new itowns.ColorLayer(id, {
                 batchId: function (property, featureId) { return featureId; },
                 source: this.source,
-                zoom: { min: 14 },
+                zoom: { min: 0, max: 12 },
                 style: new itowns.Style({
                     fill: {
                         color: drawing
