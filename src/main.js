@@ -360,34 +360,33 @@ document.getElementById("exploredata").addEventListener("change", () => {
 
 document.getElementById("exploredataIgn").addEventListener("change", () => {
     if (document.getElementById("exploredataIgn").checked) {
+        batInorandomId.bdtopo_radom_id.num += 1;
+        batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
-            batInorandomId.bdtopo_radom_id = ramdoId
+            geojsontToFeatureGeom(geojson, true, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.bdtopo_radom_id)
-        batInorandomId.bdtopo_radom_id = ""
+        view.removeLayer(batInorandomId.bdtopo_radom_id.id)
     }
 
 })
 
 document.getElementById("exploredataOsm").addEventListener("change", () => {
     if (document.getElementById("exploredataOsm").checked) {
+        batInorandomId.osm_random_id.num += 1;
+        batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             geojsontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
-            batInorandomId.osm_random_id = ramdoId
+
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.osm_random_id)
-        batInorandomId.osm_random_id = ""
+        view.removeLayer(batInorandomId.osm_random_id.id)
     }
 
 })
