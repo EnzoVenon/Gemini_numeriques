@@ -8,13 +8,6 @@ body {
     height: 100%;
 }
 
-#viewerDiv {
-    margin: auto;
-    height: 1800px;
-    width: 100%;
-    padding: 0;
-
-}
 
 .navbar {
     width: 100%;
@@ -55,7 +48,7 @@ p {
     left: 0;
     width: 100%;
     background-color: white;
-    z-index: 1;
+    z-index: 2;
 }
 
 #style_menu {
@@ -68,17 +61,14 @@ p {
     border-radius: 10px;
 }
 
-#container {
+.container {
     display: flex;
-    flex-direction: row;
 }
 
 
 #viewerDiv {
-    position: relative;
     top: 100px;
     width: 100%;
-    height: 85vh;
     z-index: 0;
 }
 
@@ -115,4 +105,8 @@ p {
 .drop-zone {
     height: 50;
     border-style: dashed;
+}
+
+.row {
+    --bs-gutter-x: 0rem;
 }
