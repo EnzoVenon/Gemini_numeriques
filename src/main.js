@@ -22,7 +22,7 @@ import * as shp from "shpjs";
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "bdtopoParis": "../data/shp/paris_11/bdtopo_paris11", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
@@ -108,6 +108,11 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
+let csvBuildingICI = importCsvFile("../data/csv/ICI-csv/building.csv")
+let csvAddressICI = importCsvFile("../data/csv/ICI-csv/address.csv")
+let csvHouseholdICI = importCsvFile("../data/csv/ICI-csv/household.csv")
+let csvHousingICI = importCsvFile("../data/csv/ICI-csv/housing.csv")
+let csvIndividualICI = importCsvFile("../data/csv/ICI-csv/individual.csv")
 let dataBdnb;
 
 
@@ -116,6 +121,7 @@ let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
+let bdtopoParisPromisedJson = loadBufferDataFromShp(paths.bdtopoParis)
 
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
@@ -124,7 +130,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdtopoParis", "red", "", view, true)
+    addShp("../data/shp/paris_11/bdtopo_paris11", "bdtopoParis", "red", "", view, true)
 
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
@@ -255,110 +261,126 @@ viewerDiv.addEventListener(
 
             })
                 .then(result => {
-                    let valDisplay2 = csvMenageINSEE
+                    csvBuildingICI
                         .then(res => {
-                            // ----------- POPULATION INSEE ----------- //
-                            let valDisplayedPop;
-                            // Retrieve elements where Iris number is same as tooltip
-                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                            console.log(tooltip.value.properties.ID)
+                            Object.entries(res).forEach((value) => {
+                                if (value[1].idBdTopo) {
+                                    if (value[1].idBdTopo.includes(tooltip.value.properties.ID)) {
+                                        console.log(value)
+                                    }
 
-                            // Add INSEE value for this IRIS in tooltip properties
-                            Object.entries(uniqueData).forEach(([key, value]) => {
-                                valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
-                            })
-
-                            // Chart for INSEE values
-                            const dataList4Chart = {
-                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
-                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
-                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                            }
-                            let data4Chart = [];
-                            Object.entries(dataList4Chart).forEach(([key, value]) => {
-                                console.log(key)
-                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
-                            })
-
-                            // ----- Generate HTML text ----- //
-                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                            htmlTest.innerHTML += textHtml;
-
-                            // Create charts
-                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
-                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
-                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
-
-                            return valDisplayedPop;
-                        })
-                    return valDisplay2
-                })
-                .then(result => {
-                    // ----------- Get BdTopo data ----------- //
-                    bdtopoPromisedJson
-                        .then(geojson => {
-                            let dataBdTopo = geojson.features.filter(obj => {
-                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                    return obj;
                                 }
                             })
-                            return dataBdTopo[0]
-                        })
-                        .then(res => {
-                            let valDisplayedBdTopo;
-                            if (res.properties) {
-                                Object.entries(res.properties).forEach(([key, value]) => {
-                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
-                                })
-                                return valDisplayedBdTopo;
-                            }
-                        })
-                        .then(res => {
-                            // ----------- Generate html accordion item for each value ----------- //
-                            Object.entries(res).forEach(([key, value]) => {
-                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
 
-                            })
-                            // for info link
-                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                            const tooltipList = [...tooltipTriggerList]
-                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                         })
-
+                    return result;
                 })
+            // .then(result => {
+            //     let valDisplay2 = csvMenageINSEE
+            //         .then(res => {
+            //             // ----------- POPULATION INSEE ----------- //
+            //             let valDisplayedPop;
+            //             // Retrieve elements where Iris number is same as tooltip
+            //             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
 
-            shapefile.open("../data/shp/prg/bdnb_perigeux8")
-                .then(source => source.read()
-                    .then(async function log(result) {
-                        if (result.done) return "done";
+            //             // Add INSEE value for this IRIS in tooltip properties
+            //             Object.entries(uniqueData).forEach(([key, value]) => {
+            //                 valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
+            //             })
 
-                        if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-                            let selectedBatGeom = result.value.geometry.coordinates
-                            let polygon = turf.polygon(selectedBatGeom)
-                            shapefile.open("../data/shp/prg/osm")
-                                .then(source => source.read()
-                                    .then(function log(result) {
-                                        if (result.done) return "done";
-                                        let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+            //             // Chart for INSEE values
+            //             const dataList4Chart = {
+            //                 status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
+            //                 repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
+            //                 enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+            //             }
+            //             let data4Chart = [];
+            //             Object.entries(dataList4Chart).forEach(([key, value]) => {
+            //                 console.log(key)
+            //                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
+            //             })
 
-                                        if (turf.intersect(polygonOsm, polygon)) {
-                                            // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-                                            return;
-                                        }
+            //             // ----- Generate HTML text ----- //
+            //             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+            //             textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+            //             textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
 
-                                        return source.read().then(log);
-                                    }))
-                        }
-                        return source.read().then(log)
+            //             htmlTest.innerHTML += textHtml;
+
+            //             // Create charts
+            //             addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
+            //             addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
+            //             addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
+
+            //             return valDisplayedPop;
+            //         })
+            //     return valDisplay2
+            // })
+            // .then(result => {
+            //     // ----------- Get BdTopo data ----------- //
+            //     bdtopoPromisedJson
+            //         .then(geojson => {
+            //             let dataBdTopo = geojson.features.filter(obj => {
+            //                 if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
+            //                     return obj;
+            //                 }
+            //             })
+            //             return dataBdTopo[0]
+            //         })
+            //         .then(res => {
+            //             let valDisplayedBdTopo;
+            //             if (res.properties) {
+            //                 Object.entries(res.properties).forEach(([key, value]) => {
+            //                     valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+            //                 })
+            //                 return valDisplayedBdTopo;
+            //             }
+            //         })
+            //         .then(res => {
+            //             // ----------- Generate html accordion item for each value ----------- //
+            //             Object.entries(res).forEach(([key, value]) => {
+            //                 generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+            //                 generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+            //                 generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+            //                 generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
+
+            //             })
+            //             // for info link
+            //             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            //             const tooltipList = [...tooltipTriggerList]
+            //             tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            //         })
+
+            // })
+
+            // shapefile.open("../data/shp/prg/bdnb_perigeux8")
+            //     .then(source => source.read()
+            //         .then(async function log(result) {
+            //             if (result.done) return "done";
+
+            //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+            //                 let selectedBatGeom = result.value.geometry.coordinates
+            //                 let polygon = turf.polygon(selectedBatGeom)
+            //                 shapefile.open("../data/shp/prg/osm")
+            //                     .then(source => source.read()
+            //                         .then(function log(result) {
+            //                             if (result.done) return "done";
+            //                             let polygonOsm = turf.polygon(result.value.geometry.coordinates)
+
+            //                             if (turf.intersect(polygonOsm, polygon)) {
+            //                                 // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+            //                                 return;
+            //                             }
+
+            //                             return source.read().then(log);
+            //                         }))
+            //             }
+            //             return source.read().then(log)
 
 
-                    }
-                    ))
+            //         }
+            //         ))
 
 
 
@@ -698,5 +720,56 @@ document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", ()
 
 
 
+// couche bdtopo Paris 11
+// ACQU_ALTI: "Interpolation bâti BDTopo"
+// ACQU_PLANI: "BDParcellaire recalée"
+// APP_FF: "A 1.0"
+// DATE_APP: Wed Jan 01 1800 00:00:00 GMT+0009 (heure normale d’Europe centrale) {}
+// DATE_CONF: Thu Nov 30 1899 00:00:00 GMT+0009 (heure normale d’Europe centrale) {}
+// DATE_CREAT: "2010-07-09 09:51:40"
+// DATE_MAJ: "2019-03-15 13:40:14"
+// ETAT: "En service"
+// HAUTEUR: 15.8
+// ID: "BATIMENT0000000240756044"
+// ID_SOURCE: ""
+// LEGER: "Non"
+// MAT_MURS: "40"
+// MAT_TOITS: "30"
+// NATURE: "Indifférenciée"
+// NB_ETAGES: 6
+// NB_LOGTS: 42
+// ORIGIN_BAT: "Cadastre"
+// PREC_ALTI: 2.5
+// PREC_PLANI: 3
+// SOURCE: ""
+// USAGE1: "Résidentiel"
+// USAGE2: "Commercial et services"
+// Z_MAX_SOL: NaN
+// Z_MAX_TOIT: NaN
+// Z_MIN_SOL: 40.6
+// Z_MIN_TOIT: 56.4
 
-
+// couche building ici
+    // ID: "BuildingGroup1088059933996340"
+    // fid: 4075
+    // idBdTopo: "BATIMENT0000000240756044"
+    // idsEntrance: "Address4488044268441824"
+    // name0: "41_Rue Pétion_75111"
+    // name1: null
+    // name2: null
+    // name3: null
+    // name4: null
+    // name5: null
+    // name6: null
+    // name7: null
+    // name8: null
+    // name9: null
+    // nbBuildingSimple: 1
+    // nbEntrances: 1 // ---- batiment
+    // nbHousing: 42 // ---- batiment
+    // nbPOI: 4
+    // nbWorkingPlace: 19 // ---- batiment
+    // roomLeft: 889.9966
+    // type: "BuildingGroup"
+    // unknownNumberOfHousing: 0
+    // utilFloorArea: 1882.9966
