@@ -13,9 +13,10 @@ import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
+import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-import { geosjontToColorLayer } from "./js/dropData/drop2dData"
-import { updateSelectOption } from "./js/dropData/updateSelection"
+import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+
 import * as shp from "shpjs";
 
 // ----------------- Variables ----------------- //
@@ -44,11 +45,17 @@ customDiv.appendChild(pointer);
 
 // ----------------- View Setup ----------------- //
 // Define initial camera position
-const placement = {
+
+
+let placement = {
+    //  Coordinates of Perigueux
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
     range: 200,
     tilt: 33,
 }
+
+
+const switchbutton = document.getElementById('site_state')
 
 const viewerDiv = document.getElementById('viewerDiv');
 viewerDiv.appendChild(bat)
@@ -57,8 +64,31 @@ viewerDiv.appendChild(bat)
 const view = new itowns.GlobeView(viewerDiv, placement);
 setupLoadingScreen(viewerDiv, view);
 FeatureToolTip.init(viewerDiv, view);
-// ajout de widget de navigation
+// add de widget navigation
 widgetNavigation(view)
+
+// Instanciate changement localisation
+document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
+    if (switchbutton.checked) {
+        cameraTargetPosition.x = 2.380015
+        cameraTargetPosition.y = 48.859424
+        cameraTargetPosition.z = 86
+
+    }
+    else {
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
+})
+
+
 
 
 // ----------------- Layers Setup ----------------- //
@@ -90,13 +120,70 @@ let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 //  Geojson for each source
 let bdnbGeoJson
 // ----------------- Globe Initialisatioin ----------------- //
-view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
+view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
+
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
-    //charger les geosjon des couche de base 
+
+    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
+
+    let checkbox_3D = document.getElementById("checkbox_style_3D");
+    let select_style = document.getElementById("select_style");
+    let button_style_apply = document.getElementById("button_style_apply");
+
+    //Getting the source (as something other than a Shp because itowns can't extrude them)
+    let src_bdnb;
+    await loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        src_bdnb = new itowns.FileSource({
+            fetchedData: geojson,
+            crs: 'EPSG:4326',
+            format: 'application/json',
+        })
+    });
+
+    //Styles definition
+    let style_list = [];
+    style_list.push(
+        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false, false)
+            .setExtrude("altitude_s", "hauteur", false)
+            .setClasses({
+                "A": "rgb(1,149,65)",
+                "B": "rgb(83,174,50)",
+                "C": "rgb(202,211,0)",
+                "D": "rgb(255,223,1)",
+                "E": "rgb(251,185,1)",
+                "F": "rgb(237,102,7)",
+                "G": "rgb(228,19,18)"
+            })
+    );
+    style_list.push(
+        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", false, true)
+            .setExtrude("altitude_s", "hauteur", false)
+            .setGradation("rgb(255,0,0)", "", 1, 30)
+    );
+    style_list.push(
+        new Style("Iris", view, src_bdnb, "code_iris", false, false)
+            .setExtrude("altitude_s", "hauteur", false)
+    );
+
+    //Setting the predefined styles
+    for (let i = 0; i < style_list.length; i++) {
+        select_style.innerHTML += "<option value='" + i + "'>" + style_list[i].name + "</option>";
+    }
+
+    button_style_apply.addEventListener("click", () => {
+        if (select_style.value == -1) {
+            style_list[0].clean(100000);
+        } else {
+            const style = style_list[select_style.value];
+            //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
+            style.to3D(checkbox_3D.checked && style.field_ground != "" && style.field_height != "");
+            style.to_itowns_layer();
+        }
+    });
 
     csvBdnb.then(res => {
         // Récupérer les valeurs uniques de la propriété "type"
@@ -182,12 +269,14 @@ viewerDiv.addEventListener(
 
             listSlect.push(randomId)
 
+
             if (listSlect[1]) {
 
                 let layerToRemove = view.getLayerById(listSlect[0]);
                 view.removeLayer(listSlect[0]);
                 layerToRemove.delete()
                 view.notifyChange()
+                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]

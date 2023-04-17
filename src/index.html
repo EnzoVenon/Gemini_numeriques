@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 
 <head>
     <title>Itowns - Globe + WFS</title>
@@ -99,6 +99,7 @@
                                         Population
                                     </a>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -113,7 +114,17 @@
                     <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasScrollingstyle" aria-controls="offcanvasScrollingstyle">Style</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" id="switchville">
+                        <div class="d-flex" id="changloc">
+                            Perigueux
+                            <div class="form-switch form-check ms-2">
+                                <input type="checkbox" class="form-check-input" id="site_state">
+                            </div>
+                            <label for="site_state" class="form-check-label">Paris</label>
+                        </div>
+                    </a>
+                </li>
 
 
             </ul>
@@ -295,7 +306,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <p>A venir</p>
+                    <label>3D <input id="checkbox_style_3D" type="checkbox"></label>
+                    <br>
+                    <label>Style
+                        <select id="select_style">
+                            <option value="-1" selected>Aucun</option>
+                        </select>
+                    </label>
+                    <br>
+                    <button id="button_style_apply">Appliquer</button>
                 </div>
             </div>
 
