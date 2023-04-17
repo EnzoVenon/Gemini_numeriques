@@ -124,6 +124,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
+    addShp("../data/shp/prg/bdnb_perigeux8", "bdtopoParis", "red", "", view, true)
 
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
