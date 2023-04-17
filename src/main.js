@@ -89,10 +89,6 @@ let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
 //  Geojson for each source
 let bdnbGeoJson
-let bdtopoGeoJson
-let osmGeoJson
-let cadastreGeoJson
-
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
@@ -101,10 +97,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true)
 
     //charger les geosjon des couche de base 
-    bdnbPromisedJson.then(geojson => { bdnbGeoJson = geojson })
-    bdtopoPromisedJson.then(geojson => { bdtopoGeoJson = geojson })
-    osmPromisedJson.then(geojson => { osmGeoJson = geojson })
-    cadastrePromisedJson.then(geojson => { cadastreGeoJson = geojson })
 
     csvBdnb.then(res => {
         // Récupérer les valeurs uniques de la propriété "type"
@@ -594,6 +586,7 @@ affiche3dFile.addEventListener("click", () => {
     dropedGeojson["3dDropId"].num += 1;
     dropedGeojson["3dDropId"].id = dropedGeojson["3dDropId"].name + "_" + dropedGeojson["3dDropId"].num
 
+    let geojson = dropedGeojson["3dDrop"]
 
     const selectHauteur3dZiped = document.getElementById('selectHauteur3dZiped').value;
     const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
