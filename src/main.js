@@ -317,13 +317,30 @@ viewerDiv.addEventListener(
                                     })
                                     return housings_IDs
                                 })
-                                .then(res => {
+                                .then(housingIDs => {
 
                                     // ----------- Get Household ICI data ----------- //
-                                    console.log(res)
+                                    console.log(housingIDs)
+                                    let housingDictionnary = {}
+                                    housingIDs.forEach(id => {
+                                        housingDictionnary[id] = []
+                                    })
+
                                     csvHouseholdICI
-                                        .then(res => {
-                                            console.log(res)
+                                        .then(result => {
+                                            console.log(result)
+                                            Object.entries(result).forEach((value) => {
+                                                if (housingIDs.includes(value[1].HousingID)) {
+                                                    housingDictionnary[value[1].HousingID].push(value[1])
+                                                }
+                                            })
+                                            Object.entries(housingDictionnary).forEach(([key, value]) => {
+                                                if (value.length === 0) {
+                                                    delete housingDictionnary[key]
+                                                }
+                                            })
+                                            // for each housing get associated household
+                                            console.log(housingDictionnary)
                                         })
                                 })
 
