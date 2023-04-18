@@ -49,7 +49,8 @@ customDiv.appendChild(pointer);
 
 let placement = {
     //  Coordinates of Perigueux
-    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
@@ -131,7 +132,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
 
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
-    addShp("../data/shp/prg/paris11bdnb", "bdnbParis", "red", "", view, true)
+    addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
 
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
@@ -249,61 +250,83 @@ viewerDiv.addEventListener(
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
-            console.log(tooltip.value.properties)
-            getBdnbInfo(csvBdnbParis, tooltip.value.properties.batiment_c)
+            console.log(tooltip.value)
+
+            let tooltipBuildingID = tooltip.value.properties.batiment_c
+            if (tooltipBuildingID.includes('-')) {
+                tooltipBuildingID = tooltipBuildingID.slice(0, -2)
+            }
+            console.log(tooltipBuildingID)
+
+            getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
                 .then(res => {
 
-                    console.log(res)
-                    let buildingID = res.batiment_c
                     // ----------- Get Bdnb data ----------- //
+                    console.log(res)
                     // Dispatch Bdnb data for each tab
                     let valDisplayed;
                     Object.entries(res).forEach(([key, value]) => {
                         valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                     })
                     console.log(valDisplayed)
-                    console.log(buildingID)
-                    return [valDisplayed, buildingID];
+                    return valDisplayed;
 
                 })
-                .then(([val2display, buildingID]) => {
+                .then(val2display => {
+                    // ----------- Get ICI data ----------- //
                     console.log(val2display)
-                    if (buildingID.includes('-')) {
-                        buildingID = buildingID.slice(0, -2)
-                    }
 
                     csvBuildingICI
                         .then(res => {
+                            // ----------- Get Building ICI data ----------- //
                             console.log(res)
                             let dataBuildingICI;
                             Object.entries(res).forEach((value) => {
                                 if (value[1].idBdTopo) {
-                                    if (value[1].idBdTopo.includes(buildingID)) {
-                                        console.log(buildingID)
-                                        console.log(value[1])
+                                    if (value[1].idBdTopo.includes(tooltipBuildingID)) {
                                         dataBuildingICI = value[1];
                                         return dataBuildingICI;
                                     }
                                 }
-
                             })
                             return dataBuildingICI
                         })
                         .then(res => {
-
                             console.log(res)
                             let valDisplayBuildingICI
                             Object.entries(res).forEach(([key, value]) => {
                                 valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
                             })
-                            return valDisplayBuildingICI
+                            console.log(valDisplayBuildingICI)
+                            return [valDisplayBuildingICI, res.ID]
 
                         })
-                        .then(res => console.log(res))
+                        .then(([result, buildingGroupID]) => {
+                            // ----------- Get Housing ICI data ----------- //
+                            console.log(result)
+                            csvHousingICI
+                                .then(res => {
+                                    console.log(res)
+                                    let housings_ICI = []
+                                    Object.entries(res).forEach((value) => {
+                                        if (value[1].BuildingID) {
+                                            if (value[1].BuildingID.includes(buildingGroupID)) {
+                                                console.log(value)
+                                                housings_ICI.push(value[1])
+                                            }
+                                        }
+                                    })
+                                    return housings_ICI
+                                })
+                                .then(res => {
+                                    console.log(res)
+                                })
+
+                        })
                     // return result;
                 })
 
-            // getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g)
+            // getBdnbInfo(csvBdnb,"batiment_groupe_id", tooltip.value.properties.batiment_g)
             //     .then(res => {
 
             //         // ----------- Get Bdnb data ----------- //
@@ -788,27 +811,3 @@ document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", ()
 // Z_MIN_SOL: 40.6
 // Z_MIN_TOIT: 56.4
 
-// couche building ici
-    // ID: "BuildingGroup1088059933996340"
-    // fid: 4075
-    // idBdTopo: "BATIMENT0000000240756044"
-    // idsEntrance: "Address4488044268441824"
-    // name0: "41_Rue Pétion_75111"
-    // name1: null
-    // name2: null
-    // name3: null
-    // name4: null
-    // name5: null
-    // name6: null
-    // name7: null
-    // name8: null
-    // name9: null
-    // nbBuildingSimple: 1
-    // nbEntrances: 1 // ---- batiment
-    // nbHousing: 42 // ---- batiment
-    // nbPOI: 4
-    // nbWorkingPlace: 19 // ---- batiment
-    // roomLeft: 889.9966
-    // type: "BuildingGroup"
-    // unknownNumberOfHousing: 0
-    // utilFloorArea: 1882.9966

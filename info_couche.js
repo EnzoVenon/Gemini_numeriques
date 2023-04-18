@@ -107,223 +107,223 @@
     // dle_2020_elec_conso_pro: null
     // dle_2020_elec_conso_pro_par_pdl: null
     // dle_2020_elec_conso_res: null
-    // ​
+    //
     // dle_2020_elec_conso_res_par_pdl: null
-    // ​
+    //
     // dle_2020_elec_conso_tot: null
-    // ​
+    //
     // dle_2020_elec_conso_tot_par_pdl: null
-    // ​
+    //
     // dle_2020_elec_nb_pdl_pro: null
-    // ​
+    //
     // dle_2020_elec_nb_pdl_res: null
-    // ​
+    //
     // dle_2020_elec_nb_pdl_tot: null
-    // ​
+    //
     // dle_2020_gaz_conso_pro: null
-    // ​
+    //
     // dle_2020_gaz_conso_pro_par_pdl: null
-    // ​
+    //
     // dle_2020_gaz_conso_res: null
-    // ​
+    //
     // dle_2020_gaz_conso_res_par_pdl: null
-    // ​
+    //
     // dle_2020_gaz_conso_tot: null
-    // ​
+    //
     // dle_2020_gaz_conso_tot_par_pdl: null
-    // ​
+    //
     // dle_2020_gaz_nb_pdl_pro: null
-    // ​
+    //
     // dle_2020_gaz_nb_pdl_res: null
-    // ​
+    //
     // dle_2020_gaz_nb_pdl_tot: null
-    // ​
+    //
     // dle_2020_reseaux_conso_pro: null
-    // ​
+    //
     // dle_2020_reseaux_conso_pro_par_pdl: null
-    // ​
+    //
     // dle_2020_reseaux_conso_res: null
-    // ​
+    //
     // dle_2020_reseaux_conso_res_par_pdl: null
-    // ​
+    //
     // dle_2020_reseaux_conso_tot: null
-    // ​
+    //
     // dle_2020_reseaux_conso_tot_par_pdl: null
-    // ​
+    //
     // dle_2020_reseaux_identifiant_reseau: null
-    // ​
+    //
     // dle_2020_reseaux_nb_pdl_pro: null
-    // ​
+    //
     // dle_2020_reseaux_nb_pdl_res: null
-    // ​
+    //
     // dle_2020_reseaux_nb_pdl_tot: null
-    // ​
+    //
     // dle_2020_reseaux_type_reseau: null
-    // ​
+    //
     // dpe_arrete_2021_annee_construction_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_arrete_2021: null
-    // ​
+    //
     // dpe_arrete_2021_chauffage_solaire: null
-    // ​
+    //
     // dpe_arrete_2021_classe_bilan_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_classe_conso_energie_arrete_2012: null
-    // ​
+    //
     // dpe_arrete_2021_classe_emission_ges: null
-    // ​
+    //
     // dpe_arrete_2021_classe_emission_ges_arrete_2012: null
-    // ​
+    //
     // dpe_arrete_2021_classe_inertie: null
-    // ​
+    //
     // dpe_arrete_2021_conso_3_usages_ep_m2_arrete_2012: null
-    // ​
+    //
     // dpe_arrete_2021_conso_5_usages_ef_m2: null
-    // ​
+    //
     // dpe_arrete_2021_conso_5_usages_ep_m2: null
-    // ​
+    //
     // dpe_arrete_2021_date_etablissement_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_date_reception_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_baie_vitree: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_mur: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_plancher_bas: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_plancher_haut: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_pont_thermique: null
-    // ​
+    //
     // dpe_arrete_2021_deperdition_porte: null
-    // ​
+    //
     // dpe_arrete_2021_ecs_solaire: null
-    // ​
+    //
     // dpe_arrete_2021_emission_ges_3_usages_ep_m2_arrete_2012: null
-    // ​
+    //
     // dpe_arrete_2021_emission_ges_5_usages_m2: null
-    // ​
+    //
     // dpe_arrete_2021_epaisseur_isolation_mur_exterieur_estim: null
-    // ​
+    //
     // dpe_arrete_2021_epaisseur_lame: null
-    // ​
+    //
     // dpe_arrete_2021_epaisseur_structure_mur_exterieur: null
-    // ​
+    //
     // dpe_arrete_2021_facteur_solaire_baie_vitree: null
-    // ​
+    //
     // dpe_arrete_2021_identifiant_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_l_local_non_chauffe_mur: null
-    // ​
+    //
     // dpe_arrete_2021_l_local_non_chauffe_plancher_bas: null
-    // ​
+    //
     // dpe_arrete_2021_l_local_non_chauffe_plancher_haut: null
-    // ​
+    //
     // dpe_arrete_2021_l_orientation_baie_vitree: null
-    // ​
+    //
     // dpe_arrete_2021_l_orientation_mur_exterieur: null
-    // ​
+    //
     // dpe_arrete_2021_local_non_chauffe_principal_mur: null
-    // ​
+    //
     // dpe_arrete_2021_local_non_chauffe_principal_plancher_bas: null
-    // ​
+    //
     // dpe_arrete_2021_local_non_chauffe_principal_plancher_haut: null
-    // ​
+    //
     // dpe_arrete_2021_materiaux_structure_mur_exterieur: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_a: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_b: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_c: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_d: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_e: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_f: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_bilan_dpe_g: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_a: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_b: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_c: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_d: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_e: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_f: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_g: null
-    // ​
+    //
     // dpe_arrete_2021_nb_classe_conso_energie_arrete_2012_nc: null
-    // ​
+    //
     // dpe_arrete_2021_nb_generateur_chauffage: null
-    // ​
+    //
     // dpe_arrete_2021_nb_generateur_ecs: null
-    // ​
+    //
     // dpe_arrete_2021_nb_installation_chauffage: null
-    // ​
+    //
     // dpe_arrete_2021_nb_installation_ecs: null
-    // ​
+    //
     // dpe_arrete_2021_nombre_niveau_immeuble: null
-    // ​
+    //
     // dpe_arrete_2021_nombre_niveau_logement: null
-    // ​
+    //
     // dpe_arrete_2021_periode_construction_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_plusieurs_facade_exposee: null
-    // ​
+    //
     // dpe_arrete_2021_pourcentage_surface_baie_vitree_exterieur: null
-    // ​
+    //
     // dpe_arrete_2021_presence_balcon: null
-    // ​
+    //
     // dpe_arrete_2021_surface_habitable_immeuble: null
-    // ​
+    //
     // dpe_arrete_2021_surface_habitable_logement: null
-    // ​
+    //
     // dpe_arrete_2021_surface_mur_deperditif: null
-    // ​
+    //
     // dpe_arrete_2021_surface_mur_exterieur: null
-    // ​
+    //
     // dpe_arrete_2021_surface_mur_totale: null
-    // ​
+    //
     // dpe_arrete_2021_surface_plancher_bas_deperditif: null
-    // ​
+    //
     // dpe_arrete_2021_surface_plancher_bas_totale: null
-    // ​
+    //
     // dpe_arrete_2021_surface_plancher_haut_deperditif: null
-    // ​
+    //
     // dpe_arrete_2021_surface_plancher_haut_totale: null
-    // ​
+    //
     // dpe_arrete_2021_surface_porte: null
-    // ​
+    //
     // dpe_arrete_2021_surface_vitree_est: null
-    // ​
+    //
     // dpe_arrete_2021_surface_vitree_horizontal: null
-    // ​
+    //
     // dpe_arrete_2021_surface_vitree_nord: null
-    // ​
+    //
     // dpe_arrete_2021_surface_vitree_ouest: null
-    // ​
+    //
     // dpe_arrete_2021_surface_vitree_sud: null
-    // ​
+    //
     // dpe_arrete_2021_traversant: null
-    // ​
+    //
     // dpe_arrete_2021_type_adjacence_principal_plancher_bas: null
-    // ​
+    //
     // dpe_arrete_2021_type_adjacence_principal_plancher_haut: null
-    // ​
+    //
     // dpe_arrete_2021_type_batiment_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_type_dpe: null
-    // ​
+    //
     // dpe_arrete_2021_type_energie_chauffage: null
-    // ​
+    //
     // dpe_arrete_2021_type_energie_chauffage_appoint: null
     // dpe_arrete_2021_type_energie_climatisation: null
     // dpe_arrete_2021_type_energie_ecs: null
@@ -471,3 +471,35 @@
     // rnc_ope_numero_immat_principal: null
     // rnc_ope_periode_construction_max: null
     // s_geom_groupe: 184
+
+// couche building ici
+    // ID: "BuildingGroup1088059933996340"
+    // fid: 4075
+    // idBdTopo: "BATIMENT0000000240756044"
+    // idsEntrance: "Address4488044268441824"
+    // name0: "41_Rue Pétion_75111"
+    // name1: null
+    // name2: null
+    // name3: null
+    // name4: null
+    // name5: null
+    // name6: null
+    // name7: null
+    // name8: null
+    // name9: null
+    // nbBuildingSimple: 1
+    // nbEntrances: 1 // ---- batiment
+    // nbHousing: 42 // ---- batiment
+    // nbPOI: 4
+    // nbWorkingPlace: 19 // ---- batiment
+    // roomLeft: 889.9966
+    // type: "BuildingGroup"
+    // unknownNumberOfHousing: 0
+    // utilFloorArea: 1882.9966
+
+// couche housing ICI
+    // BuildingID: "BuildingGroup9588057547382510"
+    // ID: "Housing088099522629953"
+    // area: 8.45389208288684
+    // fid: 1
+    // primary: 1
