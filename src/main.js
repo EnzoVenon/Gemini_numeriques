@@ -130,12 +130,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
-
-    bdnbPromisedJson.then(geojson => { bdnbJson = geojson })
-
-
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
@@ -155,8 +149,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Styles definition
     let style_list = [];
     style_list.push(
-        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
+            .setExtrude("altitude_s", "hauteur")
             .setClasses({
                 "A": "rgb(1,149,65)",
                 "B": "rgb(83,174,50)",
@@ -168,13 +162,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", false, true)
-            .setExtrude("altitude_s", "hauteur", false)
-            .setGradation("rgb(255,0,0)", "", 1, 30)
+        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", true)
+            .setExtrude("altitude_s", "hauteur")
+            .setGradation("rgb(255,0,0)", "rgb(0,0,255)")
     );
     style_list.push(
-        new Style("Iris", view, src_bdnb, "code_iris", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Iris", view, src_bdnb, "code_iris", false)
+            .setExtrude("altitude_s", "hauteur")
     );
 
     //Setting the predefined styles
@@ -184,11 +178,11 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     button_style_apply.addEventListener("click", () => {
         if (select_style.value == -1) {
-            style_list[0].clean(100000);
+            style_list[0].clean();
         } else {
             const style = style_list[select_style.value];
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
-            style.to3D(checkbox_3D.checked && style.field_ground != "" && style.field_height != "");
+            style.to3D(checkbox_3D.checked);
             style.to_itowns_layer();
         }
     });
