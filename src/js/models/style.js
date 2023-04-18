@@ -170,8 +170,32 @@ export default class Style {
                 //Here, the gradation has two colors
                 console.log("Affichage de style de dégradé 2 couleurs");
                 coloring = function f(properties) {
-                    //TODO
-                    return properties;
+                    if (properties[this.field] !== undefined) {
+                        const mid = (this.max + this.min) / 2;
+                        let intensity;
+                        let tcolor;
+                        if (properties[this.field] < mid) {
+                            intensity = (properties[this.field] - this.min) / (mid - this.min);
+                            tcolor = this.color2;
+                        } else {
+                            intensity = 1 - ((properties[this.field] - mid) / (this.max - mid));
+                            tcolor = this.color1;
+                        }
+                        let rgb = [];
+                        rgb.push(Math.floor(intensity * (255 - tcolor.r) + tcolor.r));
+                        rgb.push(Math.floor(intensity * (255 - tcolor.g) + tcolor.g));
+                        rgb.push(Math.floor(intensity * (255 - tcolor.b) + tcolor.b));
+                        for (let i = 0; i < 3; i++) {
+                            if (rgb[i] < 0) {
+                                rgb[i] = 0;
+                            } else if (rgb[i] > 255) {
+                                rgb[i] = 255;
+                            }
+                        }
+                        return "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+                    } else {
+                        return "rgb(169,169,169)";
+                    }
                 }
             }
         } else {

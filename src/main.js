@@ -156,7 +156,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     style_list.push(
         new Style("Hauteur dégradée", view, src_bdnb, "hauteur", true)
             .setExtrude("altitude_s", "hauteur")
-            .setGradation("rgb(255,0,0)")
+            .setGradation("rgb(255,0,0)", "rgb(0,0,255)")
     );
     style_list.push(
         new Style("Iris", view, src_bdnb, "code_iris", false)
