@@ -268,35 +268,39 @@ viewerDiv.addEventListener(
                 })
                 .then(([val2display, buildingID]) => {
                     console.log(val2display)
-                    console.log(buildingID)
+                    if (buildingID.includes('-')) {
+                        buildingID = buildingID.slice(0, -2)
+                    }
 
                     csvBuildingICI
                         .then(res => {
+                            console.log(res)
                             let dataBuildingICI;
                             Object.entries(res).forEach((value) => {
-                                // console.log(tooltip.value)
-                                if (result[1]) {
-                                    if (result[1].includes(value[1].idBdTopo)) {
-                                        console.log(result[1])
-                                        console.log(value)
+                                if (value[1].idBdTopo) {
+                                    if (value[1].idBdTopo.includes(buildingID)) {
+                                        console.log(buildingID)
+                                        console.log(value[1])
                                         dataBuildingICI = value[1];
+                                        return dataBuildingICI;
                                     }
                                 }
+
                             })
-                            console.log(dataBuildingICI)
                             return dataBuildingICI
                         })
                         .then(res => {
 
+                            console.log(res)
                             let valDisplayBuildingICI
                             Object.entries(res).forEach(([key, value]) => {
-                                valDisplayBuildingICI = loadDataToJSON(result[0], key, value, "Building ICI")
+                                valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
                             })
                             return valDisplayBuildingICI
 
                         })
                         .then(res => console.log(res))
-                    return result;
+                    // return result;
                 })
 
             // getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g)
