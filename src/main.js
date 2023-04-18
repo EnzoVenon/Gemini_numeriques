@@ -421,18 +421,20 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        let geojson = bdnbJson
+        bdnbPromisedJson.then(geojson => {
+            geojson.features.forEach((feature) => {
+                let data = dataBdnb[feature.properties["batiment_g"]]
+                if (data) {
+                    feature.properties = data
+                }
 
-        geojson.features.forEach((feature) => {
-            let data = dataBdnb[feature.properties["batiment_g"]]
-            if (data) {
-                feature.properties = data
-            }
+            });
+            batInorandomId.bdnb_random_id.num += 1;
+            batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+            geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
-        });
-        batInorandomId.bdnb_random_id.num += 1;
-        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
+        })
+
 
 
     }
