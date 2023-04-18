@@ -23,6 +23,8 @@ const attribut2UserName = {
   nbEntrances: "Nombre d'entrées",
   nbHousing: "Nombre de logements",
   nbWorkingPlace: "Nombre de lieux de travail",
+  code_commu: "Code commune",
+  code_depar: "Code département",
 
   argiles_alea: "Risque argile",
   radon_alea: "Risque radon",
@@ -101,7 +103,9 @@ const tabs = {
     "fiabilite_cr_adr_niv_1",
     "libelle_adr_principale_ban",
     "libelle_commune_insee",
-    "bdtopo_zoa_l_toponyme"
+    "bdtopo_zoa_l_toponyme",
+    "code_commu",
+    "code_depar"
 
   ],
   ongletEnergie: [

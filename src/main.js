@@ -249,28 +249,35 @@ viewerDiv.addEventListener(
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
-
-            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g)
+            console.log(tooltip.value.properties)
+            getBdnbInfo(csvBdnbParis, tooltip.value.properties.batiment_c)
                 .then(res => {
 
+                    console.log(res)
+                    let buildingID = res.batiment_c
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
                     let valDisplayed;
                     Object.entries(res).forEach(([key, value]) => {
                         valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                     })
-                    return valDisplayed;
+                    console.log(valDisplayed)
+                    console.log(buildingID)
+                    return [valDisplayed, buildingID];
 
                 })
-                .then(result => {
-                    console.log(result)
+                .then(([val2display, buildingID]) => {
+                    console.log(val2display)
+                    console.log(buildingID)
+
                     csvBuildingICI
                         .then(res => {
                             let dataBuildingICI;
                             Object.entries(res).forEach((value) => {
-                                if (value[1].idBdTopo) {
-                                    if (value[1].idBdTopo.includes(tooltip.value.properties.ID)) {
-                                        console.log(tooltip.value.properties.ID)
+                                // console.log(tooltip.value)
+                                if (result[1]) {
+                                    if (result[1].includes(value[1].idBdTopo)) {
+                                        console.log(result[1])
                                         console.log(value)
                                         dataBuildingICI = value[1];
                                     }
@@ -283,7 +290,7 @@ viewerDiv.addEventListener(
 
                             let valDisplayBuildingICI
                             Object.entries(res).forEach(([key, value]) => {
-                                valDisplayBuildingICI = loadDataToJSON(result, key, value, "Building ICI")
+                                valDisplayBuildingICI = loadDataToJSON(result[0], key, value, "Building ICI")
                             })
                             return valDisplayBuildingICI
 
