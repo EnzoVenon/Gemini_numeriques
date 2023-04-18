@@ -429,7 +429,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        geojson = bdnbJson
+        let geojson = bdnbJson
 
         geojson.features.forEach((feature) => {
             let data = dataBdnb[feature.properties["batiment_g"]]
