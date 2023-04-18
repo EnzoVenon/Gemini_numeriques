@@ -455,6 +455,48 @@
                     </div>
 
                 </div>
+
+                <div class="carousel-item">
+                    <div class="drop-zone" id="drop-zone-csv">Drop your csv file here</div>
+
+                    <label>attribut de jointure</label>
+                    <select class="form-select" aria-label="Default select example" id="attJointureCsv">
+                        <option selected>Choisir une couche</option>
+                    </select>
+
+                    <label>couche de jointure</label>
+                    <select class="form-select" aria-label="Default select example" id="selectJoinLayer">
+                        <option selected>Choisir une couche</option>
+                    </select>
+
+                    <label>champs de jointure</label>
+                    <select class="form-select" aria-label="Default select example" id="selectJoinAttribut">
+                        <option selected>Choisir une couche</option>
+                    </select>
+
+                    <label>attribut de couleur</label>
+                    <select class="form-select" aria-label="Default select example" id="selectCouleurCsv">
+                        <option selected>Choisir une couche</option>
+                    </select>
+
+
+                    <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
+                    <!-- Button trigger modal -->
+                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Légende
+                    </button>
+
+                    <div>
+                        <button id="checkbox-supprime-csv" class="btn btn-primary">
+                            Supprimer la couche
+                        </button>
+                    </div>
+
+
+
+                </div>
+
             </div>
 
 
