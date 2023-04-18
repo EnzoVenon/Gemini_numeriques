@@ -89,6 +89,34 @@ p {
     border-radius: 5px;
 }
 
+#liensSources{
+    background-color: rgb(171, 206, 106);
+    padding: 6px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#integrationDiagram{
+    background-color: rgb(171, 206, 106);
+    padding: 6px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#liensSources a {
+    text-decoration: none;
+}
+
+.titreEnSavoirPlus{
+    font-weight: bold;
+}
+.sousTitreEnSavoirPlus{
+    font-style: italic;
+    text-decoration: underline;
+    margin-top: 7px;
+    margin-bottom: 0px;
+}
+
 #explorationPanel {
     position: absolute;
     top: 150px;

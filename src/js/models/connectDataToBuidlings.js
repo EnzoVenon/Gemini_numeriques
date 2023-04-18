@@ -50,8 +50,24 @@ const attribut2UserName = {
   dpe_logtype_mur_pos_isol_ext: "Notes énergétique des logements",
   dpe_logtype_pb_pos_isol: "Notes énergétique des logements",
   dpe_logtype_ph_pos_isol: "Notes énergétique des logements",
-}
 
+
+  P19_POP15P_MARIEE: "Marié",
+  P19_POP15P_PACSEE: "Pacsé",
+  P19_POP15P_CONCUB_UNION_LIBRE: "Concubinage - union libre",
+  P19_POP15P_VEUFS: "Veuf",
+  P19_POP15P_DIVORCEE: "Divorcé",
+  P19_POP15P_CELIBATAIRE: "Célibataire",
+  P19_POP1524: "15-24 ans",
+  P19_POP2554: "25-54 ans",
+  P19_POP5579: "55-79 ans",
+  P19_POP80P: "80+ ans",
+  C19_NE24F0: "0 enfant",
+  C19_NE24F1: "1 enfant",
+  C19_NE24F2: "2 enfants",
+  C19_NE24F3: "3 enfants",
+  C19_NE24F4P: "4 enfants",
+}
 
 // Onglet batiment
 const tabs = {
@@ -109,7 +125,26 @@ const tabs = {
     "dpe_logtype_pb_pos_isol",
     "dpe_logtype_ph_pos_isol"
   ],
+  ongletPopulation: [
+    'P19_POP15P_MARIEE',
+    'P19_POP15P_PACSEE',
+    'P19_POP15P_CONCUB_UNION_LIBRE',
+    'P19_POP15P_VEUFS',
+    'P19_POP15P_DIVORCEE',
+    'P19_POP15P_CELIBATAIRE',
+    'P19_POP1524',
+    'P19_POP2554',
+    'P19_POP5579',
+    'P19_POP80P',
+    'C19_NE24F0',
+    'C19_NE24F1',
+    'C19_NE24F2',
+    'C19_NE24F3',
+    'C19_NE24F4P'
+  ]
 }
+
+
 
 
 export function loadDataToJSON(dictionaryTofill, key, value, base) {
@@ -134,7 +169,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
           }
   
   */
-  let name4User = attribut2UserName[key]
+  let name4User = attribut2UserName[key];
+
 
   const jsonData = {
     attribut: key,
@@ -150,6 +186,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     dictionaryTofill.tabRisques.push(jsonData)
   } else if (tabs.ongletEnergie.includes(key)) {
     dictionaryTofill.tabEnergie.push(jsonData)
+  } else if (tabs.ongletPopulation.includes(key)) {
+    dictionaryTofill.tabPopulation.push(jsonData)
   }
 
   return dictionaryTofill;

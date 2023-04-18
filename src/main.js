@@ -16,8 +16,9 @@ import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
-import * as shp from "shpjs";
+import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
+import * as shp from "shpjs";
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -29,10 +30,14 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": "", "bdnb_random_id": "", "bdtopo_radom_id": "", "osm_random_id": "", "cadastre_random_id": "" }
+let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0" }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0" }, "osm_random_id": { name: "osm", num: 0, id: "osm_0" }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0" } }
 
-let dropedGeojson = { "2dDrop": {}, "2dDropId": "", "3dDropId": "" };
+let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
 
+let csvJoinAtt = { "updatedGeojson": {}, "csvLayerId": { name: "updatedLayerWithCsv", num: 0, id: "updatedLayerWithCsv_0" } };
+
+
+let dataFromCsv;
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -105,17 +110,20 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
-let csv2 = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
+let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 
 let dataBdnb;
 
 
-// Geojson for each source
+// Promise Geojson for each source
 let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
+
+// Promise Geojson for each source
+let bdnbJson;
 
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
@@ -208,55 +216,12 @@ viewerDiv.addEventListener(
                 tabInfoGen: [],
                 tabBatiment: [],
                 tabRisques: [],
-                tabEnergie: []
+                tabEnergie: [],
+                tabPopulation: []
             }
             htmlTest.innerHTML = '';
             let textHtml = '';
             textHtml += '<div class="accordion" id="accordionPanelsStayOpenExample">';
-
-            csv2
-                .then(res => {
-                    // ----------- POPULATION INSEE ----------- //
-                    // Retrieve elements where Iris number is same as tooltip
-                    let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-                    // const currentkey = contenuOnglet.getKeyByValue(uniqueData, Number(tooltip.value.properties.code_iris));
-
-                    // Add INSEE value for this IRIS in tooltip properties
-                    Object.entries(uniqueData).forEach(([key, value]) => {
-                        if (!(value === Number(tooltip.value.properties.code_iris))) {
-                            tooltip.value.properties[key] = value;
-                        }
-                    })
-
-                    // Chart for INSEE values
-                    // ----- Status 15 ans et plus ----- //
-                    const relation15OuPlus = ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE']
-                    const dataRelation15 = contenuOnglet.dataINSEE4Chart(relation15OuPlus, 11, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-
-                    // ----- Répartition pop 15 ans et plus ----- //
-                    const repartitionPop = ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P']
-                    const dataRepartitionPop = contenuOnglet.dataINSEE4Chart(repartitionPop, 4, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-
-                    // ----- Nombre de familles avec enfants -25 ans ----- //
-                    const enfant25 = ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                    const dataEnfant25 = contenuOnglet.dataINSEE4Chart(enfant25, 4, tooltip.value.properties);
-                    // Generate html accordion item
-                    textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                    htmlTest.innerHTML += textHtml;
-
-                    // Create charts
-                    addChart('status', dataRelation15, 'name', 'value', 'Nombre de personnes');
-                    addChart('repartition', dataRepartitionPop, 'name', 'value', "Nombre d'individus");
-                    addChart('enfant', dataEnfant25, 'name', 'value', 'Nombre de familles');
-
-
-                });
-
 
             let letRandomCOlor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
             let randomId = tooltip.value.properties.batiment_c + letRandomCOlor
@@ -291,43 +256,84 @@ viewerDiv.addEventListener(
                 })
                 return valDisplayed;
 
-            }).then(result => {
-                // ----------- Get BdTopo data ----------- //
-                bdtopoPromisedJson
-                    .then(geojson => {
-                        let dataBdTopo = geojson.features.filter(obj => {
-                            if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                return obj;
+            })
+                .then(result => {
+                    let valDisplay2 = csvMenageINSEE
+                        .then(res => {
+                            // ----------- POPULATION INSEE ----------- //
+                            let valDisplayedPop;
+                            // Retrieve elements where Iris number is same as tooltip
+                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+
+                            // Add INSEE value for this IRIS in tooltip properties
+                            Object.entries(uniqueData).forEach(([key, value]) => {
+                                valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
+                            })
+
+                            // Chart for INSEE values
+                            const dataList4Chart = {
+                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
+                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
+                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                            }
+                            let data4Chart = [];
+                            Object.entries(dataList4Chart).forEach(([key, value]) => {
+                                console.log(key)
+                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
+                            })
+
+                            // ----- Generate HTML text ----- //
+                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
+
+                            htmlTest.innerHTML += textHtml;
+
+                            // Create charts
+                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
+                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
+                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
+
+                            return valDisplayedPop;
+                        })
+                    return valDisplay2
+                })
+                .then(result => {
+                    // ----------- Get BdTopo data ----------- //
+                    bdtopoPromisedJson
+                        .then(geojson => {
+                            let dataBdTopo = geojson.features.filter(obj => {
+                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
+                                    return obj;
+                                }
+                            })
+                            return dataBdTopo[0]
+                        })
+                        .then(res => {
+                            let valDisplayedBdTopo;
+                            if (res.properties) {
+                                Object.entries(res.properties).forEach(([key, value]) => {
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                })
+                                return valDisplayedBdTopo;
                             }
                         })
-                        return dataBdTopo[0]
-                    })
-                    .then(res => {
-                        let valDisplayedBdTopo;
-                        if (res.properties) {
-                            Object.entries(res.properties).forEach(([key, value]) => {
-                                valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                        .then(res => {
+                            // ----------- Generate html accordion item for each value ----------- //
+                            Object.entries(res).forEach(([key, value]) => {
+                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
+
                             })
-                            return valDisplayedBdTopo;
-                        }
-                    })
-                    .then(res => {
-                        console.log(res)
-                        // ----------- Generate html accordion item for each value ----------- //
-                        Object.entries(res).forEach(([key, value]) => {
-                            generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                            generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                            generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-                            generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
-
+                            // for info link
+                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                            const tooltipList = [...tooltipTriggerList]
+                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                         })
-                        // for info link
-                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                        const tooltipList = [...tooltipTriggerList]
-                        tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    })
 
-            })
+                })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
@@ -398,15 +404,15 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
-        let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        batInorandomId.ino_random_id.num += 1;
+        batInorandomId.ino_random_id.id = batInorandomId.ino_random_id.name + "_" + batInorandomId.ino_random_id.num
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
-            geojsontToFeatureGeom(geojson, false, "selectPropValue", ramdoId, true, view, THREE)
-            batInorandomId.ino_random_id = ramdoId
+            geojsontToFeatureGeom(geojson, false, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
         })
 
     }
     else {
-        view.removeLayer(batInorandomId.ino_random_id)
+        view.removeLayer(batInorandomId.ino_random_id.id)
         view.removeLayer("inno")
 
     }
@@ -415,125 +421,129 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        bdnbPromisedJson.then(geojson => {
+        let geojson = bdnbJson
 
-            geojson.features.forEach((feature) => {
-                let data = dataBdnb[feature.properties["batiment_g"]]
-                if (data) {
-                    feature.properties = data
-                }
+        geojson.features.forEach((feature) => {
+            let data = dataBdnb[feature.properties["batiment_g"]]
+            if (data) {
+                feature.properties = data
+            }
 
-            });
+        });
+        batInorandomId.bdnb_random_id.num += 1;
+        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+        geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
-            let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "argiles_alea", ramdoId2, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId2
-        }
-        )
+
     }
     else {
-        view.removeLayer(batInorandomId.bdnb_random_id)
-        batInorandomId.bdnb_random_id = ""
+        view.removeLayer(batInorandomId.bdnb_random_id.id)
     }
 
 })
 
 document.getElementById("exploredataIgn").addEventListener("change", () => {
     if (document.getElementById("exploredataIgn").checked) {
+        batInorandomId.bdtopo_radom_id.num += 1;
+        batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "USAGE1", ramdoId, false, view, THREE)
-            batInorandomId.bdtopo_radom_id = ramdoId
+            geojsontToFeatureGeom(geojson, true, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.bdtopo_radom_id)
-        batInorandomId.bdtopo_radom_id = ""
+        view.removeLayer(batInorandomId.bdtopo_radom_id.id)
     }
 
 })
 
 document.getElementById("exploredataOsm").addEventListener("change", () => {
     if (document.getElementById("exploredataOsm").checked) {
+        batInorandomId.osm_random_id.num += 1;
+        batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
-            batInorandomId.osm_random_id = ramdoId
+            geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
+
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.osm_random_id)
-        batInorandomId.osm_random_id = ""
+        view.removeLayer(batInorandomId.osm_random_id.id)
     }
 
 })
 
 document.getElementById("exploredataCadastre").addEventListener("change", () => {
     if (document.getElementById("exploredataCadastre").checked) {
+        batInorandomId.cadastre_random_id.num += 1;
+        batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
-            let ramdoId = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-            geojsontToFeatureGeom(geojson, true, "fclass", ramdoId, false, view, THREE)
-            batInorandomId.cadastre_random_id = ramdoId
+            geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
 
     }
     else {
-        view.removeLayer(batInorandomId.cadastre_random_id)
+        view.removeLayer(batInorandomId.cadastre_random_id.id)
         batInorandomId.cadastre_random_id = ""
     }
 
 })
 
-
-
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    Object.entries(batInorandomId).forEach(([key, val]) => {
-        if (key != "ino_random_id" && val != "") {
-            view.removeLayer(val)
-        }
-    })
+    // Object.entries(batInorandomId).forEach(([key, val]) => {
+    //     if (key != "ino_random_id" && val != "") {
+    //         view.removeLayer(val)
+    //     }
+    // })
 
     const selectPropValue = document.getElementById('selectProp').value;
     const ign = document.getElementById("exploredataIgn").checked;
     if (ign) {
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        view.removeLayer(batInorandomId.bdtopo_radom_id.id)
+        batInorandomId.bdtopo_radom_id.num += 1;
+        batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.bdtopo_radom_id = ramdoId2
-        })
+            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
+        }
+        )
     }
 
     const bdnb = document.getElementById("exploredata").checked;
     if (bdnb) {
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        view.removeLayer(batInorandomId.bdnb_random_id.id)
+        batInorandomId.bdnb_random_id.num += 1;
+        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+        console.log(batInorandomId.bdnb_random_id)
         bdnbPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.bdnb_random_id = ramdoId2
+            geojsontToFeatureGeom(geojson, false, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
         })
     }
 
 
     const osm = document.getElementById("exploredataOsm").checked;
     if (osm) {
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        view.removeLayer(batInorandomId.osm_random_id.id)
+        batInorandomId.osm_random_id.num += 1;
+        batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.osm_random_id = ramdoId2
-        })
+            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
+
+        }
+        )
     }
 
     const cad = document.getElementById("exploredataCadastre").checked;
     if (cad) {
-        let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
+        view.removeLayer(batInorandomId.cadastre_random_id.id)
+        batInorandomId.cadastre_random_id.num += 1;
+        batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, ramdoId2, false, view, THREE)
-            batInorandomId.cadastre_random_id = ramdoId2
-        })
+            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
+        }
+        )
     }
 })
 
@@ -585,27 +595,26 @@ dropZone.addEventListener('drop', function (e) {
 var affiche2dFile = document.getElementById('afficheDrop2d');
 
 affiche2dFile.addEventListener("click", () => {
-    console.log("sqfsqfsqdfd")
-    console.log(dropedGeojson["2dDropId"] === "")
 
-    if (dropedGeojson["2dDropId"] !== '') {
-        view.removeLayer(dropedGeojson["2dDropId"])
-        dropedGeojson["2dDropId"] = ""
+    if (dropedGeojson["2dDropId"].id !== "2dDropId_0") {
+        view.removeLayer(dropedGeojson["2dDropId"].id)
     }
 
-    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-    dropedGeojson["2dDropId"] = ramdoId2
+    dropedGeojson["2dDropId"].num += 1;
+    dropedGeojson["2dDropId"].id = dropedGeojson["2dDropId"].name + "_" + dropedGeojson["2dDropId"].num
+
     let geojson = dropedGeojson["2dDrop"]
     console.log(geojson)
     const select2dZiped = document.getElementById('select2dZiped').value;
-    geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
+    geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view, THREE)
 }
 )
 
 document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
     console.log(dropedGeojson)
-    view.removeLayer(dropedGeojson["2dDropId"])
-    dropedGeojson["2dDropId"] = ""
+    view.removeLayer(dropedGeojson["2dDropId"].id)
+    dropedGeojson["2dDropId"].num = 0
+    dropedGeojson["2dDropId"].id = "2dDropId_0"
 })
 
 
@@ -662,22 +671,20 @@ dropZone3d.addEventListener('drop', function (e) {
 var affiche3dFile = document.getElementById('afficheDrop3d');
 
 affiche3dFile.addEventListener("click", () => {
-    let ramdoId2 = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); })
-    let geojson = dropedGeojson["3dDrop"]
-    console.log(geojson)
-
-    if (dropedGeojson["3dDropId"] !== '') {
-        view.removeLayer(dropedGeojson["3dDropId"])
-        dropedGeojson["3dDropId"] = ""
+    if (dropedGeojson["3dDropId"].id !== "3dDropId_0") {
+        view.removeLayer(dropedGeojson["3dDropId"].id)
     }
 
-    dropedGeojson["3dDropId"] = ramdoId2
+    dropedGeojson["3dDropId"].num += 1;
+    dropedGeojson["3dDropId"].id = dropedGeojson["3dDropId"].name + "_" + dropedGeojson["3dDropId"].num
+
+    let geojson = dropedGeojson["3dDrop"]
 
     const selectHauteur3dZiped = document.getElementById('selectHauteur3dZiped').value;
     const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
     const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
 
-    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, ramdoId2, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, dropedGeojson["3dDropId"].id, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
 
     console.log(selectCol3dZiped)
     // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
@@ -687,12 +694,146 @@ affiche3dFile.addEventListener("click", () => {
 
 
 document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
-    console.log("suprime3D")
     console.log(dropedGeojson)
-    view.removeLayer(dropedGeojson["3dDropId"])
-    dropedGeojson["3dDropId"] = ""
+    view.removeLayer(dropedGeojson["3dDropId"].id)
+    dropedGeojson["3dDropId"].num = 0
+    dropedGeojson["3dDropId"].id = "3dDropId_0"
+})
+
+//========================== csv join 
+
+let dropZoneCsv = document.getElementById('drop-zone-csv');
+
+dropZoneCsv.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.add('drag-over');
+});
+
+dropZoneCsv.addEventListener('dragleave', function () {
+    dropZoneCsv.classList.remove('drag-over');
+});
+
+dropZoneCsv.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.remove('drag-over');
+
+    let file;
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        file = files[0];
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        let records = [];
+
+        const data = reader.result;
+        const rows = data.split('\n');
+        const headers = rows[0].split(',');
+
+        updateSelectOption("attJointureCsv", headers)
+
+        updateSelectOption("selectCouleurCsv", headers)
+
+
+        for (let i = 1; i < rows.length; i++) {
+            const values = rows[i].split(',');
+            let record = {};
+
+            for (let j = 0; j < headers.length; j++) {
+                record[headers[j]] = values[j];
+            }
+
+
+            record = Object.entries(record).reduce((a, [k, v]) => (v === null || v === "" ? a : (a[k] = v, a)), {})
+            records.push(record);
+        }
+        dataFromCsv = records
+
+        // console.log(records);
+    };
+
+    reader.readAsText(file);
+
+    console.log(view.getLayers())
+
+    let LayersName = view.getLayers().reduce((result, layer) => {
+        result.push(layer.id)
+        return result
+    }, [])
+
+    updateSelectOption("selectJoinLayer", LayersName)
+
+
+
+});
+
+document.getElementById("selectJoinLayer").addEventListener("change", () => {
+    let selectedValue = document.getElementById("selectJoinLayer").value
+    console.log(selectedValue)
+    console.log(view.getLayerById(selectedValue))
+    let geojson = view.getLayerById(selectedValue).source.fetchedData
+
+    let uniquenames = getUniquePropNames(geojson)
+
+    updateSelectOption("selectJoinAttribut", uniquenames)
+
+    let selectChampJointure = document.getElementById("attJointureCsv").value
+    let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
+
+    console.log(dataFromCsv)
+
+    let csvTojson = dataFromCsv.reduce((result, prop) => {
+        result[prop[selectChampJointure]] = prop
+        // console.log(prop)
+        return result
+    }, {})
+
+    console.log(csvTojson)
+
+    console.log(geojson)
+
+    geojson.features.forEach((feature) => {
+        let data = csvTojson[feature.properties[selectCibleChampJointure]]
+
+        if (data) {
+            Object.entries(data).forEach(([key, val]) => {
+                feature.properties[key] = val
+                console.log(feature.properties)
+            })
+        }
+    });
+
+    console.log(geojson)
+
+    view.removeLayer(selectedValue)
+
+    csvJoinAtt.updatedGeojson = geojson;
+
+
+
 
 })
+
+document.getElementById("afficheDropCsv").addEventListener("click", () => {
+    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
+        view.removeLayer(csvJoinAtt["csvLayerId"].id)
+    }
+
+    csvJoinAtt["csvLayerId"].num += 1;
+    csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
+
+    let geojson = csvJoinAtt.updatedGeojson
+
+    console.log(geojson)
+
+    const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
+
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+}
+)
+
 
 
 
