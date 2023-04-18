@@ -302,24 +302,29 @@ viewerDiv.addEventListener(
 
                         })
                         .then(([result, buildingGroupID]) => {
-                            // ----------- Get Housing ICI data ----------- //
+                            // ----------- Get Housing ICI IDs ----------- //
                             console.log(result)
                             csvHousingICI
                                 .then(res => {
                                     console.log(res)
-                                    let housings_ICI = []
+                                    let housings_IDs = []
                                     Object.entries(res).forEach((value) => {
                                         if (value[1].BuildingID) {
                                             if (value[1].BuildingID.includes(buildingGroupID)) {
-                                                console.log(value)
-                                                housings_ICI.push(value[1])
+                                                housings_IDs.push(value[1].ID)
                                             }
                                         }
                                     })
-                                    return housings_ICI
+                                    return housings_IDs
                                 })
                                 .then(res => {
+
+                                    // ----------- Get Household ICI data ----------- //
                                     console.log(res)
+                                    csvHouseholdICI
+                                        .then(res => {
+                                            console.log(res)
+                                        })
                                 })
 
                         })
