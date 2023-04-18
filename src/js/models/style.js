@@ -350,10 +350,10 @@ export default class Style {
         let source;
         if (config_json.source_info.type == "FileSource") {
             source = new itowns.FileSource({
-                fetchedData: config_json.fetchedData,
-                crs: config_json.crs,
-                format: config_json.format
-            })
+                fetchedData: config_json.source_info.fetchedData,
+                crs: config_json.source_info.crs,
+                format: config_json.source_info.format
+            });
         } //TODO else if to add other source types
         let style_res = new Style(config_json.name, view, source, config_json.field, config_json.gradation_or_classes);
         if ((config_json.field_ground !== undefined) && (config_json.field_height !== undefined)) {
