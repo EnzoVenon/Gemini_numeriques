@@ -19,7 +19,7 @@ export default class Style {
         this.gradation_or_classes = gradation_or_classes;
         this.#extrude = false;
         if (gradation_or_classes) {
-            this.setGradation("rgb(255,0,0)", "", 0, 0); //The two last parameters should be NaN instead of 0 to automatically set min and max, but the feature is not working yet.
+            this.setGradation("rgb(255,0,0)", "", NaN, NaN); //The two last parameters should be NaN instead of 0 to automatically set min and max, but the feature is not working yet.
         } else {
             this.setClasses({});
         }
@@ -70,60 +70,42 @@ export default class Style {
             this.color2 = { "r": +color2[0], "g": +color2[1], "b": +color2[2] };
         }
 
-        //Set this.min
+        //Set this.min and this.max
         this.min = min;
-        //Automatically find and set this.min ?
-        if (isNaN(this.min)) {
+        this.max = max;
+        //Automatically find and set this.min and this.max?
+        if (isNaN(min) || isNaN(max)) {
             //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            let hackMin = function hMi(properties) {
+            let hackMinMax = function f(properties) {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
                         this.min = properties[this.field];
                     }
-                }
-                return true;
-            }
-            const findMin = hackMin.bind(this);
-            Style.#id_counter2 += 1;
-            const id = Style.#id_counter2;
-            const layer = new itowns.FeatureGeometryLayer("to_delete_min_style" + id, {
-                batchId: function (property, featureId) { return featureId; },
-                filter: findMin,
-                source: this.source,
-                visible: false
-            });
-            this.view.addLayer(layer).then(() => {
-                this.view.notifyChange(this.view.camera.camera3D, true);
-                this.view.removeLayer("to_delete_min_style" + id);
-                layer.delete();
-            });
-        }
-
-        //Set this.max
-        this.max = max;
-        //Automatically find and set this.max ?
-        if (isNaN(this.max)) {
-            //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
-            let hackMax = function hMa(properties) {
-                if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.max) || (properties[this.field] > this.max)) {
                         this.max = properties[this.field];
                     }
                 }
                 return true;
             }
-            const findMax = hackMax.bind(this);
+            const findMinMax = hackMinMax.bind(this);
             Style.#id_counter2 += 1;
             const id = Style.#id_counter2;
-            const layer = new itowns.FeatureGeometryLayer("to_delete_max_style" + id, {
+            const layer = new itowns.FeatureGeometryLayer("to_delete_minmax_style" + id, {
                 batchId: function (property, featureId) { return featureId; },
-                filter: findMax,
+                filter: findMinMax,
                 source: this.source,
                 visible: false
             });
             this.view.addLayer(layer).then(() => {
-                this.view.notifyChange(this.view.camera.camera3D, true);
-                this.view.removeLayer("to_delete_max_style" + id);
+                //Here, this min and this.max were automatically set, we deal with the case where one of the two was NaN but not the other.
+                if (!isNaN(min)) {
+                    this.min = min;
+                }
+                if (!isNaN(max)) {
+                    this.max = max;
+                }
+                console.log(this.name + " Après le addLayer, min=" + this.min + ", max=" + this.max);
+                this.view.removeLayer("to_delete_minmax_style" + id);
                 layer.delete();
             });
         }
