@@ -170,7 +170,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     button_style_apply.addEventListener("click", () => {
         if (select_style.value == -1) {
-            style_list[0].clean(100000);
+            style_list[0].clean();
         } else {
             const style = style_list[select_style.value];
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
