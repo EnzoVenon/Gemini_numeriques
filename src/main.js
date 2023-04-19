@@ -54,8 +54,8 @@ customDiv.appendChild(pointer);
 
 let placement = {
     //  Coordinates of Perigueux
-    // coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-    coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
+    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
