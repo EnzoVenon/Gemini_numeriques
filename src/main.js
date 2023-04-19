@@ -284,15 +284,10 @@ viewerDiv.addEventListener(
                                     }
                                 }
                             })
-                            return dataBuildingICI
-                        })
-                        .then(res => {
-                            let valDisplayBuildingICI
-                            Object.entries(res).forEach(([key, value]) => {
+                            Object.entries(dataBuildingICI).forEach(([key, value]) => {
                                 valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
                             })
-                            return [valDisplayBuildingICI, res.ID]
-
+                            return [valDisplayBuildingICI, dataBuildingICI.ID]
                         })
                         .then(([result, buildingGroupID]) => {
 
