@@ -277,11 +277,11 @@ viewerDiv.addEventListener(
                     console.log(val2display)
 
                     csvBuildingICI
-                        .then(res => {
+                        .then(buildingICI => {
                             // ----------- Get Building ICI data ----------- //
-                            console.log(res)
+                            console.log(buildingICI)
                             let dataBuildingICI;
-                            Object.entries(res).forEach((value) => {
+                            Object.entries(buildingICI).forEach((value) => {
                                 if (value[1].idBdTopo) {
                                     if (value[1].idBdTopo.includes(tooltipBuildingID)) {
                                         dataBuildingICI = value[1];
@@ -305,10 +305,10 @@ viewerDiv.addEventListener(
                             // ----------- Get Housing ICI IDs ----------- //
                             console.log(result)
                             csvHousingICI
-                                .then(res => {
-                                    console.log(res)
+                                .then(housingICI => {
+                                    console.log(housingICI)
                                     let housings_IDs = []
-                                    Object.entries(res).forEach((value) => {
+                                    Object.entries(housingICI).forEach((value) => {
                                         if (value[1].BuildingID) {
                                             if (value[1].BuildingID.includes(buildingGroupID)) {
                                                 housings_IDs.push(value[1].ID)
@@ -327,9 +327,9 @@ viewerDiv.addEventListener(
                                     })
 
                                     csvHouseholdICI
-                                        .then(result => {
-                                            console.log(result)
-                                            Object.entries(result).forEach((value) => {
+                                        .then(householdICI => {
+                                            console.log(householdICI)
+                                            Object.entries(householdICI).forEach((value) => {
                                                 if (housingIDs.includes(value[1].HousingID)) {
                                                     housingDictionnary[value[1].HousingID].push(value[1])
                                                 }
@@ -340,7 +340,23 @@ viewerDiv.addEventListener(
                                                 }
                                             })
                                             // for each housing get associated household
-                                            console.log(housingDictionnary)
+                                            return housingDictionnary
+                                        })
+                                        .then(housingDict => {
+
+                                            // ----------- Get Individual ICI data ----------- //
+                                            console.log(housingDict)
+                                            let householdIDs = []
+                                            Object.entries(housingDict).forEach((val) => {
+                                                householdIDs.push(val[1][0].ID)
+                                            })
+                                            console.log(householdIDs)
+                                            csvIndividualICI
+                                                .then(individualICI => {
+                                                    Object.entries(individualICI).forEach((value) => {
+                                                        console.log(value)
+                                                    })
+                                                })
                                         })
                                 })
 
@@ -803,33 +819,4 @@ document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", ()
 })
 
 
-
-// couche bdtopo Paris 11
-// ACQU_ALTI: "Interpolation bâti BDTopo"
-// ACQU_PLANI: "BDParcellaire recalée"
-// APP_FF: "A 1.0"
-// DATE_APP: Wed Jan 01 1800 00:00:00 GMT+0009 (heure normale d’Europe centrale) {}
-// DATE_CONF: Thu Nov 30 1899 00:00:00 GMT+0009 (heure normale d’Europe centrale) {}
-// DATE_CREAT: "2010-07-09 09:51:40"
-// DATE_MAJ: "2019-03-15 13:40:14"
-// ETAT: "En service"
-// HAUTEUR: 15.8
-// ID: "BATIMENT0000000240756044"
-// ID_SOURCE: ""
-// LEGER: "Non"
-// MAT_MURS: "40"
-// MAT_TOITS: "30"
-// NATURE: "Indifférenciée"
-// NB_ETAGES: 6
-// NB_LOGTS: 42
-// ORIGIN_BAT: "Cadastre"
-// PREC_ALTI: 2.5
-// PREC_PLANI: 3
-// SOURCE: ""
-// USAGE1: "Résidentiel"
-// USAGE2: "Commercial et services"
-// Z_MAX_SOL: NaN
-// Z_MAX_TOIT: NaN
-// Z_MIN_SOL: 40.6
-// Z_MIN_TOIT: 56.4
 
