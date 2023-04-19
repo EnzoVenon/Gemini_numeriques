@@ -208,7 +208,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
 // ----------------- Variables to display content in tabs ----------------- //
 const tooltip = document.getElementById('tooltip');
-const htmlTest = document.getElementById('population');
+const htmlTest = document.getElementById('listConsoPopulationIris');
 viewerDiv.addEventListener(
     'mouseup',
     () => {
