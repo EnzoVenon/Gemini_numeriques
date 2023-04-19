@@ -294,7 +294,7 @@ viewerDiv.addEventListener(
 
                         })
                         .then(([result, buildingGroupID]) => {
-                            console.log(result)
+
                             // ----------- Get Housing ICI IDs ----------- //
                             let displayHousing = csvHousingICI
                                 .then(housingICI => {
@@ -364,7 +364,7 @@ viewerDiv.addEventListener(
                                                             }
                                                         }
                                                     })
-                                                    console.log(housingDict)
+
                                                     return housingDict
                                                 })
                                             return displayIndividual
@@ -414,7 +414,6 @@ viewerDiv.addEventListener(
                             }
                             let data4Chart = [];
                             Object.entries(dataList4Chart).forEach(([key, value]) => {
-                                console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
 
