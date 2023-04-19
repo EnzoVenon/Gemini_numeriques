@@ -322,20 +322,25 @@ viewerDiv.addEventListener(
                                     // ----------- Get Household ICI data ----------- //
                                     console.log(housingIDs)
                                     let housingDictionnary = {}
-                                    housingIDs.forEach(id => {
-                                        housingDictionnary[id] = []
-                                    })
+                                    // housingIDs.forEach(id => {
+                                    //     housingDictionnary[id] = {}
+                                    // })
+
 
                                     csvHouseholdICI
                                         .then(householdICI => {
                                             console.log(householdICI)
+
                                             Object.entries(householdICI).forEach((value) => {
                                                 if (housingIDs.includes(value[1].HousingID)) {
-                                                    housingDictionnary[value[1].HousingID].push(value[1])
+                                                    housingDictionnary[value[1].ID] = {}
+                                                    housingDictionnary[value[1].ID]["housingID"] = value[1].HousingID
+                                                    housingDictionnary[value[1].ID]["household"] = value[1]
                                                 }
                                             })
+
                                             Object.entries(housingDictionnary).forEach(([key, value]) => {
-                                                if (value.length === 0) {
+                                                if (Object.keys(value).length === 0) {
                                                     delete housingDictionnary[key]
                                                 }
                                             })
@@ -348,14 +353,27 @@ viewerDiv.addEventListener(
                                             console.log(housingDict)
                                             let householdIDs = []
                                             Object.entries(housingDict).forEach((val) => {
-                                                householdIDs.push(val[1][0].ID)
+                                                householdIDs.push(val[1].household.ID)
                                             })
                                             console.log(householdIDs)
                                             csvIndividualICI
                                                 .then(individualICI => {
                                                     Object.entries(individualICI).forEach((value) => {
-                                                        console.log(value)
+                                                        if (value[1].IDHousehold) {
+                                                            // console.log(householdIDs.includes(value[1].IDHousehold))
+                                                            if (householdIDs.includes(value[1].IDHousehold)) {
+                                                                // console.log(true)
+                                                                // console.log(value[1])
+                                                                if (housingDict[value[1].IDHousehold]["individuals"]) {
+                                                                    housingDict[value[1].IDHousehold]["individuals"].push(value[1])
+                                                                } else {
+                                                                    housingDict[value[1].IDHousehold]["individuals"] = [value[1]]
+                                                                }
+
+                                                            }
+                                                        }
                                                     })
+                                                    console.log(housingDict)
                                                 })
                                         })
                                 })
