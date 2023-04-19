@@ -54,8 +54,8 @@ customDiv.appendChild(pointer);
 
 let placement = {
     //  Coordinates of Perigueux
-    // coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-    coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
+    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
@@ -271,10 +271,10 @@ viewerDiv.addEventListener(
 
                 })
                 .then(async (val2display) => {
-                    // ----------- Get ICI data ----------- //
                     // ----------- Get Building ICI data ----------- //
                     let displayICI = await csvBuildingICI
                     let dataBuildingICI;
+                    let valDisplayBuildingICI
                     Object.entries(displayICI).forEach((value) => {
                         if (value[1].idBdTopo) {
                             if (value[1].idBdTopo.includes(tooltipBuildingID)) {
@@ -324,7 +324,6 @@ viewerDiv.addEventListener(
                     Object.entries(housingDictionnary).forEach((val) => {
                         householdIDs.push(val[0])
                     })
-
 
                     // ----------- Get Individual ICI data ----------- //
                     let displayIndividual = await csvIndividualICI
