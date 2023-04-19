@@ -16,6 +16,7 @@ import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
 
@@ -33,6 +34,10 @@ let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "inno
 
 let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
 
+let csvJoinAtt = { "updatedGeojson": {}, "csvLayerId": { name: "updatedLayerWithCsv", num: 0, id: "updatedLayerWithCsv_0" } };
+
+
+let dataFromCsv;
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -128,10 +133,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
     addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
-
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
@@ -152,8 +155,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Styles definition
     let style_list = [];
     style_list.push(
-        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
+            .setExtrude("altitude_s", "hauteur")
             .setClasses({
                 "A": "rgb(1,149,65)",
                 "B": "rgb(83,174,50)",
@@ -165,13 +168,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", false, true)
-            .setExtrude("altitude_s", "hauteur", false)
-            .setGradation("rgb(255,0,0)", "", 1, 30)
+        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", true)
+            .setExtrude("altitude_s", "hauteur")
+            .setGradation("rgb(255,0,0)", "rgb(0,0,255)")
     );
     style_list.push(
-        new Style("Iris", view, src_bdnb, "code_iris", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Iris", view, src_bdnb, "code_iris", false)
+            .setExtrude("altitude_s", "hauteur")
     );
 
     //Setting the predefined styles
@@ -181,11 +184,11 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     button_style_apply.addEventListener("click", () => {
         if (select_style.value == -1) {
-            style_list[0].clean(100000);
+            style_list[0].clean();
         } else {
             const style = style_list[select_style.value];
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
-            style.to3D(checkbox_3D.checked && style.field_ground != "" && style.field_height != "");
+            style.to3D(checkbox_3D.checked);
             style.to_itowns_layer();
         }
     });
@@ -265,6 +268,12 @@ viewerDiv.addEventListener(
                         valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                     })
                     return valDisplayed;
+
+                // ----------- Get Bdnb data ----------- //
+                // Dispatch Bdnb data for each tab
+                let valDisplayed;
+                Object.entries(res).forEach(([key, value]) => {
+                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "BDNB")
 
                 })
                 .then(val2display => {
@@ -447,7 +456,7 @@ viewerDiv.addEventListener(
                             let valDisplayedBdTopo;
                             if (res.properties) {
                                 Object.entries(res.properties).forEach(([key, value]) => {
-                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "BDTopo")
                                 })
                                 return valDisplayedBdTopo;
                             }
@@ -568,6 +577,9 @@ document.getElementById("exploredata").addEventListener("change", () => {
             geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
         })
+
+
+
     }
     else {
         view.removeLayer(batInorandomId.bdnb_random_id.id)
@@ -832,6 +844,141 @@ document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", ()
     dropedGeojson["3dDropId"].num = 0
     dropedGeojson["3dDropId"].id = "3dDropId_0"
 })
+
+//========================== csv join 
+
+let dropZoneCsv = document.getElementById('drop-zone-csv');
+
+dropZoneCsv.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.add('drag-over');
+});
+
+dropZoneCsv.addEventListener('dragleave', function () {
+    dropZoneCsv.classList.remove('drag-over');
+});
+
+dropZoneCsv.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.remove('drag-over');
+
+    let file;
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        file = files[0];
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        let records = [];
+
+        const data = reader.result;
+        const rows = data.split('\n');
+        const headers = rows[0].split(',');
+
+        updateSelectOption("attJointureCsv", headers)
+
+        updateSelectOption("selectCouleurCsv", headers)
+
+
+        for (let i = 1; i < rows.length; i++) {
+            const values = rows[i].split(',');
+            let record = {};
+
+            for (let j = 0; j < headers.length; j++) {
+                record[headers[j]] = values[j];
+            }
+
+
+            record = Object.entries(record).reduce((a, [k, v]) => (v === null || v === "" ? a : (a[k] = v, a)), {})
+            records.push(record);
+        }
+        dataFromCsv = records
+
+        // console.log(records);
+    };
+
+    reader.readAsText(file);
+
+    console.log(view.getLayers())
+
+    let LayersName = view.getLayers().reduce((result, layer) => {
+        result.push(layer.id)
+        return result
+    }, [])
+
+    updateSelectOption("selectJoinLayer", LayersName)
+
+
+
+});
+
+document.getElementById("selectJoinLayer").addEventListener("change", () => {
+    let selectedValue = document.getElementById("selectJoinLayer").value
+    console.log(selectedValue)
+    console.log(view.getLayerById(selectedValue))
+    let geojson = view.getLayerById(selectedValue).source.fetchedData
+
+    let uniquenames = getUniquePropNames(geojson)
+
+    updateSelectOption("selectJoinAttribut", uniquenames)
+
+    let selectChampJointure = document.getElementById("attJointureCsv").value
+    let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
+
+    console.log(dataFromCsv)
+
+    let csvTojson = dataFromCsv.reduce((result, prop) => {
+        result[prop[selectChampJointure]] = prop
+        // console.log(prop)
+        return result
+    }, {})
+
+    console.log(csvTojson)
+
+    console.log(geojson)
+
+    geojson.features.forEach((feature) => {
+        let data = csvTojson[feature.properties[selectCibleChampJointure]]
+
+        if (data) {
+            Object.entries(data).forEach(([key, val]) => {
+                feature.properties[key] = val
+                console.log(feature.properties)
+            })
+        }
+    });
+
+    console.log(geojson)
+
+    view.removeLayer(selectedValue)
+
+    csvJoinAtt.updatedGeojson = geojson;
+
+
+
+
+})
+
+document.getElementById("afficheDropCsv").addEventListener("click", () => {
+    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
+        view.removeLayer(csvJoinAtt["csvLayerId"].id)
+    }
+
+    csvJoinAtt["csvLayerId"].num += 1;
+    csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
+
+    let geojson = csvJoinAtt.updatedGeojson
+
+    console.log(geojson)
+
+    const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
+
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+}
+)
+
 
 
 
