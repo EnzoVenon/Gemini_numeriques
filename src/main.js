@@ -269,12 +269,6 @@ viewerDiv.addEventListener(
                     })
                     return valDisplayed;
 
-                // ----------- Get Bdnb data ----------- //
-                // Dispatch Bdnb data for each tab
-                let valDisplayed;
-                Object.entries(res).forEach(([key, value]) => {
-                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "BDNB")
-
                 })
                 .then(val2display => {
                     // ----------- Get ICI data ----------- //
