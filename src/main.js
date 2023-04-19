@@ -240,7 +240,6 @@ viewerDiv.addEventListener(
                 view.removeLayer(listSlect[0]);
                 layerToRemove.delete()
                 view.notifyChange()
-                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
@@ -256,30 +255,26 @@ viewerDiv.addEventListener(
             if (tooltipBuildingID.includes('-')) {
                 tooltipBuildingID = tooltipBuildingID.slice(0, -2)
             }
-            console.log(tooltipBuildingID)
+
 
             getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
                 .then(res => {
 
                     // ----------- Get Bdnb data ----------- //
-                    console.log(res)
                     // Dispatch Bdnb data for each tab
                     let valDisplayed;
                     Object.entries(res).forEach(([key, value]) => {
                         valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
                     })
-                    console.log(valDisplayed)
                     return valDisplayed;
 
                 })
                 .then(val2display => {
                     // ----------- Get ICI data ----------- //
-                    console.log(val2display)
 
                     csvBuildingICI
                         .then(buildingICI => {
                             // ----------- Get Building ICI data ----------- //
-                            console.log(buildingICI)
                             let dataBuildingICI;
                             Object.entries(buildingICI).forEach((value) => {
                                 if (value[1].idBdTopo) {
@@ -292,21 +287,17 @@ viewerDiv.addEventListener(
                             return dataBuildingICI
                         })
                         .then(res => {
-                            console.log(res)
                             let valDisplayBuildingICI
                             Object.entries(res).forEach(([key, value]) => {
                                 valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
                             })
-                            console.log(valDisplayBuildingICI)
                             return [valDisplayBuildingICI, res.ID]
 
                         })
                         .then(([result, buildingGroupID]) => {
                             // ----------- Get Housing ICI IDs ----------- //
-                            console.log(result)
                             csvHousingICI
                                 .then(housingICI => {
-                                    console.log(housingICI)
                                     let housings_IDs = []
                                     Object.entries(housingICI).forEach((value) => {
                                         if (value[1].BuildingID) {
@@ -320,16 +311,10 @@ viewerDiv.addEventListener(
                                 .then(housingIDs => {
 
                                     // ----------- Get Household ICI data ----------- //
-                                    console.log(housingIDs)
                                     let housingDictionnary = {}
-                                    // housingIDs.forEach(id => {
-                                    //     housingDictionnary[id] = {}
-                                    // })
-
 
                                     csvHouseholdICI
                                         .then(householdICI => {
-                                            console.log(householdICI)
 
                                             Object.entries(householdICI).forEach((value) => {
                                                 if (housingIDs.includes(value[1].HousingID)) {
@@ -350,20 +335,15 @@ viewerDiv.addEventListener(
                                         .then(housingDict => {
 
                                             // ----------- Get Individual ICI data ----------- //
-                                            console.log(housingDict)
                                             let householdIDs = []
                                             Object.entries(housingDict).forEach((val) => {
                                                 householdIDs.push(val[1].household.ID)
                                             })
-                                            console.log(householdIDs)
                                             csvIndividualICI
                                                 .then(individualICI => {
                                                     Object.entries(individualICI).forEach((value) => {
                                                         if (value[1].IDHousehold) {
-                                                            // console.log(householdIDs.includes(value[1].IDHousehold))
                                                             if (householdIDs.includes(value[1].IDHousehold)) {
-                                                                // console.log(true)
-                                                                // console.log(value[1])
                                                                 if (housingDict[value[1].IDHousehold]["individuals"]) {
                                                                     housingDict[value[1].IDHousehold]["individuals"].push(value[1])
                                                                 } else {
@@ -373,7 +353,6 @@ viewerDiv.addEventListener(
                                                             }
                                                         }
                                                     })
-                                                    console.log(housingDict)
                                                 })
                                         })
                                 })
