@@ -1,6 +1,6 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 
-export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, randomId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
+export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, incrementedId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
   // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
   // obtenir un tableau des noms de propriétés
   const propNames = geojson.features.reduce((acc, feature) => {
@@ -69,7 +69,7 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
     format: 'application/json',
   })
 
-  let bat = new itowns.FeatureGeometryLayer(randomId, {
+  let bat = new itowns.FeatureGeometryLayer(incrementedId, {
     source: src,
     transparent: true,
     opacity: 0.7,

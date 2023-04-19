@@ -9,16 +9,21 @@ Les informations que nous visualisons sont liées aux bâtiments. De plus, l'out
 ### <u>Les données</u>
 Nous interconnectons les diverses sources de données suivantes : 
 
-- *BD Carto* : https://geoservices.ign.fr/services-web-experts-cartovecto
-
-- *OpenStreetMap (OSM)* : https://download.geofabrik.de/europe/france.html
-
-- *API INSEE* : https://pyris.datajazz.io/
- 
+<u>Couches attributaires</u>
+- *INSEE* : https://www.insee.fr/fr/information/3544265
 - *Base de données nationale des bâtiments (BDNB)* : 
   - https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments
   - Energie : https://data.ademe.fr/datasets/dpe-france
+- *BD Topo* : https://geoservices.ign.fr/bdtopo
 
+<u>Couches spatiales</u>
+- *OpenStreetMap (OSM)* : https://download.geofabrik.de/europe/france.html
+- *Données Cadastrales* : https://cadastre.data.gouv.fr/datasets
+- *Territoires à risques importants d'inondation* : https://www.georisques.gouv.fr/donnees/bases-de-donnees/zonages-inondation-rapportage-2020
+
+<u>Couches de visualisation</u>
+- *BD Ortho* : https://geoservices.ign.fr/bdtopo
+- *BD Carto* : https://geoservices.ign.fr/services-web-experts-cartovecto
 
 
 ### <u>Accès et améliorations</u>

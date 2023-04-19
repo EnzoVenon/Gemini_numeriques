@@ -20,6 +20,11 @@ const attribut2UserName = {
   bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
   NB_ETAGES: "Nombre d'étages",
   DATE_CREAT: "Date de Création",
+  nbEntrances: "Nombre d'entrées",
+  nbHousing: "Nombre de logements",
+  nbWorkingPlace: "Nombre de lieux de travail",
+  code_commu: "Code commune",
+  code_depar: "Code département",
 
   argiles_alea: "Risque argile",
   radon_alea: "Risque radon",
@@ -50,8 +55,30 @@ const attribut2UserName = {
   dpe_logtype_mur_pos_isol_ext: "Notes énergétique des logements",
   dpe_logtype_pb_pos_isol: "Notes énergétique des logements",
   dpe_logtype_ph_pos_isol: "Notes énergétique des logements",
-}
 
+
+  P19_POP15P_MARIEE: "Marié",
+  P19_POP15P_PACSEE: "Pacsé",
+  P19_POP15P_CONCUB_UNION_LIBRE: "Concubinage - union libre",
+  P19_POP15P_VEUFS: "Veuf",
+  P19_POP15P_DIVORCEE: "Divorcé",
+  P19_POP15P_CELIBATAIRE: "Célibataire",
+  P19_POP1524: "15-24 ans",
+  P19_POP2554: "25-54 ans",
+  P19_POP5579: "55-79 ans",
+  P19_POP80P: "80+ ans",
+  C19_NE24F0: "0 enfant",
+  C19_NE24F1: "1 enfant",
+  C19_NE24F2: "2 enfants",
+  C19_NE24F3: "3 enfants",
+  C19_NE24F4P: "4 enfants",
+  FamilyChildrenNumber: "Nombre d'enfants dans la famille",
+  HouseholdComposition: "Composition du ménage",
+  HouseholdSize: "Nombre d'individus dans le ménage",
+  age: "Age",
+  occupation: "Occupation",
+  sex: "Sexe",
+}
 
 // Onglet batiment
 const tabs = {
@@ -65,7 +92,11 @@ const tabs = {
     "NATURE",
     "NB_ETAGES",
     "USAGE1",
-    "USAGE2"
+    "USAGE2",
+    "nbEntrances",
+    "nbHousing",
+    "nbWorkingPlace"
+
   ],
   ongletRisque: [
     "radon_alea",
@@ -78,7 +109,9 @@ const tabs = {
     "fiabilite_cr_adr_niv_1",
     "libelle_adr_principale_ban",
     "libelle_commune_insee",
-    "bdtopo_zoa_l_toponyme"
+    "bdtopo_zoa_l_toponyme",
+    "code_commu",
+    "code_depar"
 
   ],
   ongletEnergie: [
@@ -109,10 +142,33 @@ const tabs = {
     "dpe_logtype_pb_pos_isol",
     "dpe_logtype_ph_pos_isol"
   ],
+  ongletPopulation: [
+    'P19_POP15P_MARIEE',
+    'P19_POP15P_PACSEE',
+    'P19_POP15P_CONCUB_UNION_LIBRE',
+    'P19_POP15P_VEUFS',
+    'P19_POP15P_DIVORCEE',
+    'P19_POP15P_CELIBATAIRE',
+    'P19_POP1524',
+    'P19_POP2554',
+    'P19_POP5579',
+    'P19_POP80P',
+    'C19_NE24F0',
+    'C19_NE24F1',
+    'C19_NE24F2',
+    'C19_NE24F3',
+    'C19_NE24F4P',
+    'FamilyChildrenNumber',
+    'HouseholdComposition',
+    'HouseholdSize',
+    'age',
+    'occupation',
+    'sex',
+  ]
 }
 
 
-export function loadDataToJSON(dictionaryTofill, key, value, base) {
+export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulationTab = false) {
 
   /* 
   
@@ -134,7 +190,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
           }
   
   */
-  let name4User = attribut2UserName[key]
+  let name4User = attribut2UserName[key];
+
 
   const jsonData = {
     attribut: key,
@@ -142,6 +199,13 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     val: value,
     source: base
   }
+
+  if (isForPopulationTab) {
+    if (name4User) {
+      return jsonData
+    }
+  }
+
   if (tabs.ongletInfoGen.includes(key)) {
     dictionaryTofill.tabInfoGen.push(jsonData)
   } else if (tabs.ongletBatiment.includes(key)) {
@@ -150,6 +214,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     dictionaryTofill.tabRisques.push(jsonData)
   } else if (tabs.ongletEnergie.includes(key)) {
     dictionaryTofill.tabEnergie.push(jsonData)
+  } else if (tabs.ongletPopulation.includes(key)) {
+    dictionaryTofill.tabPopulation.push(jsonData)
   }
 
   return dictionaryTofill;
