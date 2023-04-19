@@ -20,6 +20,11 @@ const attribut2UserName = {
   bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
   NB_ETAGES: "Nombre d'étages",
   DATE_CREAT: "Date de Création",
+  nbEntrances: "Nombre d'entrées",
+  nbHousing: "Nombre de logements",
+  nbWorkingPlace: "Nombre de lieux de travail",
+  code_commu: "Code commune",
+  code_depar: "Code département",
 
   argiles_alea: "Risque argile",
   radon_alea: "Risque radon",
@@ -67,6 +72,12 @@ const attribut2UserName = {
   C19_NE24F2: "2 enfants",
   C19_NE24F3: "3 enfants",
   C19_NE24F4P: "4 enfants",
+  FamilyChildrenNumber: "Nombre d'enfants dans la famille",
+  HouseholdComposition: "Composition du ménage",
+  HouseholdSize: "Nombre d'individus dans le ménage",
+  age: "Age",
+  occupation: "Occupation",
+  sex: "Sexe",
 }
 
 // Onglet batiment
@@ -81,7 +92,11 @@ const tabs = {
     "NATURE",
     "NB_ETAGES",
     "USAGE1",
-    "USAGE2"
+    "USAGE2",
+    "nbEntrances",
+    "nbHousing",
+    "nbWorkingPlace"
+
   ],
   ongletRisque: [
     "radon_alea",
@@ -94,7 +109,9 @@ const tabs = {
     "fiabilite_cr_adr_niv_1",
     "libelle_adr_principale_ban",
     "libelle_commune_insee",
-    "bdtopo_zoa_l_toponyme"
+    "bdtopo_zoa_l_toponyme",
+    "code_commu",
+    "code_depar"
 
   ],
   ongletEnergie: [
@@ -140,14 +157,18 @@ const tabs = {
     'C19_NE24F1',
     'C19_NE24F2',
     'C19_NE24F3',
-    'C19_NE24F4P'
+    'C19_NE24F4P',
+    'FamilyChildrenNumber',
+    'HouseholdComposition',
+    'HouseholdSize',
+    'age',
+    'occupation',
+    'sex',
   ]
 }
 
 
-
-
-export function loadDataToJSON(dictionaryTofill, key, value, base) {
+export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulationTab = false) {
 
   /* 
   
@@ -178,6 +199,13 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     val: value,
     source: base
   }
+
+  if (isForPopulationTab) {
+    if (name4User) {
+      return jsonData
+    }
+  }
+
   if (tabs.ongletInfoGen.includes(key)) {
     dictionaryTofill.tabInfoGen.push(jsonData)
   } else if (tabs.ongletBatiment.includes(key)) {

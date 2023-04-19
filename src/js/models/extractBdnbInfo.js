@@ -1,8 +1,8 @@
 
-export function getBdnbInfo(csvBdnb, batiment_groupe_id_to_select) {
+export function getBdnbInfo(csvBdnb, idAttributBatiment, batiment_groupe_id_to_select) {
     return csvBdnb.then(res => {
         // console.log(res)
-        let uniqueData = res.filter(obj => obj.batiment_groupe_id === batiment_groupe_id_to_select)[0]
+        let uniqueData = res.filter(obj => obj[idAttributBatiment] === batiment_groupe_id_to_select)[0]
         console.log(uniqueData)
         const entries = Object.entries(uniqueData)
         // console.log(entries)

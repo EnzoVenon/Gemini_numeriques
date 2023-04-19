@@ -23,7 +23,7 @@ import * as shp from "shpjs";
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "bdtopoParis": "../data/shp/paris_11/bdtopo_paris11", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
@@ -54,7 +54,8 @@ customDiv.appendChild(pointer);
 
 let placement = {
     //  Coordinates of Perigueux
-    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
@@ -112,7 +113,12 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csvBdnbParis = importCsvFile("../data/csv/bdnb_paris11.csv")
 
+let csvBuildingICI = importCsvFile("../data/csv/ICI-csv/building.csv")
+let csvHouseholdICI = importCsvFile("../data/csv/ICI-csv/household.csv")
+let csvHousingICI = importCsvFile("../data/csv/ICI-csv/housing.csv")
+let csvIndividualICI = importCsvFile("../data/csv/ICI-csv/individual.csv")
 let dataBdnb;
 
 
@@ -126,6 +132,9 @@ let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
+
+    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
+    addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
@@ -232,7 +241,6 @@ viewerDiv.addEventListener(
                 view.removeLayer(listSlect[0]);
                 layerToRemove.delete()
                 view.notifyChange()
-                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
@@ -242,18 +250,150 @@ viewerDiv.addEventListener(
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            console.log(tooltip.value)
 
-            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
+            let tooltipBuildingID = tooltip.value.properties.batiment_c
+            if (tooltipBuildingID.includes('-')) {
+                tooltipBuildingID = tooltipBuildingID.slice(0, -2)
+            }
 
-                // ----------- Get Bdnb data ----------- //
-                // Dispatch Bdnb data for each tab
-                let valDisplayed;
-                Object.entries(res).forEach(([key, value]) => {
-                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "BDNB")
+
+            getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
+                .then(res => {
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
                 })
-                return valDisplayed;
+                .then(val2display => {
+                    // ----------- Get ICI data ----------- //
+                    let displayICI = csvBuildingICI
+                        .then(buildingICI => {
+                            // ----------- Get Building ICI data ----------- //
+                            let dataBuildingICI;
+                            Object.entries(buildingICI).forEach((value) => {
+                                if (value[1].idBdTopo) {
+                                    if (value[1].idBdTopo.includes(tooltipBuildingID)) {
+                                        dataBuildingICI = value[1];
+                                        return dataBuildingICI;
+                                    }
+                                }
+                            })
+                            return dataBuildingICI
+                        })
+                        .then(res => {
+                            let valDisplayBuildingICI
+                            Object.entries(res).forEach(([key, value]) => {
+                                valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
+                            })
+                            return [valDisplayBuildingICI, res.ID]
 
-            })
+                        })
+                        .then(([result, buildingGroupID]) => {
+
+                            // ----------- Get Housing ICI IDs ----------- //
+                            let displayHousing = csvHousingICI
+                                .then(housingICI => {
+                                    let housings_IDs = []
+                                    Object.entries(housingICI).forEach((value) => {
+                                        if (value[1].BuildingID) {
+                                            if (value[1].BuildingID.includes(buildingGroupID)) {
+                                                housings_IDs.push(value[1].ID)
+                                            }
+                                        }
+                                    })
+                                    return housings_IDs
+                                })
+                                .then(housingIDs => {
+
+                                    // ----------- Get Household ICI data ----------- //
+                                    let housingDictionnary = {}
+
+                                    let displayHousehold = csvHouseholdICI
+                                        .then(householdICI => {
+                                            let dataJSONattributeHousehold;
+                                            Object.entries(householdICI).forEach((value) => {
+                                                if (housingIDs.includes(value[1].HousingID)) {
+                                                    housingDictionnary[value[1].ID] = {}
+                                                    housingDictionnary[value[1].ID]["household"] = []
+                                                    Object.entries(value[1]).forEach(([key, val]) => {
+                                                        dataJSONattributeHousehold = loadDataToJSON({}, key, val, "Household ICI", true)
+                                                        if (Object.keys(dataJSONattributeHousehold).length !== 0) {
+                                                            housingDictionnary[value[1].ID]["household"].push(dataJSONattributeHousehold)
+                                                        }
+                                                    })
+                                                }
+                                            })
+
+                                            Object.entries(housingDictionnary).forEach(([key, value]) => {
+                                                if (Object.keys(value).length === 0) {
+                                                    delete housingDictionnary[key]
+                                                }
+                                            })
+                                            // for each housing get associated household
+                                            return housingDictionnary
+                                        })
+                                        .then(housingDict => {
+                                            // ----------- Get Individual ICI data ----------- //
+                                            let householdIDs = []
+                                            Object.entries(housingDict).forEach((val) => {
+                                                householdIDs.push(val[0])
+                                            })
+                                            let displayIndividual = csvIndividualICI
+                                                .then(individualICI => {
+                                                    let dataJSONattributeIndividual;
+                                                    Object.entries(individualICI).forEach((value) => {
+                                                        if (value[1].IDHousehold) {
+                                                            let individualList = []
+                                                            if (householdIDs.includes(value[1].IDHousehold)) {
+                                                                Object.entries(value[1]).forEach(([key, val]) => {
+                                                                    dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
+                                                                    if (Object.keys(dataJSONattributeIndividual).length !== 0) {
+                                                                        individualList.push(dataJSONattributeIndividual)
+                                                                    }
+                                                                })
+                                                                if (housingDict[value[1].IDHousehold]["individuals"]) {
+                                                                    housingDict[value[1].IDHousehold]["individuals"].push(individualList)
+                                                                } else {
+                                                                    housingDict[value[1].IDHousehold]["individuals"] = [individualList]
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+
+                                                    return housingDict
+                                                })
+                                            return displayIndividual
+
+                                        })
+                                    return displayHousehold
+                                }).then(res => {
+                                    result.tabPopulation = res;
+                                    return result
+                                })
+                            return displayHousing
+
+                        })
+                    return displayICI;
+                }).then(res => console.log(res))
+
+            getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
+                .then(res => {
+
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
+                })
                 .then(result => {
                     let valDisplay2 = csvMenageINSEE
                         .then(res => {
@@ -832,8 +972,6 @@ document.getElementById("afficheDropCsv").addEventListener("click", () => {
     geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
 }
 )
-
-
 
 
 
