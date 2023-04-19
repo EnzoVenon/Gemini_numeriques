@@ -249,6 +249,7 @@ viewerDiv.addEventListener(
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
             console.log(tooltip.value)
 
             let tooltipBuildingID = tooltip.value.properties.batiment_c
