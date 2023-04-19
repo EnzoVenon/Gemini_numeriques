@@ -82,7 +82,9 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.y = 48.859424
         cameraTargetPosition.z = 86
 
+
     }
+
     else {
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
@@ -92,8 +94,25 @@ document.getElementById("changloc").addEventListener("click", () => {
     view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
     view.camera.camera3D.updateMatrixWorld();
     view.notifyChange(view.camera.camera3D, true);
+
+
 })
 
+document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
+    if (switchbutton.unchecked) {
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
+
+
+})
 
 
 
