@@ -249,7 +249,7 @@ viewerDiv.addEventListener(
                 // Dispatch Bdnb data for each tab
                 let valDisplayed;
                 Object.entries(res).forEach(([key, value]) => {
-                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "BDNB")
                 })
                 return valDisplayed;
 
@@ -310,7 +310,7 @@ viewerDiv.addEventListener(
                             let valDisplayedBdTopo;
                             if (res.properties) {
                                 Object.entries(res.properties).forEach(([key, value]) => {
-                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "BDTopo")
                                 })
                                 return valDisplayedBdTopo;
                             }
