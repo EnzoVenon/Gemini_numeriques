@@ -72,6 +72,12 @@ const attribut2UserName = {
   C19_NE24F2: "2 enfants",
   C19_NE24F3: "3 enfants",
   C19_NE24F4P: "4 enfants",
+  FamilyChildrenNumber: "Nombre d'enfants dans la famille",
+  HouseholdComposition: "Composition du ménage",
+  HouseholdSize: "Nombre d'individus dans le ménage",
+  age: "Age",
+  occupation: "Occupation",
+  sex: "Sexe",
 }
 
 // Onglet batiment
@@ -151,12 +157,18 @@ const tabs = {
     'C19_NE24F1',
     'C19_NE24F2',
     'C19_NE24F3',
-    'C19_NE24F4P'
+    'C19_NE24F4P',
+    'FamilyChildrenNumber',
+    'HouseholdComposition',
+    'HouseholdSize',
+    'age',
+    'occupation',
+    'sex',
   ]
 }
 
 
-export function loadDataToJSON(dictionaryTofill, key, value, base) {
+export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulationTab = false) {
 
   /* 
   
@@ -187,6 +199,13 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     val: value,
     source: base
   }
+
+  if (isForPopulationTab) {
+    if (name4User) {
+      return jsonData
+    }
+  }
+
   if (tabs.ongletInfoGen.includes(key)) {
     dictionaryTofill.tabInfoGen.push(jsonData)
   } else if (tabs.ongletBatiment.includes(key)) {

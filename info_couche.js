@@ -473,41 +473,50 @@
 // s_geom_groupe: 184
 
 // couche building ici
-// ID: "BuildingGroup1088059933996340"
-// fid: 4075
-// idBdTopo: "BATIMENT0000000240756044"
-// idsEntrance: "Address4488044268441824"
-// name0: "41_Rue Pétion_75111"
-// name1: null
-// name2: null
-// name3: null
-// name4: null
-// name5: null
-// name6: null
-// name7: null
-// name8: null
-// name9: null
-// nbBuildingSimple: 1
-// nbEntrances: 1 // ---- batiment
-// nbHousing: 42 // ---- batiment
-// nbPOI: 4
-// nbWorkingPlace: 19 // ---- batiment
-// roomLeft: 889.9966
-// type: "BuildingGroup"
-// unknownNumberOfHousing: 0
-// utilFloorArea: 1882.9966
+    // ID: "BuildingGroup1088059933996340"
+    // fid: 4075
+    // idBdTopo: "BATIMENT0000000240756044"
+    // idsEntrance: "Address4488044268441824"
+    // name0: "41_Rue Pétion_75111"
+    // name1: null
+    // name2: null
+    // name3: null
+    // name4: null
+    // name5: null
+    // name6: null
+    // name7: null
+    // name8: null
+    // name9: null
+    // nbBuildingSimple: 1
+    // nbEntrances: 1 // ---- batiment
+    // nbHousing: 42 // ---- batiment
+    // nbPOI: 4
+    // nbWorkingPlace: 19 // ---- batiment
+    // roomLeft: 889.9966
+    // type: "BuildingGroup"
+    // unknownNumberOfHousing: 0
+    // utilFloorArea: 1882.9966
 
 // couche housing ICI
-// BuildingID: "BuildingGroup9588057547382510"
-// ID: "Housing088099522629953"
-// area: 8.45389208288684
-// fid: 1
-// primary: 1
+    // BuildingID: "BuildingGroup9588057547382510"
+    // ID: "Housing088099522629953"
+    // area: 8.45389208288684
+    // fid: 1
+    // primary: 1
 
 // couche household ICI
-    // FamilyChildrenNumber: "ZEROCHILDRENFAMILY"
-    // HouseholdComposition: "OTHERFAMILYLESS"
-    // HouseholdSize: 2
+    // FamilyChildrenNumber: "ZEROCHILDRENFAMILY" // ---- pop
+    // HouseholdComposition: "OTHERFAMILYLESS" // ---- pop
+    // HouseholdSize: 2 // ---- pop
     // HousingID: "Housing8688218427566950"
     // ID: "Household3388290308518922"
     // fid: 1
+
+// couche individuals ICI
+    // ID: "Individual8588319322135537"
+    // IDHousehold: "Household088290432386154"
+    // age: 69 // ---- pop
+    // fid: 119020
+    // occupation: "RETIRED" // ---- pop
+    // sc: "RETIRED" // ---- pop
+    // sex: "F" // ---- pop

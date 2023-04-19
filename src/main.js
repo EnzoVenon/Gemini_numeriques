@@ -260,7 +260,6 @@ viewerDiv.addEventListener(
 
             getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
                 .then(res => {
-
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
                     let valDisplayed;
@@ -272,8 +271,7 @@ viewerDiv.addEventListener(
                 })
                 .then(val2display => {
                     // ----------- Get ICI data ----------- //
-
-                    csvBuildingICI
+                    let displayICI = csvBuildingICI
                         .then(buildingICI => {
                             // ----------- Get Building ICI data ----------- //
                             let dataBuildingICI;
@@ -296,8 +294,9 @@ viewerDiv.addEventListener(
 
                         })
                         .then(([result, buildingGroupID]) => {
+                            console.log(result)
                             // ----------- Get Housing ICI IDs ----------- //
-                            csvHousingICI
+                            let displayHousing = csvHousingICI
                                 .then(housingICI => {
                                     let housings_IDs = []
                                     Object.entries(housingICI).forEach((value) => {
@@ -314,14 +313,19 @@ viewerDiv.addEventListener(
                                     // ----------- Get Household ICI data ----------- //
                                     let housingDictionnary = {}
 
-                                    csvHouseholdICI
+                                    let displayHousehold = csvHouseholdICI
                                         .then(householdICI => {
-
+                                            let dataJSONattributeHousehold;
                                             Object.entries(householdICI).forEach((value) => {
                                                 if (housingIDs.includes(value[1].HousingID)) {
                                                     housingDictionnary[value[1].ID] = {}
-                                                    housingDictionnary[value[1].ID]["housingID"] = value[1].HousingID
-                                                    housingDictionnary[value[1].ID]["household"] = value[1]
+                                                    housingDictionnary[value[1].ID]["household"] = []
+                                                    Object.entries(value[1]).forEach(([key, val]) => {
+                                                        dataJSONattributeHousehold = loadDataToJSON({}, key, val, "Household ICI", true)
+                                                        if (Object.keys(dataJSONattributeHousehold).length !== 0) {
+                                                            housingDictionnary[value[1].ID]["household"].push(dataJSONattributeHousehold)
+                                                        }
+                                                    })
                                                 }
                                             })
 
@@ -334,151 +338,166 @@ viewerDiv.addEventListener(
                                             return housingDictionnary
                                         })
                                         .then(housingDict => {
-
                                             // ----------- Get Individual ICI data ----------- //
                                             let householdIDs = []
                                             Object.entries(housingDict).forEach((val) => {
-                                                householdIDs.push(val[1].household.ID)
+                                                householdIDs.push(val[0])
                                             })
-                                            csvIndividualICI
+                                            let displayIndividual = csvIndividualICI
                                                 .then(individualICI => {
+                                                    let dataJSONattributeIndividual;
                                                     Object.entries(individualICI).forEach((value) => {
                                                         if (value[1].IDHousehold) {
+                                                            let individualList = []
                                                             if (householdIDs.includes(value[1].IDHousehold)) {
+                                                                Object.entries(value[1]).forEach(([key, val]) => {
+                                                                    dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
+                                                                    if (Object.keys(dataJSONattributeIndividual).length !== 0) {
+                                                                        individualList.push(dataJSONattributeIndividual)
+                                                                    }
+                                                                })
                                                                 if (housingDict[value[1].IDHousehold]["individuals"]) {
-                                                                    housingDict[value[1].IDHousehold]["individuals"].push(value[1])
+                                                                    housingDict[value[1].IDHousehold]["individuals"].push(individualList)
                                                                 } else {
-                                                                    housingDict[value[1].IDHousehold]["individuals"] = [value[1]]
+                                                                    housingDict[value[1].IDHousehold]["individuals"] = [individualList]
                                                                 }
-
                                                             }
                                                         }
                                                     })
+                                                    console.log(housingDict)
+                                                    return housingDict
                                                 })
+                                            return displayIndividual
+
                                         })
+                                    return displayHousehold
+                                }).then(res => {
+                                    result.tabPopulation = res;
+                                    return result
                                 })
+                            return displayHousing
 
                         })
-                    // return result;
+                    return displayICI;
+                }).then(res => console.log(res))
+
+            getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
+                .then(res => {
+
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
+                })
+                .then(result => {
+                    let valDisplay2 = csvMenageINSEE
+                        .then(res => {
+                            // ----------- POPULATION INSEE ----------- //
+                            let valDisplayedPop;
+                            // Retrieve elements where Iris number is same as tooltip
+                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+
+                            // Add INSEE value for this IRIS in tooltip properties
+                            Object.entries(uniqueData).forEach(([key, value]) => {
+                                valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
+                            })
+
+                            // Chart for INSEE values
+                            const dataList4Chart = {
+                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
+                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
+                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
+                            }
+                            let data4Chart = [];
+                            Object.entries(dataList4Chart).forEach(([key, value]) => {
+                                console.log(key)
+                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
+                            })
+
+                            // ----- Generate HTML text ----- //
+                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
+                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
+                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
+
+                            htmlTest.innerHTML += textHtml;
+
+                            // Create charts
+                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
+                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
+                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
+
+                            return valDisplayedPop;
+                        })
+                    return valDisplay2
+                })
+                .then(result => {
+                    // ----------- Get BdTopo data ----------- //
+                    bdtopoPromisedJson
+                        .then(geojson => {
+                            let dataBdTopo = geojson.features.filter(obj => {
+                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
+                                    return obj;
+                                }
+                            })
+                            return dataBdTopo[0]
+                        })
+                        .then(res => {
+                            let valDisplayedBdTopo;
+                            if (res.properties) {
+                                Object.entries(res.properties).forEach(([key, value]) => {
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                })
+                                return valDisplayedBdTopo;
+                            }
+                        })
+                        .then(res => {
+                            // ----------- Generate html accordion item for each value ----------- //
+                            Object.entries(res).forEach(([key, value]) => {
+                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
+
+                            })
+                            // for info link
+                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                            const tooltipList = [...tooltipTriggerList]
+                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                        })
+
                 })
 
-            // getBdnbInfo(csvBdnb,"batiment_groupe_id", tooltip.value.properties.batiment_g)
-            //     .then(res => {
+            shapefile.open("../data/shp/prg/bdnb_perigeux8")
+                .then(source => source.read()
+                    .then(async function log(result) {
+                        if (result.done) return "done";
 
-            //         // ----------- Get Bdnb data ----------- //
-            //         // Dispatch Bdnb data for each tab
-            //         let valDisplayed;
-            //         Object.entries(res).forEach(([key, value]) => {
-            //             valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
-            //         })
-            //         return valDisplayed;
+                        if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
+                            let selectedBatGeom = result.value.geometry.coordinates
+                            let polygon = turf.polygon(selectedBatGeom)
+                            shapefile.open("../data/shp/prg/osm")
+                                .then(source => source.read()
+                                    .then(function log(result) {
+                                        if (result.done) return "done";
+                                        let polygonOsm = turf.polygon(result.value.geometry.coordinates)
 
-            //     })
-            // .then(result => {
-            //     let valDisplay2 = csvMenageINSEE
-            //         .then(res => {
-            //             // ----------- POPULATION INSEE ----------- //
-            //             let valDisplayedPop;
-            //             // Retrieve elements where Iris number is same as tooltip
-            //             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                                        if (turf.intersect(polygonOsm, polygon)) {
+                                            // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                            return;
+                                        }
 
-            //             // Add INSEE value for this IRIS in tooltip properties
-            //             Object.entries(uniqueData).forEach(([key, value]) => {
-            //                 valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
-            //             })
-
-            //             // Chart for INSEE values
-            //             const dataList4Chart = {
-            //                 status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
-            //                 repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
-            //                 enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-            //             }
-            //             let data4Chart = [];
-            //             Object.entries(dataList4Chart).forEach(([key, value]) => {
-            //                 console.log(key)
-            //                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
-            //             })
-
-            //             // ----- Generate HTML text ----- //
-            //             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-            //             textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-            //             textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-            //             htmlTest.innerHTML += textHtml;
-
-            //             // Create charts
-            //             addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
-            //             addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
-            //             addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
-
-            //             return valDisplayedPop;
-            //         })
-            //     return valDisplay2
-            // })
-            // .then(result => {
-            //     // ----------- Get BdTopo data ----------- //
-            //     bdtopoPromisedJson
-            //         .then(geojson => {
-            //             let dataBdTopo = geojson.features.filter(obj => {
-            //                 if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-            //                     return obj;
-            //                 }
-            //             })
-            //             return dataBdTopo[0]
-            //         })
-            //         .then(res => {
-            //             let valDisplayedBdTopo;
-            //             if (res.properties) {
-            //                 Object.entries(res.properties).forEach(([key, value]) => {
-            //                     valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
-            //                 })
-            //                 return valDisplayedBdTopo;
-            //             }
-            //         })
-            //         .then(res => {
-            //             // ----------- Generate html accordion item for each value ----------- //
-            //             Object.entries(res).forEach(([key, value]) => {
-            //                 generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-            //                 generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-            //                 generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-            //                 generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
-
-            //             })
-            //             // for info link
-            //             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            //             const tooltipList = [...tooltipTriggerList]
-            //             tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            //         })
-
-            // })
-
-            // shapefile.open("../data/shp/prg/bdnb_perigeux8")
-            //     .then(source => source.read()
-            //         .then(async function log(result) {
-            //             if (result.done) return "done";
-
-            //             if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
-            //                 let selectedBatGeom = result.value.geometry.coordinates
-            //                 let polygon = turf.polygon(selectedBatGeom)
-            //                 shapefile.open("../data/shp/prg/osm")
-            //                     .then(source => source.read()
-            //                         .then(function log(result) {
-            //                             if (result.done) return "done";
-            //                             let polygonOsm = turf.polygon(result.value.geometry.coordinates)
-
-            //                             if (turf.intersect(polygonOsm, polygon)) {
-            //                                 // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
-            //                                 return;
-            //                             }
-
-            //                             return source.read().then(log);
-            //                         }))
-            //             }
-            //             return source.read().then(log)
+                                        return source.read().then(log);
+                                    }))
+                        }
+                        return source.read().then(log)
 
 
-            //         }
-            //         ))
+                    }
+                    ))
 
 
 
