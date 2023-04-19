@@ -111,7 +111,6 @@ let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
 let csvBdnbParis = importCsvFile("../data/csv/bdnb_paris11.csv")
 
 let csvBuildingICI = importCsvFile("../data/csv/ICI-csv/building.csv")
-let csvAddressICI = importCsvFile("../data/csv/ICI-csv/address.csv")
 let csvHouseholdICI = importCsvFile("../data/csv/ICI-csv/household.csv")
 let csvHousingICI = importCsvFile("../data/csv/ICI-csv/housing.csv")
 let csvIndividualICI = importCsvFile("../data/csv/ICI-csv/individual.csv")
@@ -123,7 +122,6 @@ let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
-let bdtopoParisPromisedJson = loadBufferDataFromShp(paths.bdtopoParis)
 
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
@@ -414,6 +412,7 @@ viewerDiv.addEventListener(
                             }
                             let data4Chart = [];
                             Object.entries(dataList4Chart).forEach(([key, value]) => {
+                                console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
 
