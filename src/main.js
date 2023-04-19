@@ -75,7 +75,7 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.x = 2.380015
         cameraTargetPosition.y = 48.859424
         cameraTargetPosition.z = 86
-        console.log(placement.tilt)
+
 
     }
 
@@ -83,12 +83,12 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
         cameraTargetPosition.z = 86
-        console.log(placement.tilt)
+
     }
     view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
     view.camera.camera3D.updateMatrixWorld();
     view.notifyChange(view.camera.camera3D, true);
-    console.log(view.camera)
+
 
 })
 
@@ -99,12 +99,12 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
         cameraTargetPosition.z = 86
-        console.log(placement.tilt)
+
     }
     view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
     view.camera.camera3D.updateMatrixWorld();
     view.notifyChange(view.camera.camera3D, true);
-    console.log(view.camera)
+
 
 })
 
