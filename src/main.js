@@ -82,7 +82,9 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.y = 48.859424
         cameraTargetPosition.z = 86
 
+
     }
+
     else {
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
@@ -92,8 +94,25 @@ document.getElementById("changloc").addEventListener("click", () => {
     view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
     view.camera.camera3D.updateMatrixWorld();
     view.notifyChange(view.camera.camera3D, true);
+
+
 })
 
+document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
+    if (switchbutton.unchecked) {
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
+
+
+})
 
 
 
@@ -138,6 +157,15 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
+    await csvBdnb.then(res => {
+        // Récupérer les valeurs uniques de la propriété "type"
+        dataBdnb = res.reduce((result, prop) => {
+            result[prop.batiment_groupe_id] = Object.entries(prop).reduce((a, [k, v]) => (v === null ? a : (a[k] = v, a)), {})
+
+            return result;
+        }, {});
+    });
+
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
     let button_style_apply = document.getElementById("button_style_apply");
@@ -145,6 +173,12 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Getting the source (as something other than a Shp because itowns can't extrude them)
     let src_bdnb;
     await loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        geojson.features.forEach((feature) => {
+            let data = dataBdnb[feature.properties["batiment_g"]]
+            if (data) {
+                feature.properties = data
+            }
+        });
         src_bdnb = new itowns.FileSource({
             fetchedData: geojson,
             crs: 'EPSG:4326',
@@ -193,16 +227,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         }
     });
 
-    csvBdnb.then(res => {
-        // Récupérer les valeurs uniques de la propriété "type"
-        dataBdnb = res.reduce((result, prop) => {
-            result[prop.batiment_groupe_id] = Object.entries(prop).reduce((a, [k, v]) => (v === null ? a : (a[k] = v, a)), {})
 
-            return result;
-        }, {});
-    }
-
-    )
 
 });
 
