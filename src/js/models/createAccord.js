@@ -1,4 +1,4 @@
-export function createAccParent(id) {
+function createAccParent(id) {
     let accParent = document.createElement("div")
     accParent.className = "accordion"
     accParent.id = id
@@ -6,7 +6,7 @@ export function createAccParent(id) {
     return accParent
 }
 
-export function createAccChild(id, header, targetID, body, emboite = "") {
+function createAccChild(id, header, body) {
     let accChild = document.createElement("div")
     accChild.className = "accordion-item"
     accChild.id = id
@@ -27,4 +27,11 @@ export function createAccChild(id, header, targetID, body, emboite = "") {
 </div>`
 
     return accChild
+}
+
+export function createAccordion(idParent, idChild, header, body) {
+    let divParent = createAccParent(idParent)
+    let divChild = createAccChild(idChild, header, body)
+    divParent.appendChild(divChild)
+    return divParent
 }

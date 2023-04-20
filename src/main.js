@@ -17,25 +17,19 @@ import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
-import { createAccChild, createAccParent } from "./js/models/createAccord";
+import { createAccordion } from "./js/models/createAccord";
 import * as shp from "shpjs";
 
-
-let divAge = createAccParent('age')
-let childAge = createAccChild('age1', 'Age', 'age-target-1', 52)
-divAge.appendChild(childAge)
+let divAge = createAccordion('age', 'agechild', 'Age', 52)
 let bodyAge = divAge.outerHTML
+console.log(bodyAge)
 
-let divOccupation = createAccParent('occupation')
-let childOccupation = createAccChild('occupation1', 'Occupation', 'occupation-target-1', "dead")
-divOccupation.appendChild(childOccupation)
+let divOccupation = createAccordion('occupation', 'occupationchild', 'Occupation', 'dead')
 bodyAge += divOccupation.outerHTML
 
-let divIndividu = createAccParent('testIndividu')
-let childIndividu = createAccChild('testIndividu1', 'Individu', 'individu-target-1', bodyAge)
+console.log(bodyAge)
 
-divIndividu.appendChild(childIndividu)
-
+let divIndividu = createAccordion('individu', 'individuchild', 'Individu', bodyAge)
 console.log(divIndividu.outerHTML)
 
 // ----------------- Variables ----------------- //
