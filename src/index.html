@@ -402,7 +402,7 @@
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrollingexplo" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Exploration</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Sources</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -415,12 +415,12 @@
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataIgn">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">BD Topo Bâtiments<i
                             class="bi bi-info-circle"></i></label>
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataOsm">
-                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM Bâtiments <i
                             class="bi bi-info-circle"></i></label>
                 </div>
 
@@ -456,7 +456,7 @@
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling2D" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">2D</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier 2D</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -484,7 +484,7 @@
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling3D" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">3D</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier 3D</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -525,28 +525,28 @@
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrollingCsv" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">2D</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier CSV</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="drop-zone" id="drop-zone-csv">Drop your csv file here</div>
+            <div class="drop-zone" id="drop-zone-csv">Glisser/Déposer fichier csv ici</div>
 
-            <label>attribut de jointure</label>
+            <label>Attribut de jointure</label>
             <select class="form-select" aria-label="Default select example" id="attJointureCsv">
                 <option selected>Choisir une couche</option>
             </select>
 
-            <label>couche de jointure</label>
+            <label>Couche de jointure</label>
             <select class="form-select" aria-label="Default select example" id="selectJoinLayer">
                 <option selected>Choisir une couche</option>
             </select>
 
-            <label>champs de jointure</label>
+            <label>Champs de jointure</label>
             <select class="form-select" aria-label="Default select example" id="selectJoinAttribut">
                 <option selected>Choisir une couche</option>
             </select>
 
-            <label>attribut de couleur</label>
+            <label>Attribut de couleur</label>
             <select class="form-select" aria-label="Default select example" id="selectCouleurCsv">
                 <option selected>Choisir une couche</option>
             </select>
@@ -571,14 +571,14 @@
 
     <div id="boutonplus" class="bottom text-center">
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrollingexplo" aria-controls="offcanvasScrollingexplo">Exploration</button>
+            data-bs-target="#offcanvasScrollingexplo" aria-controls="offcanvasScrollingexplo">Sources</button>
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">ajout 2D</button>
+            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">Import 2D</button>
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">ajout 3D</button>
+            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">Import 3D</button>
 
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrollingCsv" aria-controls="offcanvasScrollingCsv">jointure CSV</button>
+            data-bs-target="#offcanvasScrollingCsv" aria-controls="offcanvasScrollingCsv">Jointure CSV</button>
     </div>
 
 
