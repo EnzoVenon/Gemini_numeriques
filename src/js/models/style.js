@@ -81,7 +81,7 @@ export default class Style {
         this.max = max;
         //Automatically find and set this.min and this.max?
         if (isNaN(min) || isNaN(max)) {
-            //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
+            //I am using a hack here, as we can't access iTowns source field value in our version and I don't have time to write those myself
             let hackMinMax = function f(properties) {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
@@ -298,6 +298,59 @@ export default class Style {
             //I know, ESLint, this is empty
         }
         return this;
+    }
+
+
+
+    /**
+     * Returns the legend div which can be appended on an html element in the document.
+     * @returns Legend div.
+     */
+    getLegend() {
+        let res = document.createElement("div");
+        res.appendChild(document.createElement("h5")).innerText = this.name;
+        if (this.gradation_or_classes) {
+            let canvas = document.createElement("canvas");
+            let ctx = canvas.getContext("2d");
+            console.log(canvas.height);
+            canvas.height = 120;
+
+            //Create gradient
+            const grad_height = 80;
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.fillRect(0, 0, 300, grad_height + 2);
+            let gradient = ctx.createLinearGradient(20, 0, 280, 0);
+            if (this.color2 === undefined) {
+                gradient.addColorStop(0, "rgb(255,255,255)");
+            } else {
+                gradient.addColorStop(0, "rgb(" + this.color2.r + "," + this.color2.g + "," + this.color2.b + ")");
+                gradient.addColorStop(0.5, "rgb(255,255,255)");
+            }
+            gradient.addColorStop(1, "rgb(" + this.color1.r + "," + this.color1.g + "," + this.color1.b + ")");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(1, 1, 298, grad_height);
+
+            //Create small arrows
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.font = "18px Arial";
+            ctx.fillText("I", 0, grad_height + 17);
+            ctx.fillText("I", 296, grad_height + 17);
+
+            //Create min and max text
+            const max = "" + this.max;
+            ctx.font = "bold 18px Arial";
+            ctx.fillText("" + this.min, 0, grad_height + 35);
+            ctx.fillText(max, canvas.width - max.length * 10, grad_height + 35);
+
+            res.appendChild(canvas);
+        } else {
+            let inner = "";
+            for (let key of Object.keys(this.classes_map)) {
+                inner += '<p><span style="color:' + this.classes_map[key] + ';font-size: 2em">■</span> ' + key + '</p>';
+            }
+            res.innerHTML += inner;
+        }
+        return res;
     }
 
 
