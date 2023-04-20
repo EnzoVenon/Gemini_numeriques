@@ -20,17 +20,17 @@ import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojs
 import { createAccordion, createAccordionForListAttributes } from "./js/models/createAccord";
 import * as shp from "shpjs";
 
-let divAge = createAccordion('age', 'agechild', 'Age', 52)
-let bodyAge = divAge.outerHTML
-console.log(bodyAge)
+// let divAge = createAccordion('age', 'agechild', 'Age', 52)
+// let bodyAge = divAge.outerHTML
+// console.log(bodyAge)
 
-let divOccupation = createAccordion('occupation', 'occupationchild', 'Occupation', 'dead')
-bodyAge += divOccupation.outerHTML
+// let divOccupation = createAccordion('occupation', 'occupationchild', 'Occupation', 'dead')
+// bodyAge += divOccupation.outerHTML
 
-console.log(bodyAge)
+// console.log(bodyAge)
 
-let divIndividu = createAccordion('individu', 'individuchild', 'Individu', bodyAge)
-console.log(divIndividu.outerHTML)
+// let divIndividu = createAccordion('individu', 'individuchild', 'Individu', bodyAge)
+// console.log(divIndividu.outerHTML)
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -374,6 +374,7 @@ viewerDiv.addEventListener(
                                     dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
                                     if (Object.keys(dataJSONattributeIndividual).length !== 0) {
                                         individualList.push(dataJSONattributeIndividual)
+
                                     }
                                 })
                                 if (housingDictionnary[value[1].IDHousehold]["individuals"]) {
@@ -383,7 +384,6 @@ viewerDiv.addEventListener(
                                 }
                             }
                         }
-
                     })
                     valDisplayBuildingICI.tabPopulation = housingDictionnary;
                     console.log(valDisplayBuildingICI)
@@ -399,17 +399,23 @@ viewerDiv.addEventListener(
                     })
 
                     let testPop = '';
-                    let householdbody;
-                    let individubody;
+                    let householdbody = '';
+                    let indbody = '';
+                    let individubody = '';
                     let divHoushold;
                     let divIndividu;
                     Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        // console.log(value.individuals)
+                        value.individuals.forEach((val, idx) => {
+                            console.log(val)
+                            indbody += createAccordionForListAttributes(val)
+                            individubody += createAccordion('individu' + key, 'individu' + key + 'Child', 'Individu ' + idx, indbody).outerHTML
+                        })
                         householdbody = createAccordionForListAttributes(value.household)
-                        individubody = createAccordionForListAttributes(value.individuals)
-                        divHoushold = createAccordion(key + 'household', key + 'household' + 'child', 'Household', householdbody)
-                        divIndividu = createAccordion(key + 'individu', key + 'individu' + 'child', 'individu', individubody)
+                        divIndividu = createAccordion('individu', 'individuChild', 'Individus', individubody).outerHTML
+                        divHoushold = createAccordion(key, key + 'household' + 'child', key, householdbody + divIndividu)
+
                         testPop += divHoushold.outerHTML
-                        testPop += divIndividu.outerHTML
                     })
 
                     htmlICI.innerHTML = testPop

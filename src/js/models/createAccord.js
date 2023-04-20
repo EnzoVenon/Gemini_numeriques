@@ -37,9 +37,14 @@ export function createAccordion(idParent, idChild, header, body) {
 }
 
 export function createAccordionForListAttributes(listAttributes) {
-    let body;
+    let body = '';
+    let content = '';
     listAttributes.forEach((value) => {
-        body += createAccordion(value.attribute, value.attribute + 'child', value.name4User, value.val).outerHTML
+        content = createAccordion(value.attribute, value.attribute + 'child', value.name4User, value.val).outerHTML
+
+        if (content) {
+            body += content
+        }
     })
     return body
 }
