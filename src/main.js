@@ -3,7 +3,7 @@
 import { update/*, buildingLayer */ } from "./js/models/building";
 import { addOrthoLayer } from "./js/models/ortho";
 import { addElevationLayer } from "./js/models/elevation";
-import { addShp } from "./js/models/addShpLayer"
+import { addShp } from "./js/affichageItown/addShpLayer"
 import { addSpecificBuilings } from "./js/models/extrudedBat"
 import { importCsvFile } from "./js/models/readCsv"
 import { addChart } from "./js/models/insee/showChart"
