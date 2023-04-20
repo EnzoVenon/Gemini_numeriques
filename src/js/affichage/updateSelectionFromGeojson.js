@@ -1,11 +1,17 @@
 import { getUniquePropNames } from "../utile/getUniquePropertiesNamesFromGeojson"
 import { updateSelectOptionFromList } from "./updateSelectOptionFromList"
-export function updateSelectOption(idSelectDrop2d, geojson) {
-    // créer un tableau des clés uniques
+
+/**
+ * 
+ * @param {String} idSelect - id of the select html tag
+ * @param {Object} geojson - geojson from shp 
+ */
+export function updateSelectOption(idSelect, geojson) {
+    // list of unique prop name
     const uniquePropNames = getUniquePropNames(geojson)
-    // Récupération de l'élément HTML de sélection
-    const selectElement = document.getElementById(idSelectDrop2d);
+    // get html element
+    const selectElement = document.getElementById(idSelect);
     selectElement.innerHTML = "";
-    // Boucle pour ajouter chaque valeur à la sélection
-    updateSelectOptionFromList(idSelectDrop2d, uniquePropNames)
+    // update option of the select tag
+    updateSelectOptionFromList(idSelect, uniquePropNames)
 }

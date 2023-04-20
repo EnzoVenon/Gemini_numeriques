@@ -1,8 +1,19 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 import { setLegend } from "../affichage/legend"
 import { addEdgeObj3d } from "../affichage/contourObj3d"
+/**
+ * @param {Object} geojson - data to represent en 3D
+ * @param {*} updateSlectOptions 
+ * @param {String} selectOption - attribut for coloring objects
+ * @param {String} incrementedId - id of the layer
+ * @param {Boolean} uniqueColor - using unique color 
+ * @param {Object} view - itowns view
+ * @param {Object} THREE - three js lib of itwons
+ * @param {String} heightAttribut - the propertie that represent height
+ * @param {String} altiSolAttribut - the propertie that represent ground alti
+ * @param {String} uniquecolvalue - the color
+ */
 export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, incrementedId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
-  // Récupérer les valeurs uniques de la propriété "type"
   let uniquePropValues = geojson.features.reduce((acc, feature) => {
     const propfilter = feature.properties[selectOption];
     if (!acc.includes(propfilter)) {
@@ -10,17 +21,17 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
     }
     return acc;
   }, []);
-
+  // generate color for unique value of the propertie
   let uniquecol = generateUniqueColors(uniquePropValues)
-
+  //update select option
   document.getElementById("exampleModalLabel").innerText = selectOption;
-
+  //itown source 
   let src = new itowns.FileSource({
     fetchedData: geojson,
     crs: 'EPSG:4326',
     format: 'application/json',
   })
-
+  //itowns featuregeom 
   let bat = new itowns.FeatureGeometryLayer(incrementedId, {
     source: src,
     transparent: true,
@@ -43,7 +54,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
         ,
         extrusion_height: (properties) => {
           if (heightAttribut !== "") {
-            // console.log("personal height")
             return properties[heightAttribut]
           }
 
@@ -63,7 +73,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
         },
         base_altitude: (properties) => {
           if (altiSolAttribut !== "") {
-            // console.log("personal alti")
             return properties[altiSolAttribut]
           }
           else if (properties.altitude_s) {
@@ -90,12 +99,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
 
     }
   });
-  /**
-   * rajouter la couche
-  */
   view.addLayer(bat)
-  /**
-   * rajouter la légende
-  */
   setLegend(uniquecol)
 }

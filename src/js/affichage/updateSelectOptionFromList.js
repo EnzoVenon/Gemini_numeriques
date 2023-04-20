@@ -1,6 +1,11 @@
-export function updateSelectOptionFromList(idSelectDrop2d, listOptions) {
+/**
+ * 
+ * @param {String} idSelect - id of the select html tag
+ * @param {*} listOptions 
+ */
+export function updateSelectOptionFromList(idSelect, listOptions) {
     // Récupération de l'élément HTML de sélection
-    const selectElement = document.getElementById(idSelectDrop2d);
+    const selectElement = document.getElementById(idSelect);
     console.log(selectElement)
     selectElement.innerHTML = "";
 
