@@ -4,12 +4,12 @@ Si vous voulez tester notre outil, en voici le déploiement le plus récent : ht
 Si vous souhaitez voir le code et la version la plus récente du programme, vous pouvez cloner le dépôt au lien suivant : https://github.com/EnzoVenon/Gemini_numeriques.git 
 
 Notre interface utilisateur est représentée dans l’image ci-dessous
-PHOTO 1 
+![Image](images/interface.png "icon")
 
 ## Cadre rouge
 ###  Données liées à l’objet sélectionné
 Lorsque vous cliquez sur “Données liées à l’objet sélectionné”, vous allez accéder à d’autres menus : 
-PHOTO 2 
+![Image](images/boutons.png "icon")
 
 Pour accéder aux informations, il faut d’abord sélectionner un bâtiment.
 - Le volet “Contexte géographique” va vous permettre de visualiser des informations concernant l’endroit que vous souhaitez analyser : la région, la commune, le code postal, le nombre d’habitants de cette commune, le nombre d'hectares de la commune, …
@@ -25,28 +25,32 @@ Lorsque vous cliquez sur “En savoir plus”, vous pouvez accéder à des infor
 Lorsque vous cliquez sur “Style”, vous pourrez accéder à une stylisation des couches de données. Avec la case à cocher, vous pouvez choisir si vous souhaitez afficher les bâtiments en 3D. Vous pouvez ensuite choisir des styles prédéfinis pour ensuite les afficher grâce au bouton “Afficher”. Vous pouvez afficher la légende grâce au bouton Légende.
 
 ## Cadre vert 
-PHOTO 3 
+![Image](images/menu_bas.png "icon")
 
 - Sources permet d’afficher les sources de données : BDNB, BD Topo Bâtiments, OSM Bâtiments et Cadastre (voir ci-dessous). Cependant, les différentes sources ne peuvent pas être vues simultanément.
-PHOTO 4
+
+![Image](images/sources.png "icon")
 
 Une autre fonctionnalité, c’est que vous catégoriser les bâtiments grâce à un attribut (Attributs disponibles). La visualisation se mettra à jour et les différents attributs possibles seront colorés. 
 Grâce à “Afficher”, vous pouvez appliquer la catégorisation. Avec “Légende”, vous pouvez afficher la légende de la catégorisation (avec les valeurs des attributs possibles associés à leur couleur). 
 
 - En sélectionnant Import 2D, vous accédez au menu d’import de fichiers 2D. On pourra y ajouter des fichiers zip contenant un SHP, DBF, SHX et PRG qui seront affichés dans la carte.
-PHOTO 5 
+
+![Image](images/import_2D.png "icon")
 
 Vous pourrez ensuite choisir le champ qui vous permettra de catégoriser vos bâtiments : la liste se chargera à la place de “Déposer un zip”. 
 Grâce à “Afficher”, vous pouvez appliquer la catégorisation. Avec “Légende”, vous pouvez afficher la légende de la catégorisation (avec les valeurs des attributs possibles associés à leur couleur). Grâce à “Supprimer la couche”, vous pouvez la supprimer de la visualisation. 
 
 - En sélectionnant Import 3D, vous accédez au menu d’import de fichiers 3D. On pourra y ajouter des fichiers zip contenant un SHP, DBF, SHX et PRG qui seront affichés dans la carte.
-PHOTO 6
+
+![Image](images/import_3D.png "icon")
 
 Vous devrez ensuite choisir les champs de hauteur, d’altitude au sol ainsi que le champ qui vous permettra de catégoriser (de votre couche). 
 Grâce à “Afficher”, vous pouvez appliquer la catégorisation. Avec “Légende”, vous pouvez afficher la légende de la catégorisation (avec les valeurs des attributs possibles associés à leur couleur). Grâce à “Supprimer la couche”, vous pouvez la supprimer de la visualisation. 
 
-- En sélectionnant Jointure CSV, vous accédez au menu d’import de fichiers csv. On pourra y ajouter des fichiers csv qui vont ensuite se lier automatiquement avec la couche de données choisie (de notre produit)
-PHOTO 7 
+- En sélectionnant Jointure CSV, vous accédez au menu d’import de fichiers csv. On pourra y ajouter des fichiers csv qui vont ensuite se lier automatiquement avec la couche de données choisie (de notre produit).
+
+![Image](images/csv.png "icon")
 
 Vous devrez ensuite choisir les champs de votre csv avec lequel vous allez faire la jointure, la couche avec laquelle vous allez joindre votre csv, puis son champ et enfin la couleur qui va vous permettre de catégoriser.  
 Grâce à “Afficher”, vous pouvez appliquer la catégorisation. Avec “Légende”, vous pouvez afficher la légende de la catégorisation (avec les valeurs des attributs possibles associés à leur couleur). Grâce à “Supprimer la couche”, vous pouvez la supprimer de la visualisation. 
@@ -55,12 +59,16 @@ Grâce à “Afficher”, vous pouvez appliquer la catégorisation. Avec “Lég
 Le bouton va vous permettre d'accéder au 11ème arrondissement de Paris.
 Cette fonctionnalité vous permet d’accéder à d’autres données : la population synthétique. Ce sont des données simulées que nous avons uniquement sur cette zone. 
 
+A droite, vous vous déplacerez sur Paris et à gauche sur Périgueux : 
+![Image](images/vues.png "icon")
+
+
 ## Cadre bleu
 Les boutons suivants vont permettre de réaliser certaines actions que vous pouvez aussi réaliser grâce à des commandes. 
 
-PHOTO 8
+![Image](images/actions.png "icon")
 
-Clic enfoncé + déplacement de la souris → déplacement dans la vue.
-CTRL + Clic gauche enfoncé en déplaçant la souris → Modifier l’orientation de la vue à 360° (de haut en bas ainsi que latéralement). 
-Roulement de la molette → zoom et dézoom
-MAJ + Clic gauche enfoncé en déplaçant la souris → Mouvement autour d’un point à 360° (de haut en bas ainsi que latéralement). 
+- Clic enfoncé + déplacement de la souris → déplacement dans la vue.
+- CTRL + Clic gauche enfoncé en déplaçant la souris → Modifier l’orientation de la vue à 360° (de haut en bas ainsi que latéralement). 
+- Roulement de la molette → zoom et dézoom
+- MAJ + Clic gauche enfoncé en déplaçant la souris → Mouvement autour d’un point à 360° (de haut en bas ainsi que latéralement). 
