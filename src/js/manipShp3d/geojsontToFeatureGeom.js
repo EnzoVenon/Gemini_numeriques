@@ -45,8 +45,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
           }
           else {
             let color = uniquecol[properties[selectOption]];
-            // console.log(properties)
-            // console.log(color)
             return color
           }
 
@@ -93,7 +91,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
       }
     }),
     onMeshCreated: (mesh) => {
-      // console.log(mesh.children[0].children[0].children[0].children[0])
       let object = mesh.children[0].children[0].children[0].children[0]
       addEdgeObj3d(object, "black", THREE)
 
