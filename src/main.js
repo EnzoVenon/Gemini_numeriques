@@ -17,8 +17,26 @@ import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
-
+import { createAccChild, createAccParent } from "./js/models/createAccord";
 import * as shp from "shpjs";
+
+
+let divAge = createAccParent('age')
+let childAge = createAccChild('age1', 'Age', 'age-target-1', 52)
+divAge.appendChild(childAge)
+let bodyAge = divAge.outerHTML
+
+let divOccupation = createAccParent('occupation')
+let childOccupation = createAccChild('occupation1', 'Occupation', 'occupation-target-1', "dead")
+divOccupation.appendChild(childOccupation)
+bodyAge += divOccupation.outerHTML
+
+let divIndividu = createAccParent('testIndividu')
+let childIndividu = createAccChild('testIndividu1', 'Individu', 'individu-target-1', bodyAge)
+
+divIndividu.appendChild(childIndividu)
+
+console.log(divIndividu.outerHTML)
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -234,6 +252,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 // ----------------- Variables to display content in tabs ----------------- //
 const tooltip = document.getElementById('tooltip');
 const htmlTest = document.getElementById('listConsoPopulationIris');
+const htmlICI = document.getElementById('listConsoPopulationICI')
 viewerDiv.addEventListener(
     'mouseup',
     () => {
