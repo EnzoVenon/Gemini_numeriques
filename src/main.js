@@ -17,6 +17,7 @@ import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer } from "./js/dropData/drop2dData"
 import { updateSelectOption } from "./js/dropData/updateSelection"
+import { updateSelectOptionFromList } from "./js/utile/updateSelectOption"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
@@ -869,9 +870,9 @@ dropZoneCsv.addEventListener('drop', function (e) {
         const rows = data.split('\n');
         const headers = rows[0].split(',');
 
-        updateSelectOption("attJointureCsv", headers)
+        updateSelectOptionFromList("attJointureCsv", headers)
 
-        updateSelectOption("selectCouleurCsv", headers)
+        updateSelectOptionFromList("selectCouleurCsv", headers)
 
 
         for (let i = 1; i < rows.length; i++) {
@@ -900,7 +901,7 @@ dropZoneCsv.addEventListener('drop', function (e) {
         return result
     }, [])
 
-    updateSelectOption("selectJoinLayer", LayersName)
+    updateSelectOptionFromList("selectJoinLayer", LayersName)
 
 
 
@@ -914,7 +915,7 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
 
     let uniquenames = getUniquePropNames(geojson)
 
-    updateSelectOption("selectJoinAttribut", uniquenames)
+    updateSelectOptionFromList("selectJoinAttribut", uniquenames)
 
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
@@ -970,7 +971,3 @@ document.getElementById("afficheDropCsv").addEventListener("click", () => {
     geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
 }
 )
-
-
-
-

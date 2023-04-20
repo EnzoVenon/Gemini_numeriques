@@ -440,12 +440,14 @@
 
             </div>
 
-            <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="confirmExporation">Afficher</button>
 
-            <!-- Button trigger modal -->
-            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Légende
-            </button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
 
 
         </div>
@@ -463,14 +465,15 @@
             <select class="form-select" aria-label="Default select example" id="select2dZiped">
                 <option selected>déposer un zip</option>
             </select>
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
 
-            <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
-
-            <!-- Button trigger modal -->
-            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Légende
-            </button>
-            <div>
+            <div class="afficheLegende">
                 <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
                     Supprimer la couche
                 </button>
@@ -502,13 +505,15 @@
             <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
                 <option selected>Choisir une couche</option>
             </select>
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
 
-            <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
-            <!-- Button trigger modal -->
-            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Légende
-            </button>
-            <div>
+            <div class="afficheLegende">
                 <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
                     Supprimer la couche
                 </button>
@@ -546,14 +551,15 @@
                 <option selected>Choisir une couche</option>
             </select>
 
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
 
-            <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
-            <!-- Button trigger modal -->
-            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Légende
-            </button>
-
-            <div>
+            <div class="afficheLegende">
                 <button id="checkbox-supprime-csv" class="btn btn-primary">
                     Supprimer la couche
                 </button>
@@ -579,10 +585,6 @@
 
     <div class="card-footer">
     </div>
-
-
-
-
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
