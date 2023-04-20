@@ -16,13 +16,14 @@ import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
-const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
+const paths = { "bdnb": "../data/shp/prg/bdnb_perigeux8", "bdtopo": "../data/shp/prg/bd_topo_2", "bdtopoParis": "../data/shp/paris_11/bdtopo_paris11", "osm": "../data/shp/prg/osm", "cadastre": "../data/shp/prg/cadastre_perigeux8", "innodation_perigeux": "../data/shp/innondation/forte/n_tri_peri_inondable_01_01for_s_024", "bat_inond_prg": "../data/shp/prg/bat_innondable" }
 let bat = document.createElement('div');
 bat.className = 'bat';
 bat.id = 'bat';
@@ -33,6 +34,10 @@ let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "inno
 
 let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
 
+let csvJoinAtt = { "updatedGeojson": {}, "csvLayerId": { name: "updatedLayerWithCsv", num: 0, id: "updatedLayerWithCsv_0" } };
+
+
+let dataFromCsv;
 // Create a custom div which will be displayed as a label
 const customDiv = document.createElement('div');
 const bubble = document.createElement('div');
@@ -50,6 +55,7 @@ customDiv.appendChild(pointer);
 let placement = {
     //  Coordinates of Perigueux
     coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
@@ -76,7 +82,9 @@ document.getElementById("changloc").addEventListener("click", () => {
         cameraTargetPosition.y = 48.859424
         cameraTargetPosition.z = 86
 
+
     }
+
     else {
         cameraTargetPosition.x = 0.72829
         cameraTargetPosition.y = 45.18260
@@ -86,8 +94,25 @@ document.getElementById("changloc").addEventListener("click", () => {
     view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
     view.camera.camera3D.updateMatrixWorld();
     view.notifyChange(view.camera.camera3D, true);
+
+
 })
 
+document.getElementById("changloc").addEventListener("click", () => {
+    let cameraTargetPosition = view.controls.getLookAtCoordinate();
+
+    if (switchbutton.unchecked) {
+        cameraTargetPosition.x = 0.72829
+        cameraTargetPosition.y = 45.18260
+        cameraTargetPosition.z = 86
+
+    }
+    view.camera.camera3D.position.copy(cameraTargetPosition.as(view.referenceCrs));
+    view.camera.camera3D.updateMatrixWorld();
+    view.notifyChange(view.camera.camera3D, true);
+
+
+})
 
 
 
@@ -107,7 +132,12 @@ itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
 // CSV files
 let csvMenageINSEE = importCsvFile("../data/csv/base-ic-couples-familles-menages-2019.CSV")
 let csvBdnb = importCsvFile("../data/shp/prg/data_bdnb.csv")
+let csvBdnbParis = importCsvFile("../data/csv/bdnb_paris11.csv")
 
+let csvBuildingICI = importCsvFile("../data/csv/ICI-csv/building.csv")
+let csvHouseholdICI = importCsvFile("../data/csv/ICI-csv/household.csv")
+let csvHousingICI = importCsvFile("../data/csv/ICI-csv/housing.csv")
+let csvIndividualICI = importCsvFile("../data/csv/ICI-csv/individual.csv")
 let dataBdnb;
 
 
@@ -122,11 +152,19 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-
     addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
-
+    addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
+
+    await csvBdnb.then(res => {
+        // Récupérer les valeurs uniques de la propriété "type"
+        dataBdnb = res.reduce((result, prop) => {
+            result[prop.batiment_groupe_id] = Object.entries(prop).reduce((a, [k, v]) => (v === null ? a : (a[k] = v, a)), {})
+
+            return result;
+        }, {});
+    });
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
@@ -135,6 +173,12 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Getting the source (as something other than a Shp because itowns can't extrude them)
     let src_bdnb;
     await loadBufferDataFromShp(paths.bdnb).then(geojson => {
+        geojson.features.forEach((feature) => {
+            let data = dataBdnb[feature.properties["batiment_g"]]
+            if (data) {
+                feature.properties = data
+            }
+        });
         src_bdnb = new itowns.FileSource({
             fetchedData: geojson,
             crs: 'EPSG:4326',
@@ -145,8 +189,8 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     //Styles definition
     let style_list = [];
     style_list.push(
-        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
+            .setExtrude("altitude_s", "hauteur")
             .setClasses({
                 "A": "rgb(1,149,65)",
                 "B": "rgb(83,174,50)",
@@ -158,13 +202,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", false, true)
-            .setExtrude("altitude_s", "hauteur", false)
-            .setGradation("rgb(255,0,0)", "", 1, 30)
+        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", true)
+            .setExtrude("altitude_s", "hauteur")
+            .setGradation("rgb(255,0,0)", "rgb(0,0,255)")
     );
     style_list.push(
-        new Style("Iris", view, src_bdnb, "code_iris", false, false)
-            .setExtrude("altitude_s", "hauteur", false)
+        new Style("Iris", view, src_bdnb, "code_iris", false)
+            .setExtrude("altitude_s", "hauteur")
     );
 
     //Setting the predefined styles
@@ -174,31 +218,22 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     button_style_apply.addEventListener("click", () => {
         if (select_style.value == -1) {
-            style_list[0].clean(100000);
+            style_list[0].clean();
         } else {
             const style = style_list[select_style.value];
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
-            style.to3D(checkbox_3D.checked && style.field_ground != "" && style.field_height != "");
+            style.to3D(checkbox_3D.checked);
             style.to_itowns_layer();
         }
     });
 
-    csvBdnb.then(res => {
-        // Récupérer les valeurs uniques de la propriété "type"
-        dataBdnb = res.reduce((result, prop) => {
-            result[prop.batiment_groupe_id] = Object.entries(prop).reduce((a, [k, v]) => (v === null ? a : (a[k] = v, a)), {})
 
-            return result;
-        }, {});
-    }
-
-    )
 
 });
 
 // ----------------- Variables to display content in tabs ----------------- //
 const tooltip = document.getElementById('tooltip');
-const htmlTest = document.getElementById('population');
+const htmlTest = document.getElementById('listConsoPopulationIris');
 viewerDiv.addEventListener(
     'mouseup',
     () => {
@@ -231,7 +266,6 @@ viewerDiv.addEventListener(
                 view.removeLayer(listSlect[0]);
                 layerToRemove.delete()
                 view.notifyChange()
-                console.log(view.camera)
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
@@ -241,18 +275,122 @@ viewerDiv.addEventListener(
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            console.log(tooltip.value)
 
-            getBdnbInfo(csvBdnb, tooltip.value.properties.batiment_g).then(res => {
+            let tooltipBuildingID = tooltip.value.properties.batiment_c
+            if (tooltipBuildingID.includes('-')) {
+                tooltipBuildingID = tooltipBuildingID.slice(0, -2)
+            }
 
-                // ----------- Get Bdnb data ----------- //
-                // Dispatch Bdnb data for each tab
-                let valDisplayed;
-                Object.entries(res).forEach(([key, value]) => {
-                    valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+
+            getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
+                .then(res => {
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
                 })
-                return valDisplayed;
+                .then(async (val2display) => {
+                    // ----------- Get Building ICI data ----------- //
+                    let displayICI = await csvBuildingICI
+                    let dataBuildingICI;
+                    let valDisplayBuildingICI
+                    Object.entries(displayICI).forEach((value) => {
+                        if (value[1].idBdTopo) {
+                            if (value[1].idBdTopo.includes(tooltipBuildingID)) {
+                                dataBuildingICI = value[1];
+                                return dataBuildingICI;
+                            }
+                        }
+                    })
+                    Object.entries(dataBuildingICI).forEach(([key, value]) => {
+                        valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
+                    })
 
-            })
+                    // ----------- Get Housing ICI IDs ----------- //
+                    let displayHousing = await csvHousingICI
+                    let housings_IDs = []
+                    Object.entries(displayHousing).forEach((value) => {
+                        if (value[1].BuildingID) {
+                            if (value[1].BuildingID.includes(dataBuildingICI.ID)) {
+                                housings_IDs.push(value[1].ID)
+                            }
+                        }
+                    })
+
+                    // ----------- Get Household ICI data ----------- //
+                    let housingDictionnary = {}
+                    let displayHousehold = await csvHouseholdICI
+                    let dataJSONattributeHousehold;
+                    Object.entries(displayHousehold).forEach((value) => {
+                        if (housings_IDs.includes(value[1].HousingID)) {
+                            housingDictionnary[value[1].ID] = {}
+                            housingDictionnary[value[1].ID]["household"] = []
+                            Object.entries(value[1]).forEach(([key, val]) => {
+                                dataJSONattributeHousehold = loadDataToJSON({}, key, val, "Household ICI", true)
+                                if (Object.keys(dataJSONattributeHousehold).length !== 0) {
+                                    housingDictionnary[value[1].ID]["household"].push(dataJSONattributeHousehold)
+                                }
+                            })
+                        }
+                    })
+                    Object.entries(housingDictionnary).forEach(([key, value]) => {
+                        if (Object.keys(value).length === 0) {
+                            delete housingDictionnary[key]
+                        }
+                    })
+                    // for each housing get associated household
+                    let householdIDs = []
+                    Object.entries(housingDictionnary).forEach((val) => {
+                        householdIDs.push(val[0])
+                    })
+
+                    // ----------- Get Individual ICI data ----------- //
+                    let displayIndividual = await csvIndividualICI
+                    let dataJSONattributeIndividual;
+                    Object.entries(displayIndividual).forEach((value) => {
+                        if (value[1].IDHousehold) {
+                            let individualList = []
+                            if (householdIDs.includes(value[1].IDHousehold)) {
+                                Object.entries(value[1]).forEach(([key, val]) => {
+                                    dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
+                                    if (Object.keys(dataJSONattributeIndividual).length !== 0) {
+                                        individualList.push(dataJSONattributeIndividual)
+                                    }
+                                })
+                                if (housingDictionnary[value[1].IDHousehold]["individuals"]) {
+                                    housingDictionnary[value[1].IDHousehold]["individuals"].push(individualList)
+                                } else {
+                                    housingDictionnary[value[1].IDHousehold]["individuals"] = [individualList]
+                                }
+                            }
+                        }
+
+                    })
+                    valDisplayBuildingICI.tabPopulation = housingDictionnary;
+                    console.log(valDisplayBuildingICI)
+                    return valDisplayBuildingICI
+
+                })
+                .then(res => console.log(res))
+
+            getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
+                .then(res => {
+
+                    // ----------- Get Bdnb data ----------- //
+                    // Dispatch Bdnb data for each tab
+                    let valDisplayed;
+                    Object.entries(res).forEach(([key, value]) => {
+                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
+                    })
+                    return valDisplayed;
+
+                })
                 .then(result => {
                     let valDisplay2 = csvMenageINSEE
                         .then(res => {
@@ -309,7 +447,7 @@ viewerDiv.addEventListener(
                             let valDisplayedBdTopo;
                             if (res.properties) {
                                 Object.entries(res.properties).forEach(([key, value]) => {
-                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "bdtopo")
+                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "BDTopo")
                                 })
                                 return valDisplayedBdTopo;
                             }
@@ -430,6 +568,9 @@ document.getElementById("exploredata").addEventListener("change", () => {
             geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
         })
+
+
+
     }
     else {
         view.removeLayer(batInorandomId.bdnb_random_id.id)
@@ -695,6 +836,139 @@ document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", ()
     dropedGeojson["3dDropId"].id = "3dDropId_0"
 })
 
+//========================== csv join 
+
+let dropZoneCsv = document.getElementById('drop-zone-csv');
+
+dropZoneCsv.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.add('drag-over');
+});
+
+dropZoneCsv.addEventListener('dragleave', function () {
+    dropZoneCsv.classList.remove('drag-over');
+});
+
+dropZoneCsv.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZoneCsv.classList.remove('drag-over');
+
+    let file;
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        file = files[0];
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        let records = [];
+
+        const data = reader.result;
+        const rows = data.split('\n');
+        const headers = rows[0].split(',');
+
+        updateSelectOption("attJointureCsv", headers)
+
+        updateSelectOption("selectCouleurCsv", headers)
+
+
+        for (let i = 1; i < rows.length; i++) {
+            const values = rows[i].split(',');
+            let record = {};
+
+            for (let j = 0; j < headers.length; j++) {
+                record[headers[j]] = values[j];
+            }
+
+
+            record = Object.entries(record).reduce((a, [k, v]) => (v === null || v === "" ? a : (a[k] = v, a)), {})
+            records.push(record);
+        }
+        dataFromCsv = records
+
+        // console.log(records);
+    };
+
+    reader.readAsText(file);
+
+    console.log(view.getLayers())
+
+    let LayersName = view.getLayers().reduce((result, layer) => {
+        result.push(layer.id)
+        return result
+    }, [])
+
+    updateSelectOption("selectJoinLayer", LayersName)
+
+
+
+});
+
+document.getElementById("selectJoinLayer").addEventListener("change", () => {
+    let selectedValue = document.getElementById("selectJoinLayer").value
+    console.log(selectedValue)
+    console.log(view.getLayerById(selectedValue))
+    let geojson = view.getLayerById(selectedValue).source.fetchedData
+
+    let uniquenames = getUniquePropNames(geojson)
+
+    updateSelectOption("selectJoinAttribut", uniquenames)
+
+    let selectChampJointure = document.getElementById("attJointureCsv").value
+    let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
+
+    console.log(dataFromCsv)
+
+    let csvTojson = dataFromCsv.reduce((result, prop) => {
+        result[prop[selectChampJointure]] = prop
+        // console.log(prop)
+        return result
+    }, {})
+
+    console.log(csvTojson)
+
+    console.log(geojson)
+
+    geojson.features.forEach((feature) => {
+        let data = csvTojson[feature.properties[selectCibleChampJointure]]
+
+        if (data) {
+            Object.entries(data).forEach(([key, val]) => {
+                feature.properties[key] = val
+                console.log(feature.properties)
+            })
+        }
+    });
+
+    console.log(geojson)
+
+    view.removeLayer(selectedValue)
+
+    csvJoinAtt.updatedGeojson = geojson;
+
+
+
+
+})
+
+document.getElementById("afficheDropCsv").addEventListener("click", () => {
+    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
+        view.removeLayer(csvJoinAtt["csvLayerId"].id)
+    }
+
+    csvJoinAtt["csvLayerId"].num += 1;
+    csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
+
+    let geojson = csvJoinAtt.updatedGeojson
+
+    console.log(geojson)
+
+    const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
+
+    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+}
+)
 
 
 
