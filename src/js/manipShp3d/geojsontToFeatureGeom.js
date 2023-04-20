@@ -1,5 +1,5 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
-
+import { setLegend } from "../affichage/legend"
 export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, incrementedId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
   // supposons que votre objet GeoJSON est stocké dans la variable 'geojson'
   // obtenir un tableau des noms de propriétés
@@ -51,17 +51,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
   let uniquecol = generateUniqueColors(uniquePropValues)
 
   document.getElementById("exampleModalLabel").innerText = selectOption;
-
-  let legendHtml = '<div>';
-  for (const [label, color] of Object.entries(uniquecol)) {
-    // console.log(color)
-    legendHtml += `<div style="display:flex;flex-direction:row"> <div style="background-color:${color};width: 31px;height: 16px; margin-right: 20px;"></div><div>${label}</div></div>`;
-  }
-  legendHtml += '</div>';
-
-  // create a div element to hold the legend
-  document.getElementById("legend").innerHTML = legendHtml;
-
 
   let src = new itowns.FileSource({
     fetchedData: geojson,
@@ -144,4 +133,6 @@ export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption,
   });
 
   view.addLayer(bat)
+
+  setLegend(uniquecol)
 }
