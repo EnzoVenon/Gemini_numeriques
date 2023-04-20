@@ -12,12 +12,12 @@ import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
-import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
+import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-import { geosjontToColorLayer } from "./js/dropData/drop2dData"
-import { updateSelectOption } from "./js/affichage/updateSelectionFromGeojson"
-import { updateSelectOptionFromList } from "./js/affichage/updateSelectOptionFromList"
+import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
+import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
+import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
@@ -751,7 +751,7 @@ affiche2dFile.addEventListener("click", () => {
     let geojson = dropedGeojson["2dDrop"]
     console.log(geojson)
     const select2dZiped = document.getElementById('select2dZiped').value;
-    geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view, THREE)
+    geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view)
 }
 )
 
@@ -830,9 +830,6 @@ affiche3dFile.addEventListener("click", () => {
     const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
 
     geojsontToFeatureGeom(geojson, selectCol3dZiped, dropedGeojson["3dDropId"].id, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
-
-    console.log(selectCol3dZiped)
-    // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
 }
 )
 
