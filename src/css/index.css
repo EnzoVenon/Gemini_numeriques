@@ -162,3 +162,9 @@ p {
     height: 85vh;
     z-index: 0;
 }
+
+.afficheLegende {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px;
+}
