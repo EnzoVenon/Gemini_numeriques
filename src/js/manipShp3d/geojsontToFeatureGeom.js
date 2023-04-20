@@ -3,7 +3,6 @@ import { setLegend } from "../affichage/legend"
 import { addEdgeObj3d } from "../affichage/contourObj3d"
 /**
  * @param {Object} geojson - data to represent en 3D
- * @param {*} updateSlectOptions 
  * @param {String} selectOption - attribut for coloring objects
  * @param {String} incrementedId - id of the layer
  * @param {Boolean} uniqueColor - using unique color 
@@ -13,7 +12,7 @@ import { addEdgeObj3d } from "../affichage/contourObj3d"
  * @param {String} altiSolAttribut - the propertie that represent ground alti
  * @param {String} uniquecolvalue - the color
  */
-export function geojsontToFeatureGeom(geojson, updateSlectOptions, selectOption, incrementedId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
+export function geojsontToFeatureGeom(geojson, selectOption, incrementedId, uniqueColor, view, THREE, heightAttribut = "", altiSolAttribut = "", uniquecolvalue = "red") {
   let uniquePropValues = geojson.features.reduce((acc, feature) => {
     const propfilter = feature.properties[selectOption];
     if (!acc.includes(propfilter)) {

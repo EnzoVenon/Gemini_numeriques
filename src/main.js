@@ -543,7 +543,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
         batInorandomId.ino_random_id.num += 1;
         batInorandomId.ino_random_id.id = batInorandomId.ino_random_id.name + "_" + batInorandomId.ino_random_id.num
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
-            geojsontToFeatureGeom(geojson, false, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
+            geojsontToFeatureGeom(geojson, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
         })
 
     }
@@ -568,7 +568,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
             batInorandomId.bdnb_random_id.num += 1;
             batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
         })
 
@@ -587,7 +587,7 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
 
@@ -604,7 +604,7 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
         )
@@ -622,7 +622,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
 
@@ -649,7 +649,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
     }
@@ -673,7 +673,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
         )
@@ -829,7 +829,7 @@ affiche3dFile.addEventListener("click", () => {
     const selectAltiSol3dZiped = document.getElementById('selectAltiSol3dZiped').value;
     const selectCol3dZiped = document.getElementById('selectCol3dZiped').value;
 
-    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, dropedGeojson["3dDropId"].id, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
+    geojsontToFeatureGeom(geojson, selectCol3dZiped, dropedGeojson["3dDropId"].id, false, view, THREE, selectHauteur3dZiped, selectAltiSol3dZiped)
 
     console.log(selectCol3dZiped)
     // geosjontToColorLayer(geojson, select2dZiped, ramdoId2, false, view, THREE)
@@ -975,6 +975,6 @@ document.getElementById("afficheDropCsv").addEventListener("click", () => {
 
     const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
 
-    geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+    geojsontToFeatureGeom(geojson, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
 }
 )
