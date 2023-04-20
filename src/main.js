@@ -224,6 +224,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
             style.to3D(checkbox_3D.checked);
             style.to_itowns_layer();
+            document.getElementById("legend").replaceChildren(style.getLegend());
         }
     });
 

@@ -299,4 +299,49 @@ export default class Style {
         }
         return this;
     }
+
+
+
+    /**
+     * Returns the legend div which can be appended on an html element in the document.
+     * @returns Legend div.
+     */
+    getLegend() {
+        let res = document.createElement("div");
+        if (this.gradation_or_classes) {
+            let canvas = document.createElement("canvas");
+            let ctx = canvas.getContext("2d");
+
+            //Create gradient
+            let gradient = ctx.createLinearGradient(0, 0, 200, 0);
+            if (this.color2 !== undefined) {
+                gradient.addColorStop(0, "rgb(255,255,255)");
+            } else {
+                gradient.addColorStop(0, "rgb(" + this.color2.r + "," + this.color2.g + "," + this.color2.b + ")");
+                gradient.addColorStop(0.5, "rgb(255,255,255)");
+            }
+            gradient.addColorStop(1, "rgb(" + this.color1.r + "," + this.color1.g + "," + this.color1.b + ")");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(10, 10, 150, 80);
+
+            //Create min text
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.font = "bold 18px Arial";
+            ctx.fillText(" " + this.min, 10, (canvas.height / 2) + 8);
+
+            //Create max text
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.font = "bold 18px Arial";
+            ctx.fillText("" + this.max, canvas.width - 30, (canvas.height / 2) + 8);
+
+            res.appendChild(canvas);
+        } else {
+            let inner = "";
+            for (let key of Object.keys(this.classes_map)) {
+                inner += '<p><span style="color:' + this.classes_map[key] + ';font-size: 2em">■</span> ' + key + '</p>';
+            }
+            res.innerHTML = inner;
+        }
+        return res;
+    }
 }
