@@ -397,179 +397,151 @@
         </div>
 
     </div>
+
+    <!-- sidebar exploration -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrollingexplo" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Exploration</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card-body">
+                <h5 class="card-title">Sources</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredata">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataIgn">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataOsm">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                        id="exploredataCadastre">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+
+                <p>Attributs disponibles</p>
+
+                <select class="form-select" aria-label="Default select example" id="selectProp">
+                    <option selected>Choisir une couche</option>
+                </select>
+
+
+            </div>
+
+            <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+
+            <!-- Button trigger modal -->
+            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Légende
+            </button>
+
+
+        </div>
+    </div>
+    <!-- sidebar 2D -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling2D" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">2D</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="drop-zone" id="drop-zone">Drop your ZIP 2D shp/dbf/shx/prg file here</div>
+
+            <select class="form-select" aria-label="Default select example" id="select2dZiped">
+                <option selected>déposer un zip</option>
+            </select>
+
+            <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+
+            <!-- Button trigger modal -->
+            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Légende
+            </button>
+            <div>
+                <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- sidebar 3D -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling3D" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">3D</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <div class="drop-zone" id="drop-zone-3D">Drop your ZIP 3D shp/dbf/shx/prg file here</div>
+
+            <label>attribut de hauteur Hauteur</label>
+            <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>attribut d'altitude au sol</label>
+            <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>attribut de couleur</label>
+            <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
+            <!-- Button trigger modal -->
+            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Légende
+            </button>
+            <div>
+                <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
     <div id="viewerDiv"></div>
 
 
-    <div class="card text-center" id="explorationPanel">
-
-
-        <div class="card-header">
-            Exploration
-        </div>
-
-
-        <div id="carouselExampleIndicators" class="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="card-body">
-                        <h5 class="card-title">Sources</h5>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                id="exploredata">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
-                                    class="bi bi-info-circle"></i></label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                id="exploredataIgn">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
-                                    class="bi bi-info-circle"></i></label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                id="exploredataOsm">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
-                                    class="bi bi-info-circle"></i></label>
-                        </div>
-
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                id="exploredataCadastre">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
-                                    class="bi bi-info-circle"></i></label>
-                        </div>
-
-                        <p>Attributs disponibles</p>
-
-                        <select class="form-select" aria-label="Default select example" id="selectProp">
-                            <option selected>Choisir une couche</option>
-                        </select>
-
-
-                    </div>
-
-                    <button class="btn btn-primary" id="confirmExporation">Afficher</button>
-
-                    <!-- Button trigger modal -->
-                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                        Légende
-                    </button>
-
-
-                </div>
-
-                <div class="carousel-item">
-                    <div class="drop-zone" id="drop-zone">Drop your ZIP 2D shp/dbf/shx/prg file here</div>
-
-                    <select class="form-select" aria-label="Default select example" id="select2dZiped">
-                        <option selected>déposer un zip</option>
-                    </select>
-
-                    <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
-
-                    <!-- Button trigger modal -->
-                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                        Légende
-                    </button>
-                    <div>
-                        <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
-                            Supprimer la couche
-                        </button>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="drop-zone" id="drop-zone-csv">Drop your csv file here</div>
-
-                    <label>attribut de jointure</label>
-                    <select class="form-select" aria-label="Default select example" id="attJointureCsv">
-                        <option selected>Choisir une couche</option>
-                    </select>
-
-                    <label>couche de jointure</label>
-                    <select class="form-select" aria-label="Default select example" id="selectJoinLayer">
-                        <option selected>Choisir une couche</option>
-                    </select>
-
-                    <label>champs de jointure</label>
-                    <select class="form-select" aria-label="Default select example" id="selectJoinAttribut">
-                        <option selected>Choisir une couche</option>
-                    </select>
-
-                    <label>attribut de couleur</label>
-                    <select class="form-select" aria-label="Default select example" id="selectCouleurCsv">
-                        <option selected>Choisir une couche</option>
-                    </select>
-
-
-                    <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
-                    <!-- Button trigger modal -->
-                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                        Légende
-                    </button>
-
-                    <div>
-                        <button id="checkbox-supprime-csv" class="btn btn-primary">
-                            Supprimer la couche
-                        </button>
-                    </div>
 
 
 
-                </div>
-
-            </div>
-
-            <div class="carousel-item">
-                <div class="drop-zone" id="drop-zone-3D">Drop your ZIP 3D shp/dbf/shx/prg file here</div>
-
-                <label>attribut de hauteur Hauteur</label>
-                <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
-                    <option selected>Choisir une couche</option>
-                </select>
-
-                <label>attribut d'altitude au sol</label>
-                <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
-                    <option selected>Choisir une couche</option>
-                </select>
-
-                <label>attribut de couleur</label>
-                <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
-                    <option selected>Choisir une couche</option>
-                </select>
-
-                <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
-                <!-- Button trigger modal -->
-                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Légende
-                </button>
-                <div>
-                    <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
-                        Supprimer la couche
-                    </button>
-                </div>
-
-            </div>
-        </div>
 
 
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+    <div id="boutonplus" class="bottom text-center">
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrollingexplo" aria-controls="offcanvasScrollingexplo">Exploration</button>
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">2D</button>
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">3D</button>
 
 
     </div>
+
+
 
     <div class="card-footer">
     </div>
