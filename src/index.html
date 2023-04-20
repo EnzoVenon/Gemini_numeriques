@@ -513,32 +513,66 @@
                     Supprimer la couche
                 </button>
             </div>
-
-
-
-
         </div>
     </div>
 
+    <!-- sidebar CSV -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrollingCsv" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">2D</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="drop-zone" id="drop-zone-csv">Drop your csv file here</div>
 
+            <label>attribut de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="attJointureCsv">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>couche de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="selectJoinLayer">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>champs de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="selectJoinAttribut">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>attribut de couleur</label>
+            <select class="form-select" aria-label="Default select example" id="selectCouleurCsv">
+                <option selected>Choisir une couche</option>
+            </select>
+
+
+            <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
+            <!-- Button trigger modal -->
+            <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Légende
+            </button>
+
+            <div>
+                <button id="checkbox-supprime-csv" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="viewerDiv"></div>
-
-
-
-
-
-
 
     <div id="boutonplus" class="bottom text-center">
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasScrollingexplo" aria-controls="offcanvasScrollingexplo">Exploration</button>
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">2D</button>
+            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">ajout 2D</button>
         <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">3D</button>
+            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">ajout 3D</button>
 
-
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrollingCsv" aria-controls="offcanvasScrollingCsv">jointure CSV</button>
     </div>
 
 

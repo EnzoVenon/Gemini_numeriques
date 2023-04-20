@@ -15,7 +15,8 @@ import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+import { geosjontToColorLayer } from "./js/dropData/drop2dData"
+import { updateSelectOption } from "./js/dropData/updateSelection"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
