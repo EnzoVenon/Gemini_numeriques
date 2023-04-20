@@ -17,7 +17,7 @@ import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
-import { createAccordion } from "./js/models/createAccord";
+import { createAccordion, createAccordionForListAttributes } from "./js/models/createAccord";
 import * as shp from "shpjs";
 
 let divAge = createAccordion('age', 'agechild', 'Age', 52)
@@ -66,8 +66,8 @@ customDiv.appendChild(pointer);
 
 let placement = {
     //  Coordinates of Perigueux
-    coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
-    // coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
+    // coord: new itowns.Coordinates('EPSG:4326', 0.72829, 45.18260, 2),
+    coord: new itowns.Coordinates('EPSG:4326', 2.380015, 48.859424, 2),
     range: 200,
     tilt: 33,
 }
@@ -390,7 +390,35 @@ viewerDiv.addEventListener(
                     return valDisplayBuildingICI
 
                 })
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res)
+                    // ----------- Generate html accordion item for each value ----------- //
+                    Object.entries(res).forEach(([key, value]) => {
+                        generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                        generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                    })
+
+                    let testPop = '';
+                    let householdbody;
+                    let individubody;
+                    let divHoushold;
+                    let divIndividu;
+                    Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        householdbody = createAccordionForListAttributes(value.household)
+                        individubody = createAccordionForListAttributes(value.individuals)
+                        divHoushold = createAccordion(key + 'household', key + 'household' + 'child', 'Household', householdbody)
+                        divIndividu = createAccordion(key + 'individu', key + 'individu' + 'child', 'individu', individubody)
+                        testPop += divHoushold.outerHTML
+                        testPop += divIndividu.outerHTML
+                    })
+
+                    htmlICI.innerHTML = testPop
+                    console.log(htmlICI)
+                    // for info link
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList]
+                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
                 .then(res => {
