@@ -203,7 +203,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
+        new Style("Hauteur", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setGradation("rgb(255,0,0)")
     );
