@@ -1,6 +1,6 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
-import { setLegend } from "../affichage/legend"
-import { addEdgeObj3d } from "../affichage/contourObj3d"
+import { setLegend } from "../affichageHtml/legend"
+import { addEdgeObj3d } from "./contourObj3d"
 /**
  * @param {Object} geojson - data to represent en 3D
  * @param {String} selectOption - attribut for coloring objects
