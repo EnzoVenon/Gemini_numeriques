@@ -344,4 +344,75 @@ export default class Style {
         }
         return res;
     }
+
+
+
+    /**
+     * Returns the configuration json of this style, as it can be used by the load method.
+     * @returns Json of configuration.
+     */
+    to_config_json() {
+        let config_json = {};
+        config_json["name"] = this.name;
+        config_json["field"] = this.field;
+        config_json["extrude"] = this.#extrude;
+        if ((this.field_ground !== undefined) && (this.field_height !== undefined)) {
+            config_json["field_ground"] = this.field_ground;
+            config_json["field_height"] = this.field_height;
+        }
+        config_json["gradation_or_classes"] = this.gradation_or_classes;
+        if (this.gradation_or_classes) {
+            config_json["color1"] = this.color1;
+            if (this.color2 !== undefined) {
+                config_json["color2"] = this.color2;
+            }
+            config_json["min"] = this.min;
+            config_json["max"] = this.max;
+        } else {
+            config_json["classes_map"] = this.classes_map;
+        }
+        if (this.source.isFileSource) {
+            config_json["source_info"] = {
+                "type": "FileSource",
+                "fetchedData": this.source.fetchedData,
+                "crs": this.source.crs,
+                "format": this.source.format
+            };
+        } //TODO else if to add other source types
+        return config_json;
+    }
+
+
+
+    /**
+     * Creates a style object from a configuration json.
+     * @param {*} view View object from iTowns.
+     * @param {*} source Source object from iTowns.
+     * @param {JSON} config_json Json containing the configuration of style, as it is returned by the to_config_json method.
+     * @returns The style object created.
+     */
+    static load(view, config_json) {
+        let source;
+        if (config_json.source_info.type == "FileSource") {
+            source = new itowns.FileSource({
+                fetchedData: config_json.source_info.fetchedData,
+                crs: config_json.source_info.crs,
+                format: config_json.source_info.format
+            });
+        } //TODO else if to add other source types
+        let style_res = new Style(config_json.name, view, source, config_json.field, config_json.gradation_or_classes);
+        if ((config_json.field_ground !== undefined) && (config_json.field_height !== undefined)) {
+            style_res.setExtrude(config_json.field_ground, config_json.field_height);
+        }
+        if (config_json.gradation_or_classes) {
+            if (config_json.color2 === undefined) {
+                style_res.setGradation(config_json.color1, "", config_json.min, config_json.max);
+            } else {
+                style_res.setGradation(config_json.color1, config_json.color2, config_json.min, config_json.max);
+            }
+        } else {
+            style_res.setClasses(config_json.classes_map);
+        }
+        return style_res;
+    }
 }

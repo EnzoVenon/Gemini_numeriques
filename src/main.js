@@ -15,7 +15,9 @@ import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-import { geosjontToColorLayer, updateSelectOption } from "./js/dropData/drop2dData"
+import { geosjontToColorLayer } from "./js/dropData/drop2dData"
+import { updateSelectOption } from "./js/dropData/updateSelection"
+import { updateSelectOptionFromList } from "./js/utile/updateSelectOption"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
@@ -152,7 +154,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    addShp("../data/shp/prg/bdnb_perigeux8", "bdnb0", "black", "", view, true)
     addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
@@ -190,7 +191,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     let style_list = [];
     style_list.push(
         new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
-            .setExtrude("altitude_s", "hauteur")
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
                 "A": "rgb(1,149,65)",
                 "B": "rgb(83,174,50)",
@@ -202,13 +203,13 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             })
     );
     style_list.push(
-        new Style("Hauteur dégradée", view, src_bdnb, "hauteur", true)
-            .setExtrude("altitude_s", "hauteur")
-            .setGradation("rgb(255,0,0)", "rgb(0,0,255)")
+        new Style("Hauteur dégradée", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(255,0,0)")
     );
     style_list.push(
         new Style("Iris", view, src_bdnb, "code_iris", false)
-            .setExtrude("altitude_s", "hauteur")
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
     );
 
     //Setting the predefined styles
@@ -869,9 +870,9 @@ dropZoneCsv.addEventListener('drop', function (e) {
         const rows = data.split('\n');
         const headers = rows[0].split(',');
 
-        updateSelectOption("attJointureCsv", headers)
+        updateSelectOptionFromList("attJointureCsv", headers)
 
-        updateSelectOption("selectCouleurCsv", headers)
+        updateSelectOptionFromList("selectCouleurCsv", headers)
 
 
         for (let i = 1; i < rows.length; i++) {
@@ -900,7 +901,7 @@ dropZoneCsv.addEventListener('drop', function (e) {
         return result
     }, [])
 
-    updateSelectOption("selectJoinLayer", LayersName)
+    updateSelectOptionFromList("selectJoinLayer", LayersName)
 
 
 
@@ -914,7 +915,7 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
 
     let uniquenames = getUniquePropNames(geojson)
 
-    updateSelectOption("selectJoinAttribut", uniquenames)
+    updateSelectOptionFromList("selectJoinAttribut", uniquenames)
 
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
@@ -970,7 +971,3 @@ document.getElementById("afficheDropCsv").addEventListener("click", () => {
     geojsontToFeatureGeom(geojson, false, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
 }
 )
-
-
-
-
