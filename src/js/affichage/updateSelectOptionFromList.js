@@ -1,6 +1,7 @@
 export function updateSelectOptionFromList(idSelectDrop2d, listOptions) {
     // Récupération de l'élément HTML de sélection
     const selectElement = document.getElementById(idSelectDrop2d);
+    console.log(selectElement)
     selectElement.innerHTML = "";
 
     // Boucle pour ajouter chaque valeur à la sélection

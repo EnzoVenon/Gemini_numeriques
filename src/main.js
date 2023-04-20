@@ -16,8 +16,8 @@ import { geojsontToFeatureGeom } from "./js/manipShp3d/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
 import { geosjontToColorLayer } from "./js/dropData/drop2dData"
-import { updateSelectOption } from "./js/affichage/updateSelection"
-import { updateSelectOptionFromList } from "./js/utile/updateSelectOption"
+import { updateSelectOption } from "./js/affichage/updateSelectionFromGeojson"
+import { updateSelectOptionFromList } from "./js/affichage/updateSelectOptionFromList"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 
 import * as shp from "shpjs";
@@ -567,7 +567,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
             });
             batInorandomId.bdnb_random_id.num += 1;
             batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
         })
@@ -586,7 +586,7 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
@@ -603,7 +603,7 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
@@ -621,7 +621,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
@@ -648,7 +648,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
@@ -672,7 +672,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
@@ -685,7 +685,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
-            updateSelectOption(geojson, "selectProp")
+            updateSelectOption("selectProp", geojson)
             geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
@@ -723,7 +723,7 @@ dropZone.addEventListener('drop', function (e) {
                     //see bellow for whats here this internally call shp.parseZip()
                     console.log(geojson)
 
-                    updateSelectOption(geojson, "select2dZiped")
+                    updateSelectOption("select2dZiped", geojson)
 
                     dropedGeojson["2dDrop"] = geojson
                 });
@@ -794,11 +794,11 @@ dropZone3d.addEventListener('drop', function (e) {
                     //see bellow for whats here this internally call shp.parseZip()
                     console.log(geojson)
 
-                    updateSelectOption(geojson, "selectHauteur3dZiped")
+                    updateSelectOption("selectHauteur3dZiped", geojson)
 
-                    updateSelectOption(geojson, "selectAltiSol3dZiped")
+                    updateSelectOption("selectAltiSol3dZiped", geojson)
 
-                    updateSelectOption(geojson, "selectCol3dZiped")
+                    updateSelectOption("selectCol3dZiped", geojson)
 
                     dropedGeojson["3dDrop"] = geojson
                 });
