@@ -1,6 +1,5 @@
 
 // ----------------- Imports ----------------- //
-import { update/*, buildingLayer */ } from "./js/models/building";
 import { addOrthoLayer } from "./js/models/ortho";
 import { addElevationLayer } from "./js/models/elevation";
 import { addShp } from "./js/affichageItown/addShpLayer"
@@ -124,8 +123,6 @@ itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
 itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
     .then(result => addElevationLayer(result, view));
-
-view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.BEFORE_RENDER, function () { update(view) });
 
 // Ortho Layer
 itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
