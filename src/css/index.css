@@ -116,6 +116,18 @@ p {
     margin-top: 7px;
     margin-bottom: 0px;
 }
+#bdnb{
+    color: #000;
+}
+#ign{
+    color: green;
+}
+#osm{
+    color: yellow;
+}
+#cadastre{
+    color: red;
+}
 
 #explorationPanel {
     position: absolute;
