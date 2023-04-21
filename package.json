@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "parcel --open",
-    "build": "parcel build --dist-dir public",
+    "build": "sed -i 's/\\.\\.\\/data/\\.\\/data/g' src/main.js && parcel build --dist-dir public && sed -i 's/\"\\//\"\\.\\//g' public/index.html && sed -i 's/\\.\\/data/\\.\\.\\/data/g' src/main.js",
     "clean": "rm -rf dist",
     "eslintTest": "npx eslint src",
     "test": "npx eslint src ; jest --coverage",

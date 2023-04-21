@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Itowns - Globe + WFS</title>
+    <title>Gemini Numérique</title>
 
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/example.css">
@@ -10,7 +10,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Gemini Numériques</title>
     <link rel="stylesheet" type="text/css" href="css/widgets.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -51,13 +50,19 @@
 
 <body>
 
-    <div id=" container">
 
-        <!-- The div in which the navbar is -->
-        <div id="apparition">
+    <!-- The div in which the navbar is -->
+    <div id="apparition" class="row">
 
-            <!-- the navbar centered with bootstrap -->
-            <ul class="nav nav-tabs justify-content-center">
+        <div id="titlenav" class="col-4">
+            <h3 class="left"> Concept sélectionné : Bâtiment</h3>
+        </div>
+
+        <!-- the navbar centered with bootstrap -->
+
+        <div id="contenunav center" class="col-6 ">
+            <ul class="nav nav-tabs ">
+
                 <li class="nav-item">
 
                     <a class="nav-link active" data-bs-toggle="collapse" href="#collapseExample" role="button"
@@ -117,7 +122,8 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#" id="switchville">
                         <div class="d-flex" id="changloc">
-                            Perigueux
+                            <label for="site_state" class="form-check-label">Périgeux</label>
+
                             <div class="form-switch form-check ms-2">
                                 <input type="checkbox" class="form-check-input" id="site_state">
                             </div>
@@ -128,344 +134,468 @@
 
 
             </ul>
-
-            <!-- Here the important sidebar id corresponds to the navbar -->
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
-                <!-- The header -->
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Contexte géographique</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <!-- The body -->
-                <div class="offcanvas-body" id="infoGen">
-
-                    <div class="accordion" id="infoGenAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingInfoOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseInfoOne" aria-expanded="false"
-                                    aria-controls="collapseInfoOne">
-                                    Contexte général
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapseInfoOne" class="accordion-collapse collapse" aria-labelledby="headingInfoOne">
-                            <div class="accordion-body" id="listConsoInfo">
-                                <p>Pas d'informations disponibles</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Infos sur l'objet</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-
-                <div class="offcanvas-body" id="batInfo">
-
-                    <div class="accordion" id="batimentAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingBatimentOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseBatimentOne" aria-expanded="false"
-                                    aria-controls="collapseBatimentOne">
-                                    Informations liées au bâtiment
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapseBatimentOne" class="accordion-collapse collapse"
-                            aria-labelledby="headingBatimentOne">
-                            <div class="accordion-body" id="listConsoBatiment">
-                                <p>Pas d'informations disponibles</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body" id="risqueInfo">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
-                        <label class="form-check-label" for="showInnondationLayer"> Zone inondable (en bleu) et
-                            bâtiments en zone inondable (en rouge)</label>
-                    </div>
-
-                    <div class="accordion" id="RisquesAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingRisqueOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseRisqueOne" aria-expanded="false"
-                                    aria-controls="collapseRisqueOne">
-                                    Risques liés au bâtiment
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapseRisqueOne" class="accordion-collapse collapse"
-                            aria-labelledby="headingRisqueOne">
-                            <div class="accordion-body" id="listConsoRisque">
-                                <p>Pas d'informations disponibles</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Énergie</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-
-                    <div class="accordion" id="energieAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingEnergieOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseEnergieOne" aria-expanded="false"
-                                    aria-controls="collapseEnergieOne">
-                                    Consommation énergétique
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapseEnergieOne" class="accordion-collapse collapse"
-                            aria-labelledby="headingEnergieOne">
-                            <div class="accordion-body" id="listConsoEnergie">
-                                <p>Pas d'informations disponibles</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollingpop" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Population</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body" id="population">
-                    <p>Sélectionnez un bâtiment pour visualiser ces informations.</p>
-                </div>
-            </div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">En savoir plus</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div id="sourceGeom">
-
-                        <p>Sources de données géométriques</p>
-
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="showBdnbLayer" checked
-                                disabled>
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Base de Données Nationale
-                                des
-                                Bâtiments (en noir)</label>
-                        </div>
-
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="showIgnLayer">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">IGN (en vert)</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="showOsmLayer">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">OpenStreetMap (en
-                                jaune)</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="showCadastreLayer">
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre (en
-                                rouge)</label>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-                id="offcanvasScrollingstyle" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Style</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <label>3D <input id="checkbox_style_3D" type="checkbox"></label>
-                    <br>
-                    <label>Style
-                        <select id="select_style">
-                            <option value="-1" selected>Aucun</option>
-                        </select>
-                    </label>
-                    <br>
-                    <button id="button_style_apply">Appliquer</button>
-                </div>
-            </div>
-
         </div>
-
-        <div id="viewerDiv"></div>
-
-
-        <div class="card text-center" id="explorationPanel">
-
-
-            <div class="card-header">
-                Exploration
+        <!-- Here the important sidebar id corresponds to the navbar -->
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollinginfo" aria-labelledby="offcanvasScrollingLabel">
+            <!-- The header -->
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Contexte géographique</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
+            <!-- The body -->
+            <div class="offcanvas-body" id="infoGen">
 
-
-            <div id="carouselExampleIndicators" class="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="card-body">
-                            <h5 class="card-title">Sources</h5>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                    id="exploredata">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
-                                        class="bi bi-info-circle"></i></label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                    id="exploredataIgn">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">IGN <i
-                                        class="bi bi-info-circle"></i></label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                    id="exploredataOsm">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">OSM <i
-                                        class="bi bi-info-circle"></i></label>
-                            </div>
-
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="selectData" role="switch"
-                                    id="exploredataCadastre">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
-                                        class="bi bi-info-circle"></i></label>
-                            </div>
-
-                            <p>Attributs disponibles</p>
-
-                            <select class="form-select" aria-label="Default select example" id="selectProp">
-                                <option selected>Choisir une couche</option>
-                            </select>
-
-
-                        </div>
-
-                        <button class="btn btn-primary" id="confirmExporation">Afficher</button>
-
-                        <!-- Button trigger modal -->
-                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            Légende
-                        </button>
-
-
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="drop-zone" id="drop-zone">Drop your ZIP 2D shp/dbf/shx/prg file here</div>
-
-                        <select class="form-select" aria-label="Default select example" id="select2dZiped">
-                            <option selected>déposer un zip</option>
-                        </select>
-
-                        <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
-
-                        <!-- Button trigger modal -->
-                        <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            Légende
-                        </button>
-                        <div>
-                            <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
-                                Supprimer la couche
+                <div class="accordion" id="infoGenAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingInfoOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseInfoOne" aria-expanded="false" aria-controls="collapseInfoOne">
+                                Contexte général
                             </button>
+                        </h2>
+                    </div>
+                    <div id="collapseInfoOne" class="accordion-collapse collapse" aria-labelledby="headingInfoOne">
+                        <div class="accordion-body" id="listConsoInfo">
+                            <p>Pas d'informations disponibles</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="carousel-item">
-                    <div class="drop-zone" id="drop-zone-3D">Drop your ZIP 3D shp/dbf/shx/prg file here</div>
+            </div>
+        </div>
 
-                    <label>attribut de hauteur Hauteur</label>
-                    <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
-                        <option selected>Choisir une couche</option>
-                    </select>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingbat" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Infos sur l'objet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
 
-                    <label>attribut d'altitude au sol</label>
-                    <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
-                        <option selected>Choisir une couche</option>
-                    </select>
+            <div class="offcanvas-body" id="batInfo">
 
-                    <label>attribut de couleur</label>
-                    <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
-                        <option selected>Choisir une couche</option>
-                    </select>
+                <div class="accordion" id="batimentAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingBatimentOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseBatimentOne" aria-expanded="false"
+                                aria-controls="collapseBatimentOne">
+                                Informations liées au bâtiment
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseBatimentOne" class="accordion-collapse collapse"
+                        aria-labelledby="headingBatimentOne">
+                        <div class="accordion-body" id="listConsoBatiment">
+                            <p>Pas d'informations disponibles</p>
+                        </div>
+                    </div>
+                </div>
 
-                    <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
-                    <!-- Button trigger modal -->
-                    <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                        Légende
-                    </button>
-                    <div>
-                        <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
-                            Supprimer la couche
-                        </button>
+            </div>
+
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingrisq" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Risques</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="risqueInfo">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="showInnondationLayer">
+                    <label class="form-check-label" for="showInnondationLayer"> Zone inondable (en bleu) et
+                        bâtiments en zone inondable (en rouge)</label>
+                </div>
+
+                <div class="accordion" id="RisquesAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingRisqueOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseRisqueOne" aria-expanded="false"
+                                aria-controls="collapseRisqueOne">
+                                Risques liés au bâtiment
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseRisqueOne" class="accordion-collapse collapse" aria-labelledby="headingRisqueOne">
+                        <div class="accordion-body" id="listConsoRisque">
+                            <p>Pas d'informations disponibles</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingenerg" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Énergie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+
+                <div class="accordion" id="energieAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingEnergieOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseEnergieOne" aria-expanded="false"
+                                aria-controls="collapseEnergieOne">
+                                Consommation énergétique
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseEnergieOne" class="accordion-collapse collapse"
+                        aria-labelledby="headingEnergieOne">
+                        <div class="accordion-body" id="listConsoEnergie">
+                            <p>Pas d'informations disponibles</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollingpop" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Population</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+            </div>
+            <div class="offcanvas-body">
+                <div class="offcanvas-body">
+                    <div class="accordion" id="populationIrisAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPopulationIrisOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePopulationIrisOne" aria-expanded="false"
+                                    aria-controls="collapsePopulationIrisOne">
+                                    Population INSEE pour l'Iris
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapsePopulationIrisOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingPopulationIrisOne">
+                            <div class="accordion-body" id="listConsoPopulationIris">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion" id="populationICIAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPopulationICIOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePopulationICIOne" aria-expanded="false"
+                                    aria-controls="collapsePopulationICIOne">
+                                    Population ICI
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapsePopulationICIOne" class="accordion-collapse collapse"
+                            aria-labelledby="headingPopulationICIOne">
+                            <div class="accordion-body" id="listConsoPopulationICI">
+                                <p>Pas d'informations disponibles</p>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+            id="offcanvasScrollinginfocompl" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">En savoir plus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="sourceGeom">
 
+                    <h5 class="titreEnSavoirPlus">Sources de données géométriques</h5>
 
+                    <div id="bdnb" class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="showBdnbLayer" checked
+                            disabled>
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Base de Données Nationale
+                            des
+                            Bâtiments</label>
+                    </div>
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+                    <div id="ign" class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="showIgnLayer">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">IGN</label>
+                    </div>
+                    <div id="osm" class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="showOsmLayer">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">OpenStreetMap</label>
+                    </div>
+                    <div id="cadastre" class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="showCadastreLayer">
+                        <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre</label>
+                    </div>
 
+                </div>
+                <div id="liensSources">
+                    <h5 class="titreEnSavoirPlus">Liens vers les sources de données</h5>
+                    <h6 class="sousTitreEnSavoirPlus">Couches attributaires</h6>
+                    <p>Base de Données Nationale des Bâtiments : <a href="https://www.bdnb.eu/download/"
+                            target="_blank">Versions disponibles</a>,
+                        <a href="https://gitlab.com/BDNB/base_nationale_batiment/-/wikis/Home"
+                            target="_blank">documentation</a>
+                    </p>
+                    <p>INSEE : <a href="https://www.insee.fr/fr/information/3544265" target="_blank">Téléchargements
+                            possibles</a></p>
+                    <p>BD Topo (IGN) : <a href="https://geoservices.ign.fr/bdtopo" target="_blank">Géoservice de
+                            l'IGN</a></p>
+                    <p>Population synthétique : <a href="https://ici.gitlabpages.inria.fr/website/"
+                            target="_blank">Projet ICI</a></p>
+                    <h6 class="sousTitreEnSavoirPlus">Couches spatiales </h6>
+                    <p>Données cadastrales : <a href="https://cadastre.data.gouv.fr/datasets" target="_blank">Accéder à
+                            data.gouv</a></p>
+                    <p>OpenStreetMap : <a
+                            href="https://www.openstreetmap.fr/donnees/https://download.geofabrik.de/europe/france.html"
+                            target="_blank">Données disponibles</a></p>
+                    <p>Territoires à Risques importants d’Inondation : <a
+                            href="https://www.georisques.gouv.fr/donnees/bases-de-donnees/zonages-inondation-rapportage-2020"
+                            target="_blank">Accéder à Géorisques</a></p>
+                    <h6 class="sousTitreEnSavoirPlus">Couches de visualisation </h6>
+                    <p>BD Carto (IGN) : <a href="https://geoservices.ign.fr/bdcarto" target="_blank">Géoservice de
+                            l'IGN</a></p>
+                    <p>BD Ortho (IGN) : <a href="https://geoservices.ign.fr/bdortho" target="_blank">Géoservice de
+                            l'IGN</a></p>
+                </div>
+                <div id="integrationDiagram">
+                    <h5 class="titreEnSavoirPlus">Diagramme d'intégration des bases de données</h5>
+                    <p>Cliquez pour aggrandir le diagramme</p>
+                    <div class="mxgraph" style="max-width:100%;border:1px solid transparent;"
+                        data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers tags lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;app.diagrams.net\&quot; modified=\&quot;2023-04-20T12:18:36.848Z\&quot; agent=\&quot;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0\&quot; etag=\&quot;kL_5TFN0bJnEwOAiKVGT\&quot; version=\&quot;21.2.1\&quot; type=\&quot;github\&quot;&gt;\n  &lt;diagram name=\&quot;Page-1\&quot; id=\&quot;RKlKr9zLwDHz_0O1cyM0\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;748\&quot; dy=\&quot;739\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;827\&quot; pageHeight=\&quot;1169\&quot; math=\&quot;0\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--1\&quot; value=\&quot;Base de Donnée Nationale des Bâtiments\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;379\&quot; y=\&quot;410\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--2\&quot; value=\&quot;&amp;lt;div&amp;gt;BD Topo&amp;lt;/div&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;624.5\&quot; y=\&quot;300\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--4\&quot; value=\&quot;OpenStreetMap\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;150\&quot; y=\&quot;290\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--5\&quot; value=\&quot;INSEE\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;680\&quot; y=\&quot;410\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--6\&quot; value=\&quot;Territoires à Risques importants d’Inondation\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;80\&quot; y=\&quot;410\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--10\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#4e9a06;strokeWidth=3;endFill=1;startArrow=block;\&quot; parent=\&quot;1\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--2\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;-0.0213\&quot; y=\&quot;13\&quot; width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;529\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;579\&quot; y=\&quot;430\&quot; as=\&quot;targetPoint\&quot; /&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--11\&quot; value=\&quot;Intersection spatiale\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;endFill=1;startArrow=classic;startFill=1;fillColor=#d5e8d4;\&quot; parent=\&quot;1\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--6\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;529\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;579\&quot; y=\&quot;430\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--12\&quot; value=\&quot;&amp;lt;div&amp;gt;Centroïde&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Intersection spatiale&amp;lt;br&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#82b366;endFill=1;startArrow=classic;startFill=1;fillColor=#d5e8d4;\&quot; parent=\&quot;1\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--4\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;529\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;579\&quot; y=\&quot;430\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--13\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#4e9a06;strokeWidth=3;endFill=1;startArrow=block;entryX=1;entryY=0.5;entryDx=0;entryDy=0;\&quot; parent=\&quot;1\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--5\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;529\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;500\&quot; y=\&quot;460\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; value=\&quot;Population synthétique\&quot; style=\&quot;swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;19\&quot; y=\&quot;20\&quot; width=\&quot;790\&quot; height=\&quot;230\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxRectangle x=\&quot;10\&quot; y=\&quot;90\&quot; width=\&quot;170\&quot; height=\&quot;30\&quot; as=\&quot;alternateBounds\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--16\&quot; value=\&quot;Building\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;605.5\&quot; y=\&quot;130.5\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--25\&quot; value=\&quot;BuildingID - ID\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#4E9A06;endArrow=classic;endFill=1;startArrow=classic;startFill=1;strokeWidth=3;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--17\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--16\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--17\&quot; value=\&quot;&amp;lt;i&amp;gt;Housing&amp;lt;/i&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;371\&quot; y=\&quot;132.5\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--27\&quot; value=\&quot;\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#4e9a06;endArrow=classic;endFill=1;startArrow=classic;startFill=1;strokeWidth=3;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--18\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--17\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.2632\&quot; y=\&quot;-10\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--18\&quot; value=\&quot;&amp;lt;i&amp;gt;Household&amp;lt;/i&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;190\&quot; y=\&quot;37.5\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--28\&quot; value=\&quot;\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#4E9A06;endArrow=classic;endFill=1;startArrow=classic;startFill=1;strokeWidth=3;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--19\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--18\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;0.2222\&quot; y=\&quot;10\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--19\&quot; value=\&quot;&amp;lt;i&amp;gt;Individual&amp;lt;/i&amp;gt;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;30\&quot; y=\&quot;130.5\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-2\&quot; value=\&quot;&amp;lt;div&amp;gt;IDHousehold&amp;lt;/div&amp;gt;\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;161\&quot; y=\&quot;147.5\&quot; width=\&quot;90\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-4\&quot; value=\&quot;HousingID\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;324\&quot; y=\&quot;52.5\&quot; width=\&quot;80\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-5\&quot; value=\&quot;ID\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;411\&quot; y=\&quot;87.5\&quot; width=\&quot;40\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;g-4KPRBuuMpllEZ6ZMX--1\&quot; value=\&quot;&amp;lt;i&amp;gt;Simulé&amp;lt;/i&amp;gt;\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; vertex=\&quot;1\&quot; parent=\&quot;FjnJGpuL3dfxn8dWNNj--15\&quot;&gt;\n          &lt;mxGeometry x=\&quot;725.5\&quot; y=\&quot;130.5\&quot; width=\&quot;60\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;FjnJGpuL3dfxn8dWNNj--29\&quot; value=\&quot;&amp;lt;div&amp;gt;idBdTopo &amp;lt;br&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;batiment_g&amp;lt;/div&amp;gt;\&quot; style=\&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#4e9a06;strokeWidth=3;endArrow=classic;endFill=1;startArrow=block;\&quot; parent=\&quot;1\&quot; source=\&quot;FjnJGpuL3dfxn8dWNNj--16\&quot; target=\&quot;FjnJGpuL3dfxn8dWNNj--2\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; value=\&quot;Légende\&quot; style=\&quot;swimlane;whiteSpace=wrap;html=1;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;150\&quot; y=\&quot;510\&quot; width=\&quot;560\&quot; height=\&quot;110\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxRectangle x=\&quot;80\&quot; y=\&quot;570\&quot; width=\&quot;90\&quot; height=\&quot;30\&quot; as=\&quot;alternateBounds\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-2\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;10\&quot; y=\&quot;34\&quot; width=\&quot;30\&quot; height=\&quot;20\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-3\&quot; value=\&quot;Infos récupérées par croisement spatial\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;48\&quot; y=\&quot;31\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-4\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;190\&quot; y=\&quot;34\&quot; width=\&quot;30\&quot; height=\&quot;20\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-5\&quot; value=\&quot;Infos récupérées par ID Commun\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;228\&quot; y=\&quot;31\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-8\&quot; value=\&quot;\&quot; style=\&quot;endArrow=classic;html=1;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=3;endFill=1;startArrow=block;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;56\&quot; y=\&quot;83\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;10\&quot; y=\&quot;83\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-9\&quot; value=\&quot;Lien robuste entre données\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;53\&quot; y=\&quot;70\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-12\&quot; value=\&quot;\&quot; style=\&quot;endArrow=none;startArrow=none;html=1;rounded=0;strokeColor=#4e9a06;endFill=0;startFill=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; edge=\&quot;1\&quot;&gt;\n          &lt;mxGeometry width=\&quot;50\&quot; height=\&quot;50\&quot; relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;197\&quot; y=\&quot;85\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;237\&quot; y=\&quot;85\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-13\&quot; value=\&quot;Lien implémenté\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;223\&quot; y=\&quot;70\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-14\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;392\&quot; y=\&quot;34\&quot; width=\&quot;30\&quot; height=\&quot;20\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;CL4YX4rr0jCitZG3_2ce-15\&quot; value=\&quot;Base de données &amp;quot;maîtresse&amp;quot;\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;410\&quot; y=\&quot;31\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;g-4KPRBuuMpllEZ6ZMX--3\&quot; value=\&quot;&amp;lt;i&amp;gt;Nom&amp;lt;/i&amp;gt;\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; vertex=\&quot;1\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;379\&quot; y=\&quot;70\&quot; width=\&quot;60\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;g-4KPRBuuMpllEZ6ZMX--4\&quot; value=\&quot;Valeurs simulées\&quot; style=\&quot;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;\&quot; vertex=\&quot;1\&quot; parent=\&quot;CL4YX4rr0jCitZG3_2ce-1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;410\&quot; y=\&quot;70\&quot; width=\&quot;140\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-3\&quot; value=\&quot;ID\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;251\&quot; y=\&quot;131.5\&quot; width=\&quot;40\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-6\&quot; value=\&quot;&amp;lt;div&amp;gt;batiment_g&amp;lt;/div&amp;gt;\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;544.5\&quot; y=\&quot;334\&quot; width=\&quot;80\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-7\&quot; value=\&quot;&amp;lt;div&amp;gt;batiment_groupe_id&amp;lt;br&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=#FFFFFF;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;470\&quot; y=\&quot;372\&quot; width=\&quot;130\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-8\&quot; value=\&quot;&amp;lt;div&amp;gt;code_iris &amp;lt;br&amp;gt;&amp;lt;/div&amp;gt;\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=#FFFFFF;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;510\&quot; y=\&quot;426\&quot; width=\&quot;70\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;VWtHllQ4j4jmdK-bnzK4-9\&quot; value=\&quot;IRIS\&quot; style=\&quot;text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=#FFFFFF;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry x=\&quot;620\&quot; y=\&quot;427\&quot; width=\&quot;50\&quot; height=\&quot;30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}">
+                    </div>
+                    <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+                </div>
+            </div>
 
         </div>
-
-        <div class="card-footer">
+    </div>
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrollingstyle" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Style</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
+        <div class="offcanvas-body">
+            <label>3D <input id="checkbox_style_3D" type="checkbox"></label>
+            <br>
+            <label>Style
+                <select id="select_style">
+                    <option value="-1" selected>Aucun</option>
+                </select>
+            </label>
+            <br>
+            <button id="button_style_apply">Appliquer</button>
+            <button id="modalButton_legend" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+                Légende
+            </button>
+        </div>
+    </div>
 
     </div>
 
+    <!-- sidebar exploration -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrollingexplo" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Sources</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card-body">
+                <h5 class="card-title">Sources</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredata">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">BDNB <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataIgn">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">BD Topo Bâtiments<i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch" id="exploredataOsm">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">OSM Bâtiments <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
 
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="selectData" role="switch"
+                        id="exploredataCadastre">
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Cadastre <i
+                            class="bi bi-info-circle"></i></label>
+                </div>
+
+                <p>Attributs disponibles</p>
+
+                <select class="form-select" aria-label="Default select example" id="selectProp">
+                    <option selected>Choisir une couche</option>
+                </select>
+
+
+            </div>
+
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="confirmExporation">Afficher</button>
+
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- sidebar 2D -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling2D" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier 2D</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="drop-zone" id="drop-zone">Glisser/Déposer un fichier ZIP 2D shp/dbf/shx/prg ici</div>
+
+            <select class="form-select" aria-label="Default select example" id="select2dZiped">
+                <option selected>Déposer un zip</option>
+            </select>
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDrop2d">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
+
+            <div class="afficheLegende">
+                <button id="checkbox-supprime-2ddrop" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- sidebar 3D -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling3D" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier 3D</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <div class="drop-zone" id="drop-zone-3D">Glisser/Déposer un fichier ZIP 3D shp/dbf/shx/prg ici</div>
+
+            <label>Attribut de hauteur</label>
+            <select class="form-select" aria-label="Default select example" id="selectHauteur3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>Attribut d'altitude au sol</label>
+            <select class="form-select" aria-label="Default select example" id="selectAltiSol3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>Attribut de couleur</label>
+            <select class="form-select" aria-label="Default select example" id="selectCol3dZiped">
+                <option selected>Choisir une couche</option>
+            </select>
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDrop3d">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
+
+            <div class="afficheLegende">
+                <button id="checkbox-supprime-3ddrop" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- sidebar CSV -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrollingCsv" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Import de fichier CSV</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="drop-zone" id="drop-zone-csv">Glisser/Déposer fichier csv ici</div>
+
+            <label>Attribut de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="attJointureCsv">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>Couche de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="selectJoinLayer">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>Champs de jointure</label>
+            <select class="form-select" aria-label="Default select example" id="selectJoinAttribut">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <label>Attribut de couleur</label>
+            <select class="form-select" aria-label="Default select example" id="selectCouleurCsv">
+                <option selected>Choisir une couche</option>
+            </select>
+
+            <div class="afficheLegende">
+                <button class="btn btn-primary" id="afficheDropCsv">Afficher</button>
+                <!-- Button trigger modal -->
+                <button id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Légende
+                </button>
+            </div>
+
+            <div class="afficheLegende">
+                <button id="checkbox-supprime-csv" class="btn btn-primary">
+                    Supprimer la couche
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewerDiv"></div>
+
+    <div id="boutonplus" class="bottom text-center">
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrollingexplo" aria-controls="offcanvasScrollingexplo">Sources</button>
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling2D" aria-controls="offcanvasScrolling2D">Import 2D</button>
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling3D" aria-controls="offcanvasScrolling3D">Import 3D</button>
+
+        <button class="btn btn-secondary btn-lg" href="#" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrollingCsv" aria-controls="offcanvasScrollingCsv">Jointure CSV</button>
+    </div>
+
+
+
+    <div class="card-footer">
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Légende</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="legend">
@@ -485,9 +615,7 @@
     <script src="../node_modules/itowns/dist/debug.js"></script>
     <script src="../node_modules/itowns/dist/itowns_widgets.js"></script>
     <script src="../node_modules/shpjs/dist/shp.js"></script>
-
     <script src="./js/jsItown/GUI/LoadingScreen.js"></script>
-
     <script type="module" src="./main.js"></script>
 
 </body>

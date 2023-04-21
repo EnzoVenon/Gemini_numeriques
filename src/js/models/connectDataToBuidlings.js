@@ -20,38 +20,65 @@ const attribut2UserName = {
   bdtopo_bat_hauteur_mean: "Hauteur du bâtiment",
   NB_ETAGES: "Nombre d'étages",
   DATE_CREAT: "Date de Création",
+  nbEntrances: "Nombre d'entrées",
+  nbHousing: "Nombre de logements",
+  nbWorkingPlace: "Nombre de lieux de travail",
+  code_commu: "Code commune",
+  code_depar: "Code département",
 
   argiles_alea: "Risque argile",
   radon_alea: "Risque radon",
 
   dpe_arrete_2021_nb_classe_conso_energie_arrete_2012: "Notes énergétique des logements",
-  dpe_nb_classe_ener_a: "Notes énergétique des logements",
-  dpe_nb_classe_ener_b: "Notes énergétique des logements",
-  dpe_nb_classe_ener_c: "Notes énergétique des logements",
-  dpe_nb_classe_ener_d: "Notes énergétique des logements",
-  dpe_nb_classe_ener_e: "Notes énergétique des logements",
-  dpe_nb_classe_ener_f: "Notes énergétique des logements",
-  dpe_nb_classe_ener_g: "Notes énergétique des logements",
-  dpe_nb_classe_ener_nc: "Notes énergétique des logements",
-  dpe_nb_classe_ges_a: "Notes énergétique des logements",
-  dpe_nb_classe_ges_b: "Notes énergétique des logements",
-  dpe_nb_classe_ges_c: "Notes énergétique des logements",
-  dpe_nb_classe_ges_d: "Notes énergétique des logements",
-  dpe_nb_classe_ges_e: "Notes énergétique des logements",
-  dpe_nb_classe_ges_f: "Notes énergétique des logements",
-  dpe_nb_classe_ges_g: "Notes énergétique des logements",
-  dpe_nb_classe_ges_nc: "Notes énergétique des logements",
-  dpe_class_conso_ener_mean: "Notes énergétique des logements",
-  dpe_conso_ener_mean: "Notes énergétique des logements",
-  dpe_conso_ener_std: "Notes énergétique des logements",
-  dpe_class_estim_ges_mean: "Notes énergétique des logements",
-  dpe_estim_ges_mean: "Notes énergétique des logements",
-  dpe_estim_ges_std: "Notes énergétique des logements",
-  dpe_logtype_mur_pos_isol_ext: "Notes énergétique des logements",
-  dpe_logtype_pb_pos_isol: "Notes énergétique des logements",
-  dpe_logtype_ph_pos_isol: "Notes énergétique des logements",
-}
+  dpe_nb_classe_ener_a: "Nombre de logements de classe énergétique A",
+  dpe_nb_classe_ener_b: "Nombre de logements de classe énergétique B",
+  dpe_nb_classe_ener_c: "Nombre de logements de classe énergétique C",
+  dpe_nb_classe_ener_d: "Nombre de logements de classe énergétique D",
+  dpe_nb_classe_ener_e: "Nombre de logements de classe énergétique E",
+  dpe_nb_classe_ener_f: "Nombre de logements de classe énergétique F",
+  dpe_nb_classe_ener_g: "Nombre de logements de classe énergétique G",
+  dpe_nb_classe_ener_nc: "Nombre de logements de classe énergétique non communiquée",
+  dpe_nb_classe_ges_a: "Nombre de logements d'émission de GES de classe A",
+  dpe_nb_classe_ges_b: "Nombre de logements d'émission de GES de classe B",
+  dpe_nb_classe_ges_c: "Nombre de logements d'émission de GES de classe C",
+  dpe_nb_classe_ges_d: "Nombre de logements d'émission de GES de classe D",
+  dpe_nb_classe_ges_e: "Nombre de logements d'émission de GES de classe E",
+  dpe_nb_classe_ges_f: "Nombre de logements d'émission de GES de classe F",
+  dpe_nb_classe_ges_g: "Nombre de logements d'émission de GES de classe G",
+  dpe_nb_classe_ges_nc: "Nombre de logements d'émission de GES de classe non communiquée",
+  dpe_class_conso_ener_mean: "Note moyenne de la consommation énergétique du bâtiment",
+  dpe_conso_ener_mean: "Consommation énergétique moyenne du bâtiment",
+  dpe_conso_ener_std: "Ecart-type des valeurs de consommation énergétique du bâtiment",
+  dpe_class_estim_ges_mean: "Note moyenne de l'émission de Gaz à effet de serre du bâtiment",
+  dpe_estim_ges_mean: "Moyenne de l'émission de Gaz à effet de serre du bâtiment",
+  dpe_estim_ges_std: "Ecart-type des valeurs d'émission de Gaz à effet de serre du bâtiment. ",
+  dpe_logtype_mur_pos_isol_ext: "Matériaux d'isolations des murs extérieurs",
+  dpe_logtype_pb_pos_isol: "Matériaux d'isolations des planchers bas",
+  dpe_logtype_ph_pos_isol: "Matériaux d'isolations des planchers hauts",
 
+
+  P19_POP15P_MARIEE: "Marié",
+  P19_POP15P_PACSEE: "Pacsé",
+  P19_POP15P_CONCUB_UNION_LIBRE: "Concubinage - union libre",
+  P19_POP15P_VEUFS: "Veuf",
+  P19_POP15P_DIVORCEE: "Divorcé",
+  P19_POP15P_CELIBATAIRE: "Célibataire",
+  P19_POP1524: "15-24 ans",
+  P19_POP2554: "25-54 ans",
+  P19_POP5579: "55-79 ans",
+  P19_POP80P: "80+ ans",
+  C19_NE24F0: "0 enfant",
+  C19_NE24F1: "1 enfant",
+  C19_NE24F2: "2 enfants",
+  C19_NE24F3: "3 enfants",
+  C19_NE24F4P: "4 enfants",
+  FamilyChildrenNumber: "Nombre d'enfants dans la famille",
+  HouseholdComposition: "Composition du ménage",
+  HouseholdSize: "Nombre d'individus dans le ménage",
+  age: "Age",
+  occupation: "Occupation",
+  sex: "Sexe",
+}
 
 // Onglet batiment
 const tabs = {
@@ -65,7 +92,11 @@ const tabs = {
     "NATURE",
     "NB_ETAGES",
     "USAGE1",
-    "USAGE2"
+    "USAGE2",
+    "nbEntrances",
+    "nbHousing",
+    "nbWorkingPlace"
+
   ],
   ongletRisque: [
     "radon_alea",
@@ -78,7 +109,9 @@ const tabs = {
     "fiabilite_cr_adr_niv_1",
     "libelle_adr_principale_ban",
     "libelle_commune_insee",
-    "bdtopo_zoa_l_toponyme"
+    "bdtopo_zoa_l_toponyme",
+    "code_commu",
+    "code_depar"
 
   ],
   ongletEnergie: [
@@ -109,10 +142,33 @@ const tabs = {
     "dpe_logtype_pb_pos_isol",
     "dpe_logtype_ph_pos_isol"
   ],
+  ongletPopulation: [
+    'P19_POP15P_MARIEE',
+    'P19_POP15P_PACSEE',
+    'P19_POP15P_CONCUB_UNION_LIBRE',
+    'P19_POP15P_VEUFS',
+    'P19_POP15P_DIVORCEE',
+    'P19_POP15P_CELIBATAIRE',
+    'P19_POP1524',
+    'P19_POP2554',
+    'P19_POP5579',
+    'P19_POP80P',
+    'C19_NE24F0',
+    'C19_NE24F1',
+    'C19_NE24F2',
+    'C19_NE24F3',
+    'C19_NE24F4P',
+    'FamilyChildrenNumber',
+    'HouseholdComposition',
+    'HouseholdSize',
+    'age',
+    'occupation',
+    'sex',
+  ]
 }
 
 
-export function loadDataToJSON(dictionaryTofill, key, value, base) {
+export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulationTab = false) {
 
   /* 
   
@@ -134,7 +190,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
           }
   
   */
-  let name4User = attribut2UserName[key]
+  let name4User = attribut2UserName[key];
+
 
   const jsonData = {
     attribut: key,
@@ -142,6 +199,13 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     val: value,
     source: base
   }
+
+  if (isForPopulationTab) {
+    if (name4User) {
+      return jsonData
+    }
+  }
+
   if (tabs.ongletInfoGen.includes(key)) {
     dictionaryTofill.tabInfoGen.push(jsonData)
   } else if (tabs.ongletBatiment.includes(key)) {
@@ -150,6 +214,8 @@ export function loadDataToJSON(dictionaryTofill, key, value, base) {
     dictionaryTofill.tabRisques.push(jsonData)
   } else if (tabs.ongletEnergie.includes(key)) {
     dictionaryTofill.tabEnergie.push(jsonData)
+  } else if (tabs.ongletPopulation.includes(key)) {
+    dictionaryTofill.tabPopulation.push(jsonData)
   }
 
   return dictionaryTofill;
@@ -176,6 +242,14 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
   }
 
 
+}
+
+export function spreadDataToTabs(dataDictionary, dictionaryTofillFrom, nameSourceBase) {
+  let dataSpread;
+  Object.entries(dataDictionary).forEach(([key, value]) => {
+    dataSpread = loadDataToJSON(dictionaryTofillFrom, key, value, nameSourceBase)
+  })
+  return dataSpread;
 }
 
 export function generateAccordion4Attribute(attributeName, name4User, value, source) {

@@ -8,13 +8,6 @@ body {
     height: 100%;
 }
 
-#viewerDiv {
-    margin: auto;
-    height: 1800px;
-    width: 100%;
-    padding: 0;
-
-}
 
 .navbar {
     width: 100%;
@@ -55,7 +48,7 @@ p {
     left: 0;
     width: 100%;
     background-color: white;
-    z-index: 1;
+    z-index: 2;
 }
 
 #style_menu {
@@ -68,9 +61,8 @@ p {
     border-radius: 10px;
 }
 
-#container {
+.container {
     display: flex;
-    flex-direction: row;
 }
 
 
@@ -87,6 +79,52 @@ p {
     background-color: rgb(171, 206, 106);
     padding: 6px;
     border-radius: 5px;
+}
+
+#liensSources {
+    background-color: rgb(171, 206, 106);
+    padding: 6px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#integrationDiagram {
+    background-color: rgb(171, 206, 106);
+    padding: 6px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#liensSources a {
+    text-decoration: none;
+}
+
+.titreEnSavoirPlus {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.sousTitreEnSavoirPlus {
+    font-style: italic;
+    text-decoration: underline;
+    margin-top: 7px;
+    margin-bottom: 0px;
+}
+
+#bdnb {
+    color: #000;
+}
+
+#ign {
+    color: green;
+}
+
+#osm {
+    color: yellow;
+}
+
+#cadastre {
+    color: red;
 }
 
 #explorationPanel {
@@ -115,4 +153,22 @@ p {
 .drop-zone {
     height: 50;
     border-style: dashed;
+}
+
+.row {
+    --bs-gutter-x: 0rem;
+}
+
+#boutonplus {
+    position: absolute;
+
+    width: 80%;
+    height: 85vh;
+    z-index: 0;
+}
+
+.afficheLegende {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px;
 }
