@@ -1,6 +1,16 @@
 import { generateUniqueColors } from "../utile/generaRandomColorFromList"
+import { setLegend } from "../affichageHtml/legend"
 
-export function geosjontToColorLayer(geojson, selectOption, randomId, uniqueColor, view, THREE, uniquecolvalue = "red") {
+/**
+ * add a coloryer layer from geojson
+ * @param {Object} geojson - data to represent en 2D
+ * @param {string} selectOption - attribut for coloring objects
+ * @param {String} randomId - id of the layer
+ * @param {Boolean} uniqueColor - using unique color 
+ * @param {Object} view - itowns view
+ * @param {String} uniquecolvalue - the color
+ */
+export function geosjontToColorLayer(geojson, selectOption, randomId, uniqueColor, view, uniquecolvalue = "red") {
     // Récupérer les valeurs uniques de la propriété "type"
     let uniquePropValues = geojson.features.reduce((acc, feature) => {
         const propfilter = feature.properties[selectOption];
@@ -13,17 +23,6 @@ export function geosjontToColorLayer(geojson, selectOption, randomId, uniqueColo
     let uniquecol = generateUniqueColors(uniquePropValues)
 
     document.getElementById("exampleModalLabel").innerText = selectOption;
-
-    let legendHtml = '<div>';
-    for (const [label, color] of Object.entries(uniquecol)) {
-        // console.log(color)
-        legendHtml += `<div style="display:flex;flex-direction:row"> <div style="background-color:${color};width: 31px;height: 16px; margin-right: 20px;"></div><div>${label}</div></div>`;
-    }
-    legendHtml += '</div>';
-
-    // create a div element to hold the legend
-    document.getElementById("legend").innerHTML = legendHtml;
-
 
     let src = new itowns.FileSource({
         fetchedData: geojson,
@@ -44,19 +43,18 @@ export function geosjontToColorLayer(geojson, selectOption, randomId, uniqueColo
                     }
                     else {
                         let color = uniquecol[properties[selectOption]];
-                        // console.log(properties)
-                        // console.log(color)
                         return color
                     }
 
                 }
             },
             stroke: {
-                color: "red",
+                color: "blue",
                 width: 1.0
             }
         })
     })
 
     view.addLayer(layer)
+    setLegend(uniquecol)
 }

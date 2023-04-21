@@ -81,7 +81,7 @@ export default class Style {
         this.max = max;
         //Automatically find and set this.min and this.max?
         if (isNaN(min) || isNaN(max)) {
-            //I am using a hack here, as I have not found enough information on iTowns to directly use its parsers and I don't have time to write those myself
+            //I am using a hack here, as we can't access iTowns source field value in our version and I don't have time to write those myself
             let hackMinMax = function f(properties) {
                 if ((properties[this.field] !== undefined) && (!isNaN(properties[this.field]))) {
                     if (isNaN(this.min) || (properties[this.field] < this.min)) {
@@ -298,5 +298,129 @@ export default class Style {
             //I know, ESLint, this is empty
         }
         return this;
+    }
+
+
+
+    /**
+     * Returns the legend div which can be appended on an html element in the document.
+     * @returns Legend div.
+     */
+    getLegend() {
+        let res = document.createElement("div");
+        res.appendChild(document.createElement("h5")).innerText = this.name;
+        if (this.gradation_or_classes) {
+            let canvas = document.createElement("canvas");
+            let ctx = canvas.getContext("2d");
+            console.log(canvas.height);
+            canvas.height = 120;
+
+            //Create gradient
+            const grad_height = 80;
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.fillRect(0, 0, 300, grad_height + 2);
+            let gradient = ctx.createLinearGradient(20, 0, 280, 0);
+            if (this.color2 === undefined) {
+                gradient.addColorStop(0, "rgb(255,255,255)");
+            } else {
+                gradient.addColorStop(0, "rgb(" + this.color2.r + "," + this.color2.g + "," + this.color2.b + ")");
+                gradient.addColorStop(0.5, "rgb(255,255,255)");
+            }
+            gradient.addColorStop(1, "rgb(" + this.color1.r + "," + this.color1.g + "," + this.color1.b + ")");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(1, 1, 298, grad_height);
+
+            //Create small arrows
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.font = "18px Arial";
+            ctx.fillText("I", 0, grad_height + 17);
+            ctx.fillText("I", 296, grad_height + 17);
+
+            //Create min and max text
+            const max = "" + this.max;
+            ctx.font = "bold 18px Arial";
+            ctx.fillText("" + this.min, 0, grad_height + 35);
+            ctx.fillText(max, canvas.width - max.length * 10, grad_height + 35);
+
+            res.appendChild(canvas);
+        } else {
+            let inner = "";
+            for (let key of Object.keys(this.classes_map)) {
+                inner += '<p><span style="color:' + this.classes_map[key] + ';font-size: 2em">■</span> ' + key + '</p>';
+            }
+            res.innerHTML += inner;
+        }
+        return res;
+    }
+
+
+
+    /**
+     * Returns the configuration json of this style, as it can be used by the load method.
+     * @returns Json of configuration.
+     */
+    to_config_json() {
+        let config_json = {};
+        config_json["name"] = this.name;
+        config_json["field"] = this.field;
+        config_json["extrude"] = this.#extrude;
+        if ((this.field_ground !== undefined) && (this.field_height !== undefined)) {
+            config_json["field_ground"] = this.field_ground;
+            config_json["field_height"] = this.field_height;
+        }
+        config_json["gradation_or_classes"] = this.gradation_or_classes;
+        if (this.gradation_or_classes) {
+            config_json["color1"] = this.color1;
+            if (this.color2 !== undefined) {
+                config_json["color2"] = this.color2;
+            }
+            config_json["min"] = this.min;
+            config_json["max"] = this.max;
+        } else {
+            config_json["classes_map"] = this.classes_map;
+        }
+        if (this.source.isFileSource) {
+            config_json["source_info"] = {
+                "type": "FileSource",
+                "fetchedData": this.source.fetchedData,
+                "crs": this.source.crs,
+                "format": this.source.format
+            };
+        } //TODO else if to add other source types
+        return config_json;
+    }
+
+
+
+    /**
+     * Creates a style object from a configuration json.
+     * @param {*} view View object from iTowns.
+     * @param {*} source Source object from iTowns.
+     * @param {JSON} config_json Json containing the configuration of style, as it is returned by the to_config_json method.
+     * @returns The style object created.
+     */
+    static load(view, config_json) {
+        let source;
+        if (config_json.source_info.type == "FileSource") {
+            source = new itowns.FileSource({
+                fetchedData: config_json.source_info.fetchedData,
+                crs: config_json.source_info.crs,
+                format: config_json.source_info.format
+            });
+        } //TODO else if to add other source types
+        let style_res = new Style(config_json.name, view, source, config_json.field, config_json.gradation_or_classes);
+        if ((config_json.field_ground !== undefined) && (config_json.field_height !== undefined)) {
+            style_res.setExtrude(config_json.field_ground, config_json.field_height);
+        }
+        if (config_json.gradation_or_classes) {
+            if (config_json.color2 === undefined) {
+                style_res.setGradation(config_json.color1, "", config_json.min, config_json.max);
+            } else {
+                style_res.setGradation(config_json.color1, config_json.color2, config_json.min, config_json.max);
+            }
+        } else {
+            style_res.setClasses(config_json.classes_map);
+        }
+        return style_res;
     }
 }
