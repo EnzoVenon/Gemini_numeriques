@@ -23,6 +23,8 @@ import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojso
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
 
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
+import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
+
 import * as shp from "shpjs";
 
 
@@ -152,12 +154,24 @@ let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
 
+// let geojson 
+let bdnbGeoJson
+
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
     addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
+
+    bdnbGeoJson = await bdnbPromisedJson
+
+    bdnbGeoJson.features.forEach((feature) => {
+        let data = dataBdnb[feature.properties["batiment_g"]]
+        if (data) {
+            feature.properties = data
+        }
+    });
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
@@ -590,35 +604,12 @@ viewerDiv.addEventListener(
 )
 htmlTest.innerHTML += '</div>';
 
-document.getElementById("showIgnLayer").addEventListener("change", () => {
-    if (document.getElementById("showIgnLayer").checked) {
-        addShp("../data/shp/prg/bd_topo", "bd_topo", "green", "", view, false)
-    }
-    else {
-        view.removeLayer("bd_topo")
-    }
+// layer savoir plus
+addShpLayerOnChange("showIgnLayer", paths.bdtopo, "bd_topo", "red", "", view)
+addShpLayerOnChange("showOsmLayer", paths.osm, "osm", "yellow", "", view)
+addShpLayerOnChange("showCadastreLayer", paths.cadastre, "cadastre", "red", "", view)
 
-})
 
-document.getElementById("showOsmLayer").addEventListener("change", () => {
-    if (document.getElementById("showOsmLayer").checked) {
-        addShp("../data/shp/prg/osm", "osm", "yellow", "", view, false)
-    }
-    else {
-        view.removeLayer("osm")
-    }
-
-})
-
-document.getElementById("showCadastreLayer").addEventListener("change", () => {
-    if (document.getElementById("showCadastreLayer").checked) {
-        addShp("../data/shp/prg/osm", "cadastre", "red", "", view, false)
-    }
-    else {
-        view.removeLayer("cadastre")
-    }
-
-})
 
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
     if (document.getElementById("showInnondationLayer").checked) {
