@@ -10,10 +10,9 @@
  */
 export function dataINSEE4Chart(attributeList, popValues) {
     let result = [];
-    Object.entries(popValues).forEach(([key, value]) => {
-        if (attributeList.includes(value.attribut)) {
-            console.log(key)
-            result.push({ name: value.name4User, value: value.val })
+    Object.entries(popValues).forEach((value) => {
+        if (attributeList.includes(value[1].attribut)) {
+            result.push({ name: value[1].name4User, value: value[1].val })
         }
     })
 
