@@ -1,16 +1,16 @@
 
 // ----------------- Imports ----------------- //
-import { addOrthoLayer } from "./js/models/ortho";
-import { addElevationLayer } from "./js/models/elevation";
+import { addOrthoLayer } from "./js/affichageItown/ortho";
+import { addElevationLayer } from "./js/affichageItown/elevation";
 import { addShp } from "./js/affichageItown/addShpLayer"
-import { addSpecificBuilings } from "./js/models/extrudedBat"
+import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
 import { importCsvFile } from "./js/models/readCsv"
 import { addChart } from "./js/models/insee/showChart"
 import * as contenuOnglet from "./js/models/contenuOnglets"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
-import { loadBufferDataFromShp } from "./js/recupData/dataFromShpDbf.js"
+import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
 
@@ -342,8 +342,8 @@ viewerDiv.addEventListener(
             }
 
 
-            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
-            addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", 12, "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view)
+            addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
+            addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
             console.log(tooltip.value)
 
             let tooltipBuildingID = tooltip.value.properties.batiment_c

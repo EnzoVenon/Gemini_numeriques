@@ -1,7 +1,7 @@
-import { loadBufferDataFromShp } from "../recupData/dataFromShpDbf"
+import { loadBufferDataFromShp } from "../recuperationDonnee/dataFromShpDbf"
 
 /**
- * add a shapfile layer front itwon
+ * add a shapfile layer front itown
  * @param {String} filePath - path to the shp 
  * @param {String} layerName -id of the layer
  * @param {String} oulineColor 

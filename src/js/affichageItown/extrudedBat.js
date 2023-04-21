@@ -1,29 +1,22 @@
-//add one or more builing 
-/*
-databaseType: osm, bdtopo, cadastre, bdnb
-hauteur du batiment 
-properties: filter accroding to --valuesOfPerperties-- of properties => id, type, usage, .....
-Color for the object
-*/
-const THREE = itowns.THREE
-
-export function addSpecificBuilings(databaseType, height, properties, valuesOfPerperties, color, view) {
-
-    shapefile.open(databaseType)
+/**
+ * extrude one building => it is a new layer 
+ * @param {String} filePath =>  path to the shp 
+ * @param {Number} height => deafult height if there is no height attribute height 
+ * @param {String} properties => id properties
+ * @param {String} valuesOfPerperties => value of the id
+ * @param {String} color => color of the building
+ * @param {Object} view 
+ */
+import { addEdgeObj3d } from "./contourObj3d"
+export function addSpecificBuilings(filePath, properties, valuesOfPerperties, color, view, THREE, height = 20) {
+    shapefile.open(filePath)
         .then(source => source.read()
             .then(function log(result) {
+                //recursive function to loop on all shape in the geojson
                 if (result.done) return;
                 try {
 
                     if (result.value.properties[properties] == valuesOfPerperties) {
-
-                        // let polygon = turf.polygon(result.value.geometry.coordinates[0])
-
-                        // console.log(polygon)
-
-                        // var buffered = turf.buffer(polygon, 0.0001, { units: 'degrees' });
-
-                        // console.log(buffered)
                         let src2 = new itowns.FileSource({
                             fetchedData: {
                                 "type": "FeatureCollection",
@@ -38,9 +31,6 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                             crs: 'EPSG:4326',
                             format: 'application/json',
                         })
-                        // console.log(result.value.geometry.coordinates[0])
-
-
                         let bat = new itowns.FeatureGeometryLayer(result.value.properties[properties] + color, {
                             source: src2,
                             transparent: true,
@@ -58,7 +48,7 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                         }
 
                                         else {
-                                            return 20
+                                            return height
                                         }
                                     },
                                     base_altitude: (properties) => {
@@ -76,24 +66,12 @@ export function addSpecificBuilings(databaseType, height, properties, valuesOfPe
                                 }
                             }),
                             onMeshCreated: (mesh) => {
-                                console.log(mesh.children[0].children[0].children[0].children[0])
                                 let object = mesh.children[0].children[0].children[0].children[0]
-                                object.scale.x = 1.05;
-                                object.scale.y = 1.05;
-                                object.scale.z = 1.02;
-                                var objectEdges = new THREE.LineSegments(
-                                    new THREE.EdgesGeometry(object.geometry),
-                                    new THREE.LineBasicMaterial({ color: 'black' })
-                                );
-
-                                object.add(objectEdges);
+                                addEdgeObj3d(object, "black", THREE)
                             }
                         });
 
                         view.addLayer(bat)
-
-
-                        document.getElementById('bat').value = { coord: result.value.geometry.coordinates[0] }
                     }
                 } catch (e) {
                     console.log(e)
