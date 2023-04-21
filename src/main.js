@@ -467,7 +467,6 @@ viewerDiv.addEventListener(
                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                     const tooltipList = [...tooltipTriggerList]
                     tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    console.log(htmlICI)
                 })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
@@ -500,8 +499,7 @@ viewerDiv.addEventListener(
                                 console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
-                            console.log(valDisplayedPop.tabPopulation)
-                            console.log(dataList4Chart)
+
 
                             // ----- Generate HTML text ----- //
                             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
