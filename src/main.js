@@ -461,17 +461,21 @@ viewerDiv.addEventListener(
                     let individubody;
                     let divHoushold;
                     let divIndividu;
-
+                    let count = 0;
+                    let countIndividu;
                     Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        count++;
+
                         individubody = '';
                         value.individuals.forEach((val, idx) => {
+                            countIndividu = idx + 1
                             indbody = '';
                             indbody += contenuOnglet.createAccordionForListValues(val, '', true)
-                            individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
+                            individubody += contenuOnglet.createAccordion('individu' + key + countIndividu, 'Individu ' + idx, indbody).innerHTML
                         })
                         householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
-                        divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
-                        divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
+                        divIndividu = contenuOnglet.createAccordion('individu', 'Individu(s)', individubody).outerHTML
+                        divHoushold = contenuOnglet.createAccordion('household' + key, 'Ménage ' + count, householdbody + divIndividu)
                         testPop += divHoushold.outerHTML
                     })
 
@@ -495,7 +499,6 @@ viewerDiv.addEventListener(
                     let valDisplay2 = csvMenageINSEE
                         .then(res => {
                             // ----------- POPULATION INSEE ----------- //
-
                             // Retrieve elements where Iris number is same as tooltip
                             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
 
