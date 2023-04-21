@@ -2,7 +2,7 @@ import { getUniquePropNames } from "../utile/getUniquePropertiesNamesFromGeojson
 import { updateSelectOptionFromList } from "./updateSelectOptionFromList"
 
 /**
- * 
+ * udpate a selection div fron geojson 
  * @param {String} idSelect - id of the select html tag
  * @param {Object} geojson - geojson from shp 
  */

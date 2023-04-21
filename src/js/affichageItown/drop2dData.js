@@ -2,7 +2,7 @@ import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 import { setLegend } from "../affichageHtml/legend"
 
 /**
- * 
+ * add a coloryer layer from geojson
  * @param {Object} geojson - data to represent en 2D
  * @param {string} selectOption - attribut for coloring objects
  * @param {String} randomId - id of the layer

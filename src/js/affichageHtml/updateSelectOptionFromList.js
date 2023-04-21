@@ -1,5 +1,5 @@
 /**
- * 
+ * update a selection div from array
  * @param {String} idSelect - id of the select html tag
  * @param {*} listOptions 
  */
