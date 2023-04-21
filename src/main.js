@@ -162,17 +162,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
-    addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
-
-    bdnbGeoJson = await bdnbPromisedJson
-
-    bdnbGeoJson.features.forEach((feature) => {
-        let data = dataBdnb[feature.properties["batiment_g"]]
-        if (data) {
-            feature.properties = data
-        }
-    });
-
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     await csvBdnb.then(res => {
@@ -182,6 +171,17 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
             return result;
         }, {});
+    });
+
+    await addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
+
+    bdnbGeoJson = await bdnbPromisedJson;
+
+    bdnbGeoJson.features.forEach((feature) => {
+        let data = dataBdnb[feature.properties["batiment_g"]]
+        if (data) {
+            feature.properties = data
+        }
     });
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
