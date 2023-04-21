@@ -166,32 +166,81 @@ const tabs = {
   ]
 }
 
+/**
+ * 
+ * @param {Object} dataDictionary Dictionary containing the data from a given source 
+ * @param {Object} dictionaryTofillFrom Dictionary to fill from (can already be filled) with the following format
+ *    {
+ *      tabInfoGen: [{ attribut: key, name4User: name4User, val: value, source: base },..],
+ *      tabBatiment: [],
+ *      tabRisques: [],
+ *      tabEnergie: [],
+ *      tabPopulation: {}
+ *    }
+ * @param {String} nameSourceBase Name of the source base where the data is from
+ * @returns 
+ *    {
+ *      tabInfoGen: [ { attribut: key, name4User: name4User, val: value, source: base },
+ *                    { attribut: key, name4User: name4User, val: value, source: base },
+ *                    ... ],
+ *      tabBatiment: [ { attribut: key, name4User: name4User, val: value, source: base },
+ *                    { attribut: key, name4User: name4User, val: value, source: base },
+ *                    ... ],
+ *      tabRisques: [ { attribut: key, name4User: name4User, val: value, source: base },
+ *                    { attribut: key, name4User: name4User, val: value, source: base },
+ *                    ... ],
+ *      tabEnergie: [ { attribut: key, name4User: name4User, val: value, source: base },
+ *                    { attribut: key, name4User: name4User, val: value, source: base },
+ *                    ... ],
+ *      tabPopulation: {}
+ *    }
+ */
 
+export function spreadDataToTabs(dataDictionary, dictionaryTofillFrom, nameSourceBase) {
+  let dataSpread;
+  Object.entries(dataDictionary).forEach(([key, value]) => {
+    dataSpread = loadDataToJSON(dictionaryTofillFrom, key, value, nameSourceBase)
+  })
+  return dataSpread;
+}
+
+
+/**
+     * Load data into a JSON. 
+     * @param {Object} dictionaryTofill Dictionary to fill (can already be filled) with the following format :
+     *    {
+     *      tabInfoGen: [{ attribut: key, name4User: name4User, val: value, source: base },..],
+     *      tabBatiment: [],
+     *      tabRisques: [],
+     *      tabEnergie: [],
+     *      tabPopulation: {}
+     *    }
+     * @param {String} key Raw attribute name of the data in the source
+     * @param {String or Number} value Value for the given key
+     * @param {String} base Name of the source base where the data is from
+     * @param {Boolean} isForPopulationTab Boolean to process differently for the population tab.
+     *                  Default is false, if true dictionaryTofill = {}
+     * 
+     * The returned variable's format is as follow:
+     *    {
+     *      tabInfoGen: [ { attribut: key, name4User: name4User, val: value, source: base },
+     *                    { attribut: key, name4User: name4User, val: value, source: base },
+     *                    ... ],
+     *      tabBatiment: [ { attribut: key, name4User: name4User, val: value, source: base },
+     *                    { attribut: key, name4User: name4User, val: value, source: base },
+     *                    ... ],
+     *      tabRisques: [ { attribut: key, name4User: name4User, val: value, source: base },
+     *                    { attribut: key, name4User: name4User, val: value, source: base },
+     *                    ... ],
+     *      tabEnergie: [ { attribut: key, name4User: name4User, val: value, source: base },
+     *                    { attribut: key, name4User: name4User, val: value, source: base },
+     *                    ... ],
+     *      tabPopulation: {}
+     *    }
+ */
 export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulationTab = false) {
 
-  /* 
-  
-      Load data into a JSON. 
-      The returned variable's format is as follow:
-          {
-            tabInfoGen: [ { attribute: key, name4User: name4User, val: value, source: base },
-                          { attribute: key, name4User: name4User, val: value, source: base },
-                          ... ],
-            tabBatiment: [ { attribute: key, name4User: name4User, val: value, source: base },
-                          { attribute: key, name4User: name4User, val: value, source: base },
-                          ... ],
-            tabRisques: [ { attribute: key, name4User: name4User, val: value, source: base },
-                          { attribute: key, name4User: name4User, val: value, source: base },
-                          ... ],
-            tabEnergie: [ { attribute: key, name4User: name4User, val: value, source: base },
-                          { attribute: key, name4User: name4User, val: value, source: base },
-                          ... ]
-          }
-  
-  */
   let name4User = attribut2UserName[key];
-
-
   const jsonData = {
     attribut: key,
     name4User: name4User,
@@ -220,13 +269,20 @@ export function loadDataToJSON(dictionaryTofill, key, value, base, isForPopulati
   return dictionaryTofill;
 }
 
+
+/**
+     *  Generates html accordion item for each attribute in the list of attributes given
+     * @param {String} htmlID HTML id name for the accordion element
+     * @param {String} tabName Name of the tab in the application. It can either be: 
+     *                      - tabInfoGen
+     *                      - tabBatiment
+     *                      - tabRisques
+     *                      - tabEnergie
+     * @param {Array} listOfAttributes List of the attributes, each element of the list is as follow:
+     *          { attribut: key, name4User: name4User, val: value, source: base }
+     * @param {String} keyTab Key of the tab in the application
+ */
 export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab) {
-  /*
-
-    Generates html accordion item for each attribute in the list of attributes given
-
-  */
-
   if (listOfAttributes.length !== 0) {
     let textTest = ''
     const htmlElement = document.getElementById(htmlID);
@@ -239,26 +295,18 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
       })
     }
   }
-
-
 }
 
-export function spreadDataToTabs(dataDictionary, dictionaryTofillFrom, nameSourceBase) {
-  let dataSpread;
-  Object.entries(dataDictionary).forEach(([key, value]) => {
-    dataSpread = loadDataToJSON(dictionaryTofillFrom, key, value, nameSourceBase)
-  })
-  return dataSpread;
-}
 
+/**
+ * Generate html accordion for the given attribute
+ * @param {String} attributeName Raw Name of the attribute data
+ * @param {String} name4User Name displayed for the user
+ * @param {String} value Value of the data
+ * @param {String} source Source where the data is from
+ * @returns 
+ */
 export function generateAccordion4Attribute(attributeName, name4User, value, source) {
-
-  /*
-
-    Generate html accordion for the given attribute
-
-  */
-
   let htmlText = '';
   htmlText += '<div class="accordion-item">'
   htmlText += '<h2 class="accordion-header" id="heading' + attributeName + '">'
