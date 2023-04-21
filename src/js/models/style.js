@@ -79,7 +79,32 @@ export default class Style {
         //Set this.min and this.max
         this.min = min;
         this.max = max;
-        //Automatically find and set this.min and this.max?
+        return this;
+    }
+
+
+
+    /**
+     * Sets the colors used during the classification. 
+     * @param {JSON} map Optional. JSON having the field different values as keys and colors as values (example: "rgb(0,1,2)"). If unset, classification is automated. If a field value is not in keys, its color will be set to the one of the key "no-data-color". Example: myStyle.setClasses({"Résidentiel": "rgb(255,0,0)", "Commercial": "rgb(0,0,255)", "no-data-color": "rgb(0,255,0)"}).
+     */
+    setClasses(map = {}) {
+        this.classes_map = map;
+        if (this.classes_map["no-data-color"] === undefined) {
+            this.classes_map["no-data-color"] = "rgb(169,169,169)";
+        }
+        return this;
+    }
+
+
+
+    /**
+     * Find automatically the min and max values of this.field and returns the promess that end when it is done.
+     * @returns Promess which end when min and max are set.
+     */
+    async autoMinMax() {
+        const min = this.min;
+        const max = this.max;
         if (isNaN(min) || isNaN(max)) {
             //I am using a hack here, as we can't access iTowns source field value in our version and I don't have time to write those myself
             let hackMinMax = function f(properties) {
@@ -102,7 +127,7 @@ export default class Style {
                 source: this.source,
                 visible: false
             });
-            this.view.addLayer(layer).then(() => {
+            return this.view.addLayer(layer).then(() => {
                 //Here, this min and this.max were automatically set, we deal with the case where one of the two was NaN but not the other.
                 if (!isNaN(min)) {
                     this.min = min;
@@ -113,22 +138,9 @@ export default class Style {
                 this.view.removeLayer("to_delete_minmax_style" + id);
                 layer.delete();
             });
+        } else {
+            return Promise.resolve();
         }
-        return this;
-    }
-
-
-
-    /**
-     * Sets the colors used during the classification. 
-     * @param {JSON} map Optional. JSON having the field different values as keys and colors as values (example: "rgb(0,1,2)"). If unset, classification is automated. If a field value is not in keys, its color will be set to the one of the key "no-data-color". Example: myStyle.setClasses({"Résidentiel": "rgb(255,0,0)", "Commercial": "rgb(0,0,255)", "no-data-color": "rgb(0,255,0)"}).
-     */
-    setClasses(map = {}) {
-        this.classes_map = map;
-        if (this.classes_map["no-data-color"] === undefined) {
-            this.classes_map["no-data-color"] = "rgb(169,169,169)";
-        }
-        return this;
     }
 
 
@@ -137,7 +149,7 @@ export default class Style {
      * Apply the style. Removes the previous style itowns layer (if existing) and adds this one to the view and returns it.
      * @returns iTowns layer with the style.
      */
-    to_itowns_layer() {
+    async to_itowns_layer() {
         //As iTowns isn't permitting dynamic modification yet, we delete the layer and we recreate it
         this.clean();
 
@@ -145,6 +157,10 @@ export default class Style {
         let coloring;
         if (this.gradation_or_classes) {
             //Here, we deal with the gradation
+            //Check if min and max are set before creating color, otherwise we automatically find and set this.min and this.max
+            if (isNaN(this.min) || isNaN(this.max)) {
+                await this.autoMinMax();
+            }
             if (!this.color2) {
                 //Here, the gradation has only one color
                 coloring = function f(properties) {
@@ -168,7 +184,6 @@ export default class Style {
                 }
             } else {
                 //Here, the gradation has two colors
-                console.log("Affichage de style de dégradé 2 couleurs");
                 coloring = function f(properties) {
                     if (properties[this.field] !== undefined) {
                         const mid = (this.max + this.min) / 2;
