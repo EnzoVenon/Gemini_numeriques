@@ -29,21 +29,22 @@ function createAccChild(id, header, body) {
     return accChild
 }
 
-export function createAccordion(idParent, idChild, header, body) {
+export function createAccordion(idParent, header, body) {
     let divParent = createAccParent(idParent)
-    let divChild = createAccChild(idChild, header, body)
+    let divChild = createAccChild(idParent + 'child', header, body)
     divParent.appendChild(divChild)
     return divParent
 }
 
-export function createAccordionForListAttributes(listAttributes) {
+export function createAccordionForListAttributes(listAttributes, isForIndividuals = false) {
     let body = '';
-    let content = '';
     listAttributes.forEach((value) => {
-        content = createAccordion(value.attribute, value.attribute + 'child', value.name4User, value.val).outerHTML
+        if (value) {
+            if (isForIndividuals) {
+                body += value.name4User + ": " + value.val + '\n'
+            }
+            body += createAccordion(value.attribute, value.name4User, value.val).outerHTML
 
-        if (content) {
-            body += content
         }
     })
     return body
