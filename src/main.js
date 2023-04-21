@@ -509,9 +509,8 @@ viewerDiv.addEventListener(
                                 enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
                             }
                             let data4Chart = [];
-                            Object.entries(dataList4Chart).forEach(([key, value]) => {
-                                console.log(key)
-                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
+                            Object.entries(dataList4Chart).forEach((value) => {
+                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value[1], valDisplayedPop.tabPopulation))
                             })
 
 
