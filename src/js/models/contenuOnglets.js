@@ -85,15 +85,15 @@ export function createAccordion(idParent, header, body) {
     return divParent
 }
 
-export function createAccordionForListAttributes(listAttributes, isForIndividuals = false) {
+export function createAccordionForListAttributes(listAttributes, key, isForIndividuals = false) {
     let body = '';
     listAttributes.forEach((value) => {
         if (value) {
             if (isForIndividuals) {
                 body += value.name4User + ": " + value.val + '<br>'
             } else {
-
-                body += createAccordion(value.attribute, value.name4User, value.val).outerHTML
+                // console.log(value)
+                body += createAccordion(value.attribut + key, value.name4User, value.val).outerHTML
             }
 
         }

@@ -391,12 +391,12 @@ viewerDiv.addEventListener(
                         individubody = '';
                         value.individuals.forEach((val, idx) => {
                             indbody = '';
-                            indbody += contenuOnglet.createAccordionForListAttributes(val, true)
+                            indbody += contenuOnglet.createAccordionForListAttributes(val, '', true)
                             individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
                         })
-                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household)
+                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household, key)
                         divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
-                        divHoushold = contenuOnglet.createAccordion(key + 'Household', key, householdbody + divIndividu)
+                        divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
                         testPop += divHoushold.outerHTML
                     })
 
@@ -406,6 +406,7 @@ viewerDiv.addEventListener(
                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                     const tooltipList = [...tooltipTriggerList]
                     tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    console.log(htmlICI)
                 })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
