@@ -99,7 +99,7 @@ export default class Style {
 
 
     /**
-     * Find automatically the min and max values of this.field and returns the promess that end when it is done.
+     * Finds automatically the min and max values of this.field and returns the promess that end when it is done.
      * @returns Promess which end when min and max are set.
      */
     async autoMinMax() {
@@ -136,6 +136,39 @@ export default class Style {
                     this.max = max;
                 }
                 this.view.removeLayer("to_delete_minmax_style" + id);
+                layer.delete();
+            });
+        } else {
+            return Promise.resolve();
+        }
+    }
+
+
+
+    /**
+     * Finds automatically the classes contained in this.field if the user wants automated classification and returns the promess that end when it is done.
+     * @returns Promess which end when classes are well set.
+     */
+    async autoClass() {
+        if (Object.keys(this.classes_map).length == 1) {
+            //I am using a hack here, as we can't access iTowns source field value in our version and I don't have time to write those myself
+            let hackClass = function f(properties) {
+                if ((properties[this.field] !== undefined) && (this.classes_map[properties[this.field]] === undefined)) {
+                    this.classes_map[properties[this.field]] = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+                }
+                return true;
+            }
+            const findClass = hackClass.bind(this);
+            Style.#id_counter2 += 1;
+            const id = Style.#id_counter2;
+            const layer = new itowns.FeatureGeometryLayer("to_delete_class_style" + id, {
+                batchId: function (property, featureId) { return featureId; },
+                filter: findClass,
+                source: this.source,
+                visible: false
+            });
+            return this.view.addLayer(layer).then(() => {
+                this.view.removeLayer("to_delete_class_style" + id);
                 layer.delete();
             });
         } else {
@@ -217,23 +250,14 @@ export default class Style {
             //Here we deal with the classification
             if (Object.keys(this.classes_map).length == 1) {
                 //Here, the map associating classes and colors only contains the "no-data-color" key, so we classify automatically.
-                coloring = function f(properties) {
-                    if (properties[this.field] !== undefined) {
-                        if (this.classes_map[properties[this.field]] === undefined) {
-                            this.classes_map[properties[this.field]] = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
-                        }
-                        return this.classes_map[properties[this.field]];
-                    }
-                    return this.classes_map["no-data-color"];
+                await this.autoClass();
+            }
+            //Here, we classify according to the classes_map given. Unregistered classes are set to grey.
+            coloring = function f(properties) {
+                if ((properties[this.field] !== undefined) && (this.classes_map[properties[this.field]] !== undefined)) {
+                    return this.classes_map[properties[this.field]];
                 }
-            } else {
-                //Here, we classify according to the classes_map given. Unregistered classes are set to grey.
-                coloring = function f(properties) {
-                    if ((properties[this.field] !== undefined) && (this.classes_map[properties[this.field]] !== undefined)) {
-                        return this.classes_map[properties[this.field]];
-                    }
-                    return this.classes_map["no-data-color"];
-                }
+                return this.classes_map["no-data-color"];
             }
         }
         const drawing = coloring.bind(this);
