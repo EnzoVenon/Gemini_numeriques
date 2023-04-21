@@ -37,7 +37,6 @@ export function addShp(filePath, layerName, oulineColor, fillColor, view, toolti
             // Finally, we generate tooltip for when the mouse hovers the data displayed within our created layer.
             FeatureToolTip.addLayer(layer, { filterAllProperties: false });
         }
-
         return layer
     }));
 }
