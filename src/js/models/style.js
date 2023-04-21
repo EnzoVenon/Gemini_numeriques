@@ -347,8 +347,14 @@ export default class Style {
      */
     getLegend() {
         let res = document.createElement("div");
-        res.appendChild(document.createElement("h5")).innerText = this.name;
+        let legend_field = document.createElement("h5");
+        legend_field.innerText = this.name;
         if (this.gradation_or_classes) {
+            //No-data-color part of legend
+            res.innerHTML += '<p><span style="color:rgb(169,169,169);font-size: 2em">■</span> no-data-color</p><br>';
+            res.appendChild(legend_field);
+
+            //Gradation part of legend
             let canvas = document.createElement("canvas");
             let ctx = canvas.getContext("2d");
             console.log(canvas.height);
@@ -383,6 +389,7 @@ export default class Style {
 
             res.appendChild(canvas);
         } else {
+            res.appendChild(legend_field);
             let inner = "";
             for (let key of Object.keys(this.classes_map)) {
                 inner += '<p><span style="color:' + this.classes_map[key] + ';font-size: 2em">■</span> ' + key + '</p>';
