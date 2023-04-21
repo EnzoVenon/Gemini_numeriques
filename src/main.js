@@ -471,7 +471,7 @@ viewerDiv.addEventListener(
                             countIndividu = idx + 1
                             indbody = '';
                             indbody += contenuOnglet.createAccordionForListValues(val, '', true)
-                            individubody += contenuOnglet.createAccordion('individu' + key + countIndividu, 'Individu ' + idx, indbody).innerHTML
+                            individubody += contenuOnglet.createAccordion('individu' + key + countIndividu, 'Individu ' + countIndividu, indbody).innerHTML
                         })
                         householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
                         divIndividu = contenuOnglet.createAccordion('individu', 'Individu(s)', individubody).outerHTML
