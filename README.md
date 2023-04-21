@@ -1,5 +1,9 @@
 # **Gemini numérique**
 
+## **[Accéder au site](https://enzovenon.github.io/Gemini_numeriques/)**
+
+## **[Accéder au manuel utilisateur](manuel_utilisateur.md)**
+
 ## **Présentation**
 ### <u>Le projet</u>
 Cet outil est un prototype d'un projet porté par l'IGN, le CEREMA et l'INRIA qui souhaite créer un *Jumeau Numérique France Entière*.
@@ -27,7 +31,7 @@ Nous interconnectons les diverses sources de données suivantes :
 
 
 ### <u>Accès et améliorations</u>
-Vous pouvez copier ce dépôt (pour accéder à la version en cours) ou alors accéder au visualisateur web à l'adresse suivante (pour accéder à la version stable) : https://enzovenon.github.io/Gemini_numeriques/.
+La dernière version stable du site se trouve [ici](https://enzovenon.github.io/Gemini_numeriques/). Si vous voulez avoir accès à une version plus avancée, mais moins stable, la version du site la plus récente se trouve sur la branche **dev** (il vous faudra cloner le dépôt).
 
 Si vous avez eu un problème avec l'interface, que vous souhaitez laisser des commentaires ou si vous avez des idées d'améliorations, vous pouvez créer des *Issues* :
 - Si vous êtes membre du comité de suivi, vous pouvez créer une Issue avec le label : *Comité de suivi*.
@@ -41,61 +45,14 @@ git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
 - Installer Node (et npm)
 - Aller dans le dossier:  Gemini_numeriques et l'ouvrir dans le terminal 
-- Dans le terminal, lancer ces commandes pour tester en local : 
+- Dans le terminal, lancer ces commandes pour tester en local :
 
 ```bash
 npm install
 npm start
 ```
-- Pour avoir une version utilisable sur Git, lancer ces commandes avant de Push : 
+- Pour modifier la version déployé sur GitHub Pages, lancer ces commandes avant de Push, et faites une pull request sur la branche main (là où la page est déployée) :
 ```bash
 npm install
 npm run build
 ```
-
-## **Utiliser ESLint**
-
-Pour lancer les tests en local (analyse statique et tests unitaires), lancer ces commandes : 
-```bash
-npm install
-npm test
-```
-
-### Si ESLint affiche une erreur, que dois-je faire ?
----
-
-### no-unused-var
-Si l'erreur est :
-```bash
-/chemin/du/fichier.js
-  79:14  error  'myVar' is defined but never used   no-unused-vars
-```
-Il faut aller voir dans le fichier indiqué, à la ligne indiqué (ici ```/chemin/du/fichier.js``` et ligne ```79```) pour trouver la variable.
-
-Si elle ne sert pas et ne servira pas plus tard, on la supprime.
-
-Sinon, si elle sera utile plus tard, on rajoute ce commentaire à la ligne précédente :
-```js
-// eslint-disable-next-line no-unused-vars
-```
-
-### no-undef
-Si l'erreur est :
-```bash
-/chemin/du/fichier.js
-  13:9  error  'myVar' is not defined  no-undef
-```
-Il faut aller voir dans le fichier indiqué, à la ligne indiqué (ici ```/chemin/du/fichier.js``` et ligne ```13```) pour trouver la variable.
-
-Si elle sert, il faut la définir. Ça peut être un oubli de ```let``` ou de ```const``` au moment de la déclaration de la variable.
-
-Si c'est une variable globale, il faut se rendre dans le fichier [.eslintrc.json](/.eslintrc.json) qui est à la racine du projet, et la rajouter dans les variables globales.
-Exemple :
-```json
-{
-  "globals": {
-    "myVar": "readonly",
-  }
-}
-```
----
