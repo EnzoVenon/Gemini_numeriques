@@ -13,15 +13,10 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
-
-import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-
-
-
+import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToTabs";
 import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
 import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
-
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 import * as shp from "shpjs";
 
