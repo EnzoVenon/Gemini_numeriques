@@ -629,22 +629,11 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
 
 document.getElementById("exploredata").addEventListener("change", () => {
     if (document.getElementById("exploredata").checked) {
-        bdnbPromisedJson.then(geojson => {
-            geojson.features.forEach((feature) => {
-                let data = dataBdnb[feature.properties["batiment_g"]]
-                if (data) {
-                    feature.properties = data
-                }
-
-            });
-            batInorandomId.bdnb_random_id.num += 1;
-            batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
-
-        })
-
-
+        let geojson = bdnbGeoJson
+        batInorandomId.bdnb_random_id.num += 1;
+        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
+        updateSelectOption("selectProp", geojson)
+        geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
     }
     else {
@@ -707,12 +696,6 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
 })
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    // Object.entries(batInorandomId).forEach(([key, val]) => {
-    //     if (key != "ino_random_id" && val != "") {
-    //         view.removeLayer(val)
-    //     }
-    // })
-
     const selectPropValue = document.getElementById('selectProp').value;
     const ign = document.getElementById("exploredataIgn").checked;
     if (ign) {
@@ -732,9 +715,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.bdnb_random_id.num += 1;
         batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
         console.log(batInorandomId.bdnb_random_id)
-        bdnbPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
-        })
+        let geojson = bdnbGeoJson
+        updateSelectOption("selectProp", geojson)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
     }
 
 
@@ -758,7 +741,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
     }
