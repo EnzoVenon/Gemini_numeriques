@@ -186,6 +186,27 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     //Styles definition
     let style_list = [];
+    // style lié au contexte géographique
+    style_list.push(
+        new Style("Iris", view, src_bdnb, "code_iris", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+    );
+    // styles liés à l'objet
+    style_list.push(
+        new Style("Hauteur", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(255,0,0)")
+    );
+    style_list.push(
+        new Style("Nature du bâtiment", view, src_bdnb, "bdtopo_bat_l_nature", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+    );
+    // Problème de stylisation sur ce style
+    style_list.push(
+        new Style("Année de construction", view, src_bdnb, "ffo_bat_annee_construction", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(0,0,255)")
+    );
     style_list.push(
         new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
@@ -199,19 +220,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "G": "rgb(228,19,18)"
             })
     );
-    style_list.push(
-        new Style("Hauteur", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
-            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
-            .setGradation("rgb(255,0,0)")
-    );
-    style_list.push(
-        new Style("Iris", view, src_bdnb, "code_iris", false)
-            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
-    );
-    style_list.push(
-        new Style("Nature du bâtiment", view, src_bdnb, "bdtopo_bat_l_nature", false)
-            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
-    );
+    // styles liées au risques
     style_list.push(
         new Style("Risques liés aux argiles", view, src_bdnb, "argiles_alea", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
@@ -230,6 +239,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "Moyen": "rgb(255,165,0)"
             })
     );
+    // styles liés à la fiabilité
     style_list.push(
         new Style("Fiabilité de la hauteur", view, src_bdnb, "fiabilite_hauteur", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
@@ -248,13 +258,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "MOYENNE": "rgb(255,165,0)"
             })
     );
-    // Problème de stylisation sur ce style
-    style_list.push(
-        new Style("Année de construction", view, src_bdnb, "ffo_bat_annee_construction", true)
-            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
-            .setGradation("rgb(0,0,255)")
-    );
-
 
     //Setting the predefined styles
     for (let i = 0; i < style_list.length; i++) {
