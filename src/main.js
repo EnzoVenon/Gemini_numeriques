@@ -248,6 +248,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "MOYENNE": "rgb(255,165,0)"
             })
     );
+    // Problème de stylisation sur ce style
     style_list.push(
         new Style("Année de construction", view, src_bdnb, "ffo_bat_annee_construction", true)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
