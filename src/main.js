@@ -231,18 +231,18 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         new Style("Risques liés aux argiles", view, src_bdnb, "argiles_alea", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
-                "Fort": "rgb(255,0,0)",
                 "Faible": "rgb(82,255,71)",
-                "Moyen": "rgb(255,165,0)"
+                "Moyen": "rgb(255,165,0)",
+                "Fort": "rgb(255,0,0)"
             })
     );
     style_list.push(
         new Style("Risques liés au radon", view, src_bdnb, "radon_alea", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
-                "Fort": "rgb(255,0,0)",
                 "Faible": "rgb(82,255,71)",
-                "Moyen": "rgb(255,165,0)"
+                "Moyen": "rgb(255,165,0)",
+                "Fort": "rgb(255,0,0)"
             })
     );
     // styles liés à la fiabilité
@@ -250,28 +250,29 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         new Style("Fiabilité de la hauteur", view, src_bdnb, "fiabilite_hauteur", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
-                "FAIBLE": "rgb(255,0,0)",
                 "BONNE": "rgb(82,255,71)",
-                "MOYENNE": "rgb(255,165,0)"
+                "MOYENNE": "rgb(255,165,0)",
+                "FAIBLE": "rgb(255,0,0)"
+
             })
     );
     style_list.push(
         new Style("Fiabilité de l'emprise au sol", view, src_bdnb, "fiabilite_emprise_sol", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
-                "FAIBLE": "rgb(255,0,0)",
                 "BONNE": "rgb(82,255,71)",
-                "MOYENNE": "rgb(255,165,0)"
+                "MOYENNE": "rgb(255,165,0)",
+                "FAIBLE": "rgb(255,0,0)"
             })
     );
     style_list.push(
         new Style("Fiabilité de l'adresse", view, src_bdnb, "fiabilite_cr_adr_niv_1", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
             .setClasses({
-                "problème de géocodage": "rgb(255,0,0)",
                 "données croisées à l'adresse fiables": "rgb(82,255,71)",
                 "données croisées à l'adresse fiables à l'echelle de la parcelle unifiee": "rgb(255,255,0)",
-                "données croisées à l'adresse moyennement fiables": "rgb(255,165,0)"
+                "données croisées à l'adresse moyennement fiables": "rgb(255,165,0)",
+                "problème de géocodage": "rgb(255,0,0)"
             })
     );
 
