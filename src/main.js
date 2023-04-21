@@ -452,10 +452,10 @@ viewerDiv.addEventListener(
                         individubody = '';
                         value.individuals.forEach((val, idx) => {
                             indbody = '';
-                            indbody += contenuOnglet.createAccordionForListAttributes(val, '', true)
+                            indbody += contenuOnglet.createAccordionForListValues(val, '', true)
                             individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
                         })
-                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household, key)
+                        householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
                         divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
                         divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
                         testPop += divHoushold.outerHTML
@@ -500,6 +500,8 @@ viewerDiv.addEventListener(
                                 console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
+                            console.log(valDisplayedPop.tabPopulation)
+                            console.log(dataList4Chart)
 
                             // ----- Generate HTML text ----- //
                             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
