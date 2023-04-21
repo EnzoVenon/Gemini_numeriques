@@ -208,6 +208,52 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         new Style("Iris", view, src_bdnb, "code_iris", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
     );
+    style_list.push(
+        new Style("Nature du bâtiment", view, src_bdnb, "bdtopo_bat_l_nature", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+    );
+    style_list.push(
+        new Style("Risques liés aux argiles", view, src_bdnb, "argiles_alea", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "Fort": "rgb(255,0,0)",
+                "Faible": "rgb(82,255,71)",
+                "Moyen": "rgb(255,165,0)"
+            })
+    );
+    style_list.push(
+        new Style("Risques liés au radon", view, src_bdnb, "radon_alea", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "Fort": "rgb(255,0,0)",
+                "Faible": "rgb(82,255,71)",
+                "Moyen": "rgb(255,165,0)"
+            })
+    );
+    style_list.push(
+        new Style("Fiabilité de la hauteur", view, src_bdnb, "fiabilite_hauteur", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "FAIBLE": "rgb(255,0,0)",
+                "BONNE": "rgb(82,255,71)",
+                "MOYENNE": "rgb(255,165,0)"
+            })
+    );
+    style_list.push(
+        new Style("Fiabilité de l'emprise au sol", view, src_bdnb, "fiabilite_emprise_sol", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "FAIBLE": "rgb(255,0,0)",
+                "BONNE": "rgb(82,255,71)",
+                "MOYENNE": "rgb(255,165,0)"
+            })
+    );
+    style_list.push(
+        new Style("Année de construction", view, src_bdnb, "ffo_bat_annee_construction", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(0,0,255)")
+    );
+
 
     //Setting the predefined styles
     for (let i = 0; i < style_list.length; i++) {
