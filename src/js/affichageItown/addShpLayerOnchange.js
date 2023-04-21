@@ -1,6 +1,6 @@
 import { addShp } from "./addShpLayer"
 /**
- * 
+ * add shp on switch checked
  * @param {String} divId => id of the switch div
  * @param {String} filePath => path to the shp
  * @param {String} layerId => id of the color layer to be created
