@@ -110,16 +110,20 @@ p {
     margin-top: 7px;
     margin-bottom: 0px;
 }
-#bdnb{
+
+#bdnb {
     color: #000;
 }
-#ign{
+
+#ign {
     color: green;
 }
-#osm{
+
+#osm {
     color: yellow;
 }
-#cadastre{
+
+#cadastre {
     color: red;
 }
 
@@ -158,7 +162,7 @@ p {
 #boutonplus {
     position: absolute;
 
-    width: 100%;
+    width: 80%;
     height: 85vh;
     z-index: 0;
 }
