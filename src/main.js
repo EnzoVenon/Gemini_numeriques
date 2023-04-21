@@ -127,13 +127,13 @@ document.getElementById("changloc").addEventListener("click", () => {
 
 // ----------------- Layers Setup ----------------- //
 // Elevation layers
-itowns.Fetcher.json('./data/layers/JSONLayers/WORLD_DTM.json')
+itowns.Fetcher.json('../data/layers/JSONLayers/WORLD_DTM.json')
     .then(result => addElevationLayer(result, view));
-itowns.Fetcher.json('./data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
+itowns.Fetcher.json('../data/layers/JSONLayers/IGN_MNT_HIGHRES.json')
     .then(result => addElevationLayer(result, view));
 
 // Ortho Layer
-itowns.Fetcher.json('./data/layers/JSONLayers/Ortho.json')
+itowns.Fetcher.json('../data/layers/JSONLayers/Ortho.json')
     .then(result => addOrthoLayer(result, view));
 
 // CSV files
@@ -173,7 +173,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         }
     });
 
-    await addShp("./data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
+    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     await csvBdnb.then(res => {
         // Récupérer les valeurs uniques de la propriété "type"
@@ -569,7 +569,7 @@ viewerDiv.addEventListener(
 
                 })
 
-            shapefile.open("./data/shp/prg/bdnb_perigeux8")
+            shapefile.open("../data/shp/prg/bdnb_perigeux8")
                 .then(source => source.read()
                     .then(async function log(result) {
                         if (result.done) return "done";
@@ -577,14 +577,14 @@ viewerDiv.addEventListener(
                         if (result.value.properties["batiment_g"] === tooltip.value.properties.batiment_g) {
                             let selectedBatGeom = result.value.geometry.coordinates
                             let polygon = turf.polygon(selectedBatGeom)
-                            shapefile.open("./data/shp/prg/osm")
+                            shapefile.open("../data/shp/prg/osm")
                                 .then(source => source.read()
                                     .then(function log(result) {
                                         if (result.done) return "done";
                                         let polygonOsm = turf.polygon(result.value.geometry.coordinates)
 
                                         if (turf.intersect(polygonOsm, polygon)) {
-                                            // addSpecificBuilings("./data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
+                                            // addSpecificBuilings("../data/shp/prg/osm", 200, "osm_id", result.value.properties["osm_id"], "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); }), view)
                                             return;
                                         }
 
