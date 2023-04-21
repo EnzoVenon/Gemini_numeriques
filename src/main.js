@@ -13,15 +13,10 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
-
-import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-
-
-
+import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToTabs";
 import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
 import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
-
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
 
@@ -471,10 +466,10 @@ viewerDiv.addEventListener(
                         individubody = '';
                         value.individuals.forEach((val, idx) => {
                             indbody = '';
-                            indbody += contenuOnglet.createAccordionForListAttributes(val, '', true)
+                            indbody += contenuOnglet.createAccordionForListValues(val, '', true)
                             individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
                         })
-                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household, key)
+                        householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
                         divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
                         divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
                         testPop += divHoushold.outerHTML
@@ -486,7 +481,6 @@ viewerDiv.addEventListener(
                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                     const tooltipList = [...tooltipTriggerList]
                     tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    console.log(htmlICI)
                 })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
@@ -519,6 +513,7 @@ viewerDiv.addEventListener(
                                 console.log(key)
                                 data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
                             })
+
 
                             // ----- Generate HTML text ----- //
                             textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
