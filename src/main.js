@@ -264,6 +264,16 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "MOYENNE": "rgb(255,165,0)"
             })
     );
+    style_list.push(
+        new Style("Fiabilité de l'adresse", view, src_bdnb, "fiabilite_cr_adr_niv_1", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "problème de géocodage": "rgb(255,0,0)",
+                "données croisées à l'adresse fiables": "rgb(82,255,71)",
+                "données croisées à l'adresse fiables à l'echelle de la parcelle unifiee": "rgb(255,255,0)",
+                "données croisées à l'adresse moyennement fiables": "rgb(255,165,0)"
+            })
+    );
 
     //Setting the predefined styles
     for (let i = 0; i < style_list.length; i++) {
