@@ -390,20 +390,29 @@ viewerDiv.addEventListener(
 
                     let testPop = '';
                     let householdbody = '';
-                    let indbody = '';
-                    let individubody = '';
+                    let indbody;
+                    let individubody;
                     let divHoushold;
                     let divIndividu;
 
                     Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        indbody = '';
+                        individubody = '';
                         value.individuals.forEach((val, idx) => {
-                            indbody += createAccordionForListAttributes(val)
-                            individubody += createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).outerHTML
+                            console.log('------------------------------val')
+                            console.log(val)
+                            indbody = '';
+                            indbody += createAccordionForListAttributes(val, true)
+                            individubody += createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
+                            console.log(individubody)
                         })
                         householdbody = createAccordionForListAttributes(value.household)
                         divIndividu = createAccordion('individu', 'Individus', individubody).outerHTML
                         divHoushold = createAccordion(key + 'Household', key, householdbody + divIndividu)
-
+                        // console.log('-----------------------------------------indbody')
+                        // console.log(indbody)
+                        // console.log('-----------------------------------------individubody')
+                        // console.log(individubody)
                         testPop += divHoushold.outerHTML
                     })
 

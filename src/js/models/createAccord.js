@@ -41,9 +41,11 @@ export function createAccordionForListAttributes(listAttributes, isForIndividual
     listAttributes.forEach((value) => {
         if (value) {
             if (isForIndividuals) {
-                body += value.name4User + ": " + value.val + '\n'
+                body += value.name4User + ": " + value.val + '<br>'
+            } else {
+
+                body += createAccordion(value.attribute, value.name4User, value.val).outerHTML
             }
-            body += createAccordion(value.attribute, value.name4User, value.val).outerHTML
 
         }
     })
