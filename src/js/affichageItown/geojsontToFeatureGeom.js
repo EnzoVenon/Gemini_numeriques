@@ -2,6 +2,7 @@ import { generateUniqueColors } from "../utile/generaRandomColorFromList"
 import { setLegend } from "../affichageHtml/legend"
 import { addEdgeObj3d } from "./contourObj3d"
 /**
+ * add featuregeomeetry from geojson
  * @param {Object} geojson - data to represent en 3D
  * @param {String} selectOption - attribut for coloring objects
  * @param {String} incrementedId - id of the layer

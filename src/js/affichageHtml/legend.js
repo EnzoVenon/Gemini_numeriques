@@ -1,5 +1,5 @@
 /**
- * 
+ * updte the div legend
  * @param {Object} jsonLabelColor - json with key=label and value =color
  */
 export function setLegend(jsonLabelColor) {
