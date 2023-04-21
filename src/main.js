@@ -156,7 +156,14 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
 
-    bdnbJson = await bdnbPromisedJson
+    bdnbGeoJson = await bdnbPromisedJson
+
+    bdnbGeoJson.features.forEach((feature) => {
+        let data = dataBdnb[feature.properties["batiment_g"]]
+        if (data) {
+            feature.properties = data
+        }
+    });
 
     await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
