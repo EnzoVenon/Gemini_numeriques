@@ -13,13 +13,21 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
-import { loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
+
+import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
+
+
+
 import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
 import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
+
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
+
 import * as shp from "shpjs";
+
+
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -198,6 +206,27 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     //Styles definition
     let style_list = [];
+    // style lié au contexte géographique
+    style_list.push(
+        new Style("Iris", view, src_bdnb, "code_iris", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+    );
+    // styles liés à l'objet
+    style_list.push(
+        new Style("Hauteur", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(255,0,0)")
+    );
+    style_list.push(
+        new Style("Nature du bâtiment", view, src_bdnb, "bdtopo_bat_l_nature", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+    );
+    // Problème de stylisation sur ce style
+    style_list.push(
+        new Style("Année de construction", view, src_bdnb, "ffo_bat_annee_construction", true)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setGradation("rgb(0,0,255)")
+    );
     style_list.push(
         new Style("Notes consommation d'énergie", view, src_bdnb, "dpe_logtype_classe_conso_ener", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
@@ -211,14 +240,54 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
                 "G": "rgb(228,19,18)"
             })
     );
+    // styles liées au risques
     style_list.push(
-        new Style("Hauteur", view, src_bdnb, "bdtopo_bat_hauteur_mean", true)
+        new Style("Risques liés aux argiles", view, src_bdnb, "argiles_alea", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
-            .setGradation("rgb(255,0,0)")
+            .setClasses({
+                "Faible": "rgb(82,255,71)",
+                "Moyen": "rgb(255,165,0)",
+                "Fort": "rgb(255,0,0)"
+            })
     );
     style_list.push(
-        new Style("Iris", view, src_bdnb, "code_iris", false)
+        new Style("Risques liés au radon", view, src_bdnb, "radon_alea", false)
             .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "Faible": "rgb(82,255,71)",
+                "Moyen": "rgb(255,165,0)",
+                "Fort": "rgb(255,0,0)"
+            })
+    );
+    // styles liés à la fiabilité
+    style_list.push(
+        new Style("Fiabilité de la hauteur", view, src_bdnb, "fiabilite_hauteur", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "BONNE": "rgb(82,255,71)",
+                "MOYENNE": "rgb(255,165,0)",
+                "FAIBLE": "rgb(255,0,0)"
+
+            })
+    );
+    style_list.push(
+        new Style("Fiabilité de l'emprise au sol", view, src_bdnb, "fiabilite_emprise_sol", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "BONNE": "rgb(82,255,71)",
+                "MOYENNE": "rgb(255,165,0)",
+                "FAIBLE": "rgb(255,0,0)"
+            })
+    );
+    style_list.push(
+        new Style("Fiabilité de l'adresse", view, src_bdnb, "fiabilite_cr_adr_niv_1", false)
+            .setExtrude("bdtopo_bat_altitude_sol_mean", "bdtopo_bat_hauteur_mean")
+            .setClasses({
+                "données croisées à l'adresse fiables": "rgb(82,255,71)",
+                "données croisées à l'adresse fiables à l'echelle de la parcelle unifiee": "rgb(255,255,0)",
+                "données croisées à l'adresse moyennement fiables": "rgb(255,165,0)",
+                "problème de géocodage": "rgb(255,0,0)"
+            })
     );
 
     //Setting the predefined styles
@@ -233,8 +302,9 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
             const style = style_list[select_style.value];
             //If the 3D checkbox is checked and the ground and height fields values are filled, style is set to 3D
             style.to3D(checkbox_3D.checked);
-            style.to_itowns_layer();
-            document.getElementById("legend").replaceChildren(style.getLegend());
+            style.to_itowns_layer().then(() => {
+                document.getElementById("legend").replaceChildren(style.getLegend());
+            });
         }
     });
 
@@ -245,6 +315,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 // ----------------- Variables to display content in tabs ----------------- //
 const tooltip = document.getElementById('tooltip');
 const htmlTest = document.getElementById('listConsoPopulationIris');
+const htmlICI = document.getElementById('listConsoPopulationICI')
 viewerDiv.addEventListener(
     'mouseup',
     () => {
@@ -299,18 +370,13 @@ viewerDiv.addEventListener(
                 .then(res => {
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
-                    let valDisplayed;
-                    Object.entries(res).forEach(([key, value]) => {
-                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
-                    })
-                    return valDisplayed;
+                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
 
                 })
                 .then(async (val2display) => {
                     // ----------- Get Building ICI data ----------- //
                     let displayICI = await csvBuildingICI
                     let dataBuildingICI;
-                    let valDisplayBuildingICI
                     Object.entries(displayICI).forEach((value) => {
                         if (value[1].idBdTopo) {
                             if (value[1].idBdTopo.includes(tooltipBuildingID)) {
@@ -319,9 +385,8 @@ viewerDiv.addEventListener(
                             }
                         }
                     })
-                    Object.entries(dataBuildingICI).forEach(([key, value]) => {
-                        valDisplayBuildingICI = loadDataToJSON(val2display, key, value, "Building ICI")
-                    })
+
+                    let valDisplayBuildingICI = spreadDataToTabs(dataBuildingICI, val2display, 'Building ICI')
 
                     // ----------- Get Housing ICI IDs ----------- //
                     let displayHousing = await csvHousingICI
@@ -372,6 +437,7 @@ viewerDiv.addEventListener(
                                     dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
                                     if (Object.keys(dataJSONattributeIndividual).length !== 0) {
                                         individualList.push(dataJSONattributeIndividual)
+
                                     }
                                 })
                                 if (housingDictionnary[value[1].IDHousehold]["individuals"]) {
@@ -381,39 +447,66 @@ viewerDiv.addEventListener(
                                 }
                             }
                         }
-
                     })
                     valDisplayBuildingICI.tabPopulation = housingDictionnary;
-                    console.log(valDisplayBuildingICI)
                     return valDisplayBuildingICI
 
                 })
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res)
+                    // ----------- Generate html accordion item for each value ----------- //
+                    Object.entries(res).forEach(([key, value]) => {
+                        generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                        generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                    })
+
+                    let testPop = '';
+                    let householdbody = '';
+                    let indbody;
+                    let individubody;
+                    let divHoushold;
+                    let divIndividu;
+
+                    Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        individubody = '';
+                        value.individuals.forEach((val, idx) => {
+                            indbody = '';
+                            indbody += contenuOnglet.createAccordionForListAttributes(val, '', true)
+                            individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
+                        })
+                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household, key)
+                        divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
+                        divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
+                        testPop += divHoushold.outerHTML
+                    })
+
+                    htmlICI.innerHTML = testPop
+
+                    // for info link
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList]
+                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    console.log(htmlICI)
+                })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
                 .then(res => {
 
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
-                    let valDisplayed;
-                    Object.entries(res).forEach(([key, value]) => {
-                        valDisplayed = loadDataToJSON(valuesToDisplay, key, value, "bdnb")
-                    })
-                    return valDisplayed;
+                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
 
                 })
                 .then(result => {
                     let valDisplay2 = csvMenageINSEE
                         .then(res => {
                             // ----------- POPULATION INSEE ----------- //
-                            let valDisplayedPop;
+
                             // Retrieve elements where Iris number is same as tooltip
                             let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
 
                             // Add INSEE value for this IRIS in tooltip properties
-                            Object.entries(uniqueData).forEach(([key, value]) => {
-                                valDisplayedPop = loadDataToJSON(result, key, value, "INSEE")
-                            })
+                            let valDisplayedPop = spreadDataToTabs(uniqueData, result, 'INSEE')
 
                             // Chart for INSEE values
                             const dataList4Chart = {
@@ -455,12 +548,8 @@ viewerDiv.addEventListener(
                             return dataBdTopo[0]
                         })
                         .then(res => {
-                            let valDisplayedBdTopo;
                             if (res.properties) {
-                                Object.entries(res.properties).forEach(([key, value]) => {
-                                    valDisplayedBdTopo = loadDataToJSON(result, key, value, "BDTopo")
-                                })
-                                return valDisplayedBdTopo;
+                                return spreadDataToTabs(res.properties, result, 'BDTopo');
                             }
                         })
                         .then(res => {

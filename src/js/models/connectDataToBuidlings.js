@@ -244,6 +244,14 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
 
 }
 
+export function spreadDataToTabs(dataDictionary, dictionaryTofillFrom, nameSourceBase) {
+  let dataSpread;
+  Object.entries(dataDictionary).forEach(([key, value]) => {
+    dataSpread = loadDataToJSON(dictionaryTofillFrom, key, value, nameSourceBase)
+  })
+  return dataSpread;
+}
+
 export function generateAccordion4Attribute(attributeName, name4User, value, source) {
 
   /*
