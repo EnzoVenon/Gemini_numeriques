@@ -34,7 +34,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0" }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0" }, "osm_random_id": { name: "osm", num: 0, id: "osm_0" }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0" } }
+let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0", "dataGeojson": {} }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0", "dataGeojson": {} }, "osm_random_id": { name: "osm", num: 0, id: "osm_0", "dataGeojson": {} }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0", "dataGeojson": {} } }
 
 let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
 
@@ -172,12 +172,19 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     bdnbGeoJson = await bdnbPromisedJson;
 
+
+
     bdnbGeoJson.features.forEach((feature) => {
         let data = dataBdnb[feature.properties["batiment_g"]]
         if (data) {
             feature.properties = data
         }
     });
+
+    batInorandomId.bdnb_random_id.dataGeojson = bdnbGeoJson
+    batInorandomId.bdtopo_radom_id.dataGeojson = await bdtopoPromisedJson
+    batInorandomId.osm_random_id.dataGeojson = await osmPromisedJson
+    batInorandomId.cadastre_random_id.dataGeojson = await cadastrePromisedJson
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
@@ -646,11 +653,9 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
     if (document.getElementById("exploredataIgn").checked) {
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
-        bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson, "USAGE1")
-            geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.bdtopo_radom_id.dataGeojson
+        updateSelectOption("selectProp", geojson, "USAGE1")
+        geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
 
     }
     else {
@@ -663,13 +668,9 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
     if (document.getElementById("exploredataOsm").checked) {
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
-        osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson, "fclass")
-            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
-
-        }
-        )
-
+        let geojson = batInorandomId.osm_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson, "fclass")
+        geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
     }
     else {
         view.removeLayer(batInorandomId.osm_random_id.id)
@@ -681,11 +682,9 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
     if (document.getElementById("exploredataCadastre").checked) {
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
-        cadastrePromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "created", batInorandomId.cadastre_random_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.cadastre_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson)
+        geojsontToFeatureGeom(geojson, "created", batInorandomId.cadastre_random_id.id, false, view, THREE)
 
     }
     else {
@@ -702,11 +701,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.bdtopo_radom_id.id)
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
-        bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson, selectPropValue)
-            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.bdtopo_radom_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
     }
 
     const bdnb = document.getElementById("exploredata").checked;
@@ -726,12 +723,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.osm_random_id.id)
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
-        osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson, selectPropValue)
-            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
-
-        }
-        )
+        let geojson = batInorandomId.osm_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
     }
 
     const cad = document.getElementById("exploredataCadastre").checked;
@@ -739,11 +733,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.cadastre_random_id.id)
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
-        cadastrePromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson, selectPropValue)
-            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.cadastre_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
     }
 })
 
