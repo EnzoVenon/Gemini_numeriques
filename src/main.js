@@ -632,7 +632,7 @@ document.getElementById("exploredata").addEventListener("change", () => {
         let geojson = bdnbGeoJson
         batInorandomId.bdnb_random_id.num += 1;
         batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        updateSelectOption("selectProp", geojson)
+        updateSelectOption("selectProp", geojson, "argiles_alea")
         geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
 
     }
@@ -647,7 +647,7 @@ document.getElementById("exploredataIgn").addEventListener("change", () => {
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
+            updateSelectOption("selectProp", geojson, "USAGE1")
             geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
@@ -664,7 +664,7 @@ document.getElementById("exploredataOsm").addEventListener("change", () => {
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
+            updateSelectOption("selectProp", geojson, "fclass")
             geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
@@ -683,7 +683,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
             updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
+            geojsontToFeatureGeom(geojson, "created", batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
 
@@ -703,7 +703,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
         bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
+            updateSelectOption("selectProp", geojson, selectPropValue)
             geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
         }
         )
@@ -716,7 +716,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
         console.log(batInorandomId.bdnb_random_id)
         let geojson = bdnbGeoJson
-        updateSelectOption("selectProp", geojson)
+        updateSelectOption("selectProp", geojson, selectPropValue)
         geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
     }
 
@@ -727,7 +727,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
         osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
+            updateSelectOption("selectProp", geojson, selectPropValue)
             geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
 
         }
@@ -740,7 +740,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
         cadastrePromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
+            updateSelectOption("selectProp", geojson, selectPropValue)
             geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
         }
         )
@@ -763,9 +763,10 @@ dropZone.addEventListener('drop', function (e) {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
     var files = e.dataTransfer.files;
+    console.log(files)
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
             // console.log(file);
             var reader = new FileReader();
@@ -796,25 +797,17 @@ var affiche2dFile = document.getElementById('afficheDrop2d');
 
 affiche2dFile.addEventListener("click", () => {
 
-    if (dropedGeojson["2dDropId"].id !== "2dDropId_0") {
-        view.removeLayer(dropedGeojson["2dDropId"].id)
-    }
-
     dropedGeojson["2dDropId"].num += 1;
     dropedGeojson["2dDropId"].id = dropedGeojson["2dDropId"].name + "_" + dropedGeojson["2dDropId"].num
 
     let geojson = dropedGeojson["2dDrop"]
-    console.log(geojson)
     const select2dZiped = document.getElementById('select2dZiped').value;
     geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view)
 }
 )
 
 document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["2dDropId"].id)
-    dropedGeojson["2dDropId"].num = 0
-    dropedGeojson["2dDropId"].id = "2dDropId_0"
 })
 
 
@@ -836,9 +829,8 @@ dropZone3d.addEventListener('drop', function (e) {
     var files = e.dataTransfer.files;
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
-            // console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
@@ -871,10 +863,6 @@ dropZone3d.addEventListener('drop', function (e) {
 var affiche3dFile = document.getElementById('afficheDrop3d');
 
 affiche3dFile.addEventListener("click", () => {
-    if (dropedGeojson["3dDropId"].id !== "3dDropId_0") {
-        view.removeLayer(dropedGeojson["3dDropId"].id)
-    }
-
     dropedGeojson["3dDropId"].num += 1;
     dropedGeojson["3dDropId"].id = dropedGeojson["3dDropId"].name + "_" + dropedGeojson["3dDropId"].num
 
@@ -891,10 +879,7 @@ affiche3dFile.addEventListener("click", () => {
 
 
 document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["3dDropId"].id)
-    dropedGeojson["3dDropId"].num = 0
-    dropedGeojson["3dDropId"].id = "3dDropId_0"
 })
 
 //========================== csv join 
@@ -953,8 +938,6 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
     reader.readAsText(file);
 
-    console.log(view.getLayers())
-
     let LayersName = view.getLayers().reduce((result, layer) => {
         result.push(layer.id)
         return result
@@ -968,28 +951,22 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
 document.getElementById("selectJoinLayer").addEventListener("change", () => {
     let selectedValue = document.getElementById("selectJoinLayer").value
-    console.log(selectedValue)
-    console.log(view.getLayerById(selectedValue))
     let geojson = view.getLayerById(selectedValue).source.fetchedData
-
     let uniquenames = getUniquePropNames(geojson)
-
     updateSelectOptionFromList("selectJoinAttribut", uniquenames)
+    csvJoinAtt.updatedGeojson = geojson;
+})
 
+document.getElementById("selectJoinAttribut").addEventListener("change", () => {
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
 
-    console.log(dataFromCsv)
-
     let csvTojson = dataFromCsv.reduce((result, prop) => {
         result[prop[selectChampJointure]] = prop
-        // console.log(prop)
         return result
     }, {})
 
-    console.log(csvTojson)
-
-    console.log(geojson)
+    let geojson = csvJoinAtt.updatedGeojson;
 
     geojson.features.forEach((feature) => {
         let data = csvTojson[feature.properties[selectCibleChampJointure]]
@@ -997,36 +974,21 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
         if (data) {
             Object.entries(data).forEach(([key, val]) => {
                 feature.properties[key] = val
-                console.log(feature.properties)
             })
         }
     });
 
-    console.log(geojson)
-
-    view.removeLayer(selectedValue)
-
-    csvJoinAtt.updatedGeojson = geojson;
-
-
-
-
 })
 
 document.getElementById("afficheDropCsv").addEventListener("click", () => {
-    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
-        view.removeLayer(csvJoinAtt["csvLayerId"].id)
-    }
-
     csvJoinAtt["csvLayerId"].num += 1;
     csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
-
     let geojson = csvJoinAtt.updatedGeojson
-
-    console.log(geojson)
-
     const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
-
-    geojsontToFeatureGeom(geojson, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+    geojsontToFeatureGeom(geojson, selectCol3dZiped, csvJoinAtt["csvLayerId"].id, false, view, THREE)
 }
 )
+
+document.getElementById("checkbox-supprime-csv").addEventListener("click", () => {
+    view.removeLayer(csvJoinAtt["csvLayerId"].id)
+})
