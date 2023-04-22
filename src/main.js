@@ -797,10 +797,6 @@ var affiche2dFile = document.getElementById('afficheDrop2d');
 
 affiche2dFile.addEventListener("click", () => {
 
-    if (dropedGeojson["2dDropId"].id !== "2dDropId_0") {
-        view.removeLayer(dropedGeojson["2dDropId"].id)
-    }
-
     dropedGeojson["2dDropId"].num += 1;
     dropedGeojson["2dDropId"].id = dropedGeojson["2dDropId"].name + "_" + dropedGeojson["2dDropId"].num
 
@@ -811,10 +807,7 @@ affiche2dFile.addEventListener("click", () => {
 )
 
 document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["2dDropId"].id)
-    dropedGeojson["2dDropId"].num = 0
-    dropedGeojson["2dDropId"].id = "2dDropId_0"
 })
 
 
@@ -838,7 +831,6 @@ dropZone3d.addEventListener('drop', function (e) {
         var file = files[0];
         if (file.type.includes('zip')) {
             // Handle the ZIP file
-            console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
@@ -871,10 +863,6 @@ dropZone3d.addEventListener('drop', function (e) {
 var affiche3dFile = document.getElementById('afficheDrop3d');
 
 affiche3dFile.addEventListener("click", () => {
-    if (dropedGeojson["3dDropId"].id !== "3dDropId_0") {
-        view.removeLayer(dropedGeojson["3dDropId"].id)
-    }
-
     dropedGeojson["3dDropId"].num += 1;
     dropedGeojson["3dDropId"].id = dropedGeojson["3dDropId"].name + "_" + dropedGeojson["3dDropId"].num
 
@@ -891,10 +879,7 @@ affiche3dFile.addEventListener("click", () => {
 
 
 document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["3dDropId"].id)
-    dropedGeojson["3dDropId"].num = 0
-    dropedGeojson["3dDropId"].id = "3dDropId_0"
 })
 
 //========================== csv join 
@@ -953,8 +938,6 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
     reader.readAsText(file);
 
-    console.log(view.getLayers())
-
     let LayersName = view.getLayers().reduce((result, layer) => {
         result.push(layer.id)
         return result
@@ -968,28 +951,22 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
 document.getElementById("selectJoinLayer").addEventListener("change", () => {
     let selectedValue = document.getElementById("selectJoinLayer").value
-    console.log(selectedValue)
-    console.log(view.getLayerById(selectedValue))
     let geojson = view.getLayerById(selectedValue).source.fetchedData
-
     let uniquenames = getUniquePropNames(geojson)
-
     updateSelectOptionFromList("selectJoinAttribut", uniquenames)
+    csvJoinAtt.updatedGeojson = geojson;
+})
 
+document.getElementById("selectJoinAttribut").addEventListener("change", () => {
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
 
-    console.log(dataFromCsv)
-
     let csvTojson = dataFromCsv.reduce((result, prop) => {
         result[prop[selectChampJointure]] = prop
-        // console.log(prop)
         return result
     }, {})
 
-    console.log(csvTojson)
-
-    console.log(geojson)
+    let geojson = csvJoinAtt.updatedGeojson;
 
     geojson.features.forEach((feature) => {
         let data = csvTojson[feature.properties[selectCibleChampJointure]]
@@ -997,36 +974,21 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
         if (data) {
             Object.entries(data).forEach(([key, val]) => {
                 feature.properties[key] = val
-                console.log(feature.properties)
             })
         }
     });
 
-    console.log(geojson)
-
-    view.removeLayer(selectedValue)
-
-    csvJoinAtt.updatedGeojson = geojson;
-
-
-
-
 })
 
 document.getElementById("afficheDropCsv").addEventListener("click", () => {
-    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
-        view.removeLayer(csvJoinAtt["csvLayerId"].id)
-    }
-
     csvJoinAtt["csvLayerId"].num += 1;
     csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
-
     let geojson = csvJoinAtt.updatedGeojson
-
-    console.log(geojson)
-
     const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
-
-    geojsontToFeatureGeom(geojson, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+    geojsontToFeatureGeom(geojson, selectCol3dZiped, csvJoinAtt["csvLayerId"].id, false, view, THREE)
 }
 )
+
+document.getElementById("checkbox-supprime-csv").addEventListener("click", () => {
+    view.removeLayer(csvJoinAtt["csvLayerId"].id)
+})
