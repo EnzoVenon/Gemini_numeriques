@@ -763,9 +763,10 @@ dropZone.addEventListener('drop', function (e) {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
     var files = e.dataTransfer.files;
+    console.log(files)
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
             // console.log(file);
             var reader = new FileReader();
@@ -835,9 +836,9 @@ dropZone3d.addEventListener('drop', function (e) {
     var files = e.dataTransfer.files;
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
-            // console.log(file);
+            console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
