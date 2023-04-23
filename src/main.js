@@ -19,10 +19,8 @@ import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojso
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
-
+import { exploreData } from "./js/affichageItown/exploreData";
 import * as shp from "shpjs";
-
-
 
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
@@ -608,7 +606,7 @@ viewerDiv.addEventListener(
 )
 htmlTest.innerHTML += '</div>';
 
-// layer savoir plus
+// layer en savoir plus
 addShpLayerOnChange("showIgnLayer", paths.bdtopo, "bd_topo", "red", "", view)
 addShpLayerOnChange("showOsmLayer", paths.osm, "osm", "yellow", "", view)
 addShpLayerOnChange("showCadastreLayer", paths.cadastre, "cadastre", "red", "", view)
@@ -619,7 +617,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
-        batInorandomId.ino_random_id.num += 1;
+            .num += 1;
         batInorandomId.ino_random_id.id = batInorandomId.ino_random_id.name + "_" + batInorandomId.ino_random_id.num
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
             geojsontToFeatureGeom(geojson, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
@@ -633,65 +631,27 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
 })
 
-
+// exploration des sources 
 document.getElementById("exploredata").addEventListener("change", () => {
-    if (document.getElementById("exploredata").checked) {
-        let geojson = bdnbGeoJson
-        batInorandomId.bdnb_random_id.num += 1;
-        batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        updateSelectOption("selectProp", geojson, "argiles_alea")
-        geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
-
-    }
-    else {
-        view.removeLayer(batInorandomId.bdnb_random_id.id)
-    }
-
-})
-
+    let layerStructureId = exploreData("exploredata", bdnbGeoJson, batInorandomId.bdnb_random_id, "selectProp", "argiles_alea", view, THREE)
+    batInorandomId.bdnb_random_id.num = layerStructureId.num
+    batInorandomId.bdnb_random_id.id = layerStructureId.id
+}
+)
 document.getElementById("exploredataIgn").addEventListener("change", () => {
-    if (document.getElementById("exploredataIgn").checked) {
-        batInorandomId.bdtopo_radom_id.num += 1;
-        batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
-        let geojson = batInorandomId.bdtopo_radom_id.dataGeojson
-        updateSelectOption("selectProp", geojson, "USAGE1")
-        geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
-
-    }
-    else {
-        view.removeLayer(batInorandomId.bdtopo_radom_id.id)
-    }
-
+    let layerStructureId = exploreData("exploredataIgn", batInorandomId.bdtopo_radom_id.dataGeojson, batInorandomId.bdtopo_radom_id, "selectProp", "USAGE1", view, THREE)
+    batInorandomId.bdtopo_radom_id.num = layerStructureId.num
+    batInorandomId.bdtopo_radom_id.id = layerStructureId.id
 })
-
 document.getElementById("exploredataOsm").addEventListener("change", () => {
-    if (document.getElementById("exploredataOsm").checked) {
-        batInorandomId.osm_random_id.num += 1;
-        batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
-        let geojson = batInorandomId.osm_random_id.dataGeojson
-        updateSelectOption("selectProp", geojson, "fclass")
-        geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
-    }
-    else {
-        view.removeLayer(batInorandomId.osm_random_id.id)
-    }
-
+    let layerStructureId = exploreData("exploredataOsm", batInorandomId.osm_random_id.dataGeojson, batInorandomId.osm_random_id, "selectProp", "USAGE1", view, THREE)
+    batInorandomId.osm_random_id.num = layerStructureId.num
+    batInorandomId.osm_random_id.id = layerStructureId.id
 })
-
 document.getElementById("exploredataCadastre").addEventListener("change", () => {
-    if (document.getElementById("exploredataCadastre").checked) {
-        batInorandomId.cadastre_random_id.num += 1;
-        batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
-        let geojson = batInorandomId.cadastre_random_id.dataGeojson
-        updateSelectOption("selectProp", geojson)
-        geojsontToFeatureGeom(geojson, "created", batInorandomId.cadastre_random_id.id, false, view, THREE)
-
-    }
-    else {
-        view.removeLayer(batInorandomId.cadastre_random_id.id)
-        batInorandomId.cadastre_random_id = ""
-    }
-
+    let layerStructureId = exploreData("exploredataCadastre", batInorandomId.cadastre_random_id.dataGeojson, batInorandomId.cadastre_random_id, "selectProp", "created", view, THREE)
+    batInorandomId.cadastre_random_id.num = layerStructureId.num
+    batInorandomId.cadastre_random_id.id = layerStructureId.id
 })
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
