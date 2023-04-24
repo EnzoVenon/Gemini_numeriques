@@ -48,14 +48,14 @@ export function generateAccordionItem(idHTML, idChart) {
  * @param {Boolean} isForIndividuals Default false. If true, does not create an accordion HTML
  * @returns {String} content for accordion-item body
  */
-export function createAccordionForListValues(listValues, key, isForIndividuals = false) {
+export function createAccordionForListValues(listValues, key, isForIndividuals = false, doNotAddInfo = false) {
     let body = '';
     listValues.forEach((value) => {
         if (value) {
             if (isForIndividuals) {
                 body += value.name4User + ": " + value.val + '<br>'
             } else {
-                body += createAccordion(value.attribut + key, value.name4User, value.val).outerHTML
+                body += createAccordion(value.attribut + key, value.name4User, value.val, doNotAddInfo).outerHTML
             }
         }
     })
@@ -84,9 +84,9 @@ function createAccParent(id) {
  * @param {String} body Content of the accordion once collapsed
  * @returns HTML accordion div with an accordion-item child div
  */
-export function createAccordion(idParent, header, body) {
+export function createAccordion(idParent, header, body, doNotAddInfo = false) {
     let divParent = createAccParent(idParent)
-    let divChild = createAccChild(idParent + 'child', header, body)
+    let divChild = createAccChild(idParent + 'child', header, body, doNotAddInfo)
     divParent.appendChild(divChild)
     return divParent
 }
@@ -99,8 +99,16 @@ export function createAccordion(idParent, header, body) {
  * @param {String} body Content of the accordion once collapsed
  * @returns HTML accordion-item element
  */
-function createAccChild(id, header, body) {
+function createAccChild(id, header, body, doNotAddInfo = false) {
     let accChild = document.createElement("div")
+    let bodyAccordion;
+    if (doNotAddInfo) {
+        bodyAccordion = body
+    } else {
+        bodyAccordion = body + `<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI">
+        info
+        </a>`
+    }
     accChild.className = "accordion-item"
     accChild.id = id
 
@@ -115,9 +123,11 @@ function createAccChild(id, header, body) {
 <div id="panelsStayOpen-collapse${id}" class="accordion-collapse collapse"
     aria-labelledby="panelsStayOpen-heading${id}">
     <div class="accordion-body">
-    ${body}
+    ${bodyAccordion}
     </div>
 </div>`
 
+
+    console.log(accChild)
     return accChild
 }

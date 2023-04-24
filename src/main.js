@@ -479,8 +479,8 @@ viewerDiv.addEventListener(
                             individubody += contenuOnglet.createAccordion('individu' + key + countIndividu, 'Individu ' + countIndividu, indbody).innerHTML
                         })
                         householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
-                        divIndividu = contenuOnglet.createAccordion('individu', 'Individu(s)', individubody).outerHTML
-                        divHoushold = contenuOnglet.createAccordion('household' + key, 'Ménage ' + count, householdbody + divIndividu)
+                        divIndividu = contenuOnglet.createAccordion('individu', 'Individu(s)', individubody, true).outerHTML
+                        divHoushold = contenuOnglet.createAccordion('household' + key, 'Ménage ' + count, householdbody + divIndividu, true)
                         testPop += divHoushold.outerHTML
                     })
 
