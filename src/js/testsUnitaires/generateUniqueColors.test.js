@@ -1,5 +1,5 @@
-const generaRandomColorFromList = require("../utile/generaRandomColorFromList");
+import { generateUniqueColors } from "../utile/generaRandomColorFromList";
 
 test('generate random color', () => {
-    expect(generaRandomColorFromList(["undefined"])).toStrictEqual({ "undefined": "rgb(169,169,169)" });
+    expect(generateUniqueColors(["undefined"])).toStrictEqual({ "undefined": "rgb(169,169,169)" });
 });

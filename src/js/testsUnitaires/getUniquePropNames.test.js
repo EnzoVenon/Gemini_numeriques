@@ -1,4 +1,4 @@
-const getUniquePropNames = require("../utile/getUniquePropertiesNamesFromGeojson");
+import { getUniquePropNames } from "../utile/getUniquePropertiesNamesFromGeojson";
 
 test('generate random color', () => {
 
