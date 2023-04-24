@@ -1,15 +1,26 @@
 # **Gemini numérique**
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/username/repo.svg)](https://github.com/username/repo/issues)
+[![GitHub stars](https://img.shields.io/github/stars/username/repo.svg)](https://github.com/username/repo/stargazers)
 
-## **[Accéder au site](https://enzovenon.github.io/Gemini_numeriques/)**
 
-## **[Accéder au manuel utilisateur](manuel_utilisateur.md)**
-
-## **Présentation**
-### <u>Le projet</u>
 Cet outil est un prototype d'un projet porté par l'IGN, le CEREMA et l'INRIA qui souhaite créer un *Jumeau Numérique France Entière*.
 Le projet étudiant TSI "Gemimi Numérique" permet d'être une base de réflection pour ce projet. Le but est d'**Interconnecter différentes sources de données dans un outil qui permettra de les visualiser**. 
 Les informations que nous visualisons sont liées aux bâtiments. De plus, l'outil est centré sur Périgueux et sur le 11ème arrondissement de Paris. 
 
+### **[Accéder au site](https://enzovenon.github.io/Gemini_numeriques/)**
+
+### **[Accéder au manuel utilisateur](manuel_utilisateur.md)**
+
+## Table des matières
+
+- [Le projet](#projet)
+- [Installation](#installation)
+- [Licence](#licence)
+- [Dépots git ou exemples utiles](#depotsgitouexemplesutiles)
+
+
+## Le projet
 ### <u>Les données</u>
 Nous interconnectons les diverses sources de données suivantes : 
 
@@ -56,3 +67,12 @@ npm start
 npm install
 npm run build
 ```
+
+## Licence
+
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## Dépôts git ou exemples utiles
+
+- Itowns: [Widget-navigation](https://github.com/iTowns/itowns/blob/master/examples/widgets_navigation.html)
+- Itowns: [source stream wfs 25D](https://github.com/iTowns/itowns/blob/master/examples/source_stream_wfs_25d.html)
