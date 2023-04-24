@@ -41,6 +41,8 @@
     "util": "^0.12.5"
   },
   "dependencies": {
+    "@parcel/babel-plugin-transform-runtime": "^2.8.3",
+    "@parcel/babel-preset-env": "^2.8.3",
     "@turf/turf": "^6.5.0",
     "bootstrap": "^5.3.0-alpha2",
     "bootstrap-icons": "^1.10.4",
