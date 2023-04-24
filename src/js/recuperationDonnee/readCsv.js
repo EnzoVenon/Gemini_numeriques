@@ -1,5 +1,10 @@
-import * as  Papa from '../../../node_modules/papaparse/papaparse'
+import * as  Papa from 'papaparse'
 
+/**
+ * read csv data  as array
+ * @param {String} csvFile => csv file path 
+ * @returns {Array} containsthe csv data 
+ */
 export async function importCsvFile(csvFile) {
     // '../data/shp/prg/data_bdnb.csv'
     function parseFile() {

@@ -2,6 +2,23 @@ import * as contenuOnglet from "../models/contenuOnglets"
 import { addChart } from "../models/insee/showChart"
 import { spreadDataToTabs } from "../models/connectDataToTabs"
 
+
+/**
+ * Retrieve INSEE population data from IRIS code 
+ * @param {Array} csvMenageINSEE Array containing csv data for INSEE data
+ * @param {Object} tooltip div element
+ * @param {Object} dictionaryTofill Dictionary to fill (can already be filled) with the following format :
+     *    {
+     *      tabInfoGen: [{ attribut: key, name4User: name4User, val: value, source: base },..],
+     *      tabBatiment: [],
+     *      tabRisques: [],
+     *      tabEnergie: [],
+     *      tabPopulation: {}
+     *    }
+ * @param {String} textHtml html text to put for an html div element
+ * @param {String} htmlTest div element to add charts for the data
+ * @returns {Object} Dictionnary with the data spreaded for each tab
+ */
 export function getDataINSEE(csvMenageINSEE, tooltip, dictionaryTofill, textHtml, htmlTest) {
     let valDisplay2 = csvMenageINSEE
         .then(res => {

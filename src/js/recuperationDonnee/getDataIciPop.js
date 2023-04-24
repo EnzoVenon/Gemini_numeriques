@@ -2,13 +2,20 @@ import { spreadDataToTabs } from "../models/connectDataToTabs";
 import { loadDataToJSON } from "../models/connectDataToTabs";
 /**
  * 
- * @param {*} val2display 
- * @param {*} csvBuildingICI 
- * @param {*} csvHousingICI 
- * @param {*} csvHouseholdICI 
- * @param {*} csvIndividualICI 
- * @param {*} tooltipBuildingID 
- * @returns 
+ * @param {Object} val2display Dictionary to fill (can already be filled) with the following format :
+     *    {
+     *      tabInfoGen: [{ attribut: key, name4User: name4User, val: value, source: base },..],
+     *      tabBatiment: [],
+     *      tabRisques: [],
+     *      tabEnergie: [],
+     *      tabPopulation: {}
+     *    }
+ * @param {Array} csvBuildingICI Array containing csv data for building ICI data
+ * @param {Array} csvHousingICI Array containing csv data for housing ICI data
+ * @param {Array} csvHouseholdICI Array containing csv data for household ICI data
+ * @param {Array} csvIndividualICI Array containing csv data for Individual ICI data
+ * @param {String} tooltipBuildingID Building bdtopo id 
+ * @returns {Object} Dictionnary of the data spread over each tabs
  */
 export async function getDataICI(val2display, csvBuildingICI, csvHousingICI, csvHouseholdICI, csvIndividualICI, tooltipBuildingID) {
     // ----------- Ge, t Building ICI data ----------- //

@@ -4,7 +4,7 @@ import { addOrthoLayer } from "./js/affichageItown/ortho";
 import { addElevationLayer } from "./js/affichageItown/elevation";
 import { addShp } from "./js/affichageItown/addShpLayer"
 import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
-import { importCsvFile } from "./js/models/readCsv"
+import { importCsvFile } from "./js/recuperationDonnee/readCsv"
 import { addChart } from "./js/models/insee/showChart"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
@@ -12,7 +12,7 @@ import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
-import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToTabs";
+import { spreadDataToTabs, generateAttributes4Tab } from "./js/models/connectDataToTabs";
 import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
 import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"

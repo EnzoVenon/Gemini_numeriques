@@ -178,7 +178,7 @@ const tabs = {
  *      tabPopulation: {}
  *    }
  * @param {String} nameSourceBase Name of the source base where the data is from
- * @returns 
+ * @returns {Object}
  *    {
  *      tabInfoGen: [ { attribut: key, name4User: name4User, val: value, source: base },
  *                    { attribut: key, name4User: name4User, val: value, source: base },
@@ -221,7 +221,7 @@ export function spreadDataToTabs(dataDictionary, dictionaryTofillFrom, nameSourc
      * @param {Boolean} isForPopulationTab Boolean to process differently for the population tab.
      *                  Default is false, if true dictionaryTofill = {}
      * 
-     * The returned variable's format is as follow:
+     * @return {Object} The returned variable's format is as follow:
      *    {
      *      tabInfoGen: [ { attribut: key, name4User: name4User, val: value, source: base },
      *                    { attribut: key, name4User: name4User, val: value, source: base },
@@ -304,7 +304,7 @@ export function generateAttributes4Tab(htmlID, tabName, listOfAttributes, keyTab
  * @param {String} name4User Name displayed for the user
  * @param {String} value Value of the data
  * @param {String} source Source where the data is from
- * @returns 
+ * @returns {String} HTML element in text format
  */
 export function generateAccordion4Attribute(attributeName, name4User, value, source) {
   let htmlText = '';
