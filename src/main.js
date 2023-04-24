@@ -4,31 +4,25 @@ import { addOrthoLayer } from "./js/affichageItown/ortho";
 import { addElevationLayer } from "./js/affichageItown/elevation";
 import { addShp } from "./js/affichageItown/addShpLayer"
 import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
-import { importCsvFile } from "./js/models/readCsv"
-import { addChart } from "./js/models/insee/showChart"
-import * as contenuOnglet from "./js/models/contenuOnglets"
+import { importCsvFile } from "./js/recuperationDonnee/readCsv"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
 import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/models/style.js";
-
-import { spreadDataToTabs, loadDataToJSON, generateAttributes4Tab } from "./js/models/connectDataToBuidlings";
-
-
-
+import { spreadDataToTabs, generateAttributes4Tab } from "./js/models/connectDataToTabs";
 import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
 import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
 import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
-
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
 import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
-
+import { exploreData } from "./js/affichageItown/exploreData";
 import * as shp from "shpjs";
-
-
-
+import { getDataICI } from "./js/recuperationDonnee/getDataIciPop";
+import { getDataBDTOPO } from "./js/recuperationDonnee/getDataBdtopo.js";
+import { getDataINSEE } from "./js/recuperationDonnee/getDataINSEEpopIRIS";
+import * as contenuOnglet from "./js/models/contenuOnglets"
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
@@ -39,7 +33,7 @@ bat.id = 'bat';
 //listBatSelectioner
 let listSlect = []
 let fidSelectf = [1, 2]
-let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0" }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0" }, "osm_random_id": { name: "osm", num: 0, id: "osm_0" }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0" } }
+let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0", "dataGeojson": {} }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0", "dataGeojson": {} }, "osm_random_id": { name: "osm", num: 0, id: "osm_0", "dataGeojson": {} }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0", "dataGeojson": {} } }
 
 let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
 
@@ -153,6 +147,7 @@ let bdnbPromisedJson = loadBufferDataFromShp(paths.bdnb);
 let bdtopoPromisedJson = loadBufferDataFromShp(paths.bdtopo)
 let osmPromisedJson = loadBufferDataFromShp(paths.osm)
 let cadastrePromisedJson = loadBufferDataFromShp(paths.cadastre)
+let bdtopoParis11PromisedJson = loadBufferDataFromShp(paths.bdtopoParis)
 
 // let geojson 
 let bdnbGeoJson
@@ -177,12 +172,19 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
 
     bdnbGeoJson = await bdnbPromisedJson;
 
+
+
     bdnbGeoJson.features.forEach((feature) => {
         let data = dataBdnb[feature.properties["batiment_g"]]
         if (data) {
             feature.properties = data
         }
     });
+
+    batInorandomId.bdnb_random_id.dataGeojson = bdnbGeoJson
+    batInorandomId.bdtopo_radom_id.dataGeojson = await bdtopoPromisedJson
+    batInorandomId.osm_random_id.dataGeojson = await osmPromisedJson
+    batInorandomId.cadastre_random_id.dataGeojson = await cadastrePromisedJson
 
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
@@ -351,14 +353,11 @@ viewerDiv.addEventListener(
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
-            } else {
-                console.log("non")
             }
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
             addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
-            console.log(tooltip.value)
 
             let tooltipBuildingID = tooltip.value.properties.batiment_c
             if (tooltipBuildingID.includes('-')) {
@@ -367,93 +366,16 @@ viewerDiv.addEventListener(
 
 
             getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
-                .then(res => {
+                .then(async (res) => {
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
-                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
-
-                })
-                .then(async (val2display) => {
-                    // ----------- Get Building ICI data ----------- //
-                    let displayICI = await csvBuildingICI
-                    let dataBuildingICI;
-                    Object.entries(displayICI).forEach((value) => {
-                        if (value[1].idBdTopo) {
-                            if (value[1].idBdTopo.includes(tooltipBuildingID)) {
-                                dataBuildingICI = value[1];
-                                return dataBuildingICI;
-                            }
-                        }
-                    })
-
-                    let valDisplayBuildingICI = spreadDataToTabs(dataBuildingICI, val2display, 'Building ICI')
-
-                    // ----------- Get Housing ICI IDs ----------- //
-                    let displayHousing = await csvHousingICI
-                    let housings_IDs = []
-                    Object.entries(displayHousing).forEach((value) => {
-                        if (value[1].BuildingID) {
-                            if (value[1].BuildingID.includes(dataBuildingICI.ID)) {
-                                housings_IDs.push(value[1].ID)
-                            }
-                        }
-                    })
-
-                    // ----------- Get Household ICI data ----------- //
-                    let housingDictionnary = {}
-                    let displayHousehold = await csvHouseholdICI
-                    let dataJSONattributeHousehold;
-                    Object.entries(displayHousehold).forEach((value) => {
-                        if (housings_IDs.includes(value[1].HousingID)) {
-                            housingDictionnary[value[1].ID] = {}
-                            housingDictionnary[value[1].ID]["household"] = []
-                            Object.entries(value[1]).forEach(([key, val]) => {
-                                dataJSONattributeHousehold = loadDataToJSON({}, key, val, "Household ICI", true)
-                                if (Object.keys(dataJSONattributeHousehold).length !== 0) {
-                                    housingDictionnary[value[1].ID]["household"].push(dataJSONattributeHousehold)
-                                }
-                            })
-                        }
-                    })
-                    Object.entries(housingDictionnary).forEach(([key, value]) => {
-                        if (Object.keys(value).length === 0) {
-                            delete housingDictionnary[key]
-                        }
-                    })
-                    // for each housing get associated household
-                    let householdIDs = []
-                    Object.entries(housingDictionnary).forEach((val) => {
-                        householdIDs.push(val[0])
-                    })
-
-                    // ----------- Get Individual ICI data ----------- //
-                    let displayIndividual = await csvIndividualICI
-                    let dataJSONattributeIndividual;
-                    Object.entries(displayIndividual).forEach((value) => {
-                        if (value[1].IDHousehold) {
-                            let individualList = []
-                            if (householdIDs.includes(value[1].IDHousehold)) {
-                                Object.entries(value[1]).forEach(([key, val]) => {
-                                    dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
-                                    if (Object.keys(dataJSONattributeIndividual).length !== 0) {
-                                        individualList.push(dataJSONattributeIndividual)
-
-                                    }
-                                })
-                                if (housingDictionnary[value[1].IDHousehold]["individuals"]) {
-                                    housingDictionnary[value[1].IDHousehold]["individuals"].push(individualList)
-                                } else {
-                                    housingDictionnary[value[1].IDHousehold]["individuals"] = [individualList]
-                                }
-                            }
-                        }
-                    })
-                    valDisplayBuildingICI.tabPopulation = housingDictionnary;
-                    return valDisplayBuildingICI
-
+                    let dataBDNB2Display = await spreadDataToTabs(res, valuesToDisplay, 'BDNB')
+                    let dataWithINSEE2Display = await getDataINSEE(csvMenageINSEE, tooltip, dataBDNB2Display, textHtml, htmlTest)
+                    let dataWithBdTopo2Display = await getDataBDTOPO(bdtopoParis11PromisedJson, tooltip, dataWithINSEE2Display)
+                    let dataWithICI2Display = await getDataICI(dataWithBdTopo2Display, csvBuildingICI, csvHousingICI, csvHouseholdICI, csvIndividualICI, tooltipBuildingID)
+                    return dataWithICI2Display
                 })
                 .then(res => {
-                    console.log(res)
                     // ----------- Generate html accordion item for each value ----------- //
                     Object.entries(res).forEach(([key, value]) => {
                         generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
@@ -466,17 +388,21 @@ viewerDiv.addEventListener(
                     let individubody;
                     let divHoushold;
                     let divIndividu;
-
+                    let count = 0;
+                    let countIndividu;
                     Object.entries(res.tabPopulation).forEach(([key, value]) => {
+                        count++;
+
                         individubody = '';
                         value.individuals.forEach((val, idx) => {
+                            countIndividu = idx + 1
                             indbody = '';
-                            indbody += contenuOnglet.createAccordionForListAttributes(val, '', true)
-                            individubody += contenuOnglet.createAccordion('individu' + key + idx, 'Individu ' + idx, indbody).innerHTML
+                            indbody += contenuOnglet.createAccordionForListValues(val, '', true)
+                            individubody += contenuOnglet.createAccordion('individu' + key + countIndividu, 'Individu ' + countIndividu, indbody).innerHTML
                         })
-                        householdbody = contenuOnglet.createAccordionForListAttributes(value.household, key)
-                        divIndividu = contenuOnglet.createAccordion('individu', 'Individus', individubody).outerHTML
-                        divHoushold = contenuOnglet.createAccordion('household' + key, key, householdbody + divIndividu)
+                        householdbody = contenuOnglet.createAccordionForListValues(value.household, key)
+                        divIndividu = contenuOnglet.createAccordion('individu', 'Individu(s)', individubody, true).outerHTML
+                        divHoushold = contenuOnglet.createAccordion('household' + key, 'Ménage ' + count, householdbody + divIndividu, true)
                         testPop += divHoushold.outerHTML
                     })
 
@@ -486,87 +412,29 @@ viewerDiv.addEventListener(
                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                     const tooltipList = [...tooltipTriggerList]
                     tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    console.log(htmlICI)
                 })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
+                .then(async (res) => {
+
+                    let dataPerigueuxBDNB2display = await spreadDataToTabs(res, valuesToDisplay, 'BDNB')
+                    let dataPerigueuxWithINSEE2Display = await getDataINSEE(csvMenageINSEE, tooltip, dataPerigueuxBDNB2display, textHtml, htmlTest)
+                    let dataPerigueuxWithBdTopo2Display = await getDataBDTOPO(bdtopoPromisedJson, tooltip, dataPerigueuxWithINSEE2Display)
+                    return dataPerigueuxWithBdTopo2Display
+                })
                 .then(res => {
+                    // ----------- Generate html accordion item for each value ----------- //
+                    Object.entries(res).forEach(([key, value]) => {
+                        generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                        generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                        generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                        generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
 
-                    // ----------- Get Bdnb data ----------- //
-                    // Dispatch Bdnb data for each tab
-                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
-
-                })
-                .then(result => {
-                    let valDisplay2 = csvMenageINSEE
-                        .then(res => {
-                            // ----------- POPULATION INSEE ----------- //
-
-                            // Retrieve elements where Iris number is same as tooltip
-                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-
-                            // Add INSEE value for this IRIS in tooltip properties
-                            let valDisplayedPop = spreadDataToTabs(uniqueData, result, 'INSEE')
-
-                            // Chart for INSEE values
-                            const dataList4Chart = {
-                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
-                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
-                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                            }
-                            let data4Chart = [];
-                            Object.entries(dataList4Chart).forEach(([key, value]) => {
-                                console.log(key)
-                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value, valDisplayedPop.tabPopulation))
-                            })
-
-                            // ----- Generate HTML text ----- //
-                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                            htmlTest.innerHTML += textHtml;
-
-                            // Create charts
-                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
-                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
-                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
-
-                            return valDisplayedPop;
-                        })
-                    return valDisplay2
-                })
-                .then(result => {
-                    // ----------- Get BdTopo data ----------- //
-                    bdtopoPromisedJson
-                        .then(geojson => {
-                            let dataBdTopo = geojson.features.filter(obj => {
-                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                    return obj;
-                                }
-                            })
-                            return dataBdTopo[0]
-                        })
-                        .then(res => {
-                            if (res.properties) {
-                                return spreadDataToTabs(res.properties, result, 'BDTopo');
-                            }
-                        })
-                        .then(res => {
-                            // ----------- Generate html accordion item for each value ----------- //
-                            Object.entries(res).forEach(([key, value]) => {
-                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
-
-                            })
-                            // for info link
-                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                            const tooltipList = [...tooltipTriggerList]
-                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                        })
-
+                    })
+                    // for info link
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList]
+                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                 })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
@@ -604,7 +472,7 @@ viewerDiv.addEventListener(
 )
 htmlTest.innerHTML += '</div>';
 
-// layer savoir plus
+// layer en savoir plus
 addShpLayerOnChange("showIgnLayer", paths.bdtopo, "bd_topo", "red", "", view)
 addShpLayerOnChange("showOsmLayer", paths.osm, "osm", "yellow", "", view)
 addShpLayerOnChange("showCadastreLayer", paths.cadastre, "cadastre", "red", "", view)
@@ -615,7 +483,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
 
-        batInorandomId.ino_random_id.num += 1;
+            .num += 1;
         batInorandomId.ino_random_id.id = batInorandomId.ino_random_id.name + "_" + batInorandomId.ino_random_id.num
         loadBufferDataFromShp(paths.bat_inond_prg).then(geojson => {
             geojsontToFeatureGeom(geojson, "selectPropValue", batInorandomId.ino_random_id.id, true, view, THREE)
@@ -629,104 +497,39 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
 })
 
-
+// exploration des sources 
 document.getElementById("exploredata").addEventListener("change", () => {
-    if (document.getElementById("exploredata").checked) {
-        bdnbPromisedJson.then(geojson => {
-            geojson.features.forEach((feature) => {
-                let data = dataBdnb[feature.properties["batiment_g"]]
-                if (data) {
-                    feature.properties = data
-                }
-
-            });
-            batInorandomId.bdnb_random_id.num += 1;
-            batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "argiles_alea", batInorandomId.bdnb_random_id.id, false, view, THREE)
-
-        })
-
-
-
-    }
-    else {
-        view.removeLayer(batInorandomId.bdnb_random_id.id)
-    }
-
-})
-
+    let layerStructureId = exploreData("exploredata", bdnbGeoJson, batInorandomId.bdnb_random_id, "selectProp", "argiles_alea", view, THREE)
+    batInorandomId.bdnb_random_id.num = layerStructureId.num
+    batInorandomId.bdnb_random_id.id = layerStructureId.id
+}
+)
 document.getElementById("exploredataIgn").addEventListener("change", () => {
-    if (document.getElementById("exploredataIgn").checked) {
-        batInorandomId.bdtopo_radom_id.num += 1;
-        batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
-        bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "USAGE1", batInorandomId.bdtopo_radom_id.id, false, view, THREE)
-        }
-        )
-
-    }
-    else {
-        view.removeLayer(batInorandomId.bdtopo_radom_id.id)
-    }
-
+    let layerStructureId = exploreData("exploredataIgn", batInorandomId.bdtopo_radom_id.dataGeojson, batInorandomId.bdtopo_radom_id, "selectProp", "USAGE1", view, THREE)
+    batInorandomId.bdtopo_radom_id.num = layerStructureId.num
+    batInorandomId.bdtopo_radom_id.id = layerStructureId.id
 })
-
 document.getElementById("exploredataOsm").addEventListener("change", () => {
-    if (document.getElementById("exploredataOsm").checked) {
-        batInorandomId.osm_random_id.num += 1;
-        batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
-        osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.osm_random_id.id, false, view, THREE)
-
-        }
-        )
-
-    }
-    else {
-        view.removeLayer(batInorandomId.osm_random_id.id)
-    }
-
+    let layerStructureId = exploreData("exploredataOsm", batInorandomId.osm_random_id.dataGeojson, batInorandomId.osm_random_id, "selectProp", "USAGE1", view, THREE)
+    batInorandomId.osm_random_id.num = layerStructureId.num
+    batInorandomId.osm_random_id.id = layerStructureId.id
 })
-
 document.getElementById("exploredataCadastre").addEventListener("change", () => {
-    if (document.getElementById("exploredataCadastre").checked) {
-        batInorandomId.cadastre_random_id.num += 1;
-        batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
-        cadastrePromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, "fclass", batInorandomId.cadastre_random_id.id, false, view, THREE)
-        }
-        )
-
-    }
-    else {
-        view.removeLayer(batInorandomId.cadastre_random_id.id)
-        batInorandomId.cadastre_random_id = ""
-    }
-
+    let layerStructureId = exploreData("exploredataCadastre", batInorandomId.cadastre_random_id.dataGeojson, batInorandomId.cadastre_random_id, "selectProp", "created", view, THREE)
+    batInorandomId.cadastre_random_id.num = layerStructureId.num
+    batInorandomId.cadastre_random_id.id = layerStructureId.id
 })
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
-    // Object.entries(batInorandomId).forEach(([key, val]) => {
-    //     if (key != "ino_random_id" && val != "") {
-    //         view.removeLayer(val)
-    //     }
-    // })
-
     const selectPropValue = document.getElementById('selectProp').value;
     const ign = document.getElementById("exploredataIgn").checked;
     if (ign) {
         view.removeLayer(batInorandomId.bdtopo_radom_id.id)
         batInorandomId.bdtopo_radom_id.num += 1;
         batInorandomId.bdtopo_radom_id.id = batInorandomId.bdtopo_radom_id.name + "_" + batInorandomId.bdtopo_radom_id.num
-        bdtopoPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.bdtopo_radom_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdtopo_radom_id.id, false, view, THREE)
     }
 
     const bdnb = document.getElementById("exploredata").checked;
@@ -734,10 +537,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.bdnb_random_id.id)
         batInorandomId.bdnb_random_id.num += 1;
         batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        console.log(batInorandomId.bdnb_random_id)
-        bdnbPromisedJson.then(geojson => {
-            geojsontToFeatureGeom(geojson, false, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
-        })
+        let geojson = bdnbGeoJson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
     }
 
 
@@ -746,12 +548,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.osm_random_id.id)
         batInorandomId.osm_random_id.num += 1;
         batInorandomId.osm_random_id.id = batInorandomId.osm_random_id.name + "_" + batInorandomId.osm_random_id.num
-        osmPromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
-
-        }
-        )
+        let geojson = batInorandomId.osm_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.osm_random_id.id, false, view, THREE)
     }
 
     const cad = document.getElementById("exploredataCadastre").checked;
@@ -759,11 +558,9 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.cadastre_random_id.id)
         batInorandomId.cadastre_random_id.num += 1;
         batInorandomId.cadastre_random_id.id = batInorandomId.cadastre_random_id.name + "_" + batInorandomId.cadastre_random_id.num
-        cadastrePromisedJson.then(geojson => {
-            updateSelectOption("selectProp", geojson)
-            geojsontToFeatureGeom(geojson, true, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
-        }
-        )
+        let geojson = batInorandomId.cadastre_random_id.dataGeojson
+        updateSelectOption("selectProp", geojson, selectPropValue)
+        geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.cadastre_random_id.id, false, view, THREE)
     }
 })
 
@@ -785,19 +582,15 @@ dropZone.addEventListener('drop', function (e) {
     var files = e.dataTransfer.files;
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
-            // console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
                 // Handle the arrayBuffer
-                console.log(arrayBuffer);
                 //for the shapefiles in the files folder called pandr.shp
                 shp(arrayBuffer).then(function (geojson) {
                     //see bellow for whats here this internally call shp.parseZip()
-                    console.log(geojson)
-
                     updateSelectOption("select2dZiped", geojson)
 
                     dropedGeojson["2dDrop"] = geojson
@@ -816,25 +609,17 @@ var affiche2dFile = document.getElementById('afficheDrop2d');
 
 affiche2dFile.addEventListener("click", () => {
 
-    if (dropedGeojson["2dDropId"].id !== "2dDropId_0") {
-        view.removeLayer(dropedGeojson["2dDropId"].id)
-    }
-
     dropedGeojson["2dDropId"].num += 1;
     dropedGeojson["2dDropId"].id = dropedGeojson["2dDropId"].name + "_" + dropedGeojson["2dDropId"].num
 
     let geojson = dropedGeojson["2dDrop"]
-    console.log(geojson)
     const select2dZiped = document.getElementById('select2dZiped').value;
     geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view)
 }
 )
 
 document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["2dDropId"].id)
-    dropedGeojson["2dDropId"].num = 0
-    dropedGeojson["2dDropId"].id = "2dDropId_0"
 })
 
 
@@ -856,19 +641,15 @@ dropZone3d.addEventListener('drop', function (e) {
     var files = e.dataTransfer.files;
     if (files.length > 0) {
         var file = files[0];
-        if (file.type === 'application/zip') {
+        if (file.type.includes('zip')) {
             // Handle the ZIP file
-            // console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
                 // Handle the arrayBuffer
-                console.log(arrayBuffer);
                 //for the shapefiles in the files folder called pandr.shp
                 shp(arrayBuffer).then(function (geojson) {
                     //see bellow for whats here this internally call shp.parseZip()
-                    console.log(geojson)
-
                     updateSelectOption("selectHauteur3dZiped", geojson)
 
                     updateSelectOption("selectAltiSol3dZiped", geojson)
@@ -891,10 +672,6 @@ dropZone3d.addEventListener('drop', function (e) {
 var affiche3dFile = document.getElementById('afficheDrop3d');
 
 affiche3dFile.addEventListener("click", () => {
-    if (dropedGeojson["3dDropId"].id !== "3dDropId_0") {
-        view.removeLayer(dropedGeojson["3dDropId"].id)
-    }
-
     dropedGeojson["3dDropId"].num += 1;
     dropedGeojson["3dDropId"].id = dropedGeojson["3dDropId"].name + "_" + dropedGeojson["3dDropId"].num
 
@@ -911,10 +688,7 @@ affiche3dFile.addEventListener("click", () => {
 
 
 document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
-    console.log(dropedGeojson)
     view.removeLayer(dropedGeojson["3dDropId"].id)
-    dropedGeojson["3dDropId"].num = 0
-    dropedGeojson["3dDropId"].id = "3dDropId_0"
 })
 
 //========================== csv join 
@@ -967,18 +741,20 @@ dropZoneCsv.addEventListener('drop', function (e) {
             records.push(record);
         }
         dataFromCsv = records
-
-        // console.log(records);
     };
 
     reader.readAsText(file);
-
-    console.log(view.getLayers())
 
     let LayersName = view.getLayers().reduce((result, layer) => {
         result.push(layer.id)
         return result
     }, [])
+
+    function removeLayername(layerName) {
+        return layerName !== "globe" && layerName !== "atmosphere" && layerName !== "Ortho" && layerName !== "IGN_MNT_HIGHRES" && layerName !== "MNT_WORLD_SRTM3" && !layerName.includes("label");
+    }
+
+    LayersName = LayersName.filter(removeLayername);
 
     updateSelectOptionFromList("selectJoinLayer", LayersName)
 
@@ -988,28 +764,22 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
 document.getElementById("selectJoinLayer").addEventListener("change", () => {
     let selectedValue = document.getElementById("selectJoinLayer").value
-    console.log(selectedValue)
-    console.log(view.getLayerById(selectedValue))
     let geojson = view.getLayerById(selectedValue).source.fetchedData
-
     let uniquenames = getUniquePropNames(geojson)
-
     updateSelectOptionFromList("selectJoinAttribut", uniquenames)
+    csvJoinAtt.updatedGeojson = geojson;
+})
 
+document.getElementById("selectJoinAttribut").addEventListener("change", () => {
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
 
-    console.log(dataFromCsv)
-
     let csvTojson = dataFromCsv.reduce((result, prop) => {
         result[prop[selectChampJointure]] = prop
-        // console.log(prop)
         return result
     }, {})
 
-    console.log(csvTojson)
-
-    console.log(geojson)
+    let geojson = csvJoinAtt.updatedGeojson;
 
     geojson.features.forEach((feature) => {
         let data = csvTojson[feature.properties[selectCibleChampJointure]]
@@ -1017,36 +787,21 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
         if (data) {
             Object.entries(data).forEach(([key, val]) => {
                 feature.properties[key] = val
-                console.log(feature.properties)
             })
         }
     });
 
-    console.log(geojson)
-
-    view.removeLayer(selectedValue)
-
-    csvJoinAtt.updatedGeojson = geojson;
-
-
-
-
 })
 
 document.getElementById("afficheDropCsv").addEventListener("click", () => {
-    if (csvJoinAtt.csvLayerId.id !== "updatedLayerWithCsv_0") {
-        view.removeLayer(csvJoinAtt["csvLayerId"].id)
-    }
-
     csvJoinAtt["csvLayerId"].num += 1;
     csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
-
     let geojson = csvJoinAtt.updatedGeojson
-
-    console.log(geojson)
-
     const selectCol3dZiped = document.getElementById('selectCouleurCsv').value;
-
-    geojsontToFeatureGeom(geojson, selectCol3dZiped, "fsdfdsfgdsg", false, view, THREE)
+    geojsontToFeatureGeom(geojson, selectCol3dZiped, csvJoinAtt["csvLayerId"].id, false, view, THREE)
 }
 )
+
+document.getElementById("checkbox-supprime-csv").addEventListener("click", () => {
+    view.removeLayer(csvJoinAtt["csvLayerId"].id)
+})

@@ -3,24 +3,20 @@
  * @param {String} idSelect - id of the select html tag
  * @param {*} listOptions 
  */
-export function updateSelectOptionFromList(idSelect, listOptions) {
-    // Récupération de l'élément HTML de sélection
+export function updateSelectOptionFromList(idSelect, listOptions, selected = "") {
+    // get the dom element 
     const selectElement = document.getElementById(idSelect);
-    console.log(selectElement)
     selectElement.innerHTML = "";
 
-    // Boucle pour ajouter chaque valeur à la sélection
+    // add each value to selecteion
     listOptions.forEach(value => {
-        // Création d'un élément d'option
+        // create option element
         const option = document.createElement('option');
-        // Ajout de la valeur de l'option
         option.text = value;
-        // Ajout de la valeur de l'option en tant que valeur d'attribut
         option.value = value;
-        // Ajout de l'option à l'élément de sélection
+        if (value === selected) {
+            option.selected = true
+        }
         selectElement.add(option);
     });
-
-
-    console.log(listOptions)
 }

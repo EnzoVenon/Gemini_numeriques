@@ -196,8 +196,6 @@ var FeatureToolTip = (function _() {
                     })
 
                     tooltip.addEventListener
-
-                    console.log(tooltip)
                 } else {
                     tooltip.style.left = (view.eventToViewCoords(event).x) + 'px';
                     tooltip.style.bottom = (view.eventToViewCoords(event).y) + 'px';
