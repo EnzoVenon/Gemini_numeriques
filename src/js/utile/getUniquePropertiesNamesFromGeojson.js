@@ -1,4 +1,9 @@
-export function getUniquePropNames(geojson) {
+/**
+ * filter unique property name in geojson 
+ * @param {Object} geojson 
+ * @returns lis of unique property name in geojson
+ */
+function getUniquePropNames(geojson) {
     const propNames = geojson.features.reduce((acc, feature) => {
         return acc.concat(Object.keys(feature.properties));
     }, []);
@@ -12,3 +17,5 @@ export function getUniquePropNames(geojson) {
 
     return uniquePropNames
 }
+
+module.exports = getUniquePropNames;
