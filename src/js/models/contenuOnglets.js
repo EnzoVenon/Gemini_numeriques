@@ -105,7 +105,7 @@ function createAccChild(id, header, body, doNotAddInfo = false) {
     if (doNotAddInfo) {
         bodyAccordion = body
     } else {
-        bodyAccordion = body + `<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI">
+        bodyAccordion = body + `<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI" style="text-align:right">
         info
         </a>`
     }
@@ -123,7 +123,9 @@ function createAccChild(id, header, body, doNotAddInfo = false) {
 <div id="panelsStayOpen-collapse${id}" class="accordion-collapse collapse"
     aria-labelledby="panelsStayOpen-heading${id}">
     <div class="accordion-body">
+
     ${bodyAccordion}
+
     </div>
 </div>`
 
