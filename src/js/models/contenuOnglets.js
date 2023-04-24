@@ -116,8 +116,11 @@ function createAccChild(id, header, body) {
     aria-labelledby="panelsStayOpen-heading${id}">
     <div class="accordion-body">
     ${body}
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI">
+    info
+    </a>
     </div>
 </div>`
-
+    console.log(accChild)
     return accChild
 }
