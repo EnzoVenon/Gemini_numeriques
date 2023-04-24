@@ -3,7 +3,7 @@ import * as shp from "shpjs"
 /**
  * Récupérationd de données shp en geojson
  * @param {String} path 
- * @returns 
+ * @returns {Promise} geojson promise
  */
 export function loadBufferDataFromShp(path) {
 
