@@ -6,7 +6,6 @@ import { addShp } from "./js/affichageItown/addShpLayer"
 import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
 import { importCsvFile } from "./js/models/readCsv"
 import { addChart } from "./js/models/insee/showChart"
-import * as contenuOnglet from "./js/models/contenuOnglets"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
@@ -21,7 +20,10 @@ import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojs
 import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
 import { exploreData } from "./js/affichageItown/exploreData";
 import * as shp from "shpjs";
-
+import { getDataICI } from "./js/recuperationDonnee/getDataIciPop";
+import { getDataBDTOPO } from "./js/recuperationDonnee/getDataBdtopo.js";
+import { getDataINSEE } from "./js/recuperationDonnee/getDataINSEEpopIRIS";
+import * as contenuOnglet from "./js/models/contenuOnglets"
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
@@ -375,139 +377,14 @@ viewerDiv.addEventListener(
 
                 })
                 .then(result => {
-                    let valDisplay2 = csvMenageINSEE
-                        .then(res => {
-                            // ----------- POPULATION INSEE ----------- //
-                            // Retrieve elements where Iris number is same as tooltip
-                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
+                    return getDataINSEE(csvMenageINSEE, tooltip, result, textHtml, htmlTest)
 
-                            // Add INSEE value for this IRIS in tooltip properties
-                            let valDisplayedPop = spreadDataToTabs(uniqueData, result, 'INSEE')
-
-                            // Chart for INSEE values
-                            const dataList4Chart = {
-                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
-                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
-                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                            }
-                            let data4Chart = [];
-                            Object.entries(dataList4Chart).forEach((value) => {
-                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value[1], valDisplayedPop.tabPopulation))
-                            })
-
-
-                            // ----- Generate HTML text ----- //
-                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                            htmlTest.innerHTML += textHtml;
-
-                            // Create charts
-                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
-                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
-                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
-
-                            return valDisplayedPop;
-                        })
-                    return valDisplay2
                 })
                 .then(result => {
-                    // ----------- Get BdTopo data ----------- //
-                    let valDisplaybdtopo = bdtopoParis11PromisedJson
-                        .then(geojson => {
-                            let dataBdTopo = geojson.features.filter(obj => {
-                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                    return obj;
-                                }
-                            })
-                            return dataBdTopo[0]
-                        })
-                        .then(res => {
-                            if (res.properties) {
-                                return spreadDataToTabs(res.properties, result, 'BDTopo');
-                            }
-                        })
-                    return valDisplaybdtopo
+                    return getDataBDTOPO(bdtopoParis11PromisedJson, tooltip, result)
                 })
-                .then(async (val2display) => {
-                    // ----------- Get Building ICI data ----------- //
-                    let displayICI = await csvBuildingICI
-                    let dataBuildingICI;
-                    Object.entries(displayICI).forEach((value) => {
-                        if (value[1].idBdTopo) {
-                            if (value[1].idBdTopo.includes(tooltipBuildingID)) {
-                                dataBuildingICI = value[1];
-                                return dataBuildingICI;
-                            }
-                        }
-                    })
-
-                    let valDisplayBuildingICI = spreadDataToTabs(dataBuildingICI, val2display, 'Building ICI')
-
-                    // ----------- Get Housing ICI IDs ----------- //
-                    let displayHousing = await csvHousingICI
-                    let housings_IDs = []
-                    Object.entries(displayHousing).forEach((value) => {
-                        if (value[1].BuildingID) {
-                            if (value[1].BuildingID.includes(dataBuildingICI.ID)) {
-                                housings_IDs.push(value[1].ID)
-                            }
-                        }
-                    })
-
-                    // ----------- Get Household ICI data ----------- //
-                    let housingDictionnary = {}
-                    let displayHousehold = await csvHouseholdICI
-                    let dataJSONattributeHousehold;
-                    Object.entries(displayHousehold).forEach((value) => {
-                        if (housings_IDs.includes(value[1].HousingID)) {
-                            housingDictionnary[value[1].ID] = {}
-                            housingDictionnary[value[1].ID]["household"] = []
-                            Object.entries(value[1]).forEach(([key, val]) => {
-                                dataJSONattributeHousehold = loadDataToJSON({}, key, val, "Household ICI", true)
-                                if (Object.keys(dataJSONattributeHousehold).length !== 0) {
-                                    housingDictionnary[value[1].ID]["household"].push(dataJSONattributeHousehold)
-                                }
-                            })
-                        }
-                    })
-                    Object.entries(housingDictionnary).forEach(([key, value]) => {
-                        if (Object.keys(value).length === 0) {
-                            delete housingDictionnary[key]
-                        }
-                    })
-                    // for each housing get associated household
-                    let householdIDs = []
-                    Object.entries(housingDictionnary).forEach((val) => {
-                        householdIDs.push(val[0])
-                    })
-
-                    // ----------- Get Individual ICI data ----------- //
-                    let displayIndividual = await csvIndividualICI
-                    let dataJSONattributeIndividual;
-                    Object.entries(displayIndividual).forEach((value) => {
-                        if (value[1].IDHousehold) {
-                            let individualList = []
-                            if (householdIDs.includes(value[1].IDHousehold)) {
-                                Object.entries(value[1]).forEach(([key, val]) => {
-                                    dataJSONattributeIndividual = loadDataToJSON({}, key, val, "Individual ICI", true)
-                                    if (Object.keys(dataJSONattributeIndividual).length !== 0) {
-                                        individualList.push(dataJSONattributeIndividual)
-
-                                    }
-                                })
-                                if (housingDictionnary[value[1].IDHousehold]["individuals"]) {
-                                    housingDictionnary[value[1].IDHousehold]["individuals"].push(individualList)
-                                } else {
-                                    housingDictionnary[value[1].IDHousehold]["individuals"] = [individualList]
-                                }
-                            }
-                        }
-                    })
-                    valDisplayBuildingICI.tabPopulation = housingDictionnary;
-                    return valDisplayBuildingICI
-
+                .then((val2display) => {
+                    return getDataICI(val2display, csvBuildingICI, csvHousingICI, csvHouseholdICI, csvIndividualICI, tooltipBuildingID)
                 })
                 .then(res => {
                     console.log(res)
@@ -558,74 +435,25 @@ viewerDiv.addEventListener(
 
                 })
                 .then(result => {
-                    let valDisplay2 = csvMenageINSEE
-                        .then(res => {
-                            // ----------- POPULATION INSEE ----------- //
-                            // Retrieve elements where Iris number is same as tooltip
-                            let uniqueData = res.filter(obj => obj.IRIS === Number(tooltip.value.properties.code_iris))[0]
-
-                            // Add INSEE value for this IRIS in tooltip properties
-                            let valDisplayedPop = spreadDataToTabs(uniqueData, result, 'INSEE')
-
-                            // Chart for INSEE values
-                            const dataList4Chart = {
-                                status15OuPlus: ['P19_POP15P_MARIEE', 'P19_POP15P_PACSEE', 'P19_POP15P_CONCUB_UNION_LIBRE', 'P19_POP15P_VEUFS', 'P19_POP15P_DIVORCEE', 'P19_POP15P_CELIBATAIRE'],
-                                repartitionPop: ['P19_POP1524', 'P19_POP2554', 'P19_POP5579', 'P19_POP80P'],
-                                enfant25: ['C19_NE24F0', 'C19_NE24F1', 'C19_NE24F2', 'C19_NE24F3', 'C19_NE24F4P']
-                            }
-                            let data4Chart = [];
-                            Object.entries(dataList4Chart).forEach((value) => {
-                                data4Chart.push(contenuOnglet.dataINSEE4Chart(value[1], valDisplayedPop.tabPopulation))
-                            })
-
-
-                            // ----- Generate HTML text ----- //
-                            textHtml += contenuOnglet.generateAccordionItem("Status_15_ans+", 'status');
-                            textHtml += contenuOnglet.generateAccordionItem("Repartion_pop_15_ans+", 'repartition');
-                            textHtml += contenuOnglet.generateAccordionItem("Nombre_famille_enfants_-25ans", 'enfant');
-
-                            htmlTest.innerHTML += textHtml;
-
-                            // Create charts
-                            addChart('status', data4Chart[0], 'name', 'value', 'Nombre de personnes');
-                            addChart('repartition', data4Chart[1], 'name', 'value', "Nombre d'individus");
-                            addChart('enfant', data4Chart[2], 'name', 'value', 'Nombre de familles');
-
-                            return valDisplayedPop;
-                        })
-                    return valDisplay2
+                    return getDataINSEE(csvMenageINSEE, tooltip, result, textHtml, htmlTest)
                 })
                 .then(result => {
-                    // ----------- Get BdTopo data ----------- //
-                    bdtopoPromisedJson
-                        .then(geojson => {
-                            let dataBdTopo = geojson.features.filter(obj => {
-                                if (tooltip.value.properties.batiment_c.includes(obj.properties.ID)) {
-                                    return obj;
-                                }
-                            })
-                            return dataBdTopo[0]
-                        })
-                        .then(res => {
-                            if (res.properties) {
-                                return spreadDataToTabs(res.properties, result, 'BDTopo');
-                            }
-                        })
-                        .then(res => {
-                            // ----------- Generate html accordion item for each value ----------- //
-                            Object.entries(res).forEach(([key, value]) => {
-                                generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
-                                generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
-                                generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
-                                generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
+                    return getDataBDTOPO(bdtopoPromisedJson, tooltip, result)
 
-                            })
-                            // for info link
-                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                            const tooltipList = [...tooltipTriggerList]
-                            tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                        })
+                })
+                .then(res => {
+                    // ----------- Generate html accordion item for each value ----------- //
+                    Object.entries(res).forEach(([key, value]) => {
+                        generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
+                        generateAttributes4Tab('batimentAccordion', 'tabBatiment', value, key)
+                        generateAttributes4Tab('RisquesAccordion', 'tabRisques', value, key)
+                        generateAttributes4Tab('energieAccordion', 'tabEnergie', value, key)
 
+                    })
+                    // for info link
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList]
+                    tooltipList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
                 })
 
             shapefile.open("../data/shp/prg/bdnb_perigeux8")
