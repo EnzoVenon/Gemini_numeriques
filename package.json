@@ -8,10 +8,13 @@
   "jest": {
     "roots": [
       "<rootDir>/src/"
-    ]
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "scripts": {
-    "start": "parcel --open",
+    "start": "parcel",
     "build": "sed -i 's/\\.\\.\\/data/\\.\\/data/g' src/main.js && parcel build --dist-dir public && sed -i 's/\"\\//\"\\.\\//g' public/index.html && sed -i 's/\\.\\/data/\\.\\.\\/data/g' src/main.js",
     "clean": "rm -rf dist",
     "eslintTest": "npx eslint src",
@@ -19,7 +22,9 @@
     "jest": "jest --coverage"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.21.4",
     "assert": "^2.0.0",
+    "babel-jest": "^29.5.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^5.7.1",
     "chart.js": "^4.2.1",

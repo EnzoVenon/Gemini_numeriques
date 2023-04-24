@@ -3,7 +3,7 @@
  * @param {Array} values - generate unique color from label 
  * @returns {Object} - json with key => label and value => color
  */
-function generateUniqueColors(values) {
+export function generateUniqueColors(values) {
   const uniqueValues = [...new Set(values)]; // récupère les valeurs uniques
   const colors = {};
   // génère une couleur unique pour chaque valeur unique
@@ -13,5 +13,3 @@ function generateUniqueColors(values) {
   colors.undefined = "rgb(169,169,169)"
   return colors
 }
-
-module.exports = generateUniqueColors;
