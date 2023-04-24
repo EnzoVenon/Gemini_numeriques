@@ -54,7 +54,6 @@ export function geosjontToColorLayer(geojson, selectOption, randomId, uniqueColo
             }
         })
     })
-
     view.addLayer(layer)
     setLegend(uniquecol)
 }
