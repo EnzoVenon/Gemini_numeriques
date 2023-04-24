@@ -105,7 +105,7 @@ function createAccChild(id, header, body, doNotAddInfo = false) {
     if (doNotAddInfo) {
         bodyAccordion = body
     } else {
-        bodyAccordion = body + `<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI" style="text-align:right">
+        bodyAccordion = body + `<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Donnée issue de simulation ICI" style="padding-left: 25%;>
         info
         </a>`
     }

@@ -952,6 +952,12 @@ dropZoneCsv.addEventListener('drop', function (e) {
         return result
     }, [])
 
+    function removeLayername(layerName) {
+        return layerName !== "globe" && layerName !== "atmosphere" && layerName !== "Ortho" && layerName !== "IGN_MNT_HIGHRES" && layerName !== "MNT_WORLD_SRTM3" && !layerName.includes("label");
+    }
+
+    LayersName = LayersName.filter(removeLayername);
+
     updateSelectOptionFromList("selectJoinLayer", LayersName)
 
 
