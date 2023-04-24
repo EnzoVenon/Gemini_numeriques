@@ -5,7 +5,6 @@ import { addElevationLayer } from "./js/affichageItown/elevation";
 import { addShp } from "./js/affichageItown/addShpLayer"
 import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
 import { importCsvFile } from "./js/recuperationDonnee/readCsv"
-import { addChart } from "./js/models/insee/showChart"
 import { getBdnbInfo } from "./js/models/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
