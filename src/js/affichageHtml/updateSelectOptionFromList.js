@@ -6,7 +6,6 @@
 export function updateSelectOptionFromList(idSelect, listOptions, selected = "") {
     // get the dom element 
     const selectElement = document.getElementById(idSelect);
-    console.log(selectElement)
     selectElement.innerHTML = "";
 
     // add each value to selecteion

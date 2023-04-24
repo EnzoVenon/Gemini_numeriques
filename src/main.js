@@ -353,14 +353,11 @@ viewerDiv.addEventListener(
                 view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 
                 listSlect = [listSlect[1]]
-            } else {
-                console.log("non")
             }
 
 
             addSpecificBuilings("../data/shp/prg/bdnb_perigeux8", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
             addSpecificBuilings("../data/shp/paris_11/paris11_bdnb", "batiment_c", tooltip.value.properties.batiment_c, letRandomCOlor, view, THREE)
-            console.log(tooltip.value)
 
             let tooltipBuildingID = tooltip.value.properties.batiment_c
             if (tooltipBuildingID.includes('-')) {
@@ -379,7 +376,6 @@ viewerDiv.addEventListener(
                     return dataWithICI2Display
                 })
                 .then(res => {
-                    console.log(res)
                     // ----------- Generate html accordion item for each value ----------- //
                     Object.entries(res).forEach(([key, value]) => {
                         generateAttributes4Tab('infoGenAccordion', 'tabInfoGen', value, key)
@@ -541,7 +537,6 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
         view.removeLayer(batInorandomId.bdnb_random_id.id)
         batInorandomId.bdnb_random_id.num += 1;
         batInorandomId.bdnb_random_id.id = batInorandomId.bdnb_random_id.name + "_" + batInorandomId.bdnb_random_id.num
-        console.log(batInorandomId.bdnb_random_id)
         let geojson = bdnbGeoJson
         updateSelectOption("selectProp", geojson, selectPropValue)
         geojsontToFeatureGeom(geojson, selectPropValue, batInorandomId.bdnb_random_id.id, false, view, THREE)
@@ -585,22 +580,17 @@ dropZone.addEventListener('drop', function (e) {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
     var files = e.dataTransfer.files;
-    console.log(files)
     if (files.length > 0) {
         var file = files[0];
         if (file.type.includes('zip')) {
             // Handle the ZIP file
-            // console.log(file);
             var reader = new FileReader();
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
                 // Handle the arrayBuffer
-                console.log(arrayBuffer);
                 //for the shapefiles in the files folder called pandr.shp
                 shp(arrayBuffer).then(function (geojson) {
                     //see bellow for whats here this internally call shp.parseZip()
-                    console.log(geojson)
-
                     updateSelectOption("select2dZiped", geojson)
 
                     dropedGeojson["2dDrop"] = geojson
@@ -657,12 +647,9 @@ dropZone3d.addEventListener('drop', function (e) {
             reader.onload = function (event) {
                 var arrayBuffer = event.target.result;
                 // Handle the arrayBuffer
-                console.log(arrayBuffer);
                 //for the shapefiles in the files folder called pandr.shp
                 shp(arrayBuffer).then(function (geojson) {
                     //see bellow for whats here this internally call shp.parseZip()
-                    console.log(geojson)
-
                     updateSelectOption("selectHauteur3dZiped", geojson)
 
                     updateSelectOption("selectAltiSol3dZiped", geojson)
@@ -754,8 +741,6 @@ dropZoneCsv.addEventListener('drop', function (e) {
             records.push(record);
         }
         dataFromCsv = records
-
-        // console.log(records);
     };
 
     reader.readAsText(file);

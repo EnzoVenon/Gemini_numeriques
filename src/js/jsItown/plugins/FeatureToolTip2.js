@@ -53,9 +53,6 @@ var FeatureToolTip = (function _() {
             }
 
             layer = layers[layersId.indexOf(layerId)];
-            console.log(layer)
-            console.log(layer.layer.source)
-            console.log(layer.layer.source.features)
             if (!layer) {
                 continue;
             }
@@ -88,14 +85,9 @@ var FeatureToolTip = (function _() {
         var geometry;
         var style;
 
-        console.log(features)
-
         for (var p = 0; p < features.length; p++) {
             feature = features[p];
             geometry = feature.geometry;
-
-            console.log(geometry)
-
 
             tooltip.value = geometry
 
@@ -161,8 +153,6 @@ var FeatureToolTip = (function _() {
                     })
 
                     tooltip.addEventListener
-
-                    console.log(tooltip)
                 } else {
                     tooltip.style.left = (view.eventToViewCoords(event).x) + 'px';
                     tooltip.style.bottom = (view.eventToViewCoords(event).y) + 'px';

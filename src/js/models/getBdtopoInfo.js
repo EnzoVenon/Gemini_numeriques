@@ -6,12 +6,10 @@ export function getBdtopoInfo(csvIdBdnbBdtopo, bdnbGoupeBatId) {
       .then(source => source.read()
         .then(function log(result) {
           if (result.done) return "done";
-          console.log("bdtopo")
-
           if (result.value.properties["ID"] === bdTopoId) {
 
             if (document.getElementById('batInfo').value != bdnbGoupeBatId) {
-              console.log("bdtopoIDoh")
+              //console.log("bdtopoIDoh")
             }
             return result.value.properties;
           }

@@ -357,7 +357,6 @@ export default class Style {
             //Gradation part of legend
             let canvas = document.createElement("canvas");
             let ctx = canvas.getContext("2d");
-            console.log(canvas.height);
             canvas.height = 120;
 
             //Create gradient

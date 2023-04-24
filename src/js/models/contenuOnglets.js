@@ -128,8 +128,5 @@ function createAccChild(id, header, body, doNotAddInfo = false) {
 
     </div>
 </div>`
-
-
-    console.log(accChild)
     return accChild
 }
