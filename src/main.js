@@ -370,21 +370,14 @@ viewerDiv.addEventListener(
 
 
             getBdnbInfo(csvBdnbParis, "batiment_g", tooltip.value.properties.batiment_g)
-                .then(res => {
+                .then(async (res) => {
                     // ----------- Get Bdnb data ----------- //
                     // Dispatch Bdnb data for each tab
-                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
-
-                })
-                .then(result => {
-                    return getDataINSEE(csvMenageINSEE, tooltip, result, textHtml, htmlTest)
-
-                })
-                .then(result => {
-                    return getDataBDTOPO(bdtopoParis11PromisedJson, tooltip, result)
-                })
-                .then((val2display) => {
-                    return getDataICI(val2display, csvBuildingICI, csvHousingICI, csvHouseholdICI, csvIndividualICI, tooltipBuildingID)
+                    let dataBDNB2Display = await spreadDataToTabs(res, valuesToDisplay, 'BDNB')
+                    let dataWithINSEE2Display = await getDataINSEE(csvMenageINSEE, tooltip, dataBDNB2Display, textHtml, htmlTest)
+                    let dataWithBdTopo2Display = await getDataBDTOPO(bdtopoParis11PromisedJson, tooltip, dataWithINSEE2Display)
+                    let dataWithICI2Display = await getDataICI(dataWithBdTopo2Display, csvBuildingICI, csvHousingICI, csvHouseholdICI, csvIndividualICI, tooltipBuildingID)
+                    return dataWithICI2Display
                 })
                 .then(res => {
                     console.log(res)
@@ -427,19 +420,12 @@ viewerDiv.addEventListener(
                 })
 
             getBdnbInfo(csvBdnb, "batiment_groupe_id", tooltip.value.properties.batiment_g)
-                .then(res => {
+                .then(async (res) => {
 
-                    // ----------- Get Bdnb data ----------- //
-                    // Dispatch Bdnb data for each tab
-                    return spreadDataToTabs(res, valuesToDisplay, 'BDNB')
-
-                })
-                .then(result => {
-                    return getDataINSEE(csvMenageINSEE, tooltip, result, textHtml, htmlTest)
-                })
-                .then(result => {
-                    return getDataBDTOPO(bdtopoPromisedJson, tooltip, result)
-
+                    let dataPerigueuxBDNB2display = await spreadDataToTabs(res, valuesToDisplay, 'BDNB')
+                    let dataPerigueuxWithINSEE2Display = await getDataINSEE(csvMenageINSEE, tooltip, dataPerigueuxBDNB2display, textHtml, htmlTest)
+                    let dataPerigueuxWithBdTopo2Display = await getDataBDTOPO(bdtopoPromisedJson, tooltip, dataPerigueuxWithINSEE2Display)
+                    return dataPerigueuxWithBdTopo2Display
                 })
                 .then(res => {
                     // ----------- Generate html accordion item for each value ----------- //
