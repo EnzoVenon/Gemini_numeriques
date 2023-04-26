@@ -54,10 +54,14 @@ Si vous avez eu un problème avec l'interface, que vous souhaitez laisser des co
 ```
 git clone https://github.com/EnzoVenon/Gemini_numeriques.git
 ```
-- Installer Node (et npm)
+- Installer docker ou Node (et npm) avec verions minimun 18 pour node
 - Aller dans le dossier:  Gemini_numeriques et l'ouvrir dans le terminal 
 - Dans le terminal, lancer ces commandes pour tester en local :
-
+### installation avec docker 
+```bash
+docker-compose up 
+```
+### installation avec npm 
 ```bash
 npm install
 npm start
