@@ -1,5 +1,5 @@
-import { spreadDataToTabs } from "../models/connectDataToTabs";
-import { loadDataToJSON } from "../models/connectDataToTabs";
+import { spreadDataToTabs } from "../affichage/affichageHtml/connectDataToTabs";
+import { loadDataToJSON } from "../affichage/affichageHtml/connectDataToTabs";
 /**
  * 
  * @param {Object} val2display Dictionary to fill (can already be filled) with the following format :

@@ -14,7 +14,8 @@
     }
   },
   "scripts": {
-    "start": "parcel",
+    "start": "parcel --open",
+    "startDocker": "parcel --open",
     "build": "sed -i 's/\\.\\.\\/data/\\.\\/data/g' src/main.js && parcel build --dist-dir public && sed -i 's/\"\\//\"\\.\\//g' public/index.html && sed -i 's/\\.\\/data/\\.\\.\\/data/g' src/main.js",
     "clean": "rm -rf dist",
     "eslintTest": "npx eslint src",

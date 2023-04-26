@@ -1,4 +1,4 @@
-import { spreadDataToTabs } from "../models/connectDataToTabs";
+import { spreadDataToTabs } from "../affichage/affichageHtml/connectDataToTabs";
 
 /**
  * Retrieve BdTopo data for the selected building
