@@ -1,6 +1,6 @@
 import * as contenuOnglet from "../models/contenuOnglets"
-import { addChart } from "../models/insee/showChart"
-import { spreadDataToTabs } from "../models/connectDataToTabs"
+import { addChart } from "../affichage/affichageHtml/showChart"
+import { spreadDataToTabs } from "../affichage/affichageHtml/connectDataToTabs"
 
 
 /**
