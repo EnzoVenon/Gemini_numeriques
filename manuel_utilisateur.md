@@ -21,6 +21,9 @@ Pour accéder aux informations, il faut d’abord sélectionner un bâtiment.
 - Le volet “Énergie” vous permet de visualiser des données détaillées l'émission de gaz à effet de serre et la consommation énergétique des logements. 
 - Le volet “Population” vous permet d'afficher des données sur la population, tel que le nombre d'habitants. Vous pouvez afficher des graphiques et des diagrammes pour visualiser les caractéristiques de la population avec différentes répartitions.
 
+Pour avoir des informations sur la provenance des données ainsi que l'attribut qui est lié à la donnée, il faut cliquer sur "infos" à côté de la donnée (voir ci-dessous).
+
+![Image](images_manuel_utilisateur/infos.PNG "icon")
 ### En savoir plus
 Lorsque vous cliquez sur “En savoir plus”, vous pouvez accéder à des informations comme le contour des bâtiments des différentes sources de données, aux liens vers les sources de données ainsi que le schéma d’intégration des différentes bases de données. 
 
