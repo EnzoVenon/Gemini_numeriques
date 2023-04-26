@@ -1,4 +1,4 @@
-import { getUniquePropNames } from "../utile/getUniquePropertiesNamesFromGeojson"
+import { getUniquePropNames } from "../../utile/getUniquePropertiesNamesFromGeojson"
 import { updateSelectOptionFromList } from "./updateSelectOptionFromList"
 
 /**

@@ -9,15 +9,15 @@ import { getBdnbInfo } from "./js/connectionDonnee/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
-import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
+import { geojsontToFeatureGeom } from "./js/affichage/affichageItown/geojsontToFeatureGeom"
 import Style from "./js/affichage/affichageItown/style.js";
 import { spreadDataToTabs, generateAttributes4Tab } from "./js/affichage/affichageHtml/connectDataToTabs";
 import { geosjontToColorLayer } from "./js/affichage/affichageItown/drop2dData"
-import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
-import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
+import { updateSelectOption } from "./js/affichage/affichageHtml/updateSelectionFromGeojson"
+import { updateSelectOptionFromList } from "./js/affichage/affichageHtml/updateSelectOptionFromList"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
-import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
-import { exploreData } from "./js/affichageItown/exploreData";
+import { addShpLayerOnChange } from "./js/affichage/affichageItown/addShpLayerOnchange";
+import { exploreData } from "./js/affichage/affichageItown/exploreData";
 import * as shp from "shpjs";
 import { getDataICI } from "./js/recuperationDonnee/getDataIciPop";
 import { getDataBDTOPO } from "./js/recuperationDonnee/getDataBdtopo.js";
