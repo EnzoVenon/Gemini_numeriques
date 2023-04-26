@@ -1,4 +1,4 @@
-import { loadBufferDataFromShp } from "../recuperationDonnee/dataFromShpDbf"
+import { loadBufferDataFromShp } from "../../recuperationDonnee/dataFromShpDbf"
 
 /**
  * add a shapfile layer front itown

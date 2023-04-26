@@ -1,4 +1,4 @@
-import * as contenuOnglet from "../models/contenuOnglets"
+import * as contenuOnglet from "../affichage/affichageHtml/contenuOnglets"
 import { addChart } from "../affichage/affichageHtml/showChart"
 import { spreadDataToTabs } from "../affichage/affichageHtml/connectDataToTabs"
 
