@@ -1,4 +1,4 @@
-import { generateUniqueColors } from "../utile/generaRandomColorFromList"
+import { generateUniqueColors } from "../../utile/generaRandomColorFromList"
 import { setLegend } from "../affichageHtml/legend"
 
 /**

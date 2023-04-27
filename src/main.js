@@ -1,28 +1,28 @@
 
 // ----------------- Imports ----------------- //
-import { addOrthoLayer } from "./js/affichageItown/ortho";
-import { addElevationLayer } from "./js/affichageItown/elevation";
-import { addShp } from "./js/affichageItown/addShpLayer"
-import { addSpecificBuilings } from "./js/affichageItown/extrudedBat"
+import { addOrthoLayer } from "./js/affichage/affichageItown/ortho";
+import { addElevationLayer } from "./js/affichage/affichageItown/elevation";
+import { addShp } from "./js/affichage/affichageItown/addShpLayer"
+import { addSpecificBuilings } from "./js/affichage/affichageItown/extrudedBat"
 import { importCsvFile } from "./js/recuperationDonnee/readCsv"
-import { getBdnbInfo } from "./js/models/extractBdnbInfo"
+import { getBdnbInfo } from "./js/connectionDonnee/extractBdnbInfo"
 import * as turf from "@turf/turf"
 import { widgetNavigation } from "./js/jsItown/widgetNavigation"
 import { loadBufferDataFromShp } from "./js/recuperationDonnee/dataFromShpDbf.js"
-import { geojsontToFeatureGeom } from "./js/affichageItown/geojsontToFeatureGeom"
-import Style from "./js/models/style.js";
-import { spreadDataToTabs, generateAttributes4Tab } from "./js/models/connectDataToTabs";
-import { geosjontToColorLayer } from "./js/affichageItown/drop2dData"
-import { updateSelectOption } from "./js/affichageHtml/updateSelectionFromGeojson"
-import { updateSelectOptionFromList } from "./js/affichageHtml/updateSelectOptionFromList"
+import { geojsontToFeatureGeom } from "./js/affichage/affichageItown/geojsontToFeatureGeom"
+import Style from "./js/affichage/affichageItown/style.js";
+import { spreadDataToTabs, generateAttributes4Tab } from "./js/affichage/affichageHtml/connectDataToTabs";
+import { geosjontToColorLayer } from "./js/affichage/affichageItown/drop2dData"
+import { updateSelectOption } from "./js/affichage/affichageHtml/updateSelectionFromGeojson"
+import { updateSelectOptionFromList } from "./js/affichage/affichageHtml/updateSelectOptionFromList"
 import { getUniquePropNames } from "./js/utile/getUniquePropertiesNamesFromGeojson"
-import { addShpLayerOnChange } from "./js/affichageItown/addShpLayerOnchange";
-import { exploreData } from "./js/affichageItown/exploreData";
+import { addShpLayerOnChange } from "./js/affichage/affichageItown/addShpLayerOnchange";
+import { exploreData } from "./js/affichage/affichageItown/exploreData";
 import * as shp from "shpjs";
 import { getDataICI } from "./js/recuperationDonnee/getDataIciPop";
 import { getDataBDTOPO } from "./js/recuperationDonnee/getDataBdtopo.js";
 import { getDataINSEE } from "./js/recuperationDonnee/getDataINSEEpopIRIS";
-import * as contenuOnglet from "./js/models/contenuOnglets"
+import * as contenuOnglet from "./js/affichage/affichageHtml/contenuOnglets"
 // ----------------- Variables ----------------- //
 // les constantes et variable globales
 const THREE = itowns.THREE
@@ -34,11 +34,8 @@ bat.id = 'bat';
 let listSlect = []
 let fidSelectf = [1, 2]
 let batInorandomId = { "ino_random_id": { name: "innondation", num: 0, id: "innondation_0" }, "bdnb_random_id": { name: "bdnb", num: 0, id: "bdnb_0", "dataGeojson": {} }, "bdtopo_radom_id": { name: "bdtopo", num: 0, id: "bdtopo_0", "dataGeojson": {} }, "osm_random_id": { name: "osm", num: 0, id: "osm_0", "dataGeojson": {} }, "cadastre_random_id": { name: "cadastre", num: 0, id: "cadastre_0", "dataGeojson": {} } }
-
 let dropedGeojson = { "2dDrop": {}, "2dDropId": { name: "2dDropId", num: 0, id: "2dDropId_0" }, "3dDropId": { name: "3dDropId", num: 0, id: "3dDropId_0" }, };
-
 let csvJoinAtt = { "updatedGeojson": {}, "csvLayerId": { name: "updatedLayerWithCsv", num: 0, id: "updatedLayerWithCsv_0" } };
-
 
 let dataFromCsv;
 // Create a custom div which will be displayed as a label
@@ -155,9 +152,8 @@ let bdnbGeoJson
 // ----------------- Globe Initialisatioin ----------------- //
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function globeInitialized() {
     // eslint-disable-next-line no-console
-    console.info('Globe initialized');
+    // console.info('Globe initialized');
 
-    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
     await csvBdnb.then(res => {
         // Récupérer les valeurs uniques de la propriété "type"
@@ -168,24 +164,24 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, async function
         }, {});
     });
 
+    //add clickable layer
     await addShp("../data/shp/paris_11/paris11_bdnb", "bdnbParis", "red", "", view, true)
+    await addShp("../data/shp/prg/bdnb_perigeux8", "bdnb", "black", "", view, true);
 
+    //add geojson to layer config
     bdnbGeoJson = await bdnbPromisedJson;
-
-
-
     bdnbGeoJson.features.forEach((feature) => {
         let data = dataBdnb[feature.properties["batiment_g"]]
         if (data) {
             feature.properties = data
         }
     });
-
     batInorandomId.bdnb_random_id.dataGeojson = bdnbGeoJson
     batInorandomId.bdtopo_radom_id.dataGeojson = await bdtopoPromisedJson
     batInorandomId.osm_random_id.dataGeojson = await osmPromisedJson
     batInorandomId.cadastre_random_id.dataGeojson = await cadastrePromisedJson
 
+    //list checkbox
     let checkbox_3D = document.getElementById("checkbox_style_3D");
     let select_style = document.getElementById("select_style");
     let button_style_apply = document.getElementById("button_style_apply");
@@ -478,7 +474,7 @@ addShpLayerOnChange("showOsmLayer", paths.osm, "osm", "yellow", "", view)
 addShpLayerOnChange("showCadastreLayer", paths.cadastre, "cadastre", "red", "", view)
 
 
-
+//layer innondation event listnter 
 document.getElementById("showInnondationLayer").addEventListener("change", () => {
     if (document.getElementById("showInnondationLayer").checked) {
         addShp(paths.innodation_perigeux, "inno", "black", "blue", view, false)
@@ -497,7 +493,7 @@ document.getElementById("showInnondationLayer").addEventListener("change", () =>
     }
 })
 
-// exploration des sources 
+//========================= exploration des sources====================== 
 document.getElementById("exploredata").addEventListener("change", () => {
     let layerStructureId = exploreData("exploredata", bdnbGeoJson, batInorandomId.bdnb_random_id, "selectProp", "argiles_alea", view, THREE)
     batInorandomId.bdnb_random_id.num = layerStructureId.num
@@ -519,6 +515,7 @@ document.getElementById("exploredataCadastre").addEventListener("change", () => 
     batInorandomId.cadastre_random_id.num = layerStructureId.num
     batInorandomId.cadastre_random_id.id = layerStructureId.id
 })
+
 
 document.getElementById("confirmExporation").addEventListener("click", () => {
     const selectPropValue = document.getElementById('selectProp').value;
@@ -564,7 +561,7 @@ document.getElementById("confirmExporation").addEventListener("click", () => {
     }
 })
 
-
+//=============================== drop ziped shp panel=========================================//
 let dropZone = document.getElementById('drop-zone');
 
 dropZone.addEventListener('dragover', function (e) {
@@ -604,14 +601,11 @@ dropZone.addEventListener('drop', function (e) {
     }
 });
 
-
+// display la 2d drop layer 
 var affiche2dFile = document.getElementById('afficheDrop2d');
-
 affiche2dFile.addEventListener("click", () => {
-
     dropedGeojson["2dDropId"].num += 1;
     dropedGeojson["2dDropId"].id = dropedGeojson["2dDropId"].name + "_" + dropedGeojson["2dDropId"].num
-
     let geojson = dropedGeojson["2dDrop"]
     const select2dZiped = document.getElementById('select2dZiped').value;
     geosjontToColorLayer(geojson, select2dZiped, dropedGeojson["2dDropId"].id, false, view)
@@ -623,7 +617,7 @@ document.getElementById("checkbox-supprime-2ddrop").addEventListener("click", ()
 })
 
 
-//================================== Drop zone 3d =========================================//
+//================================== Drop zone 3d (4326) =========================================//
 let dropZone3d = document.getElementById('drop-zone-3D');
 
 dropZone3d.addEventListener('dragover', function (e) {
@@ -668,7 +662,6 @@ dropZone3d.addEventListener('drop', function (e) {
 });
 
 
-
 var affiche3dFile = document.getElementById('afficheDrop3d');
 
 affiche3dFile.addEventListener("click", () => {
@@ -685,13 +678,11 @@ affiche3dFile.addEventListener("click", () => {
 }
 )
 
-
-
 document.getElementById("checkbox-supprime-3ddrop").addEventListener("click", () => {
     view.removeLayer(dropedGeojson["3dDropId"].id)
 })
 
-//========================== csv join 
+//========================== csv join ===================================//
 
 let dropZoneCsv = document.getElementById('drop-zone-csv');
 
@@ -723,11 +714,12 @@ dropZoneCsv.addEventListener('drop', function (e) {
         const rows = data.split('\n');
         const headers = rows[0].split(',');
 
+        //update selection div with csv attribut
         updateSelectOptionFromList("attJointureCsv", headers)
-
+        //update selection div with csv attribut cor colorling the layer
         updateSelectOptionFromList("selectCouleurCsv", headers)
 
-
+        //create a list containg the csv data in records
         for (let i = 1; i < rows.length; i++) {
             const values = rows[i].split(',');
             let record = {};
@@ -745,23 +737,19 @@ dropZoneCsv.addEventListener('drop', function (e) {
 
     reader.readAsText(file);
 
+    //=============== get all active layer and remove useless local active layer ===========//
     let LayersName = view.getLayers().reduce((result, layer) => {
         result.push(layer.id)
         return result
     }, [])
-
     function removeLayername(layerName) {
         return layerName !== "globe" && layerName !== "atmosphere" && layerName !== "Ortho" && layerName !== "IGN_MNT_HIGHRES" && layerName !== "MNT_WORLD_SRTM3" && !layerName.includes("label");
     }
-
     LayersName = LayersName.filter(removeLayername);
-
     updateSelectOptionFromList("selectJoinLayer", LayersName)
-
-
-
+    //=========================================================================================
 });
-
+//=============== csv update select attribut of selected layer ===========//
 document.getElementById("selectJoinLayer").addEventListener("change", () => {
     let selectedValue = document.getElementById("selectJoinLayer").value
     let geojson = view.getLayerById(selectedValue).source.fetchedData
@@ -769,7 +757,9 @@ document.getElementById("selectJoinLayer").addEventListener("change", () => {
     updateSelectOptionFromList("selectJoinAttribut", uniquenames)
     csvJoinAtt.updatedGeojson = geojson;
 })
+//=========================================================================================
 
+//=============== join layer and create a new geojson ===========//
 document.getElementById("selectJoinAttribut").addEventListener("change", () => {
     let selectChampJointure = document.getElementById("attJointureCsv").value
     let selectCibleChampJointure = document.getElementById("selectJoinAttribut").value
@@ -792,7 +782,9 @@ document.getElementById("selectJoinAttribut").addEventListener("change", () => {
     });
 
 })
+//=========================================================================================
 
+//=============== show new layer  ===========//
 document.getElementById("afficheDropCsv").addEventListener("click", () => {
     csvJoinAtt["csvLayerId"].num += 1;
     csvJoinAtt["csvLayerId"].id = csvJoinAtt["csvLayerId"].name + "_" + csvJoinAtt["csvLayerId"].num
@@ -801,6 +793,9 @@ document.getElementById("afficheDropCsv").addEventListener("click", () => {
     geojsontToFeatureGeom(geojson, selectCol3dZiped, csvJoinAtt["csvLayerId"].id, false, view, THREE)
 }
 )
+//=========================================================================================
+
+//=========remove layer with joined attribute 
 
 document.getElementById("checkbox-supprime-csv").addEventListener("click", () => {
     view.removeLayer(csvJoinAtt["csvLayerId"].id)

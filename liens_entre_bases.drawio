@@ -1,19 +1,19 @@
-<mxfile host="app.diagrams.net" modified="2023-04-21T13:26:58.341Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="YEpD7HRXKF6euHpfXA12" version="21.2.1" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-26T10:19:54.074Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="zh2WW7U1EQK1FHjdx8ue" version="21.2.2" type="github">
   <diagram name="Page-1" id="RKlKr9zLwDHz_0O1cyM0">
-    <mxGraphModel dx="748" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="794" dy="740" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="FjnJGpuL3dfxn8dWNNj--1" value="Base de Donnée Nationale des Bâtiments" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="379" y="410" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--2" value="&lt;div&gt;BD Topo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--2" value="&lt;div&gt;BD Topo&amp;nbsp;&lt;/div&gt;&lt;div&gt;Bâtiments&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="624.5" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--4" value="OpenStreetMap" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--4" value="OpenStreetMap Bâtiments" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
           <mxGeometry x="150" y="290" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="FjnJGpuL3dfxn8dWNNj--5" value="INSEE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+        <mxCell id="FjnJGpuL3dfxn8dWNNj--5" value="INSEE &lt;br&gt;Population" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="680" y="410" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="FjnJGpuL3dfxn8dWNNj--6" value="Territoires à Risques importants d’Inondation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
