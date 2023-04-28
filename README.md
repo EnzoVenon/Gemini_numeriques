@@ -7,6 +7,7 @@
 Cet outil est un prototype d'un projet porté par l'IGN, le CEREMA et l'INRIA qui souhaite créer un *Jumeau Numérique France Entière*.
 Le projet étudiant TSI "Gemimi Numérique" permet d'être une base de réflection pour ce projet. Le but est d'**Interconnecter différentes sources de données dans un outil qui permettra de les visualiser**. 
 Les informations que nous visualisons sont liées aux bâtiments. De plus, l'outil est centré sur Périgueux et sur le 11ème arrondissement de Paris. 
+Le rapport et le diaporama de l'oral se trouvent dans le fichier *livrables* au format pdf. 
 
 ### **[Accéder au site](https://enzovenon.github.io/Gemini_numeriques/)**
 
